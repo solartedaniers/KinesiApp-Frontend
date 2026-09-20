@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sólo variante debug: permite HTTP en texto claro para el emulador
+     (env/dev.android.json usa http://10.0.2.2:8000). Release no incluye este
+     archivo, así que cae al default de Android (sólo HTTPS). -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system"/>
+        </trust-anchors>
+    </base-config>
+</network-security-config>

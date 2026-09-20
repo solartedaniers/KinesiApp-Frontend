@@ -39,10 +39,14 @@ dependencies:
   dio: ^5.7.0
   # Almacenamiento cifrado en el dispositivo para access_token/refresh_token
   flutter_secure_storage: ^9.2.2
+  go_router: ^17.5.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # Sólo para fakear FlutterSecureStoragePlatform.instance en tests (ver test/support/).
+  flutter_secure_storage_platform_interface: ^1.1.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -1,19 +1,23 @@
-import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
-
-/// Resuelve la URL base del backend según la plataforma de ejecución.
-///
-/// El emulador de Android no puede llegar a "localhost" (apunta a sí mismo, no al
-/// host); 10.0.2.2 es el alias especial que el emulador expone hacia la máquina host.
-class ApiConfig {
-  const ApiConfig._();
-
-  static const int _port = 8001;
+/// URL base del backend. Viene siempre de `--dart-define-from-file=env/<archivo>.json`
+/// (ver env/dev.local.json, env/dev.android.json, env/prod.example.json); nunca hay
+/// un host o puerto quemado en el código.
+abstract final class ApiConfig {
+  static const String _baseUrl = String.fromEnvironment('API_BASE_URL');
 
   static String get baseUrl {
-    if (kIsWeb) return 'http://localhost:$_port/api/v1';
-    if (Platform.isAndroid) return 'http://10.0.2.2:$_port/api/v1';
-    return 'http://localhost:$_port/api/v1'; // iOS/desktop: localhost sí resuelve al host
+    if (_baseUrl.isEmpty) {
+      throw StateError(
+        'API_BASE_URL is not set. Run with --dart-define-from-file=env/<file>.json, '
+        'e.g. flutter run --dart-define-from-file=env/dev.local.json',
+      );
+    }
+    // ponytail: única regla de seguridad de red que vive en Dart; el resto (cleartext
+    // sólo en debug) lo impone la network security config nativa de Android.
+    if (kReleaseMode && !_baseUrl.startsWith('https://')) {
+      throw StateError('API_BASE_URL must use https:// in release builds.');
+    }
+    return _baseUrl;
   }
 }

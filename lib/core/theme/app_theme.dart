@@ -1,3 +1,37 @@
 import 'package:flutter/material.dart';
+
 import 'app_colors.dart';
-abstract final class AppTheme { static final light=_make(Brightness.light); static final dark=_make(Brightness.dark); static ThemeData _make(Brightness brightness){final darkMode=brightness==Brightness.dark;final scheme=ColorScheme.fromSeed(seedColor:AppColors.cyan,brightness:brightness,primary:darkMode?const Color(0xFF84F4FF):AppColors.cyanDeep,secondary:AppColors.mint,surface:darkMode?AppColors.darkSurface:Colors.white);return ThemeData(useMaterial3:true,colorScheme:scheme,scaffoldBackgroundColor:darkMode?AppColors.darkBackground:AppColors.lightBackground,inputDecorationTheme:InputDecorationTheme(filled:true,fillColor:scheme.surface,border:OutlineInputBorder(borderRadius:BorderRadius.circular(14))));} }
+import 'app_spacing.dart';
+
+/// Único punto que produce los `ThemeData` claro/oscuro de la app: todo color
+/// vive aquí o en [AppColors], nunca suelto en un widget.
+abstract final class AppTheme {
+  static final ThemeData light = _build(Brightness.light);
+  static final ThemeData dark = _build(Brightness.dark);
+
+  static ThemeData _build(Brightness brightness) {
+    final isDark = brightness == Brightness.dark;
+    final scheme = ColorScheme.fromSeed(
+      seedColor: AppColors.cyan,
+      brightness: brightness,
+      primary: isDark ? AppColors.cyanLightPrimary : AppColors.cyanDeep,
+      secondary: AppColors.mint,
+      surface: isDark ? AppColors.darkSurface : Colors.white,
+    );
+
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: isDark
+          ? AppColors.darkBackground
+          : AppColors.lightBackground,
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: scheme.surface,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppRadius.control),
+        ),
+      ),
+    );
+  }
+}

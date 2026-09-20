@@ -1,1 +1,74 @@
-{"appName":"KinesiApp","signIn":"Iniciar sesión","createAccount":"Crear cuenta","email":"Correo o usuario","password":"Contraseña","forgotPassword":"¿Olvidaste tu contraseña?","noAccount":"¿Aún no tienes una cuenta?","register":"Regístrate aquí","subtitle":"Inteligencia de movimiento para atletas más seguros.","athlete":"Deportista","coach":"Entrenador","coachWelcome":"Hola de nuevo, entrenador","athleteWelcome":"Hola de nuevo, deportista","roleHint":"Personaliza tu experiencia de prevención.","fullName":"Nombre completo","organization":"Club u organización","confirmPassword":"Confirmar contraseña","dashboard":"Inicio","today":"Hoy","readiness":"Preparación de movimiento","readinessValue":"82% listo","startAnalysis":"Nuevo análisis","recentAnalyses":"Análisis recientes","lowRisk":"Riesgo bajo","capture":"Capturar movimiento","uploadVideo":"Subir video","recordVideo":"Grabar video","analysis":"Análisis","profile":"Perfil","assistant":"Pregunta al asistente de IA por ejercicios correctivos.","captureHint":"Graba un salto o carrera en un área bien iluminada.","analysisComplete":"Análisis completado","riskScore":"Puntaje de riesgo","scoreValue":"37","kneeValgus":"Alineación de rodilla","recommendation":"Recomendación","askAssistant":"Pregunta sobre este resultado","logout":"Cerrar sesión","theme":"Tema","language":"Idioma","secure":"Datos biomecánicos protegidos","profileSubtitle":"Administra tu cuenta y preferencias","loginError":"No se pudo iniciar sesión. Verifica tus credenciales e intenta de nuevo."}
+{
+  "appName": "KinesiApp",
+  "subtitle": "Inteligencia de movimiento para atletas más seguros.",
+  "secure": "Datos biomecánicos protegidos",
+
+  "signIn": "Iniciar sesión",
+  "email": "Correo electrónico",
+  "password": "Contraseña",
+  "noAccount": "¿Aún no tienes una cuenta?",
+  "register": "Regístrate aquí",
+
+  "createAccount": "Crear cuenta",
+  "fullName": "Nombre completo",
+  "confirmPassword": "Confirmar contraseña",
+
+  "verifyEmailTitle": "Verifica tu correo",
+  "verifyEmailHint": "Enviamos un código a {email}. Ingrésalo para activar tu cuenta.",
+  "otpCode": "Código de verificación",
+  "verifyEmailAction": "Verificar",
+
+  "sessionRestoreError": "No pudimos verificar tu sesión. Revisa tu conexión e intenta de nuevo.",
+  "retry": "Reintentar",
+
+  "logout": "Cerrar sesión",
+  "theme": "Tema",
+  "language": "Idioma",
+
+  "athlete": "Deportista",
+  "coach": "Entrenador",
+  "admin": "Administrador",
+
+  "athleteHomeTitle": "Mi perfil",
+  "athleteProfileSetupTitle": "Completa tu perfil",
+  "athleteProfileSetupHint": "Necesitamos estos datos para personalizar tus análisis de salto.",
+  "athleteProfileSetupAction": "Guardar perfil",
+  "sport": "Deporte",
+  "heightCm": "Altura (cm)",
+  "weightKg": "Peso (kg)",
+  "birthDate": "Fecha de nacimiento",
+  "recentAnalyses": "Análisis recientes",
+  "noAnalysesYet": "Todavía no tienes análisis de salto.",
+  "analysisStatusPending": "Pendiente",
+  "analysisStatusProcessed": "Procesado",
+  "analysisStatusFailed": "Falló",
+
+  "coachHomeTitle": "Mis deportistas",
+  "noCoachedAthletes": "Todavía no tienes deportistas asignados.",
+
+  "adminHomeTitle": "Administración",
+  "adminUsersTab": "Usuarios",
+  "adminAthletesTab": "Deportistas",
+  "noUsers": "No hay usuarios registrados.",
+  "noAthletesToAssign": "No hay perfiles de deportista para asignar.",
+  "noCoachesAvailable": "No hay entrenadores disponibles.",
+  "assignCoach": "Asignar entrenador",
+
+  "validatorRequired": "Este campo es obligatorio.",
+  "validatorInvalidEmail": "Ingresa un correo válido.",
+  "validatorPasswordTooShort": "La contraseña debe tener al menos 8 caracteres.",
+  "validatorPasswordMismatch": "Las contraseñas no coinciden.",
+  "validatorInvalidNumber": "Ingresa un número válido.",
+
+  "errorGeneric": "Ocurrió un error. Intenta de nuevo.",
+  "errorInvalidCredentials": "Correo o contraseña incorrectos.",
+  "errorAccountDisabled": "Tu cuenta está deshabilitada.",
+  "errorEmailNotVerified": "Verifica tu correo antes de iniciar sesión.",
+  "errorInvalidOtp": "El código ingresado no es válido.",
+  "errorSessionExpired": "Tu sesión expiró. Inicia sesión de nuevo.",
+  "errorEmailAlreadyRegistered": "Ese correo ya está registrado.",
+  "errorProfileAlreadyExists": "Ya tienes un perfil de deportista.",
+  "errorNotFound": "No encontramos lo que buscabas.",
+  "errorForbidden": "No tienes permiso para hacer esto.",
+  "errorInvalidRoleAssignment": "Esa asignación de rol no es válida."
+}

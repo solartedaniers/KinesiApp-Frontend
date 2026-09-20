@@ -1,1 +1,74 @@
-{"appName":"KinesiApp","signIn":"Sign in","createAccount":"Create account","email":"Email or username","password":"Password","forgotPassword":"Forgot password?","noAccount":"New to KinesiApp?","register":"Register now","subtitle":"Movement intelligence for safer athletes.","athlete":"Athlete","coach":"Coach","coachWelcome":"Welcome back, Coach","athleteWelcome":"Welcome back, Athlete","roleHint":"Tailor your prevention experience.","fullName":"Full name","organization":"Club or organization","confirmPassword":"Confirm password","dashboard":"Dashboard","today":"Today","readiness":"Movement readiness","readinessValue":"82% ready","startAnalysis":"New analysis","recentAnalyses":"Recent analyses","lowRisk":"Low risk","capture":"Capture movement","uploadVideo":"Upload video","recordVideo":"Record video","analysis":"Analysis","profile":"Profile","assistant":"Ask the AI assistant for corrective exercise recommendations.","captureHint":"Record a jump or running drill in a well-lit area.","analysisComplete":"Analysis complete","riskScore":"Risk score","scoreValue":"37","kneeValgus":"Knee alignment","recommendation":"Recommendation","askAssistant":"Ask about this result","logout":"Sign out","theme":"Theme","language":"Language","secure":"Secure biomechanical data","profileSubtitle":"Manage your account and preferences","loginError":"Could not sign in. Check your credentials and try again."}
+{
+  "appName": "KinesiApp",
+  "subtitle": "Movement intelligence for safer athletes.",
+  "secure": "Secure biomechanical data",
+
+  "signIn": "Sign in",
+  "email": "Email",
+  "password": "Password",
+  "noAccount": "New to KinesiApp?",
+  "register": "Register now",
+
+  "createAccount": "Create account",
+  "fullName": "Full name",
+  "confirmPassword": "Confirm password",
+
+  "verifyEmailTitle": "Verify your email",
+  "verifyEmailHint": "We sent a code to {email}. Enter it to activate your account.",
+  "otpCode": "Verification code",
+  "verifyEmailAction": "Verify",
+
+  "sessionRestoreError": "We couldn't verify your session. Check your connection and try again.",
+  "retry": "Retry",
+
+  "logout": "Sign out",
+  "theme": "Theme",
+  "language": "Language",
+
+  "athlete": "Athlete",
+  "coach": "Coach",
+  "admin": "Admin",
+
+  "athleteHomeTitle": "My profile",
+  "athleteProfileSetupTitle": "Complete your profile",
+  "athleteProfileSetupHint": "We need this to personalize your jump analyses.",
+  "athleteProfileSetupAction": "Save profile",
+  "sport": "Sport",
+  "heightCm": "Height (cm)",
+  "weightKg": "Weight (kg)",
+  "birthDate": "Birth date",
+  "recentAnalyses": "Recent analyses",
+  "noAnalysesYet": "You don't have any jump analyses yet.",
+  "analysisStatusPending": "Pending",
+  "analysisStatusProcessed": "Processed",
+  "analysisStatusFailed": "Failed",
+
+  "coachHomeTitle": "My athletes",
+  "noCoachedAthletes": "You don't have any athletes assigned yet.",
+
+  "adminHomeTitle": "Administration",
+  "adminUsersTab": "Users",
+  "adminAthletesTab": "Athletes",
+  "noUsers": "No users registered.",
+  "noAthletesToAssign": "No athlete profiles to assign.",
+  "noCoachesAvailable": "No coaches available.",
+  "assignCoach": "Assign coach",
+
+  "validatorRequired": "This field is required.",
+  "validatorInvalidEmail": "Enter a valid email.",
+  "validatorPasswordTooShort": "Password must be at least 8 characters.",
+  "validatorPasswordMismatch": "Passwords don't match.",
+  "validatorInvalidNumber": "Enter a valid number.",
+
+  "errorGeneric": "Something went wrong. Please try again.",
+  "errorInvalidCredentials": "Incorrect email or password.",
+  "errorAccountDisabled": "Your account is disabled.",
+  "errorEmailNotVerified": "Verify your email before signing in.",
+  "errorInvalidOtp": "The code you entered is not valid.",
+  "errorSessionExpired": "Your session expired. Please sign in again.",
+  "errorEmailAlreadyRegistered": "That email is already registered.",
+  "errorProfileAlreadyExists": "You already have an athlete profile.",
+  "errorNotFound": "We couldn't find what you were looking for.",
+  "errorForbidden": "You don't have permission to do that.",
+  "errorInvalidRoleAssignment": "That role assignment is not valid."
+}

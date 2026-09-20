@@ -4,7 +4,8 @@ import '../../models/auth/auth_tokens.dart';
 
 /// Envoltorio sobre flutter_secure_storage para persistir cifrados los tokens de sesión en el dispositivo.
 class SecureSessionStorage {
-  SecureSessionStorage({FlutterSecureStorage? storage}) : _storage = storage ?? const FlutterSecureStorage();
+  SecureSessionStorage({FlutterSecureStorage? storage})
+    : _storage = storage ?? const FlutterSecureStorage();
 
   final FlutterSecureStorage _storage;
 
