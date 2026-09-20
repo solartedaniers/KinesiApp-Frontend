@@ -1,0 +1,3 @@
+import 'package:flutter/material.dart';
+import 'app_colors.dart';
+abstract final class AppTheme { static final light=_make(Brightness.light); static final dark=_make(Brightness.dark); static ThemeData _make(Brightness brightness){final darkMode=brightness==Brightness.dark;final scheme=ColorScheme.fromSeed(seedColor:AppColors.cyan,brightness:brightness,primary:darkMode?const Color(0xFF84F4FF):AppColors.cyanDeep,secondary:AppColors.mint,surface:darkMode?AppColors.darkSurface:Colors.white);return ThemeData(useMaterial3:true,colorScheme:scheme,scaffoldBackgroundColor:darkMode?AppColors.darkBackground:AppColors.lightBackground,inputDecorationTheme:InputDecorationTheme(filled:true,fillColor:scheme.surface,border:OutlineInputBorder(borderRadius:BorderRadius.circular(14))));} }
