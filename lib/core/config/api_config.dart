@@ -5,6 +5,22 @@ import 'package:flutter/foundation.dart';
 /// un host o puerto quemado en el código.
 abstract final class ApiConfig {
   static const String _baseUrl = String.fromEnvironment('API_BASE_URL');
+  static const int maxVideoDurationSeconds = int.fromEnvironment(
+    'MAX_VIDEO_DURATION_SECONDS',
+    defaultValue: 30,
+  );
+  static const int videoCaptureFps = int.fromEnvironment(
+    'VIDEO_CAPTURE_FPS',
+    defaultValue: 24,
+  );
+  static const int videoCaptureBitrate = int.fromEnvironment(
+    'VIDEO_CAPTURE_BITRATE',
+    defaultValue: 2000000,
+  );
+  static const int consentVersion = int.fromEnvironment(
+    'VIDEO_CONSENT_VERSION',
+    defaultValue: 1,
+  );
 
   static String get baseUrl {
     if (_baseUrl.isEmpty) {

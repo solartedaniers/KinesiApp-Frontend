@@ -6,15 +6,13 @@ import '../../core/error/error_message_resolver.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/navigation/app_routes.dart';
 import '../../core/network/api_exception.dart';
+import '../../core/theme/app_spacing.dart';
 import '../../core/validation/form_validators.dart';
-import '../../widgets/app_card.dart';
 import '../../widgets/app_text_field.dart';
-import '../../widgets/biometric_background.dart';
+import '../../widgets/auth_page_shell.dart';
 import '../../widgets/primary_button.dart';
 import 'auth_error_banner.dart';
 
-/// El backend sólo permite registrar cuentas ATHLETE (`/auth/register`): no
-/// hay selector de rol. Registrar no autentica; falta verificar el OTP.
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -62,9 +60,9 @@ class _RegisterViewState extends State<RegisterView> {
         fullName: _fullNameController.text.trim(),
       );
       if (mounted) context.go(AppRoutes.verifyEmail, extra: email);
-    } on ApiException catch (e) {
+    } on ApiException catch (error) {
       if (mounted) {
-        setState(() => _errorKey = ErrorMessageResolver.keyFor(e.code));
+        setState(() => _errorKey = ErrorMessageResolver.keyFor(error.code));
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);
@@ -72,72 +70,69 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(leading: const BackButton()),
-    body: BiometricBackground(
-      variant: 1,
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(24),
-          children: [
-            Text(
-              context.tr('createAccount'),
-              style: Theme.of(
-                context,
-              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 20),
-            AppCard(
-              child: Column(
-                children: [
-                  AppTextField(
-                    controller: _fullNameController,
-                    label: context.tr('fullName'),
-                    icon: Icons.badge_outlined,
-                    validator: (value) =>
-                        context.trValidator(FormValidators.required(value)),
-                  ),
-                  const SizedBox(height: 12),
-                  AppTextField(
-                    controller: _emailController,
-                    label: context.tr('email'),
-                    icon: Icons.mail_outline,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) =>
-                        context.trValidator(FormValidators.email(value)),
-                  ),
-                  const SizedBox(height: 12),
-                  AppTextField(
-                    controller: _passwordController,
-                    label: context.tr('password'),
-                    icon: Icons.lock_outline,
-                    obscureText: true,
-                    validator: (value) =>
-                        context.trValidator(FormValidators.password(value)),
-                  ),
-                  const SizedBox(height: 12),
-                  AppTextField(
-                    controller: _confirmPasswordController,
-                    label: context.tr('confirmPassword'),
-                    icon: Icons.lock_reset_outlined,
-                    obscureText: true,
-                    validator: _validateConfirmPassword,
-                  ),
-                ],
-              ),
-            ),
-            if (_errorKey != null) AuthErrorBanner(messageKey: _errorKey!),
-            const SizedBox(height: 18),
-            PrimaryButton(
-              label: context.tr('createAccount'),
-              icon: Icons.person_add,
-              isLoading: _isSubmitting,
-              onPressed: _handleRegister,
-            ),
-          ],
-        ),
+  Widget build(BuildContext context) => AuthPageShell(
+    titleKey: 'createAccount',
+    subtitleKey: 'authRegisterSubtitle',
+    showBackButton: true,
+    content: Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppTextField(
+            controller: _fullNameController,
+            label: context.tr('fullName'),
+            icon: Icons.badge_outlined,
+            validator: (value) =>
+                context.trValidator(FormValidators.required(value)),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          AppTextField(
+            controller: _emailController,
+            label: context.tr('email'),
+            icon: Icons.alternate_email,
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) =>
+                context.trValidator(FormValidators.email(value)),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          AppTextField(
+            controller: _passwordController,
+            label: context.tr('password'),
+            icon: Icons.lock_outline,
+            obscureText: true,
+            validator: (value) =>
+                context.trValidator(FormValidators.password(value)),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          AppTextField(
+            controller: _confirmPasswordController,
+            label: context.tr('confirmPassword'),
+            icon: Icons.lock_reset_outlined,
+            obscureText: true,
+            validator: _validateConfirmPassword,
+          ),
+          if (_errorKey != null) AuthErrorBanner(messageKey: _errorKey!),
+          const SizedBox(height: AppSpacing.lg),
+          PrimaryButton(
+            label: context.tr('createAccount'),
+            icon: Icons.person_add_alt_1,
+            isLoading: _isSubmitting,
+            onPressed: _handleRegister,
+          ),
+        ],
       ),
+    ),
+    footer: Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Text(context.tr('hasAccount')),
+        TextButton(
+          onPressed: () => context.go(AppRoutes.login),
+          child: Text(context.tr('signIn')),
+        ),
+      ],
     ),
   );
 }

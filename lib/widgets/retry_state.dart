@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/localization/app_localizations.dart';
+import '../core/theme/app_spacing.dart';
 
 /// Estado de error genérico con botón de reintentar, reutilizado por las
 /// listas de las home screens (athlete/coach/admin) cuando una carga falla.
@@ -20,7 +21,7 @@ class RetryState extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(context.tr(messageKey)),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         OutlinedButton.icon(
           onPressed: onRetry,
           icon: const Icon(Icons.refresh),

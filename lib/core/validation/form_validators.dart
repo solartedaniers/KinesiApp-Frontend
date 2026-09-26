@@ -25,4 +25,12 @@ abstract final class FormValidators {
         ? null
         : 'validatorPasswordTooShort';
   }
+
+  static String? otp(String? value) {
+    final requiredError = required(value);
+    if (requiredError != null) return requiredError;
+    return RegExp(r'^\d{6}$').hasMatch(value!.trim())
+        ? null
+        : 'validatorInvalidOtpFormat';
+  }
 }

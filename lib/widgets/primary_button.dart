@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core/theme/app_spacing.dart';
+
 /// Botón de acción principal, con estado de carga incorporado para no
 /// repetir el `isSubmitting ? spinner : botón` en cada pantalla.
 class PrimaryButton extends StatelessWidget {
@@ -18,17 +20,17 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-    height: 52,
+    height: AppSpacing.actionHeight,
     width: double.infinity,
     child: FilledButton.icon(
       onPressed: isLoading ? null : onPressed,
       icon: isLoading
-          ? const SizedBox(
-              width: 18,
-              height: 18,
+          ? SizedBox(
+              width: AppSpacing.compactIcon,
+              height: AppSpacing.compactIcon,
               child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
+                strokeWidth: AppSpacing.xs / 2,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
             )
           : Icon(icon),

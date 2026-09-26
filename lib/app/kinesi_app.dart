@@ -11,6 +11,10 @@ import '../core/storage/secure_session_storage.dart';
 import '../core/theme/app_theme.dart';
 import '../repositories/auth_repository.dart';
 import '../repositories/auth_repository_impl.dart';
+import '../repositories/fake_jump_analysis_consent_repository.dart';
+import '../repositories/fake_video_upload_repository.dart';
+import '../repositories/fake_jump_analysis_status_repository.dart';
+import '../repositories/fake_chat_repository.dart';
 import '../services/athletes/athlete_api.dart';
 import '../services/auth/auth_api.dart';
 import '../services/auth/session_controller.dart';
@@ -21,6 +25,9 @@ import '../use_cases/auth/logout_use_case.dart';
 import '../use_cases/auth/register_use_case.dart';
 import '../use_cases/auth/restore_session_use_case.dart';
 import '../use_cases/auth/verify_email_use_case.dart';
+import '../use_cases/auth/request_verification_code_use_case.dart';
+import '../use_cases/auth/request_password_reset_use_case.dart';
+import '../use_cases/auth/confirm_password_reset_use_case.dart';
 import 'app_scope.dart';
 import 'router.dart';
 
@@ -59,10 +66,20 @@ class _KinesiAppState extends State<KinesiApp> {
     verifyEmail: VerifyEmailUseCase(_authRepository),
     logout: LogoutUseCase(_authRepository),
     restoreSession: RestoreSessionUseCase(_authRepository),
+    requestVerificationCode: RequestVerificationCodeUseCase(_authRepository),
+    requestPasswordReset: RequestPasswordResetUseCase(_authRepository),
+    confirmPasswordReset: ConfirmPasswordResetUseCase(_authRepository),
   );
   late final AthleteApi _athleteApi = AthleteApi(_dio);
   late final UserApi _userApi = UserApi(_dio);
   late final JumpAnalysisApi _jumpAnalysisApi = JumpAnalysisApi(_dio);
+  final FakeJumpAnalysisConsentRepository _consentRepository =
+      FakeJumpAnalysisConsentRepository();
+  final FakeVideoUploadRepository _videoUploadRepository =
+      FakeVideoUploadRepository();
+  final FakeJumpAnalysisStatusRepository _analysisStatusRepository =
+      FakeJumpAnalysisStatusRepository();
+  final FakeChatRepository _chatRepository = FakeChatRepository();
   late final GoRouter _router = buildAppRouter(_session);
   late final Future<TranslationCatalog> _bootstrap = _translationService.load();
 
@@ -93,6 +110,10 @@ class _KinesiAppState extends State<KinesiApp> {
           athleteApi: _athleteApi,
           userApi: _userApi,
           jumpAnalysisApi: _jumpAnalysisApi,
+          consentRepository: _consentRepository,
+          videoUploadRepository: _videoUploadRepository,
+          analysisStatusRepository: _analysisStatusRepository,
+          chatRepository: _chatRepository,
           language: _language,
           themeMode: _mode,
           onLanguageChanged: (value) => setState(() => _language = value),

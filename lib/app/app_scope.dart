@@ -6,6 +6,10 @@ import '../services/athletes/athlete_api.dart';
 import '../services/auth/session_controller.dart';
 import '../services/jump_analyses/jump_analysis_api.dart';
 import '../services/users/user_api.dart';
+import '../repositories/jump_analysis_consent_repository.dart';
+import '../repositories/video_upload_repository.dart';
+import '../repositories/jump_analysis_status_repository.dart';
+import '../repositories/chat_repository.dart';
 
 /// Único InheritedWidget que expone las dependencias construidas por el
 /// composition root (`KinesiApp`) al resto del árbol: nada por debajo crea
@@ -17,6 +21,10 @@ class AppScope extends InheritedWidget {
     required this.athleteApi,
     required this.userApi,
     required this.jumpAnalysisApi,
+    required this.consentRepository,
+    required this.videoUploadRepository,
+    required this.analysisStatusRepository,
+    required this.chatRepository,
     required this.language,
     required this.themeMode,
     required this.onLanguageChanged,
@@ -28,6 +36,10 @@ class AppScope extends InheritedWidget {
   final AthleteApi athleteApi;
   final UserApi userApi;
   final JumpAnalysisApi jumpAnalysisApi;
+  final JumpAnalysisConsentRepository consentRepository;
+  final VideoUploadRepository videoUploadRepository;
+  final JumpAnalysisStatusRepository analysisStatusRepository;
+  final ChatRepository chatRepository;
   final AppLanguage language;
   final ThemeMode themeMode;
   final ValueChanged<AppLanguage> onLanguageChanged;

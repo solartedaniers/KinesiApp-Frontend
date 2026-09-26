@@ -8,9 +8,16 @@ import '../views/admin/admin_home_view.dart';
 import '../views/athlete/athlete_home_view.dart';
 import '../views/auth/login_view.dart';
 import '../views/auth/otp_verification_view.dart';
+import '../views/auth/password_recovery_view.dart';
 import '../views/auth/register_view.dart';
 import '../views/auth/splash_view.dart';
 import '../views/coach/coach_home_view.dart';
+import '../views/analysis/video_consent_view.dart';
+import '../views/analysis/video_capture_view.dart';
+import '../views/analysis/video_upload_view.dart';
+import '../views/analysis/analysis_status_view.dart';
+import '../views/analysis/analysis_chat_view.dart';
+import '../core/navigation/analysis_flow.dart';
 
 /// Construye el `GoRouter` de la app: la única guarda de acceso es [_redirect],
 /// que decide sólo con [SessionController.status] (y el rol), reevaluada
@@ -20,6 +27,7 @@ GoRouter buildAppRouter(SessionController session) {
     AppRoutes.login,
     AppRoutes.register,
     AppRoutes.verifyEmail,
+    AppRoutes.passwordRecovery,
   };
 
   String? redirect(_, GoRouterState state) {
@@ -60,6 +68,11 @@ GoRouter buildAppRouter(SessionController session) {
             OtpVerificationView(email: state.extra as String? ?? ''),
       ),
       GoRoute(
+        path: AppRoutes.passwordRecovery,
+        builder: (context, state) =>
+            PasswordRecoveryView(initialEmail: state.extra as String? ?? ''),
+      ),
+      GoRoute(
         path: AppRoutes.athleteHome,
         builder: (context, state) => const AthleteHomeView(),
       ),
@@ -70,6 +83,31 @@ GoRouter buildAppRouter(SessionController session) {
       GoRoute(
         path: AppRoutes.adminHome,
         builder: (context, state) => const AdminHomeView(),
+      ),
+      GoRoute(
+        path: AppRoutes.videoConsent,
+        builder: (context, state) =>
+            VideoConsentView(athleteId: state.extra! as int),
+      ),
+      GoRoute(
+        path: AppRoutes.videoCapture,
+        builder: (context, state) =>
+            VideoCaptureView(athleteId: state.extra! as int),
+      ),
+      GoRoute(
+        path: AppRoutes.videoUpload,
+        builder: (context, state) =>
+            VideoUploadView(flow: state.extra! as AnalysisFlow),
+      ),
+      GoRoute(
+        path: AppRoutes.analysisStatus,
+        builder: (context, state) =>
+            AnalysisStatusView(flow: state.extra! as AnalysisFlow),
+      ),
+      GoRoute(
+        path: AppRoutes.analysisChat,
+        builder: (context, state) =>
+            AnalysisChatView(analysisId: state.extra! as int),
       ),
     ],
   );

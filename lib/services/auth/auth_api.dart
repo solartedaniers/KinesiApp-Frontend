@@ -44,6 +44,37 @@ class AuthApi {
     }
   }
 
+  Future<void> requestVerificationCode({required String email}) async {
+    try {
+      await _dio.post(ApiPaths.requestVerificationCode, data: {'email': email});
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  Future<void> requestPasswordReset({required String email}) async {
+    try {
+      await _dio.post(ApiPaths.requestPasswordReset, data: {'email': email});
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  Future<void> confirmPasswordReset({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) async {
+    try {
+      await _dio.post(
+        ApiPaths.confirmPasswordReset,
+        data: {'email': email, 'code': code, 'new_password': newPassword},
+      );
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
   Future<AuthTokens> login({
     required String email,
     required String password,

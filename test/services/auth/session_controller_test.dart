@@ -11,6 +11,9 @@ import 'package:frontend/use_cases/auth/logout_use_case.dart';
 import 'package:frontend/use_cases/auth/register_use_case.dart';
 import 'package:frontend/use_cases/auth/restore_session_use_case.dart';
 import 'package:frontend/use_cases/auth/verify_email_use_case.dart';
+import 'package:frontend/use_cases/auth/request_verification_code_use_case.dart';
+import 'package:frontend/use_cases/auth/request_password_reset_use_case.dart';
+import 'package:frontend/use_cases/auth/confirm_password_reset_use_case.dart';
 
 const _user = CurrentUser(
   id: 1,
@@ -57,6 +60,19 @@ class _FakeAuthRepository implements AuthRepository {
   }) async => _user;
 
   @override
+  Future<void> requestVerificationCode({required String email}) async {}
+
+  @override
+  Future<void> requestPasswordReset({required String email}) async {}
+
+  @override
+  Future<void> confirmPasswordReset({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) async {}
+
+  @override
   Future<void> logout() async {}
 }
 
@@ -67,6 +83,9 @@ SessionController _buildController(_FakeAuthRepository repository) =>
       verifyEmail: VerifyEmailUseCase(repository),
       logout: LogoutUseCase(repository),
       restoreSession: RestoreSessionUseCase(repository),
+      requestVerificationCode: RequestVerificationCodeUseCase(repository),
+      requestPasswordReset: RequestPasswordResetUseCase(repository),
+      confirmPasswordReset: ConfirmPasswordResetUseCase(repository),
     );
 
 void main() {

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/app_scope.dart';
+import '../../core/localization/app_localizations.dart';
 import '../../core/network/api_exception.dart';
 import '../../models/athlete/athlete_profile.dart';
+import '../../core/navigation/app_routes.dart';
+import '../../widgets/primary_button.dart';
 import '../../widgets/retry_state.dart';
 import '../../widgets/role_home_scaffold.dart';
 import 'athlete_profile_setup_view.dart';
@@ -60,6 +64,13 @@ class _AthleteHomeViewState extends State<AthleteHomeView> {
           padding: const EdgeInsets.all(20),
           children: [
             AthleteProfileSummary(profile: profile),
+            const SizedBox(height: 20),
+            PrimaryButton(
+              label: context.tr('startJumpAnalysis'),
+              icon: Icons.videocam,
+              onPressed: () =>
+                  context.go(AppRoutes.videoConsent, extra: profile.id),
+            ),
             const SizedBox(height: 20),
             JumpAnalysisList(athleteId: profile.id),
           ],

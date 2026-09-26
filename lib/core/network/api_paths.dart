@@ -4,9 +4,14 @@ abstract final class ApiPaths {
   static const String login = '/auth/login';
   static const String register = '/auth/register';
   static const String verifyEmail = '/auth/verify-email';
+  static const String requestVerificationCode =
+      '/auth/verification-code/request';
+  static const String requestPasswordReset = '/auth/password-recovery/request';
+  static const String confirmPasswordReset = '/auth/password-recovery/confirm';
   static const String refresh = '/auth/refresh';
   static const String logout = '/auth/logout';
   static const String me = '/auth/me';
+  static const String videoConsent = '/users/me/video-consent';
 
   static const String athleteMe = '/athletes/me';
   static const String athletesCoached = '/athletes/coached';
@@ -21,5 +26,13 @@ abstract final class ApiPaths {
   static String userRole(int userId) => '/users/$userId/role';
 
   /// Endpoints que nunca llevan `Authorization` ni disparan un refresh de token.
-  static const List<String> public = [login, register, refresh, verifyEmail];
+  static const List<String> public = [
+    login,
+    register,
+    refresh,
+    verifyEmail,
+    requestVerificationCode,
+    requestPasswordReset,
+    confirmPasswordReset,
+  ];
 }

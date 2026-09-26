@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import '../../models/auth/current_user.dart';
 import '../../models/auth/session_status.dart';
 import '../../use_cases/auth/login_use_case.dart';
+import '../../use_cases/auth/request_verification_code_use_case.dart';
+import '../../use_cases/auth/request_password_reset_use_case.dart';
+import '../../use_cases/auth/confirm_password_reset_use_case.dart';
 import '../../use_cases/auth/logout_use_case.dart';
 import '../../use_cases/auth/register_use_case.dart';
 import '../../use_cases/auth/restore_session_result.dart';
@@ -18,17 +21,26 @@ class SessionController extends ChangeNotifier {
     required VerifyEmailUseCase verifyEmail,
     required LogoutUseCase logout,
     required RestoreSessionUseCase restoreSession,
+    required RequestVerificationCodeUseCase requestVerificationCode,
+    required RequestPasswordResetUseCase requestPasswordReset,
+    required ConfirmPasswordResetUseCase confirmPasswordReset,
   }) : _login = login,
        _register = register,
        _verifyEmail = verifyEmail,
        _logout = logout,
-       _restoreSession = restoreSession;
+       _restoreSession = restoreSession,
+       _requestVerificationCode = requestVerificationCode,
+       _requestPasswordReset = requestPasswordReset,
+       _confirmPasswordReset = confirmPasswordReset;
 
   final LoginUseCase _login;
   final RegisterUseCase _register;
   final VerifyEmailUseCase _verifyEmail;
   final LogoutUseCase _logout;
   final RestoreSessionUseCase _restoreSession;
+  final RequestVerificationCodeUseCase _requestVerificationCode;
+  final RequestPasswordResetUseCase _requestPasswordReset;
+  final ConfirmPasswordResetUseCase _confirmPasswordReset;
 
   SessionStatus _status = SessionStatus.unknown;
   CurrentUser? _currentUser;
@@ -79,6 +91,24 @@ class SessionController extends ChangeNotifier {
         () async =>
             _setAuthenticated(await _verifyEmail(email: email, code: code)),
       );
+
+  Future<void> requestVerificationCode({required String email}) =>
+      _runAuthFlow(() => _requestVerificationCode(email: email));
+
+  Future<void> requestPasswordReset({required String email}) =>
+      _runAuthFlow(() => _requestPasswordReset(email: email));
+
+  Future<void> confirmPasswordReset({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) => _runAuthFlow(
+    () => _confirmPasswordReset(
+      email: email,
+      code: code,
+      newPassword: newPassword,
+    ),
+  );
 
   Future<void> logout() async {
     await _logout();
