@@ -15,3 +15,14 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+# Celular
+
+1. cd frontend
+2. flutter run -d eb40db3a --dart-define-from-file=env/dev.local.json
+
+# para el computador
+
+1. cd frontend
+2. flutter run -d chrome --dart-define-from-file=env/dev.local.json
