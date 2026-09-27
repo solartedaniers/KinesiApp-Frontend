@@ -28,7 +28,7 @@ class _VideoConsentViewState extends State<VideoConsentView> {
   }
 
   Future<void> _checkExistingConsent() async {
-    final hasConsent = await AppScope.of(
+    final hasConsent = await AppScope.read(
       context,
     ).consentRepository.hasConsent(ApiConfig.consentVersion);
     if (!mounted) return;
@@ -42,7 +42,7 @@ class _VideoConsentViewState extends State<VideoConsentView> {
   Future<void> _continue() async {
     if (!_accepted) return;
     setState(() => _loading = true);
-    await AppScope.of(
+    await AppScope.read(
       context,
     ).consentRepository.recordConsent(ApiConfig.consentVersion);
     if (mounted) context.go(AppRoutes.videoCapture, extra: widget.athleteId);

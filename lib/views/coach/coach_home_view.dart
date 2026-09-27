@@ -30,12 +30,12 @@ class _CoachHomeViewState extends State<CoachHomeView> {
   }
 
   Future<List<AthleteProfile>> _load() =>
-      AppScope.of(context).managedAthleteApi.list();
+      AppScope.read(context).managedAthleteApi.list();
 
   void _reload() => setState(() => _future = _load());
 
   Future<void> _create() async {
-    final api = AppScope.of(context).managedAthleteApi;
+    final api = AppScope.read(context).managedAthleteApi;
     final saved = await AthleteProfileForm.openAsPage(
       context,
       titleKey: 'newManagedAthlete',
@@ -47,7 +47,7 @@ class _CoachHomeViewState extends State<CoachHomeView> {
   }
 
   Future<void> _edit(AthleteProfile athlete) async {
-    final api = AppScope.of(context).managedAthleteApi;
+    final api = AppScope.read(context).managedAthleteApi;
     final saved = await AthleteProfileForm.openAsPage(
       context,
       titleKey: 'editManagedAthlete',
@@ -60,7 +60,7 @@ class _CoachHomeViewState extends State<CoachHomeView> {
   }
 
   Future<void> _delete(AthleteProfile athlete) async {
-    final api = AppScope.of(context).managedAthleteApi;
+    final api = AppScope.read(context).managedAthleteApi;
     final messenger = ScaffoldMessenger.of(context);
     final confirmed = await showDialog<bool>(
       context: context,

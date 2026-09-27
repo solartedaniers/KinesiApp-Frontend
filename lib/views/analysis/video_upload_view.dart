@@ -35,7 +35,7 @@ class _VideoUploadViewState extends State<VideoUploadView> {
       _progress = 0;
       _error = null;
     });
-    _subscription = AppScope.of(context).videoUploadRepository
+    _subscription = AppScope.read(context).videoUploadRepository
         .upload(widget.flow.video)
         .listen(
           (progress) => setState(() => _progress = progress),

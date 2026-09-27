@@ -35,7 +35,7 @@ class _AthleteHomeViewState extends State<AthleteHomeView> {
 
   Future<AthleteProfile?> _loadProfile() async {
     try {
-      return await AppScope.of(context).athleteApi.getMine();
+      return await AppScope.read(context).athleteApi.getMine();
     } on ApiException catch (e) {
       if (e.statusCode == 404) return null;
       rethrow;
@@ -45,7 +45,7 @@ class _AthleteHomeViewState extends State<AthleteHomeView> {
   void _reload() => setState(() => _profileFuture = _loadProfile());
 
   Future<void> _editProfile(AthleteProfile profile) async {
-    final athleteApi = AppScope.of(context).athleteApi;
+    final athleteApi = AppScope.read(context).athleteApi;
     final saved = await AthleteProfileForm.openAsPage(
       context,
       titleKey: 'editAthleteProfile',
@@ -76,7 +76,7 @@ class _AthleteHomeViewState extends State<AthleteHomeView> {
             hintKey: 'athleteProfileSetupHint',
             actionKey: 'athleteProfileSetupAction',
             onSubmit: (data) async {
-              await AppScope.of(context).athleteApi.createMine(data);
+              await AppScope.read(context).athleteApi.createMine(data);
               _reload();
             },
           );

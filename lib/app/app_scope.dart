@@ -51,6 +51,12 @@ class AppScope extends InheritedWidget {
   static AppScope of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<AppScope>()!;
 
+  /// Acceso a servicios sin suscribirse a cambios de idioma/tema. Es el único
+  /// válido dentro de `initState` (ahí `of` lanza en debug), así que los
+  /// cargadores que arrancan en `initState` deben usar este.
+  static AppScope read(BuildContext context) =>
+      context.getInheritedWidgetOfExactType<AppScope>()!;
+
   @override
   bool updateShouldNotify(AppScope oldWidget) =>
       language != oldWidget.language || themeMode != oldWidget.themeMode;

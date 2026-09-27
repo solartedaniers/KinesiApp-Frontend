@@ -32,7 +32,7 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
   }
 
   Future<void> _verifyConsent() async {
-    final hasConsent = await AppScope.of(
+    final hasConsent = await AppScope.read(
       context,
     ).consentRepository.hasConsent(ApiConfig.consentVersion);
     if (!mounted) return;

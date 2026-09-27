@@ -28,7 +28,7 @@ class _AnalysisChatViewState extends State<AnalysisChatView> {
   }
 
   Future<List<ChatMessage>> _load() =>
-      AppScope.of(context).chatRepository.getMessages(widget.analysisId);
+      AppScope.read(context).chatRepository.getMessages(widget.analysisId);
 
   Future<void> _send() async {
     final content = _input.text.trim();
@@ -39,7 +39,7 @@ class _AnalysisChatViewState extends State<AnalysisChatView> {
     });
     _input.clear();
     try {
-      final reply = await AppScope.of(
+      final reply = await AppScope.read(
         context,
       ).chatRepository.sendMessage(widget.analysisId, content);
       if (mounted) setState(() => _sent.add(reply));

@@ -36,7 +36,7 @@ class _AnalysisStatusViewState extends State<AnalysisStatusView> {
     if (_loading) return;
     _loading = true;
     try {
-      final status = await AppScope.of(
+      final status = await AppScope.read(
         context,
       ).analysisStatusRepository.getStatus(widget.flow.analysisId);
       if (!mounted) return;

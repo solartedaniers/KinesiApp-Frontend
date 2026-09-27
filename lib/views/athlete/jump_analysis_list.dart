@@ -28,7 +28,7 @@ class _JumpAnalysisListState extends State<JumpAnalysisList> {
   }
 
   Future<List<JumpAnalysisSummary>> _load() =>
-      AppScope.of(context).jumpAnalysisApi.listByAthlete(widget.athleteId);
+      AppScope.read(context).jumpAnalysisApi.listByAthlete(widget.athleteId);
 
   @override
   Widget build(BuildContext context) => Column(

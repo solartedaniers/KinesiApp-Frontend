@@ -29,7 +29,7 @@ class _AdminHomeViewState extends State<AdminHomeView> {
   }
 
   Future<(List<CurrentUser>, List<AthleteProfile>)> _load() async {
-    final scope = AppScope.of(context);
+    final scope = AppScope.read(context);
     final users = await scope.userApi.list();
     final athletes = await scope.athleteApi.listAll();
     return (users, athletes);
