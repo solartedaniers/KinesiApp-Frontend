@@ -11,6 +11,8 @@
   "hasAccount": "¿Ya tienes una cuenta?",
   "email": "Correo electrónico",
   "password": "Contraseña",
+  "showPassword": "Mostrar contraseña",
+  "hidePassword": "Ocultar contraseña",
   "noAccount": "¿Aún no tienes una cuenta?",
   "register": "Regístrate aquí",
 
@@ -109,6 +111,7 @@
   "errorInvalidOtp": "El código ingresado no es válido.",
   "errorSessionExpired": "Tu sesión expiró. Inicia sesión de nuevo.",
   "errorEmailAlreadyRegistered": "Ese correo ya está registrado.",
+  "errorEmailDeliveryFailed": "No pudimos enviar el correo. Inténtalo de nuevo en unos momentos.",
   "errorProfileAlreadyExists": "Ya tienes un perfil de deportista.",
   "errorNotFound": "No encontramos lo que buscabas.",
   "errorForbidden": "No tienes permiso para hacer esto.",

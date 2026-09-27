@@ -14,6 +14,7 @@ enum ErrorCode {
   invalidOtp('invalid_otp'),
   invalidRefreshToken('invalid_refresh_token'),
   invalidRoleAssignment('invalid_role_assignment'),
+  emailDeliveryFailed('email_delivery_failed'),
   unknown('unknown');
 
   const ErrorCode(this.wireValue);

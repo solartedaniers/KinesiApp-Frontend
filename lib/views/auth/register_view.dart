@@ -101,6 +101,7 @@ class _RegisterViewState extends State<RegisterView> {
             label: context.tr('password'),
             icon: Icons.lock_outline,
             obscureText: true,
+            showVisibilityToggle: true,
             validator: (value) =>
                 context.trValidator(FormValidators.password(value)),
           ),
@@ -110,6 +111,7 @@ class _RegisterViewState extends State<RegisterView> {
             label: context.tr('confirmPassword'),
             icon: Icons.lock_reset_outlined,
             obscureText: true,
+            showVisibilityToggle: true,
             validator: _validateConfirmPassword,
           ),
           if (_errorKey != null) AuthErrorBanner(messageKey: _errorKey!),

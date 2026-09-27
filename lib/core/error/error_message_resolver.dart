@@ -16,6 +16,7 @@ abstract final class ErrorMessageResolver {
     ErrorCode.notFound: 'errorNotFound',
     ErrorCode.forbidden: 'errorForbidden',
     ErrorCode.invalidRoleAssignment: 'errorInvalidRoleAssignment',
+    ErrorCode.emailDeliveryFailed: 'errorEmailDeliveryFailed',
   };
 
   static String keyFor(ErrorCode code) => _keyByCode[code] ?? genericKey;

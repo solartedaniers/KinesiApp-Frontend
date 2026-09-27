@@ -73,6 +73,7 @@ class _LoginViewState extends State<LoginView> {
               label: context.tr('password'),
               icon: Icons.lock_outline,
               obscureText: true,
+              showVisibilityToggle: true,
               validator: (value) =>
                   context.trValidator(FormValidators.required(value)),
             ),

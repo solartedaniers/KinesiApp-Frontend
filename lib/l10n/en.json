@@ -11,6 +11,8 @@
   "hasAccount": "Already have an account?",
   "email": "Email",
   "password": "Password",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
   "noAccount": "New to KinesiApp?",
   "register": "Register now",
 
@@ -109,6 +111,7 @@
   "errorInvalidOtp": "The code you entered is not valid.",
   "errorSessionExpired": "Your session expired. Please sign in again.",
   "errorEmailAlreadyRegistered": "That email is already registered.",
+  "errorEmailDeliveryFailed": "We could not deliver the email. Please try again shortly.",
   "errorProfileAlreadyExists": "You already have an athlete profile.",
   "errorNotFound": "We couldn't find what you were looking for.",
   "errorForbidden": "You don't have permission to do that.",
