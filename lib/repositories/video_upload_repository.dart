@@ -1,5 +1,7 @@
 import 'package:cross_file/cross_file.dart';
 
+import '../models/jump_analysis/movement_type.dart';
+
 /// Avance de la subida; el último evento trae el id del análisis creado.
 class VideoUploadProgress {
   const VideoUploadProgress(this.fraction, {this.analysisId});
@@ -12,6 +14,7 @@ abstract interface class VideoUploadRepository {
   /// Cancelar la suscripción cancela la subida en curso.
   Stream<VideoUploadProgress> upload({
     required int athleteId,
+    required MovementType movementType,
     required XFile video,
   });
 }

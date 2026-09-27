@@ -38,5 +38,14 @@ abstract final class AppRoutes {
   static const String videoCapture = '/analysis/capture';
   static const String videoUpload = '/analysis/upload';
   static const String analysisStatus = '/analysis/status';
+
+  /// Detalle de una grabación. El id va en la query (no en `extra`): sobrevive
+  /// a recargas y refrescos del router, y el path fijo lo valida RouteAccessPolicy.
+  static const String analysisDetail = '/analysis/detail';
+  static const String analysisIdParam = 'id';
+  static String analysisDetailFor(int analysisId) => Uri(
+    path: analysisDetail,
+    queryParameters: {analysisIdParam: '$analysisId'},
+  ).toString();
   static const String analysisChat = '/analysis/chat';
 }

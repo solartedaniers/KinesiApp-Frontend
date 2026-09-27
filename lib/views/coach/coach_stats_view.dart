@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../controllers/loadable_controller.dart';
+import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../widgets/controller_scope.dart';
 import '../../widgets/loadable_view.dart';
@@ -27,6 +29,7 @@ class CoachStatsView extends StatelessWidget {
         children: [
           AnalysisStatisticsPanel(
             analyses: analyses,
+            onRecordingsTap: () => context.go(AppRoutes.coachTeamAnalyses),
             leadingItems: [
               StatItem(
                 labelKey: 'statsAthletes',

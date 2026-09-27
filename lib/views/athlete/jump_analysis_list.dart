@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/localization/app_localizations.dart';
+import '../../core/navigation/app_routes.dart';
 import '../../models/jump_analysis/analysis_statistics.dart';
 import '../../models/jump_analysis/jump_analysis_status.dart';
 import '../../models/jump_analysis/jump_analysis_summary.dart';
@@ -59,9 +61,11 @@ class _JumpAnalysisTile extends StatelessWidget {
     final risk = analysis.riskScore;
     final scheme = Theme.of(context).colorScheme;
     return AppCard(
+      onTap: () => context.push(AppRoutes.analysisDetailFor(analysis.id)),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         leading: const Icon(Icons.directions_run),
+        // Sin trailing de navegación: el chip de riesgo ya ocupa ese lugar
         title: Text(athleteName ?? date),
         subtitle: Text(
           athleteName == null

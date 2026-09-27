@@ -11,6 +11,7 @@ abstract final class RouteAccessPolicy {
     AppRoutes.videoCapture,
     AppRoutes.videoUpload,
     AppRoutes.analysisStatus,
+    AppRoutes.analysisDetail,
     AppRoutes.analysisChat,
   };
 

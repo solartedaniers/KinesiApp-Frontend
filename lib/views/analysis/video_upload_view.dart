@@ -40,7 +40,11 @@ class _VideoUploadViewState extends State<VideoUploadView> {
       _errorKey = null;
     });
     _subscription = AppScope.read(context).videoUploadRepository
-        .upload(athleteId: widget.flow.athleteId, video: widget.flow.video)
+        .upload(
+          athleteId: widget.flow.athleteId,
+          movementType: widget.flow.movementType,
+          video: widget.flow.video,
+        )
         .listen(
           (progress) {
             if (!mounted) return;

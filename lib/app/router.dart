@@ -14,6 +14,7 @@ import '../views/admin/admin_home_view.dart';
 import '../views/admin/admin_shell.dart';
 import '../views/admin/admin_users_tab.dart';
 import '../views/analysis/analysis_chat_view.dart';
+import '../views/analysis/analysis_detail_view.dart';
 import '../views/analysis/analysis_status_view.dart';
 import '../views/analysis/video_capture_view.dart';
 import '../views/analysis/video_consent_view.dart';
@@ -208,6 +209,14 @@ GoRouter buildAppRouter(SessionController session) {
             AnalysisStatusView(flow: state.extra! as AnalysisFlow),
       ),
       GoRoute(
+        path: AppRoutes.analysisDetail,
+        redirect: (_, state) => _analysisIdOf(state) == null
+            ? RoleHomeResolver.resolve(session.currentUser!.role)
+            : null,
+        builder: (context, state) =>
+            AnalysisDetailView(analysisId: _analysisIdOf(state)!),
+      ),
+      GoRoute(
         path: AppRoutes.analysisChat,
         redirect: toRoleHome,
         builder: (context, state) =>
@@ -216,3 +225,6 @@ GoRouter buildAppRouter(SessionController session) {
     ],
   );
 }
+
+int? _analysisIdOf(GoRouterState state) =>
+    int.tryParse(state.uri.queryParameters[AppRoutes.analysisIdParam] ?? '');

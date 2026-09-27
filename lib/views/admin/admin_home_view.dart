@@ -23,7 +23,7 @@ class AdminHomeView extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            WelcomeHeader(hintKey: 'adminHomeHint'),
+            const WelcomeHeader(),
             const SizedBox(height: AppSpacing.lg),
             StatGrid(
               items: [

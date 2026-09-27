@@ -28,6 +28,23 @@ class JumpAnalysisApi {
     }
   }
 
+  /// URL reproducible del video: lleva un token de corta vida en la query
+  /// porque el reproductor no puede mandar el header `Authorization`.
+  Future<Uri> videoUrl(int analysisId) async {
+    try {
+      final response = await _dio.get<Map<String, dynamic>>(
+        ApiPaths.jumpAnalysisVideoAccess(analysisId),
+      );
+      final base = Uri.parse(_dio.options.baseUrl);
+      return base.replace(
+        path: '${base.path}${ApiPaths.jumpAnalysisVideo(analysisId)}',
+        queryParameters: {'token': response.data!['token'] as String},
+      );
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
   Future<List<JumpAnalysisSummary>> _list(String path) async {
     try {
       final response = await _dio.get(path);

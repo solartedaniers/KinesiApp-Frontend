@@ -49,6 +49,7 @@ dependencies:
   # Foto de perfil desde galería/cámara (ya redimensionada al elegirla)
   image_picker: ^1.1.2
   image: ^4.10.1
+  video_player: ^2.11.1
 
 dev_dependencies:
   flutter_test:

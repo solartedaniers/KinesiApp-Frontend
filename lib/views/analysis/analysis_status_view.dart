@@ -47,7 +47,7 @@ class _AnalysisStatusViewState extends State<AnalysisStatusView> {
         _attempts++;
       });
       if (status == ClientAnalysisStatus.processed) {
-        context.go(AppRoutes.analysisChat, extra: widget.flow.analysisId);
+        context.go(AppRoutes.analysisDetailFor(widget.flow.analysisId!));
       } else if (status == ClientAnalysisStatus.failed) {
         // Estado final: no tiene sentido seguir consultando
         return;

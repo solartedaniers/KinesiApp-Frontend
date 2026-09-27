@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../controllers/loadable_controller.dart';
 import '../../core/localization/app_localizations.dart';
+import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/controller_scope.dart';
@@ -19,7 +21,10 @@ class AthleteStatsView extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.lg),
       children: [
         if (analyses.isEmpty) AppCard(child: Text(context.tr('statsEmpty'))),
-        AnalysisStatisticsPanel(analyses: analyses),
+        AnalysisStatisticsPanel(
+          analyses: analyses,
+          onRecordingsTap: () => context.go(AppRoutes.athleteAnalyses),
+        ),
       ],
     ),
   );

@@ -5,6 +5,7 @@ import 'package:frontend/models/avatar/avatar_data.dart';
 import 'package:frontend/models/jump_analysis/analysis_statistics.dart';
 import 'package:frontend/models/jump_analysis/jump_analysis_status.dart';
 import 'package:frontend/models/jump_analysis/jump_analysis_summary.dart';
+import 'package:frontend/models/jump_analysis/movement_type.dart';
 
 JumpAnalysisSummary _analysis(
   JumpAnalysisStatus status,
@@ -13,6 +14,7 @@ JumpAnalysisSummary _analysis(
 ) => JumpAnalysisSummary(
   id: 1,
   athleteId: 1,
+  movementType: MovementType.jump,
   status: status,
   riskScore: risk,
   recordedAt: at,

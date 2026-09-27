@@ -72,6 +72,17 @@ void main() {
       RouteAccessPolicy.canAccess(UserRole.admin, AppRoutes.videoCapture),
       isFalse,
     );
+    // Detalle de una grabación: quien graba (deportista) y quien dirige (coach)
+    for (final role in [UserRole.athlete, UserRole.coach]) {
+      expect(
+        RouteAccessPolicy.canAccess(role, AppRoutes.analysisDetail),
+        isTrue,
+      );
+    }
+    expect(
+      RouteAccessPolicy.canAccess(UserRole.admin, AppRoutes.analysisDetail),
+      isFalse,
+    );
   });
 
   test('auth screens are not reachable once authenticated', () {

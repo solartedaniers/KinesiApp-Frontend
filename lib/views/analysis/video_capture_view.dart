@@ -11,6 +11,7 @@ import '../../core/localization/app_localizations.dart';
 import '../../core/navigation/analysis_flow.dart';
 import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../models/jump_analysis/movement_type.dart';
 import '../../widgets/role_home_button.dart';
 
 class VideoCaptureView extends StatefulWidget {
@@ -25,6 +26,7 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
   Timer? _timer;
   int _secondsRemaining = ApiConfig.maxVideoDurationSeconds;
   bool _recording = false;
+  MovementType _movementType = MovementType.jump;
   Object? _error;
 
   @override
@@ -100,7 +102,11 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
     if (!mounted) return;
     context.go(
       AppRoutes.videoUpload,
-      extra: AnalysisFlow(athleteId: widget.athleteId, video: video),
+      extra: AnalysisFlow(
+        athleteId: widget.athleteId,
+        video: video,
+        movementType: _movementType,
+      ),
     );
   }
 
@@ -133,6 +139,13 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: AppSpacing.md),
+                      _MovementTypeSelector(
+                        value: _movementType,
+                        enabled: true,
+                        onChanged: (type) =>
+                            setState(() => _movementType = type),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
                       _PickVideoButton(onPressed: _pickExistingVideo),
                     ],
                   ),
@@ -161,6 +174,13 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
                     padding: const EdgeInsets.all(AppSpacing.lg),
                     child: Column(
                       children: [
+                        _MovementTypeSelector(
+                          value: _movementType,
+                          enabled: !_recording,
+                          onChanged: (type) =>
+                              setState(() => _movementType = type),
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
                         Text(
                           context.tr('videoCaptureLateralView'),
                           style: Theme.of(context).textTheme.titleMedium,
@@ -219,5 +239,44 @@ class _PickVideoButton extends StatelessWidget {
       icon: const Icon(Icons.video_library_outlined),
       label: Text(context.tr('videoPickExisting')),
     ),
+  );
+}
+
+/// Salto o sentadilla. La sentadilla se sube igual, pero se avisa que todavía
+/// no tiene análisis propio.
+class _MovementTypeSelector extends StatelessWidget {
+  const _MovementTypeSelector({
+    required this.value,
+    required this.enabled,
+    required this.onChanged,
+  });
+
+  final MovementType value;
+  final bool enabled;
+  final ValueChanged<MovementType> onChanged;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    children: [
+      SegmentedButton<MovementType>(
+        segments: [
+          for (final type in MovementType.values)
+            ButtonSegment(value: type, label: Text(context.tr(type.labelKey))),
+        ],
+        selected: {value},
+        onSelectionChanged: enabled
+            ? (selection) => onChanged(selection.single)
+            : null,
+      ),
+      if (value == MovementType.squat)
+        Padding(
+          padding: const EdgeInsets.only(top: AppSpacing.xs),
+          child: Text(
+            context.tr('movementTypeSquatNotice'),
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+    ],
   );
 }

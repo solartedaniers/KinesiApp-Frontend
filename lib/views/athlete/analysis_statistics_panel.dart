@@ -11,12 +11,16 @@ class AnalysisStatisticsPanel extends StatelessWidget {
     super.key,
     required this.analyses,
     this.leadingItems = const [],
+    this.onRecordingsTap,
   });
 
   final List<JumpAnalysisSummary> analyses;
 
   /// Métricas propias de quien lo usa, antes de las de análisis.
   final List<StatItem> leadingItems;
+
+  /// Abre la lista de grabaciones de quien lo usa.
+  final VoidCallback? onRecordingsTap;
 
   static String _score(double? value) => value?.toStringAsFixed(2) ?? '—';
 
@@ -31,6 +35,7 @@ class AnalysisStatisticsPanel extends StatelessWidget {
           labelKey: 'statsRecordings',
           value: '${stats.total}',
           icon: Icons.videocam_outlined,
+          onTap: onRecordingsTap,
         ),
         StatItem(
           labelKey: 'analysisStatusProcessed',

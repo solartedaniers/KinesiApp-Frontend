@@ -76,7 +76,7 @@ class CoachHomeView extends StatelessWidget {
           AppSpacing.xxl * 2,
         ),
         children: [
-          WelcomeHeader(hintKey: 'coachHomeHint'),
+          const WelcomeHeader(),
           const SizedBox(height: AppSpacing.lg),
           if (athletes.isEmpty)
             AppCard(child: Text(context.tr('noCoachedAthletes'))),

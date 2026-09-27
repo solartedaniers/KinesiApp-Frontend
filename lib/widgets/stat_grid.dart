@@ -9,11 +9,15 @@ class StatItem {
     required this.labelKey,
     required this.value,
     required this.icon,
+    this.onTap,
   });
 
   final String labelKey;
   final String value;
   final IconData icon;
+
+  /// Si no es null, la tarjeta se puede tocar (p. ej. abrir las grabaciones).
+  final VoidCallback? onTap;
 }
 
 /// Tarjetas de métricas en dos columnas, pensadas para pantalla de móvil.
@@ -63,31 +67,35 @@ class _StatCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Card(
       margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(item.icon, color: theme.colorScheme.secondary),
-            const SizedBox(height: AppSpacing.sm),
-            // Fechas largas se encogen en vez de desbordar la tarjeta
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                item.value,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: theme.colorScheme.primary,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: item.onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(item.icon, color: theme.colorScheme.secondary),
+              const SizedBox(height: AppSpacing.sm),
+              // Fechas largas se encogen en vez de desbordar la tarjeta
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  item.value,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    color: theme.colorScheme.primary,
+                  ),
                 ),
               ),
-            ),
-            Text(
-              context.tr(item.labelKey),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelMedium,
-            ),
-          ],
+              Text(
+                context.tr(item.labelKey),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelMedium,
+              ),
+            ],
+          ),
         ),
       ),
     );

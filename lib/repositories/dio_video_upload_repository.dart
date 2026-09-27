@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 
 import '../core/network/api_exception.dart';
 import '../core/network/api_paths.dart';
+import '../models/jump_analysis/movement_type.dart';
 import 'video_upload_repository.dart';
 
 /// Sube el video del salto como multipart en streaming: Dio lee el archivo
@@ -18,6 +19,7 @@ class DioVideoUploadRepository implements VideoUploadRepository {
   @override
   Stream<VideoUploadProgress> upload({
     required int athleteId,
+    required MovementType movementType,
     required XFile video,
   }) {
     final cancelToken = CancelToken();
@@ -27,6 +29,7 @@ class DioVideoUploadRepository implements VideoUploadRepository {
         try {
           final analysisId = await _send(
             athleteId,
+            movementType,
             video,
             cancelToken,
             (fraction) => controller.add(VideoUploadProgress(fraction)),
@@ -47,12 +50,14 @@ class DioVideoUploadRepository implements VideoUploadRepository {
 
   Future<int> _send(
     int athleteId,
+    MovementType movementType,
     XFile video,
     CancelToken cancelToken,
     void Function(double fraction) onProgress,
   ) async {
     final formData = FormData.fromMap({
       'athlete_id': athleteId,
+      'movement_type': movementType.apiValue,
       // Fábrica de stream (no bytes): se puede releer si hay que reintentar
       'video': MultipartFile.fromStream(
         video.openRead,

@@ -28,7 +28,7 @@ class AthleteDashboardView extends StatelessWidget {
       builder: (context, analyses) => ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: [
-          WelcomeHeader(hintKey: 'athleteHomeHint'),
+          const WelcomeHeader(),
           const SizedBox(height: AppSpacing.lg),
           PrimaryButton(
             label: context.tr('startJumpAnalysis'),
@@ -44,6 +44,7 @@ class AthleteDashboardView extends StatelessWidget {
                 labelKey: 'statsRecordings',
                 value: '${analyses.length}',
                 icon: Icons.videocam_outlined,
+                onTap: () => context.go(AppRoutes.athleteAnalyses),
               ),
               StatItem(
                 labelKey: 'statsAverageRisk',
