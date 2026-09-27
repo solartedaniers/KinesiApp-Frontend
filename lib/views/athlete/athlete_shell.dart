@@ -25,9 +25,9 @@ class AthleteShell extends StatefulWidget {
       selectedIcon: Icons.home,
     ),
     ShellDestination(
-      labelKey: 'navPhysicalProfile',
-      icon: Icons.accessibility_new_outlined,
-      selectedIcon: Icons.accessibility_new,
+      labelKey: 'navProfile',
+      icon: Icons.person_outline,
+      selectedIcon: Icons.person,
     ),
     ShellDestination(
       labelKey: 'navAnalyses',

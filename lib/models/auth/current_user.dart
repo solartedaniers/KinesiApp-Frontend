@@ -13,6 +13,7 @@ class CurrentUser {
     required this.isActive,
     required this.isVerified,
     this.avatarBytes,
+    this.videoConsentVersion,
   });
 
   final int id;
@@ -23,6 +24,9 @@ class CurrentUser {
   final bool isVerified;
   final Uint8List? avatarBytes;
 
+  /// Versión del texto de consentimiento de video aceptada; null si nunca aceptó.
+  final int? videoConsentVersion;
+
   factory CurrentUser.fromJson(Map<String, dynamic> json) => CurrentUser(
     id: json['id'] as int,
     email: json['email'] as String,
@@ -31,5 +35,6 @@ class CurrentUser {
     isActive: json['is_active'] as bool,
     isVerified: json['is_verified'] as bool,
     avatarBytes: AvatarDataUrl.decode(json['avatar_data_url'] as String?),
+    videoConsentVersion: json['video_consent_version'] as int?,
   );
 }

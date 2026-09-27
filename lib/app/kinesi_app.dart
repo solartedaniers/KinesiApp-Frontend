@@ -12,7 +12,7 @@ import '../core/storage/secure_session_storage.dart';
 import '../core/theme/app_theme.dart';
 import '../repositories/auth_repository.dart';
 import '../repositories/auth_repository_impl.dart';
-import '../repositories/fake_jump_analysis_consent_repository.dart';
+import '../repositories/api_jump_analysis_consent_repository.dart';
 import '../repositories/api_jump_analysis_status_repository.dart';
 import '../repositories/dio_video_upload_repository.dart';
 import '../repositories/fake_chat_repository.dart';
@@ -80,8 +80,8 @@ class _KinesiAppState extends State<KinesiApp> {
   late final ManagedAthleteApi _managedAthleteApi = ManagedAthleteApi(_dio);
   late final UserApi _userApi = UserApi(_dio);
   late final JumpAnalysisApi _jumpAnalysisApi = JumpAnalysisApi(_dio);
-  final FakeJumpAnalysisConsentRepository _consentRepository =
-      FakeJumpAnalysisConsentRepository();
+  late final ApiJumpAnalysisConsentRepository _consentRepository =
+      ApiJumpAnalysisConsentRepository(_userApi, _session);
   late final DioVideoUploadRepository _videoUploadRepository =
       DioVideoUploadRepository(_dio);
   late final ApiJumpAnalysisStatusRepository _analysisStatusRepository =

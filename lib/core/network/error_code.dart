@@ -19,6 +19,7 @@ enum ErrorCode {
   invalidCurrentPassword('invalid_current_password'),
   invalidVideo('invalid_video'),
   videoTooLarge('video_too_large'),
+  consentRequired('consent_required'),
   unknown('unknown');
 
   const ErrorCode(this.wireValue);

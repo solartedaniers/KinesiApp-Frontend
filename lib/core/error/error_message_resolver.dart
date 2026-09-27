@@ -21,6 +21,7 @@ abstract final class ErrorMessageResolver {
     ErrorCode.invalidCurrentPassword: 'errorInvalidCurrentPassword',
     ErrorCode.invalidVideo: 'errorInvalidVideo',
     ErrorCode.videoTooLarge: 'errorVideoTooLarge',
+    ErrorCode.consentRequired: 'errorConsentRequired',
   };
 
   static String keyFor(ErrorCode code) => _keyByCode[code] ?? genericKey;

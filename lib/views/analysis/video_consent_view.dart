@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/app_scope.dart';
 import '../../core/config/api_config.dart';
+import '../../core/error/error_message_resolver.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/navigation/app_routes.dart';
+import '../../core/network/api_exception.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/primary_button.dart';
@@ -42,11 +44,22 @@ class _VideoConsentViewState extends State<VideoConsentView> {
 
   Future<void> _continue() async {
     if (!_accepted) return;
+    final messenger = ScaffoldMessenger.of(context);
     setState(() => _loading = true);
-    await AppScope.read(
-      context,
-    ).consentRepository.recordConsent(ApiConfig.consentVersion);
-    if (mounted) context.go(AppRoutes.videoCapture, extra: widget.athleteId);
+    try {
+      await AppScope.read(
+        context,
+      ).consentRepository.recordConsent(ApiConfig.consentVersion);
+      if (mounted) context.go(AppRoutes.videoCapture, extra: widget.athleteId);
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      setState(() => _loading = false);
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(context.tr(ErrorMessageResolver.keyFor(e.code))),
+        ),
+      );
+    }
   }
 
   @override

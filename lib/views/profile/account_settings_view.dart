@@ -111,11 +111,6 @@ class _AccountSettingsViewState extends State<AccountSettingsView> {
           textAlign: TextAlign.center,
           style: theme.textTheme.titleLarge,
         ),
-        Text(
-          user.email,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.bodyMedium,
-        ),
         const SizedBox(height: AppSpacing.lg),
         _SectionTitle(titleKey: 'accountSection'),
         AppCard(

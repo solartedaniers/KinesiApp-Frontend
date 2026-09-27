@@ -23,6 +23,10 @@ class UserApi {
   Future<CurrentUser> deleteMyAvatar() =>
       _sendMe(() => _dio.delete(ApiPaths.myAvatar));
 
+  Future<CurrentUser> grantVideoConsent(int version) => _sendMe(
+    () => _dio.post(ApiPaths.videoConsent, data: {'version': version}),
+  );
+
   Future<CurrentUser> _sendMe(Future<Response> Function() request) async {
     try {
       final response = await request();
