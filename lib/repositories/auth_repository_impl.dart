@@ -65,6 +65,24 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> verifyPasswordResetCode({
+    required String email,
+    required String code,
+  }) => _api.verifyPasswordResetCode(email: email, code: code);
+
+  @override
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final tokens = await _api.changePassword(
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    );
+    await _storage.saveTokens(tokens);
+  }
+
+  @override
   Future<CurrentUser> fetchCurrentUser() => _api.me();
 
   @override

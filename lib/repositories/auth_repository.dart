@@ -20,6 +20,17 @@ abstract interface class AuthRepository {
 
   Future<void> requestPasswordReset({required String email});
 
+  Future<void> verifyPasswordResetCode({
+    required String email,
+    required String code,
+  });
+
+  /// Guarda los tokens nuevos que emite el backend tras el cambio.
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  });
+
   Future<void> confirmPasswordReset({
     required String email,
     required String code,

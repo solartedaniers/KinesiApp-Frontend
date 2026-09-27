@@ -10,11 +10,16 @@ class JumpAnalysisApi {
 
   final Dio _dio;
 
-  Future<List<JumpAnalysisSummary>> listByAthlete(int athleteId) async {
+  Future<List<JumpAnalysisSummary>> listByAthlete(int athleteId) =>
+      _list(ApiPaths.jumpAnalysesForAthlete(athleteId));
+
+  /// Solo COACH: análisis de todos sus deportistas a cargo.
+  Future<List<JumpAnalysisSummary>> listTeam() =>
+      _list(ApiPaths.teamJumpAnalyses);
+
+  Future<List<JumpAnalysisSummary>> _list(String path) async {
     try {
-      final response = await _dio.get(
-        ApiPaths.jumpAnalysesForAthlete(athleteId),
-      );
+      final response = await _dio.get(path);
       return (response.data as List)
           .map(
             (json) =>

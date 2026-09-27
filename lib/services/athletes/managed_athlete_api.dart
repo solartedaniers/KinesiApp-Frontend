@@ -4,6 +4,7 @@ import '../../core/network/api_exception.dart';
 import '../../core/network/api_paths.dart';
 import '../../models/athlete/athlete_profile.dart';
 import '../../models/athlete/athlete_profile_form_data.dart';
+import '../../models/avatar/avatar_data.dart';
 
 /// Envoltorio delgado sobre Dio para `/coach/athletes`: CRUD exclusivo del
 /// coach sobre sus deportistas (lista todos los que tiene a cargo, pero solo
@@ -31,6 +32,17 @@ class ManagedAthleteApi {
       _send(
         () => _dio.patch(ApiPaths.coachAthlete(athleteId), data: data.toJson()),
       );
+
+  Future<AthleteProfile> uploadAvatar(int athleteId, AvatarUpload avatar) =>
+      _send(
+        () => _dio.put(
+          ApiPaths.coachAthleteAvatar(athleteId),
+          data: avatar.toJson(),
+        ),
+      );
+
+  Future<AthleteProfile> deleteAvatar(int athleteId) =>
+      _send(() => _dio.delete(ApiPaths.coachAthleteAvatar(athleteId)));
 
   Future<void> delete(int athleteId) async {
     try {

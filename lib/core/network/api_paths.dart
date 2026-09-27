@@ -7,11 +7,16 @@ abstract final class ApiPaths {
   static const String requestVerificationCode =
       '/auth/verification-code/request';
   static const String requestPasswordReset = '/auth/password-recovery/request';
+  static const String verifyPasswordResetCode =
+      '/auth/password-recovery/verify';
   static const String confirmPasswordReset = '/auth/password-recovery/confirm';
+  static const String changePassword = '/auth/password/change';
   static const String refresh = '/auth/refresh';
   static const String logout = '/auth/logout';
   static const String me = '/auth/me';
   static const String videoConsent = '/users/me/video-consent';
+  static const String myProfile = '/users/me';
+  static const String myAvatar = '/users/me/avatar';
 
   static const String athleteMe = '/athletes/me';
   static const String athletesCoached = '/athletes/coached';
@@ -20,7 +25,10 @@ abstract final class ApiPaths {
 
   static const String coachAthletes = '/coach/athletes';
   static String coachAthlete(int athleteId) => '$coachAthletes/$athleteId';
+  static String coachAthleteAvatar(int athleteId) =>
+      '${coachAthlete(athleteId)}/avatar';
 
+  static const String teamJumpAnalyses = '/jump-analyses/team';
   static const String jumpAnalysesByAthlete = '/jump-analyses/by-athlete';
   static String jumpAnalysesForAthlete(int athleteId) =>
       '$jumpAnalysesByAthlete/$athleteId';
@@ -36,6 +44,7 @@ abstract final class ApiPaths {
     verifyEmail,
     requestVerificationCode,
     requestPasswordReset,
+    verifyPasswordResetCode,
     confirmPasswordReset,
   ];
 }

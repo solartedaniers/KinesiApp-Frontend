@@ -15,6 +15,8 @@ enum ErrorCode {
   invalidRefreshToken('invalid_refresh_token'),
   invalidRoleAssignment('invalid_role_assignment'),
   emailDeliveryFailed('email_delivery_failed'),
+  passwordReused('password_reused'),
+  invalidCurrentPassword('invalid_current_password'),
   unknown('unknown');
 
   const ErrorCode(this.wireValue);

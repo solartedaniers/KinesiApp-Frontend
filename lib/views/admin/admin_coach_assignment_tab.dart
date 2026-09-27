@@ -5,20 +5,15 @@ import '../../core/localization/app_localizations.dart';
 import '../../models/athlete/athlete_profile.dart';
 import '../../models/auth/current_user.dart';
 import '../../models/user_role.dart';
+import '../../controllers/loadable_controller.dart';
 import '../../widgets/app_card.dart';
+import '../../widgets/controller_scope.dart';
+import '../../widgets/loadable_view.dart';
+import '../../widgets/user_avatar.dart';
 
 /// Asignación de entrenador a deportista (`PATCH /athletes/{id}/coach`), sólo ADMIN.
 class AdminCoachAssignmentTab extends StatelessWidget {
-  const AdminCoachAssignmentTab({
-    super.key,
-    required this.athletes,
-    required this.coaches,
-    required this.onCoachAssigned,
-  });
-
-  final List<AthleteProfile> athletes;
-  final List<CurrentUser> coaches;
-  final VoidCallback onCoachAssigned;
+  const AdminCoachAssignmentTab({super.key});
 
   Future<void> _assignCoach(
     BuildContext context,
@@ -26,14 +21,24 @@ class AdminCoachAssignmentTab extends StatelessWidget {
     int coachId,
   ) async {
     if (coachId == athlete.coachId) return;
-    await AppScope.of(
+    final data = ControllerScope.read<AdminDataController>(context);
+    await AppScope.read(
       context,
     ).athleteApi.assignCoach(athleteId: athlete.id, coachId: coachId);
-    onCoachAssigned();
+    await data.load();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => LoadableView(
+    controller: ControllerScope.of<AdminDataController>(context),
+    builder: (context, data) => _buildList(context, data.athletes, data.users),
+  );
+
+  Widget _buildList(
+    BuildContext context,
+    List<AthleteProfile> athletes,
+    List<CurrentUser> coaches,
+  ) {
     if (athletes.isEmpty) {
       return Center(child: Text(context.tr('noAthletesToAssign')));
     }
@@ -47,7 +52,10 @@ class AdminCoachAssignmentTab extends StatelessWidget {
             (athlete) => AppCard(
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.directions_run),
+                leading: UserAvatar(
+                  name: athlete.displayName,
+                  bytes: athlete.avatarBytes,
+                ),
                 title: Text(athlete.displayName),
                 subtitle: Text(context.tr(athlete.gender.labelKey)),
                 trailing: coachOptions.isEmpty

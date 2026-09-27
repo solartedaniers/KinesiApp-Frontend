@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import '../avatar/avatar_data.dart';
 import '../user_role.dart';
 
 /// DTO de la respuesta de /auth/register y /auth/me (esquema UserRead del backend).
@@ -9,6 +12,7 @@ class CurrentUser {
     required this.role,
     required this.isActive,
     required this.isVerified,
+    this.avatarBytes,
   });
 
   final int id;
@@ -17,6 +21,7 @@ class CurrentUser {
   final UserRole role;
   final bool isActive;
   final bool isVerified;
+  final Uint8List? avatarBytes;
 
   factory CurrentUser.fromJson(Map<String, dynamic> json) => CurrentUser(
     id: json['id'] as int,
@@ -25,5 +30,6 @@ class CurrentUser {
     role: UserRole.fromApiValue(json['role'] as String),
     isActive: json['is_active'] as bool,
     isVerified: json['is_verified'] as bool,
+    avatarBytes: AvatarDataUrl.decode(json['avatar_data_url'] as String?),
   );
 }

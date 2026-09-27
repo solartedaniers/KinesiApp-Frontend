@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import '../avatar/avatar_data.dart';
 import 'gender.dart';
 
 /// DTO de AthleteProfileRead (backend `app/schemas/athlete.py`).
@@ -12,6 +15,7 @@ class AthleteProfile {
     required this.heightCm,
     required this.weightKg,
     required this.birthDate,
+    this.avatarBytes,
   });
 
   final int id;
@@ -26,6 +30,9 @@ class AthleteProfile {
   final double weightKg;
   final DateTime birthDate;
 
+  /// Foto del gestionado (la sube su coach) o la de la cuenta del deportista.
+  final Uint8List? avatarBytes;
+
   factory AthleteProfile.fromJson(Map<String, dynamic> json) => AthleteProfile(
     id: json['id'] as int,
     userId: json['user_id'] as int?,
@@ -36,5 +43,6 @@ class AthleteProfile {
     heightCm: (json['height_cm'] as num).toDouble(),
     weightKg: (json['weight_kg'] as num).toDouble(),
     birthDate: DateTime.parse(json['birth_date'] as String),
+    avatarBytes: AvatarDataUrl.decode(json['display_avatar'] as String?),
   );
 }

@@ -82,6 +82,41 @@ class AuthApi {
     }
   }
 
+  /// Paso 2 de la recuperación: valida el código sin consumirlo.
+  Future<void> verifyPasswordResetCode({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      await _dio.post(
+        ApiPaths.verifyPasswordResetCode,
+        data: {'email': email, 'code': code},
+      );
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
+  /// Viaja por HTTPS (ApiConfig lo exige en release); el backend compara y
+  /// guarda solo hashes bcrypt. Devuelve tokens nuevos: los demás se revocan.
+  Future<AuthTokens> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      final response = await _dio.post(
+        ApiPaths.changePassword,
+        data: {
+          'current_password': currentPassword,
+          'new_password': newPassword,
+        },
+      );
+      return AuthTokens.fromJson(response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
   Future<AuthTokens> login({
     required String email,
     required String password,

@@ -7,6 +7,8 @@ import '../../use_cases/auth/login_use_case.dart';
 import '../../use_cases/auth/request_verification_code_use_case.dart';
 import '../../use_cases/auth/request_password_reset_use_case.dart';
 import '../../use_cases/auth/confirm_password_reset_use_case.dart';
+import '../../use_cases/auth/change_password_use_case.dart';
+import '../../use_cases/auth/verify_password_reset_code_use_case.dart';
 import '../../use_cases/auth/logout_use_case.dart';
 import '../../use_cases/auth/register_use_case.dart';
 import '../../use_cases/auth/restore_session_result.dart';
@@ -24,7 +26,9 @@ class SessionController extends ChangeNotifier {
     required RestoreSessionUseCase restoreSession,
     required RequestVerificationCodeUseCase requestVerificationCode,
     required RequestPasswordResetUseCase requestPasswordReset,
+    required VerifyPasswordResetCodeUseCase verifyPasswordResetCode,
     required ConfirmPasswordResetUseCase confirmPasswordReset,
+    required ChangePasswordUseCase changePassword,
   }) : _login = login,
        _register = register,
        _verifyEmail = verifyEmail,
@@ -32,7 +36,9 @@ class SessionController extends ChangeNotifier {
        _restoreSession = restoreSession,
        _requestVerificationCode = requestVerificationCode,
        _requestPasswordReset = requestPasswordReset,
-       _confirmPasswordReset = confirmPasswordReset;
+       _verifyPasswordResetCode = verifyPasswordResetCode,
+       _confirmPasswordReset = confirmPasswordReset,
+       _changePassword = changePassword;
 
   final LoginUseCase _login;
   final RegisterUseCase _register;
@@ -41,7 +47,9 @@ class SessionController extends ChangeNotifier {
   final RestoreSessionUseCase _restoreSession;
   final RequestVerificationCodeUseCase _requestVerificationCode;
   final RequestPasswordResetUseCase _requestPasswordReset;
+  final VerifyPasswordResetCodeUseCase _verifyPasswordResetCode;
   final ConfirmPasswordResetUseCase _confirmPasswordReset;
+  final ChangePasswordUseCase _changePassword;
 
   SessionStatus _status = SessionStatus.unknown;
   CurrentUser? _currentUser;
@@ -116,6 +124,25 @@ class SessionController extends ChangeNotifier {
       newPassword: newPassword,
     ),
   );
+
+  Future<void> verifyPasswordResetCode({
+    required String email,
+    required String code,
+  }) => _runAuthFlow(() => _verifyPasswordResetCode(email: email, code: code));
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) => _runAuthFlow(
+    () => _changePassword(
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+    ),
+  );
+
+  /// Refleja en la sesión los datos de cuenta que devolvió `PATCH /users/me`
+  /// o el cambio de foto, sin volver a pedir `/auth/me`.
+  void updateCurrentUser(CurrentUser user) => _setAuthenticated(user);
 
   Future<void> logout() async {
     await _logout();

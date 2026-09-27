@@ -2,59 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/app_scope.dart';
+import '../../controllers/loadable_controller.dart';
 import '../../core/error/error_message_resolver.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/navigation/app_routes.dart';
 import '../../core/network/api_exception.dart';
+import '../../core/theme/app_spacing.dart';
 import '../../models/athlete/athlete_profile.dart';
 import '../../widgets/app_card.dart';
-import '../../widgets/retry_state.dart';
-import '../../widgets/role_home_scaffold.dart';
-import '../athlete/athlete_profile_form.dart';
+import '../../widgets/controller_scope.dart';
+import '../../widgets/loadable_view.dart';
+import '../../widgets/user_avatar.dart';
+import '../../widgets/welcome_header.dart';
 
-/// Home de COACH: tarjetas de los deportistas a cargo (`GET /coach/athletes`).
-/// Los gestionados (sin cuenta propia) se crean y eliminan desde aquí; al tocar
-/// cualquier tarjeta se abre su ficha con los análisis (CoachAthleteDetailView).
-class CoachHomeView extends StatefulWidget {
+/// Pestaña Inicio del coach: tarjetas de los deportistas a cargo. Al tocar una
+/// se abre su ficha (CoachAthleteDetailView); los gestionados se eliminan aquí
+/// y se crean con el "+" central del shell.
+class CoachHomeView extends StatelessWidget {
   const CoachHomeView({super.key});
 
-  @override
-  State<CoachHomeView> createState() => _CoachHomeViewState();
-}
-
-class _CoachHomeViewState extends State<CoachHomeView> {
-  late Future<List<AthleteProfile>> _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = _load();
-  }
-
-  Future<List<AthleteProfile>> _load() =>
-      AppScope.read(context).managedAthleteApi.list();
-
-  void _reload() => setState(() => _future = _load());
-
-  Future<void> _create() async {
-    final api = AppScope.read(context).managedAthleteApi;
-    final saved = await AthleteProfileForm.openAsPage(
-      context,
-      titleKey: 'newManagedAthlete',
-      actionKey: 'saveChanges',
-      askFullName: true,
-      onSubmit: api.create,
-    );
-    if (saved) _reload();
-  }
-
-  Future<void> _openDetail(AthleteProfile athlete) async {
+  Future<void> _openDetail(BuildContext context, AthleteProfile athlete) async {
+    final controller = ControllerScope.read<CoachAthletesController>(context);
     await context.push(AppRoutes.coachAthleteDetail, extra: athlete);
-    // La ficha pudo editarse en el detalle: se refresca al volver
-    if (mounted) _reload();
+    // La ficha o su foto pudieron cambiar en el detalle: se refresca al volver
+    controller.load();
   }
 
-  Future<void> _delete(AthleteProfile athlete) async {
+  Future<void> _delete(BuildContext context, AthleteProfile athlete) async {
+    final controller = ControllerScope.read<CoachAthletesController>(context);
     final api = AppScope.read(context).managedAthleteApi;
     final messenger = ScaffoldMessenger.of(context);
     final confirmed = await showDialog<bool>(
@@ -77,9 +52,9 @@ class _CoachHomeViewState extends State<CoachHomeView> {
     if (confirmed != true) return;
     try {
       await api.delete(athlete.id);
-      _reload();
+      controller.load();
     } on ApiException catch (e) {
-      if (!mounted) return;
+      if (!context.mounted) return;
       messenger.showSnackBar(
         SnackBar(
           content: Text(context.tr(ErrorMessageResolver.keyFor(e.code))),
@@ -89,41 +64,39 @@ class _CoachHomeViewState extends State<CoachHomeView> {
   }
 
   @override
-  Widget build(BuildContext context) => RoleHomeScaffold(
-    titleKey: 'coachHomeTitle',
-    floatingActionButton: FloatingActionButton.extended(
-      onPressed: _create,
-      icon: const Icon(Icons.person_add_alt_1),
-      label: Text(context.tr('newManagedAthlete')),
-    ),
-    body: FutureBuilder<List<AthleteProfile>>(
-      future: _future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return RetryState(messageKey: 'errorGeneric', onRetry: _reload);
-        }
-        final athletes = snapshot.data!;
-        if (athletes.isEmpty) {
-          return Center(child: Text(context.tr('noCoachedAthletes')));
-        }
-        return ListView(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 96),
-          children: athletes
-              .map(
-                (athlete) => _CoachedAthleteTile(
-                  athlete: athlete,
-                  onOpen: () => _openDetail(athlete),
-                  onDelete: athlete.isManaged ? () => _delete(athlete) : null,
-                ),
-              )
-              .toList(),
-        );
-      },
-    ),
-  );
+  Widget build(BuildContext context) {
+    final user = AppScope.of(context).sessionController.currentUser!;
+    return LoadableView(
+      controller: ControllerScope.of<CoachAthletesController>(context),
+      builder: (context, athletes) => ListView(
+        // Espacio inferior para que el "+" central no tape la última tarjeta
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.lg,
+          AppSpacing.lg,
+          AppSpacing.xxl * 2,
+        ),
+        children: [
+          WelcomeHeader(
+            name: user.fullName,
+            avatarBytes: user.avatarBytes,
+            hintKey: 'coachHomeHint',
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          if (athletes.isEmpty)
+            AppCard(child: Text(context.tr('noCoachedAthletes'))),
+          for (final athlete in athletes)
+            _CoachedAthleteTile(
+              athlete: athlete,
+              onOpen: () => _openDetail(context, athlete),
+              onDelete: athlete.isManaged
+                  ? () => _delete(context, athlete)
+                  : null,
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 class _CoachedAthleteTile extends StatelessWidget {
@@ -139,19 +112,20 @@ class _CoachedAthleteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppCard(
+    onTap: onOpen,
     child: ListTile(
       contentPadding: EdgeInsets.zero,
-      leading: Icon(
-        athlete.isManaged ? Icons.person_outline : Icons.verified_user_outlined,
+      leading: UserAvatar(
+        name: athlete.displayName,
+        bytes: athlete.avatarBytes,
       ),
       title: Text(athlete.displayName),
       subtitle: Text(
         '${context.tr(athlete.gender.labelKey)} · ${athlete.heightCm.toStringAsFixed(0)} cm · '
         '${athlete.weightKg.toStringAsFixed(1)} kg',
       ),
-      onTap: onOpen,
       trailing: onDelete == null
-          ? null
+          ? const Icon(Icons.verified_user_outlined)
           : IconButton(
               onPressed: onDelete,
               icon: const Icon(Icons.delete_outline),

@@ -4,18 +4,15 @@ import '../../app/app_scope.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../models/auth/current_user.dart';
 import '../../models/user_role.dart';
+import '../../controllers/loadable_controller.dart';
 import '../../widgets/app_card.dart';
+import '../../widgets/controller_scope.dart';
+import '../../widgets/loadable_view.dart';
+import '../../widgets/user_avatar.dart';
 
-/// Lista de usuarios con cambio de rol (`PATCH /users/{id}/role`).
+/// Pestaña Usuarios del admin: lista con cambio de rol (`PATCH /users/{id}/role`).
 class AdminUsersTab extends StatelessWidget {
-  const AdminUsersTab({
-    super.key,
-    required this.users,
-    required this.onRoleChanged,
-  });
-
-  final List<CurrentUser> users;
-  final VoidCallback onRoleChanged;
+  const AdminUsersTab({super.key});
 
   Future<void> _changeRole(
     BuildContext context,
@@ -23,8 +20,11 @@ class AdminUsersTab extends StatelessWidget {
     UserRole role,
   ) async {
     if (role == user.role) return;
-    await AppScope.of(context).userApi.updateRole(userId: user.id, role: role);
-    onRoleChanged();
+    final data = ControllerScope.read<AdminDataController>(context);
+    await AppScope.read(
+      context,
+    ).userApi.updateRole(userId: user.id, role: role);
+    await data.load();
   }
 
   String _roleKey(UserRole role) => switch (role) {
@@ -34,7 +34,12 @@ class AdminUsersTab extends StatelessWidget {
   };
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => LoadableView(
+    controller: ControllerScope.of<AdminDataController>(context),
+    builder: (context, data) => _buildList(context, data.users),
+  );
+
+  Widget _buildList(BuildContext context, List<CurrentUser> users) {
     if (users.isEmpty) return Center(child: Text(context.tr('noUsers')));
     return ListView(
       padding: const EdgeInsets.all(20),
@@ -43,7 +48,10 @@ class AdminUsersTab extends StatelessWidget {
             (user) => AppCard(
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.person_outline),
+                leading: UserAvatar(
+                  name: user.fullName,
+                  bytes: user.avatarBytes,
+                ),
                 title: Text(user.fullName),
                 subtitle: Text(user.email),
                 trailing: DropdownButton<UserRole>(

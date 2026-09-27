@@ -1,77 +1,51 @@
 import 'package:flutter/material.dart';
 
-import '../../app/app_scope.dart';
 import '../../core/localization/app_localizations.dart';
+import '../../models/jump_analysis/analysis_statistics.dart';
 import '../../models/jump_analysis/jump_analysis_status.dart';
 import '../../models/jump_analysis/jump_analysis_summary.dart';
 import '../../widgets/app_card.dart';
-import '../../widgets/retry_state.dart';
 
-/// Lista de análisis de salto del deportista (`GET /jump-analyses/by-athlete/{id}`).
-/// Sin datos falsos: si no hay ninguno, se muestra el estado vacío real.
-class JumpAnalysisList extends StatefulWidget {
-  const JumpAnalysisList({super.key, required this.athleteId});
+/// Lista de análisis de salto ya cargados por quien la usa. Sin datos falsos:
+/// si no hay ninguno, se muestra el estado vacío real. Con [athleteNames]
+/// (vista de equipo del coach) cada fila indica de qué deportista es.
+class JumpAnalysisList extends StatelessWidget {
+  const JumpAnalysisList({
+    super.key,
+    required this.analyses,
+    this.titleKey = 'recentAnalyses',
+    this.emptyKey = 'noAnalysesYet',
+    this.athleteNames = const {},
+  });
 
-  final int athleteId;
-
-  @override
-  State<JumpAnalysisList> createState() => _JumpAnalysisListState();
-}
-
-class _JumpAnalysisListState extends State<JumpAnalysisList> {
-  late Future<List<JumpAnalysisSummary>> _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = _load();
-  }
-
-  Future<List<JumpAnalysisSummary>> _load() =>
-      AppScope.read(context).jumpAnalysisApi.listByAthlete(widget.athleteId);
+  final List<JumpAnalysisSummary> analyses;
+  final String titleKey;
+  final String emptyKey;
+  final Map<int, String> athleteNames;
 
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        context.tr('recentAnalyses'),
-        style: Theme.of(
-          context,
-        ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-      ),
+      Text(context.tr(titleKey), style: Theme.of(context).textTheme.titleLarge),
       const SizedBox(height: 8),
-      FutureBuilder<List<JumpAnalysisSummary>>(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return RetryState(
-              messageKey: 'errorGeneric',
-              onRetry: () => setState(() => _future = _load()),
-            );
-          }
-          final analyses = snapshot.data!;
-          if (analyses.isEmpty) {
-            return AppCard(child: Text(context.tr('noAnalysesYet')));
-          }
-          return Column(
-            children: analyses
-                .map((analysis) => _JumpAnalysisTile(analysis: analysis))
-                .toList(),
-          );
-        },
-      ),
+      if (analyses.isEmpty)
+        AppCard(child: Text(context.tr(emptyKey)))
+      else
+        for (final analysis in analyses)
+          _JumpAnalysisTile(
+            analysis: analysis,
+            athleteName: athleteNames[analysis.athleteId],
+          ),
     ],
   );
 }
 
 class _JumpAnalysisTile extends StatelessWidget {
-  const _JumpAnalysisTile({required this.analysis});
+  const _JumpAnalysisTile({required this.analysis, this.athleteName});
 
   final JumpAnalysisSummary analysis;
+  final String? athleteName;
 
   String _statusKey(JumpAnalysisStatus status) => switch (status) {
     JumpAnalysisStatus.pending => 'analysisStatusPending',
@@ -80,15 +54,29 @@ class _JumpAnalysisTile extends StatelessWidget {
   };
 
   @override
-  Widget build(BuildContext context) => AppCard(
-    child: ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: const Icon(Icons.directions_run),
-      title: Text(analysis.recordedAt.toIso8601String().split('T').first),
-      subtitle: Text(context.tr(_statusKey(analysis.status))),
-      trailing: analysis.riskScore == null
-          ? null
-          : Text(analysis.riskScore!.toStringAsFixed(2)),
-    ),
-  );
+  Widget build(BuildContext context) {
+    final date = analysis.recordedAt.toIso8601String().split('T').first;
+    final risk = analysis.riskScore;
+    final scheme = Theme.of(context).colorScheme;
+    return AppCard(
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: const Icon(Icons.directions_run),
+        title: Text(athleteName ?? date),
+        subtitle: Text(
+          athleteName == null
+              ? context.tr(_statusKey(analysis.status))
+              : '$date · ${context.tr(_statusKey(analysis.status))}',
+        ),
+        trailing: risk == null
+            ? null
+            : Chip(
+                label: Text(risk.toStringAsFixed(2)),
+                backgroundColor: risk >= AnalysisStatistics.highRiskThreshold
+                    ? scheme.errorContainer
+                    : scheme.primaryContainer,
+              ),
+      ),
+    );
+  }
 }

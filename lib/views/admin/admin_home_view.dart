@@ -1,75 +1,64 @@
 import 'package:flutter/material.dart';
 
 import '../../app/app_scope.dart';
-import '../../core/localization/app_localizations.dart';
-import '../../models/athlete/athlete_profile.dart';
-import '../../models/auth/current_user.dart';
-import '../../widgets/retry_state.dart';
-import '../../widgets/role_home_scaffold.dart';
-import 'admin_coach_assignment_tab.dart';
-import 'admin_users_tab.dart';
+import '../../controllers/loadable_controller.dart';
+import '../../core/theme/app_spacing.dart';
+import '../../models/user_role.dart';
+import '../../widgets/controller_scope.dart';
+import '../../widgets/loadable_view.dart';
+import '../../widgets/stat_grid.dart';
+import '../../widgets/welcome_header.dart';
 
-/// Home de ADMIN: gestión de usuarios (cambio de rol) y asignación de coach
-/// a deportistas. Ambas listas se cargan una vez aquí y se pasan a cada tab,
-/// porque la asignación de coach necesita el mismo listado de usuarios.
-class AdminHomeView extends StatefulWidget {
+/// Pestaña Inicio del admin: resumen de usuarios por rol y deportistas que
+/// aún no tienen coach asignado.
+class AdminHomeView extends StatelessWidget {
   const AdminHomeView({super.key});
 
   @override
-  State<AdminHomeView> createState() => _AdminHomeViewState();
-}
-
-class _AdminHomeViewState extends State<AdminHomeView> {
-  late Future<(List<CurrentUser>, List<AthleteProfile>)> _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = _load();
+  Widget build(BuildContext context) {
+    final user = AppScope.of(context).sessionController.currentUser!;
+    return LoadableView(
+      controller: ControllerScope.of<AdminDataController>(context),
+      builder: (context, data) {
+        int countRole(UserRole role) =>
+            data.users.where((u) => u.role == role).length;
+        return ListView(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          children: [
+            WelcomeHeader(
+              name: user.fullName,
+              avatarBytes: user.avatarBytes,
+              hintKey: 'adminHomeHint',
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            StatGrid(
+              items: [
+                StatItem(
+                  labelKey: 'statsUsers',
+                  value: '${data.users.length}',
+                  icon: Icons.people_outline,
+                ),
+                StatItem(
+                  labelKey: 'statsCoaches',
+                  value: '${countRole(UserRole.coach)}',
+                  icon: Icons.sports_outlined,
+                ),
+                StatItem(
+                  labelKey: 'statsAthletes',
+                  value: '${data.athletes.length}',
+                  icon: Icons.directions_run,
+                ),
+                StatItem(
+                  labelKey: 'statsUnassignedAthletes',
+                  value:
+                      '${data.athletes.where((a) => a.coachId == null).length}',
+                  icon: Icons.person_search_outlined,
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
-
-  Future<(List<CurrentUser>, List<AthleteProfile>)> _load() async {
-    final scope = AppScope.read(context);
-    final users = await scope.userApi.list();
-    final athletes = await scope.athleteApi.listAll();
-    return (users, athletes);
-  }
-
-  void _reload() => setState(() => _future = _load());
-
-  @override
-  Widget build(BuildContext context) => DefaultTabController(
-    length: 2,
-    child: RoleHomeScaffold(
-      titleKey: 'adminHomeTitle',
-      bottom: TabBar(
-        tabs: [
-          Tab(text: context.tr('adminUsersTab')),
-          Tab(text: context.tr('adminAthletesTab')),
-        ],
-      ),
-      body: FutureBuilder<(List<CurrentUser>, List<AthleteProfile>)>(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return RetryState(messageKey: 'errorGeneric', onRetry: _reload);
-          }
-          final (users, athletes) = snapshot.data!;
-          return TabBarView(
-            children: [
-              AdminUsersTab(users: users, onRoleChanged: _reload),
-              AdminCoachAssignmentTab(
-                athletes: athletes,
-                coaches: users,
-                onCoachAssigned: _reload,
-              ),
-            ],
-          );
-        },
-      ),
-    ),
-  );
 }

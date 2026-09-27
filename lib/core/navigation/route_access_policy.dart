@@ -15,13 +15,30 @@ abstract final class RouteAccessPolicy {
   };
 
   static const Map<UserRole, Set<String>> _routesByRole = {
-    UserRole.athlete: {AppRoutes.athleteHome, ..._analysisRoutes},
-    UserRole.coach: {
-      AppRoutes.coachHome,
-      AppRoutes.coachAthleteDetail,
+    UserRole.athlete: {
+      AppRoutes.athleteHome,
+      AppRoutes.athletePhysicalProfile,
+      AppRoutes.athleteAnalyses,
+      AppRoutes.athleteStats,
+      AppRoutes.changePassword,
       ..._analysisRoutes,
     },
-    UserRole.admin: {AppRoutes.adminHome},
+    UserRole.coach: {
+      AppRoutes.coachHome,
+      AppRoutes.coachTeamAnalyses,
+      AppRoutes.coachStats,
+      AppRoutes.coachProfile,
+      AppRoutes.coachAthleteDetail,
+      AppRoutes.changePassword,
+      ..._analysisRoutes,
+    },
+    UserRole.admin: {
+      AppRoutes.adminHome,
+      AppRoutes.adminUsers,
+      AppRoutes.adminAssignments,
+      AppRoutes.adminProfile,
+      AppRoutes.changePassword,
+    },
   };
 
   static bool canAccess(UserRole role, String location) =>

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/localization/app_localizations.dart';
@@ -29,6 +30,8 @@ import '../use_cases/auth/verify_email_use_case.dart';
 import '../use_cases/auth/request_verification_code_use_case.dart';
 import '../use_cases/auth/request_password_reset_use_case.dart';
 import '../use_cases/auth/confirm_password_reset_use_case.dart';
+import '../use_cases/auth/change_password_use_case.dart';
+import '../use_cases/auth/verify_password_reset_code_use_case.dart';
 import 'app_scope.dart';
 import 'router.dart';
 
@@ -69,7 +72,9 @@ class _KinesiAppState extends State<KinesiApp> {
     restoreSession: RestoreSessionUseCase(_authRepository),
     requestVerificationCode: RequestVerificationCodeUseCase(_authRepository),
     requestPasswordReset: RequestPasswordResetUseCase(_authRepository),
+    verifyPasswordResetCode: VerifyPasswordResetCodeUseCase(_authRepository),
     confirmPasswordReset: ConfirmPasswordResetUseCase(_authRepository),
+    changePassword: ChangePasswordUseCase(_authRepository),
   );
   late final AthleteApi _athleteApi = AthleteApi(_dio);
   late final ManagedAthleteApi _managedAthleteApi = ManagedAthleteApi(_dio);
@@ -128,6 +133,11 @@ class _KinesiAppState extends State<KinesiApp> {
               theme: AppTheme.light,
               darkTheme: AppTheme.dark,
               themeMode: _mode,
+              // Los widgets de Material (calendario de showDatePicker,
+              // diálogos, tooltips) siguen el idioma elegido en la app
+              locale: Locale(_language == AppLanguage.spanish ? 'es' : 'en'),
+              supportedLocales: const [Locale('en'), Locale('es')],
+              localizationsDelegates: GlobalMaterialLocalizations.delegates,
               routerConfig: _router,
             ),
           ),
