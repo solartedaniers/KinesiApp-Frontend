@@ -81,8 +81,18 @@ class _AccountSettingsViewState extends State<AccountSettingsView> {
 
   @override
   Widget build(BuildContext context) {
+    final session = AppScope.of(context).sessionController;
+    return ListenableBuilder(
+      listenable: session,
+      builder: (context, _) {
+        final user = session.currentUser;
+        return user == null ? const SizedBox.shrink() : _content(context, user);
+      },
+    );
+  }
+
+  Widget _content(BuildContext context, CurrentUser user) {
     final scope = AppScope.of(context);
-    final user = scope.sessionController.currentUser!;
     final theme = Theme.of(context);
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.lg),

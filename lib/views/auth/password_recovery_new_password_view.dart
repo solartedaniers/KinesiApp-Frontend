@@ -42,7 +42,6 @@ class _PasswordRecoveryNewPasswordViewState
   final _confirmController = TextEditingController();
   String? _errorKey;
   bool _isSubmitting = false;
-  bool _completed = false;
 
   @override
   void dispose() {
@@ -61,6 +60,7 @@ class _PasswordRecoveryNewPasswordViewState
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
+    final messenger = ScaffoldMessenger.of(context);
     setState(() {
       _errorKey = null;
       _isSubmitting = true;
@@ -71,7 +71,12 @@ class _PasswordRecoveryNewPasswordViewState
         code: widget.ticket.code,
         newPassword: _passwordController.text,
       );
-      if (mounted) setState(() => _completed = true);
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(content: Text(context.tr('passwordRecoverySuccess'))),
+      );
+      // `go` (no `push`) limpia la pila de recuperación: no se puede volver atrás
+      context.go(AppRoutes.login);
     } on ApiException catch (error) {
       if (mounted) {
         setState(() => _errorKey = ErrorMessageResolver.keyFor(error.code));
@@ -84,34 +89,9 @@ class _PasswordRecoveryNewPasswordViewState
   @override
   Widget build(BuildContext context) => AuthPageShell(
     titleKey: 'passwordRecoveryTitle',
-    subtitleKey: _completed
-        ? 'passwordRecoveryCompleteHint'
-        : 'passwordRecoveryNewPasswordHint',
-    showBackButton: !_completed,
-    content: _completed ? _buildSuccess(context) : _buildForm(context),
-  );
-
-  Widget _buildSuccess(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Icon(
-        Icons.check_circle_outline_rounded,
-        size: AppSpacing.xxl,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-      const SizedBox(height: AppSpacing.md),
-      Text(
-        context.tr('passwordRecoverySuccess'),
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.bodyLarge,
-      ),
-      const SizedBox(height: AppSpacing.lg),
-      PrimaryButton(
-        label: context.tr('backToSignIn'),
-        icon: Icons.login,
-        onPressed: () => context.go(AppRoutes.login),
-      ),
-    ],
+    subtitleKey: 'passwordRecoveryNewPasswordHint',
+    showBackButton: true,
+    content: _buildForm(context),
   );
 
   Widget _buildForm(BuildContext context) => Form(

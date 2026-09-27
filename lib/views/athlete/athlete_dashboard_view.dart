@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../app/app_scope.dart';
 import '../../controllers/loadable_controller.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/navigation/app_routes.dart';
@@ -24,17 +23,12 @@ class AthleteDashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profile = ControllerScope.of<AthleteProfileController>(context).data!;
-    final user = AppScope.of(context).sessionController.currentUser!;
     return LoadableView(
       controller: ControllerScope.of<JumpAnalysesController>(context),
       builder: (context, analyses) => ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: [
-          WelcomeHeader(
-            name: user.fullName,
-            avatarBytes: profile.avatarBytes ?? user.avatarBytes,
-            hintKey: 'athleteHomeHint',
-          ),
+          WelcomeHeader(hintKey: 'athleteHomeHint'),
           const SizedBox(height: AppSpacing.lg),
           PrimaryButton(
             label: context.tr('startJumpAnalysis'),

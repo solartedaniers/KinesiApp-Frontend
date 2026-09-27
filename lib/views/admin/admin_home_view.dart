@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../app/app_scope.dart';
 import '../../controllers/loadable_controller.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../models/user_role.dart';
@@ -16,7 +15,6 @@ class AdminHomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = AppScope.of(context).sessionController.currentUser!;
     return LoadableView(
       controller: ControllerScope.of<AdminDataController>(context),
       builder: (context, data) {
@@ -25,11 +23,7 @@ class AdminHomeView extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            WelcomeHeader(
-              name: user.fullName,
-              avatarBytes: user.avatarBytes,
-              hintKey: 'adminHomeHint',
-            ),
+            WelcomeHeader(hintKey: 'adminHomeHint'),
             const SizedBox(height: AppSpacing.lg),
             StatGrid(
               items: [

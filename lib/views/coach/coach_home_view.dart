@@ -65,7 +65,6 @@ class CoachHomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = AppScope.of(context).sessionController.currentUser!;
     return LoadableView(
       controller: ControllerScope.of<CoachAthletesController>(context),
       builder: (context, athletes) => ListView(
@@ -77,11 +76,7 @@ class CoachHomeView extends StatelessWidget {
           AppSpacing.xxl * 2,
         ),
         children: [
-          WelcomeHeader(
-            name: user.fullName,
-            avatarBytes: user.avatarBytes,
-            hintKey: 'coachHomeHint',
-          ),
+          WelcomeHeader(hintKey: 'coachHomeHint'),
           const SizedBox(height: AppSpacing.lg),
           if (athletes.isEmpty)
             AppCard(child: Text(context.tr('noCoachedAthletes'))),

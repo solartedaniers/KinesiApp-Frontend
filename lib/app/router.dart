@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 
 import '../core/navigation/analysis_flow.dart';
@@ -6,6 +7,7 @@ import '../core/navigation/role_home_resolver.dart';
 import '../core/navigation/route_access_policy.dart';
 import '../models/athlete/athlete_profile.dart';
 import '../models/auth/session_status.dart';
+import '../models/user_role.dart';
 import '../services/auth/session_controller.dart';
 import '../views/admin/admin_coach_assignment_tab.dart';
 import '../views/admin/admin_home_view.dart';
@@ -81,9 +83,22 @@ GoRouter buildAppRouter(SessionController session) {
         routes: [GoRoute(path: path, builder: builder)],
       );
 
+  // Refrescar el router re-parsea la ruta y go_router descarta los `extra` que
+  // no son JSON (ticket de recuperación, AnalysisFlow...), rompiendo los
+  // builders con "Unexpected null value". Por eso sólo se refresca cuando
+  // cambia algo que la guarda usa (estado o rol), no con cada notify de la
+  // sesión (carga, avatar, nombre...). Un record compara por valor.
+  final accessState = ValueNotifier<(SessionStatus, UserRole?)>((
+    session.status,
+    session.currentUser?.role,
+  ));
+  session.addListener(
+    () => accessState.value = (session.status, session.currentUser?.role),
+  );
+
   return GoRouter(
     initialLocation: AppRoutes.splash,
-    refreshListenable: session,
+    refreshListenable: accessState,
     redirect: redirect,
     routes: [
       GoRoute(

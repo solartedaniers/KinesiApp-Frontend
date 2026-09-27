@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../app/app_scope.dart';
 import '../../core/config/api_config.dart';
@@ -86,7 +87,16 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
     _timer?.cancel();
     final controller = _controller;
     if (controller == null || !controller.value.isRecordingVideo) return;
-    final video = await controller.stopVideoRecording();
+    _goToUpload(await controller.stopVideoRecording());
+  }
+
+  /// Alternativa a grabar: un video del salto ya guardado en el dispositivo.
+  Future<void> _pickExistingVideo() async {
+    final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (video != null) _goToUpload(video);
+  }
+
+  void _goToUpload(XFile video) {
     if (!mounted) return;
     context.go(
       AppRoutes.videoUpload,
@@ -111,7 +121,23 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
       ),
       body: SafeArea(
         child: _error != null
-            ? Center(child: Text(context.tr('videoCameraError')))
+            // Sin cámara todavía se puede analizar un video guardado
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        context.tr('videoCameraError'),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      _PickVideoButton(onPressed: _pickExistingVideo),
+                    ],
+                  ),
+                ),
+              )
             : controller == null || !controller.value.isInitialized
             ? const Center(child: CircularProgressIndicator())
             : Column(
@@ -165,6 +191,10 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: AppSpacing.sm),
+                        _PickVideoButton(
+                          onPressed: _recording ? null : _pickExistingVideo,
+                        ),
                       ],
                     ),
                   ),
@@ -173,4 +203,21 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
       ),
     );
   }
+}
+
+/// Botón "Subir video existente" (galería/archivos del dispositivo).
+class _PickVideoButton extends StatelessWidget {
+  const _PickVideoButton({required this.onPressed});
+
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    width: double.infinity,
+    child: OutlinedButton.icon(
+      onPressed: onPressed,
+      icon: const Icon(Icons.video_library_outlined),
+      label: Text(context.tr('videoPickExisting')),
+    ),
+  );
 }

@@ -2,26 +2,34 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
+import '../app/app_scope.dart';
 import '../core/localization/app_localizations.dart';
 import '../core/theme/app_spacing.dart';
 import 'user_avatar.dart';
 
 /// Cabecera de la pestaña Inicio de cada rol: avatar, saludo y una línea de
-/// contexto sobre fondo verde "cancha".
+/// contexto sobre fondo verde "cancha". Escucha la sesión: un cambio de foto
+/// o nombre se ve al instante sin recargar la pestaña.
 class WelcomeHeader extends StatelessWidget {
-  const WelcomeHeader({
-    super.key,
-    required this.name,
-    required this.avatarBytes,
-    required this.hintKey,
-  });
+  const WelcomeHeader({super.key, required this.hintKey});
 
-  final String name;
-  final Uint8List? avatarBytes;
   final String hintKey;
 
   @override
   Widget build(BuildContext context) {
+    final session = AppScope.of(context).sessionController;
+    return ListenableBuilder(
+      listenable: session,
+      builder: (context, _) {
+        final user = session.currentUser;
+        return user == null
+            ? const SizedBox.shrink()
+            : _content(context, user.fullName, user.avatarBytes);
+      },
+    );
+  }
+
+  Widget _content(BuildContext context, String name, Uint8List? avatarBytes) {
     final theme = Theme.of(context);
     final onPrimary = theme.colorScheme.onPrimary;
     return Container(

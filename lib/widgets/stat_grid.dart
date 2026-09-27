@@ -17,20 +17,39 @@ class StatItem {
 }
 
 /// Tarjetas de métricas en dos columnas, pensadas para pantalla de móvil.
+/// La altura la da el contenido (no un aspect ratio fijo): con pantallas
+/// angostas o texto del sistema agrandado la tarjeta crece en vez de
+/// desbordar ("BOTTOM OVERFLOWED").
 class StatGrid extends StatelessWidget {
   const StatGrid({super.key, required this.items});
+
+  static const double _gap = AppSpacing.sm + AppSpacing.xs;
 
   final List<StatItem> items;
 
   @override
-  Widget build(BuildContext context) => GridView.count(
-    crossAxisCount: 2,
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    mainAxisSpacing: AppSpacing.sm + AppSpacing.xs,
-    crossAxisSpacing: AppSpacing.sm + AppSpacing.xs,
-    childAspectRatio: 1.3,
-    children: [for (final item in items) _StatCard(item: item)],
+  Widget build(BuildContext context) => Column(
+    children: [
+      for (var i = 0; i < items.length; i += 2)
+        Padding(
+          padding: EdgeInsets.only(top: i == 0 ? 0 : _gap),
+          // IntrinsicHeight: las dos tarjetas de la fila miden lo mismo
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: _StatCard(item: items[i])),
+                const SizedBox(width: _gap),
+                Expanded(
+                  child: i + 1 < items.length
+                      ? _StatCard(item: items[i + 1])
+                      : const SizedBox.shrink(),
+                ),
+              ],
+            ),
+          ),
+        ),
+    ],
   );
 }
 
@@ -48,9 +67,9 @@ class _StatCard extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Icon(item.icon, color: theme.colorScheme.secondary),
+            const SizedBox(height: AppSpacing.sm),
             // Fechas largas se encogen en vez de desbordar la tarjeta
             FittedBox(
               fit: BoxFit.scaleDown,
