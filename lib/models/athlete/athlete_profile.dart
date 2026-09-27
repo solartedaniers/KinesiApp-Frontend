@@ -4,6 +4,8 @@ class AthleteProfile {
     required this.id,
     required this.userId,
     required this.coachId,
+    required this.displayName,
+    required this.isManaged,
     required this.sport,
     required this.heightCm,
     required this.weightKg,
@@ -11,8 +13,12 @@ class AthleteProfile {
   });
 
   final int id;
-  final int userId;
+
+  /// Nulo en deportistas gestionados por un coach (sin cuenta propia).
+  final int? userId;
   final int? coachId;
+  final String displayName;
+  final bool isManaged;
   final String sport;
   final double heightCm;
   final double weightKg;
@@ -20,8 +26,10 @@ class AthleteProfile {
 
   factory AthleteProfile.fromJson(Map<String, dynamic> json) => AthleteProfile(
     id: json['id'] as int,
-    userId: json['user_id'] as int,
+    userId: json['user_id'] as int?,
     coachId: json['coach_id'] as int?,
+    displayName: json['display_name'] as String,
+    isManaged: json['is_managed'] as bool,
     sport: json['sport'] as String,
     heightCm: (json['height_cm'] as num).toDouble(),
     weightKg: (json['weight_kg'] as num).toDouble(),

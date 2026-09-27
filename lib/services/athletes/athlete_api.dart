@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../core/network/api_exception.dart';
 import '../../core/network/api_paths.dart';
 import '../../models/athlete/athlete_profile.dart';
+import '../../models/athlete/athlete_profile_form_data.dart';
 
 /// Envoltorio delgado sobre Dio para los endpoints /athletes del backend.
 class AthleteApi {
@@ -10,36 +11,14 @@ class AthleteApi {
 
   final Dio _dio;
 
-  Future<AthleteProfile> getMine() async {
-    try {
-      final response = await _dio.get(ApiPaths.athleteMe);
-      return AthleteProfile.fromJson(response.data as Map<String, dynamic>);
-    } on DioException catch (e) {
-      throw ApiException.fromDioError(e);
-    }
-  }
+  Future<AthleteProfile> getMine() => _send(() => _dio.get(ApiPaths.athleteMe));
 
-  Future<AthleteProfile> createMine({
-    required String sport,
-    required double heightCm,
-    required double weightKg,
-    required DateTime birthDate,
-  }) async {
-    try {
-      final response = await _dio.post(
-        ApiPaths.athleteMe,
-        data: {
-          'sport': sport,
-          'height_cm': heightCm,
-          'weight_kg': weightKg,
-          'birth_date': _isoDate(birthDate),
-        },
-      );
-      return AthleteProfile.fromJson(response.data as Map<String, dynamic>);
-    } on DioException catch (e) {
-      throw ApiException.fromDioError(e);
-    }
-  }
+  Future<AthleteProfile> createMine(AthleteProfileFormData data) =>
+      _send(() => _dio.post(ApiPaths.athleteMe, data: data.toJson()));
+
+  /// El propio deportista actualiza su ficha (p. ej. cambios de peso o altura).
+  Future<AthleteProfile> updateMine(AthleteProfileFormData data) =>
+      _send(() => _dio.patch(ApiPaths.athleteMe, data: data.toJson()));
 
   Future<List<AthleteProfile>> listCoached() => _list(ApiPaths.athletesCoached);
 
@@ -49,12 +28,16 @@ class AthleteApi {
   Future<AthleteProfile> assignCoach({
     required int athleteId,
     required int coachId,
-  }) async {
+  }) => _send(
+    () => _dio.patch(
+      ApiPaths.athleteCoach(athleteId),
+      data: {'coach_id': coachId},
+    ),
+  );
+
+  Future<AthleteProfile> _send(Future<Response> Function() request) async {
     try {
-      final response = await _dio.patch(
-        ApiPaths.athleteCoach(athleteId),
-        data: {'coach_id': coachId},
-      );
+      final response = await request();
       return AthleteProfile.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
@@ -71,7 +54,4 @@ class AthleteApi {
       throw ApiException.fromDioError(e);
     }
   }
-
-  String _isoDate(DateTime date) =>
-      '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 }

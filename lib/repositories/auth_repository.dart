@@ -1,4 +1,5 @@
 import '../models/auth/current_user.dart';
+import '../models/user_role.dart';
 
 /// Abstracción de la sesión de auth: los use cases dependen de esto, no de
 /// [AuthApi]/[SecureSessionStorage] directamente.
@@ -7,6 +8,7 @@ abstract interface class AuthRepository {
     required String email,
     required String password,
     required String fullName,
+    required UserRole role,
   });
 
   Future<CurrentUser> verifyEmail({

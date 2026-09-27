@@ -5,7 +5,7 @@
 
   "signIn": "Sign in",
   "authLoginSubtitle": "Welcome back. Continue your movement journey.",
-  "authRegisterSubtitle": "Create your athlete account to start tracking movement.",
+  "authRegisterSubtitle": "Create your athlete or coach account to start tracking movement.",
   "back": "Back",
   "forgotPassword": "Forgot password?",
   "hasAccount": "Already have an account?",
@@ -19,6 +19,7 @@
   "createAccount": "Create account",
   "fullName": "Full name",
   "confirmPassword": "Confirm password",
+  "registerRoleLabel": "I am a...",
 
   "verifyEmailTitle": "Verify your email",
   "verifyEmailSubtitle": "One more step to protect your account.",
@@ -50,6 +51,8 @@
 
   "athleteHomeTitle": "My profile",
   "athleteProfileSetupTitle": "Complete your profile",
+  "editAthleteProfile": "Edit physical profile",
+  "saveChanges": "Save changes",
   "athleteProfileSetupHint": "We need this to personalize your jump analyses.",
   "athleteProfileSetupAction": "Save profile",
   "sport": "Sport",
@@ -88,6 +91,11 @@
 
   "coachHomeTitle": "My athletes",
   "noCoachedAthletes": "You don't have any athletes assigned yet.",
+  "newManagedAthlete": "New athlete",
+  "editManagedAthlete": "Edit athlete",
+  "deleteManagedAthleteTitle": "Delete this athlete?",
+  "cancel": "Cancel",
+  "delete": "Delete",
 
   "adminHomeTitle": "Administration",
   "adminUsersTab": "Users",

@@ -4,6 +4,7 @@ import '../../core/network/api_exception.dart';
 import '../../core/network/api_paths.dart';
 import '../../models/auth/auth_tokens.dart';
 import '../../models/auth/current_user.dart';
+import '../../models/user_role.dart';
 
 /// Envoltorio delgado sobre Dio para los endpoints /auth del backend FastAPI.
 class AuthApi {
@@ -11,17 +12,23 @@ class AuthApi {
 
   final Dio _dio;
 
-  /// El registro siempre crea un usuario ATHLETE (regla del backend); requiere
+  /// [role] solo puede ser athlete o coach (el backend rechaza admin); requiere
   /// luego verifyEmail con el código OTP enviado por correo antes de poder hacer login.
   Future<CurrentUser> register({
     required String email,
     required String password,
     required String fullName,
+    required UserRole role,
   }) async {
     try {
       final response = await _dio.post(
         ApiPaths.register,
-        data: {'email': email, 'password': password, 'full_name': fullName},
+        data: {
+          'email': email,
+          'password': password,
+          'full_name': fullName,
+          'role': role.name,
+        },
       );
       return CurrentUser.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {

@@ -9,7 +9,7 @@ import '../../core/navigation/app_routes.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/retry_state.dart';
 import '../../widgets/role_home_scaffold.dart';
-import 'athlete_profile_setup_view.dart';
+import 'athlete_profile_form.dart';
 import 'athlete_profile_summary.dart';
 import 'jump_analysis_list.dart';
 
@@ -44,6 +44,18 @@ class _AthleteHomeViewState extends State<AthleteHomeView> {
 
   void _reload() => setState(() => _profileFuture = _loadProfile());
 
+  Future<void> _editProfile(AthleteProfile profile) async {
+    final athleteApi = AppScope.of(context).athleteApi;
+    final saved = await AthleteProfileForm.openAsPage(
+      context,
+      titleKey: 'editAthleteProfile',
+      actionKey: 'saveChanges',
+      initialProfile: profile,
+      onSubmit: athleteApi.updateMine,
+    );
+    if (saved) _reload();
+  }
+
   @override
   Widget build(BuildContext context) => RoleHomeScaffold(
     titleKey: 'athleteHomeTitle',
@@ -57,13 +69,25 @@ class _AthleteHomeViewState extends State<AthleteHomeView> {
           return RetryState(messageKey: 'errorGeneric', onRetry: _reload);
         }
         final profile = snapshot.data;
+        // Alta obligatoria: sin ficha física no se accede al contenido de la app
         if (profile == null) {
-          return AthleteProfileSetupView(onCreated: _reload);
+          return AthleteProfileForm(
+            titleKey: 'athleteProfileSetupTitle',
+            hintKey: 'athleteProfileSetupHint',
+            actionKey: 'athleteProfileSetupAction',
+            onSubmit: (data) async {
+              await AppScope.of(context).athleteApi.createMine(data);
+              _reload();
+            },
+          );
         }
         return ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            AthleteProfileSummary(profile: profile),
+            AthleteProfileSummary(
+              profile: profile,
+              onEdit: () => _editProfile(profile),
+            ),
             const SizedBox(height: 20),
             PrimaryButton(
               label: context.tr('startJumpAnalysis'),

@@ -12,11 +12,13 @@ class RoleHomeScaffold extends StatelessWidget {
     required this.titleKey,
     required this.body,
     this.bottom,
+    this.floatingActionButton,
   });
 
   final String titleKey;
   final Widget body;
   final PreferredSizeWidget? bottom;
+  final Widget? floatingActionButton;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -33,5 +35,6 @@ class RoleHomeScaffold extends StatelessWidget {
       ],
     ),
     body: SafeArea(child: body),
+    floatingActionButton: floatingActionButton,
   );
 }

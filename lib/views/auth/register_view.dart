@@ -8,6 +8,7 @@ import '../../core/navigation/app_routes.dart';
 import '../../core/network/api_exception.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/validation/form_validators.dart';
+import '../../models/user_role.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/auth_page_shell.dart';
 import '../../widgets/primary_button.dart';
@@ -26,6 +27,9 @@ class _RegisterViewState extends State<RegisterView> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  // El registro público solo ofrece estos roles; admin se asigna internamente.
+  static const _signupRoles = [UserRole.athlete, UserRole.coach];
+  UserRole _role = UserRole.athlete;
   String? _errorKey;
   bool _isSubmitting = false;
 
@@ -58,6 +62,7 @@ class _RegisterViewState extends State<RegisterView> {
         email: email,
         password: _passwordController.text,
         fullName: _fullNameController.text.trim(),
+        role: _role,
       );
       if (mounted) context.go(AppRoutes.verifyEmail, extra: email);
     } on ApiException catch (error) {
@@ -79,6 +84,22 @@ class _RegisterViewState extends State<RegisterView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Text(context.tr('registerRoleLabel')),
+          const SizedBox(height: AppSpacing.sm),
+          SegmentedButton<UserRole>(
+            segments: _signupRoles
+                .map(
+                  (role) => ButtonSegment(
+                    value: role,
+                    label: Text(context.tr(role.name)),
+                  ),
+                )
+                .toList(),
+            selected: {_role},
+            onSelectionChanged: (selection) =>
+                setState(() => _role = selection.first),
+          ),
+          const SizedBox(height: AppSpacing.md),
           AppTextField(
             controller: _fullNameController,
             label: context.tr('fullName'),

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 import '../core/localization/app_localizations.dart';
 import '../services/athletes/athlete_api.dart';
+import '../services/athletes/managed_athlete_api.dart';
 import '../services/auth/session_controller.dart';
 import '../services/jump_analyses/jump_analysis_api.dart';
 import '../services/users/user_api.dart';
@@ -19,6 +20,7 @@ class AppScope extends InheritedWidget {
     super.key,
     required this.sessionController,
     required this.athleteApi,
+    required this.managedAthleteApi,
     required this.userApi,
     required this.jumpAnalysisApi,
     required this.consentRepository,
@@ -34,6 +36,7 @@ class AppScope extends InheritedWidget {
 
   final SessionController sessionController;
   final AthleteApi athleteApi;
+  final ManagedAthleteApi managedAthleteApi;
   final UserApi userApi;
   final JumpAnalysisApi jumpAnalysisApi;
   final JumpAnalysisConsentRepository consentRepository;

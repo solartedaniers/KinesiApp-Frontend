@@ -16,6 +16,7 @@ import '../repositories/fake_video_upload_repository.dart';
 import '../repositories/fake_jump_analysis_status_repository.dart';
 import '../repositories/fake_chat_repository.dart';
 import '../services/athletes/athlete_api.dart';
+import '../services/athletes/managed_athlete_api.dart';
 import '../services/auth/auth_api.dart';
 import '../services/auth/session_controller.dart';
 import '../services/jump_analyses/jump_analysis_api.dart';
@@ -71,6 +72,7 @@ class _KinesiAppState extends State<KinesiApp> {
     confirmPasswordReset: ConfirmPasswordResetUseCase(_authRepository),
   );
   late final AthleteApi _athleteApi = AthleteApi(_dio);
+  late final ManagedAthleteApi _managedAthleteApi = ManagedAthleteApi(_dio);
   late final UserApi _userApi = UserApi(_dio);
   late final JumpAnalysisApi _jumpAnalysisApi = JumpAnalysisApi(_dio);
   final FakeJumpAnalysisConsentRepository _consentRepository =
@@ -108,6 +110,7 @@ class _KinesiAppState extends State<KinesiApp> {
         child: AppScope(
           sessionController: _session,
           athleteApi: _athleteApi,
+          managedAthleteApi: _managedAthleteApi,
           userApi: _userApi,
           jumpAnalysisApi: _jumpAnalysisApi,
           consentRepository: _consentRepository,

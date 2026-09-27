@@ -1,5 +1,6 @@
 import '../core/storage/secure_session_storage.dart';
 import '../models/auth/current_user.dart';
+import '../models/user_role.dart';
 import '../services/auth/auth_api.dart';
 import 'auth_repository.dart';
 
@@ -16,7 +17,13 @@ class AuthRepositoryImpl implements AuthRepository {
     required String email,
     required String password,
     required String fullName,
-  }) => _api.register(email: email, password: password, fullName: fullName);
+    required UserRole role,
+  }) => _api.register(
+    email: email,
+    password: password,
+    fullName: fullName,
+    role: role,
+  );
 
   @override
   Future<void> requestVerificationCode({required String email}) =>

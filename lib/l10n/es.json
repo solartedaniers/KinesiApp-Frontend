@@ -5,7 +5,7 @@
 
   "signIn": "Iniciar sesión",
   "authLoginSubtitle": "Qué bueno tenerte de vuelta. Continúa tu proceso de movimiento.",
-  "authRegisterSubtitle": "Crea tu cuenta de deportista para empezar a seguir tu movimiento.",
+  "authRegisterSubtitle": "Crea tu cuenta de deportista o entrenador para empezar a seguir tu movimiento.",
   "back": "Volver",
   "forgotPassword": "¿Olvidaste tu contraseña?",
   "hasAccount": "¿Ya tienes una cuenta?",
@@ -19,6 +19,7 @@
   "createAccount": "Crear cuenta",
   "fullName": "Nombre completo",
   "confirmPassword": "Confirmar contraseña",
+  "registerRoleLabel": "Soy...",
 
   "verifyEmailTitle": "Verifica tu correo",
   "verifyEmailSubtitle": "Un paso más para proteger tu cuenta.",
@@ -50,6 +51,8 @@
 
   "athleteHomeTitle": "Mi perfil",
   "athleteProfileSetupTitle": "Completa tu perfil",
+  "editAthleteProfile": "Editar ficha física",
+  "saveChanges": "Guardar cambios",
   "athleteProfileSetupHint": "Necesitamos estos datos para personalizar tus análisis de salto.",
   "athleteProfileSetupAction": "Guardar perfil",
   "sport": "Deporte",
@@ -88,6 +91,11 @@
 
   "coachHomeTitle": "Mis deportistas",
   "noCoachedAthletes": "Todavía no tienes deportistas asignados.",
+  "newManagedAthlete": "Nuevo deportista",
+  "editManagedAthlete": "Editar deportista",
+  "deleteManagedAthleteTitle": "¿Eliminar este deportista?",
+  "cancel": "Cancelar",
+  "delete": "Eliminar",
 
   "adminHomeTitle": "Administración",
   "adminUsersTab": "Usuarios",

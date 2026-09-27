@@ -51,6 +51,7 @@ class _FakeAuthRepository implements AuthRepository {
     required String email,
     required String password,
     required String fullName,
+    required UserRole role,
   }) async => _user;
 
   @override

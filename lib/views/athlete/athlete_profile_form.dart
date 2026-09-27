@@ -1,39 +1,100 @@
 import 'package:flutter/material.dart';
 
-import '../../app/app_scope.dart';
 import '../../core/error/error_message_resolver.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/network/api_exception.dart';
 import '../../core/validation/form_validators.dart';
+import '../../models/athlete/athlete_profile.dart';
+import '../../models/athlete/athlete_profile_form_data.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../auth/auth_error_banner.dart';
 
-/// Alta del perfil de deportista (`POST /athletes/me`): sport, altura, peso y
-/// fecha de nacimiento, tal como exige `AthleteProfileSelfCreate` del backend.
-class AthleteProfileSetupView extends StatefulWidget {
-  const AthleteProfileSetupView({super.key, required this.onCreated});
+/// Formulario de ficha física (deporte, altura, peso, fecha de nacimiento),
+/// reutilizado para el alta inicial del deportista, su edición posterior y el
+/// CRUD de deportistas gestionados por un coach. Solo captura y valida: quien
+/// lo usa decide a qué endpoint enviar los datos vía [onSubmit].
+class AthleteProfileForm extends StatefulWidget {
+  /// Abre el formulario como pantalla propia; devuelve true si se guardó.
+  static Future<bool> openAsPage(
+    BuildContext context, {
+    required String titleKey,
+    required String actionKey,
+    required Future<void> Function(AthleteProfileFormData data) onSubmit,
+    AthleteProfile? initialProfile,
+    bool askFullName = false,
+  }) async {
+    final saved = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (pageContext) => Scaffold(
+          appBar: AppBar(),
+          body: SafeArea(
+            child: AthleteProfileForm(
+              titleKey: titleKey,
+              actionKey: actionKey,
+              initialProfile: initialProfile,
+              askFullName: askFullName,
+              onSubmit: (data) async {
+                await onSubmit(data);
+                if (pageContext.mounted) Navigator.of(pageContext).pop(true);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+    return saved ?? false;
+  }
 
-  /// Se llama tras crear el perfil con éxito para que la vista dueña recargue `GET /athletes/me`.
-  final VoidCallback onCreated;
+  const AthleteProfileForm({
+    super.key,
+    required this.titleKey,
+    required this.actionKey,
+    required this.onSubmit,
+    this.hintKey,
+    this.initialProfile,
+    this.askFullName = false,
+  });
+
+  final String titleKey;
+  final String actionKey;
+  final String? hintKey;
+
+  /// Si viene, el formulario arranca precargado (modo edición).
+  final AthleteProfile? initialProfile;
+
+  /// Solo los deportistas gestionados por un coach guardan un nombre propio.
+  final bool askFullName;
+
+  /// Persiste los datos; un [ApiException] se muestra en el banner de error.
+  final Future<void> Function(AthleteProfileFormData data) onSubmit;
 
   @override
-  State<AthleteProfileSetupView> createState() =>
-      _AthleteProfileSetupViewState();
+  State<AthleteProfileForm> createState() => _AthleteProfileFormState();
 }
 
-class _AthleteProfileSetupViewState extends State<AthleteProfileSetupView> {
+class _AthleteProfileFormState extends State<AthleteProfileForm> {
   final _formKey = GlobalKey<FormState>();
-  final _sportController = TextEditingController();
-  final _heightController = TextEditingController();
-  final _weightController = TextEditingController();
-  DateTime? _birthDate;
+  late final _fullNameController = TextEditingController(
+    text: widget.initialProfile?.displayName,
+  );
+  late final _sportController = TextEditingController(
+    text: widget.initialProfile?.sport,
+  );
+  late final _heightController = TextEditingController(
+    text: widget.initialProfile?.heightCm.toString(),
+  );
+  late final _weightController = TextEditingController(
+    text: widget.initialProfile?.weightKg.toString(),
+  );
+  late DateTime? _birthDate = widget.initialProfile?.birthDate;
   String? _errorKey;
   bool _isSubmitting = false;
 
   @override
   void dispose() {
+    _fullNameController.dispose();
     _sportController.dispose();
     _heightController.dispose();
     _weightController.dispose();
@@ -69,13 +130,15 @@ class _AthleteProfileSetupViewState extends State<AthleteProfileSetupView> {
       _isSubmitting = true;
     });
     try {
-      await AppScope.of(context).athleteApi.createMine(
-        sport: _sportController.text.trim(),
-        heightCm: double.parse(_heightController.text),
-        weightKg: double.parse(_weightController.text),
-        birthDate: _birthDate!,
+      await widget.onSubmit(
+        AthleteProfileFormData(
+          fullName: widget.askFullName ? _fullNameController.text.trim() : null,
+          sport: _sportController.text.trim(),
+          heightCm: double.parse(_heightController.text),
+          weightKg: double.parse(_weightController.text),
+          birthDate: _birthDate!,
+        ),
       );
-      widget.onCreated();
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _errorKey = ErrorMessageResolver.keyFor(e.code));
@@ -92,17 +155,29 @@ class _AthleteProfileSetupViewState extends State<AthleteProfileSetupView> {
       padding: const EdgeInsets.all(20),
       children: [
         Text(
-          context.tr('athleteProfileSetupTitle'),
+          context.tr(widget.titleKey),
           style: Theme.of(
             context,
           ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
         ),
-        const SizedBox(height: 8),
-        Text(context.tr('athleteProfileSetupHint')),
+        if (widget.hintKey != null) ...[
+          const SizedBox(height: 8),
+          Text(context.tr(widget.hintKey!)),
+        ],
         const SizedBox(height: 20),
         AppCard(
           child: Column(
             children: [
+              if (widget.askFullName) ...[
+                AppTextField(
+                  controller: _fullNameController,
+                  label: context.tr('fullName'),
+                  icon: Icons.badge_outlined,
+                  validator: (value) =>
+                      context.trValidator(FormValidators.required(value)),
+                ),
+                const SizedBox(height: 12),
+              ],
               AppTextField(
                 controller: _sportController,
                 label: context.tr('sport'),
@@ -147,7 +222,7 @@ class _AthleteProfileSetupViewState extends State<AthleteProfileSetupView> {
         if (_errorKey != null) AuthErrorBanner(messageKey: _errorKey!),
         const SizedBox(height: 18),
         PrimaryButton(
-          label: context.tr('athleteProfileSetupAction'),
+          label: context.tr(widget.actionKey),
           icon: Icons.check_circle_outline,
           isLoading: _isSubmitting,
           onPressed: _handleSubmit,

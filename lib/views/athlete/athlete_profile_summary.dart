@@ -7,20 +7,35 @@ import '../../widgets/app_card.dart';
 /// Resumen del perfil real del deportista (sin datos de ejemplo): deporte,
 /// altura, peso y fecha de nacimiento tal como los devuelve `GET /athletes/me`.
 class AthleteProfileSummary extends StatelessWidget {
-  const AthleteProfileSummary({super.key, required this.profile});
+  const AthleteProfileSummary({super.key, required this.profile, this.onEdit});
 
   final AthleteProfile profile;
+
+  /// Si viene, muestra el acceso a configuración para editar la ficha.
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) => AppCard(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          profile.sport,
-          style: Theme.of(
-            context,
-          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                profile.sport,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+            if (onEdit != null)
+              IconButton(
+                onPressed: onEdit,
+                icon: const Icon(Icons.settings_outlined),
+                tooltip: context.tr('editAthleteProfile'),
+              ),
+          ],
         ),
         const SizedBox(height: 12),
         _SummaryRow(

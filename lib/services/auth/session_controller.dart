@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../models/auth/current_user.dart';
 import '../../models/auth/session_status.dart';
+import '../../models/user_role.dart';
 import '../../use_cases/auth/login_use_case.dart';
 import '../../use_cases/auth/request_verification_code_use_case.dart';
 import '../../use_cases/auth/request_password_reset_use_case.dart';
@@ -76,14 +77,20 @@ class SessionController extends ChangeNotifier {
             _setAuthenticated(await _login(email: email, password: password)),
       );
 
-  /// Registra un usuario nuevo (siempre ATHLETE); no autentica por sí solo,
+  /// Registra un usuario nuevo (ATHLETE o COACH); no autentica por sí solo,
   /// falta verifyEmail con el código OTP enviado por correo.
   Future<void> register({
     required String email,
     required String password,
     required String fullName,
+    required UserRole role,
   }) => _runAuthFlow(
-    () => _register(email: email, password: password, fullName: fullName),
+    () => _register(
+      email: email,
+      password: password,
+      fullName: fullName,
+      role: role,
+    ),
   );
 
   Future<void> verifyEmail({required String email, required String code}) =>
