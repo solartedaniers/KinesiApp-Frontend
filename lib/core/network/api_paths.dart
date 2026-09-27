@@ -32,6 +32,8 @@ abstract final class ApiPaths {
   static const String jumpAnalysesByAthlete = '/jump-analyses/by-athlete';
   static String jumpAnalysesForAthlete(int athleteId) =>
       '$jumpAnalysesByAthlete/$athleteId';
+  static const String uploadJumpVideo = '/jump-analyses/upload';
+  static String jumpAnalysis(int analysisId) => '/jump-analyses/$analysisId';
 
   static const String users = '/users';
   static String userRole(int userId) => '/users/$userId/role';

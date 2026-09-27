@@ -17,6 +17,8 @@ enum ErrorCode {
   emailDeliveryFailed('email_delivery_failed'),
   passwordReused('password_reused'),
   invalidCurrentPassword('invalid_current_password'),
+  invalidVideo('invalid_video'),
+  videoTooLarge('video_too_large'),
   unknown('unknown');
 
   const ErrorCode(this.wireValue);

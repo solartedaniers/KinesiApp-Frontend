@@ -13,8 +13,8 @@ import '../core/theme/app_theme.dart';
 import '../repositories/auth_repository.dart';
 import '../repositories/auth_repository_impl.dart';
 import '../repositories/fake_jump_analysis_consent_repository.dart';
-import '../repositories/fake_video_upload_repository.dart';
-import '../repositories/fake_jump_analysis_status_repository.dart';
+import '../repositories/api_jump_analysis_status_repository.dart';
+import '../repositories/dio_video_upload_repository.dart';
 import '../repositories/fake_chat_repository.dart';
 import '../services/athletes/athlete_api.dart';
 import '../services/athletes/managed_athlete_api.dart';
@@ -82,10 +82,10 @@ class _KinesiAppState extends State<KinesiApp> {
   late final JumpAnalysisApi _jumpAnalysisApi = JumpAnalysisApi(_dio);
   final FakeJumpAnalysisConsentRepository _consentRepository =
       FakeJumpAnalysisConsentRepository();
-  final FakeVideoUploadRepository _videoUploadRepository =
-      FakeVideoUploadRepository();
-  final FakeJumpAnalysisStatusRepository _analysisStatusRepository =
-      FakeJumpAnalysisStatusRepository();
+  late final DioVideoUploadRepository _videoUploadRepository =
+      DioVideoUploadRepository(_dio);
+  late final ApiJumpAnalysisStatusRepository _analysisStatusRepository =
+      ApiJumpAnalysisStatusRepository(_jumpAnalysisApi);
   final FakeChatRepository _chatRepository = FakeChatRepository();
   late final GoRouter _router = buildAppRouter(_session);
   late final Future<TranslationCatalog> _bootstrap = _translationService.load();

@@ -129,6 +129,8 @@
   "errorForbidden": "No tienes permiso para hacer esto.",
   "errorInvalidRoleAssignment": "Esa asignación de rol no es válida.",
   "errorPasswordReused": "La nueva contraseña debe ser distinta de la actual.",
+  "errorInvalidVideo": "El archivo seleccionado no es un video válido.",
+  "errorVideoTooLarge": "El video es demasiado grande. Graba un salto más corto.",
   "errorInvalidCurrentPassword": "Tu contraseña actual es incorrecta.",
   "validatorPasswordWeak": "Usa al menos una letra y un número.",
   "validatorPasswordTooLong": "La contraseña debe tener como máximo 128 caracteres.",

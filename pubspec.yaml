@@ -48,6 +48,7 @@ dependencies:
   cross_file: ^0.3.4
   # Foto de perfil desde galería/cámara (ya redimensionada al elegirla)
   image_picker: ^1.1.2
+  image: ^4.10.1
 
 dev_dependencies:
   flutter_test:

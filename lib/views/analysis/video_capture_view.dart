@@ -90,11 +90,7 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
     if (!mounted) return;
     context.go(
       AppRoutes.videoUpload,
-      extra: AnalysisFlow(
-        athleteId: widget.athleteId,
-        analysisId: DateTime.now().millisecondsSinceEpoch,
-        video: video,
-      ),
+      extra: AnalysisFlow(athleteId: widget.athleteId, video: video),
     );
   }
 

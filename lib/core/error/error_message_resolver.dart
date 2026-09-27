@@ -19,6 +19,8 @@ abstract final class ErrorMessageResolver {
     ErrorCode.emailDeliveryFailed: 'errorEmailDeliveryFailed',
     ErrorCode.passwordReused: 'errorPasswordReused',
     ErrorCode.invalidCurrentPassword: 'errorInvalidCurrentPassword',
+    ErrorCode.invalidVideo: 'errorInvalidVideo',
+    ErrorCode.videoTooLarge: 'errorVideoTooLarge',
   };
 
   static String keyFor(ErrorCode code) => _keyByCode[code] ?? genericKey;

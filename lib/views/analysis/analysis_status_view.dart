@@ -39,7 +39,7 @@ class _AnalysisStatusViewState extends State<AnalysisStatusView> {
     try {
       final status = await AppScope.read(
         context,
-      ).analysisStatusRepository.getStatus(widget.flow.analysisId);
+      ).analysisStatusRepository.getStatus(widget.flow.analysisId!);
       if (!mounted) return;
       setState(() {
         _status = status;
@@ -48,6 +48,9 @@ class _AnalysisStatusViewState extends State<AnalysisStatusView> {
       });
       if (status == ClientAnalysisStatus.processed) {
         context.go(AppRoutes.analysisChat, extra: widget.flow.analysisId);
+      } else if (status == ClientAnalysisStatus.failed) {
+        // Estado final: no tiene sentido seguir consultando
+        return;
       } else if (_attempts >= 10) {
         setState(() => _error = StateError('Analysis did not finish'));
       } else {

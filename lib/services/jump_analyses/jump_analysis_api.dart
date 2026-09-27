@@ -17,6 +17,17 @@ class JumpAnalysisApi {
   Future<List<JumpAnalysisSummary>> listTeam() =>
       _list(ApiPaths.teamJumpAnalyses);
 
+  Future<JumpAnalysisSummary> get(int analysisId) async {
+    try {
+      final response = await _dio.get(ApiPaths.jumpAnalysis(analysisId));
+      return JumpAnalysisSummary.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
   Future<List<JumpAnalysisSummary>> _list(String path) async {
     try {
       final response = await _dio.get(path);

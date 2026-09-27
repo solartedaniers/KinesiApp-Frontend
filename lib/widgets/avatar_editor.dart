@@ -7,12 +7,13 @@ import '../core/error/error_message_resolver.dart';
 import '../core/localization/app_localizations.dart';
 import '../core/network/api_exception.dart';
 import '../models/avatar/avatar_data.dart';
+import '../services/media/avatar_image_compressor.dart';
 import 'user_avatar.dart';
 
 enum _AvatarAction { gallery, camera, remove }
 
 /// Avatar con acceso a cambiar/quitar la foto (galería o cámara). Solo elige y
-/// valida la imagen: quien lo usa decide a qué endpoint subirla.
+/// comprime la imagen: quien lo usa decide a qué endpoint subirla.
 class AvatarEditor extends StatefulWidget {
   const AvatarEditor({
     super.key,
@@ -67,19 +68,21 @@ class _AvatarEditorState extends State<AvatarEditor> {
     if (action == null || !mounted) return;
     if (action == _AvatarAction.remove) return _save(widget.onRemove);
 
-    // Redimensionada al elegirla: el backend acepta hasta ~1 MB
     final file = await ImagePicker().pickImage(
       source: action == _AvatarAction.gallery
           ? ImageSource.gallery
           : ImageSource.camera,
-      maxWidth: 512,
-      maxHeight: 512,
-      imageQuality: 85,
     );
-    if (file == null) return;
-    final upload = AvatarUpload.fromBytes(await file.readAsBytes());
-    if (upload == null) return _showError('avatarInvalid');
-    await _save(() => widget.onUpload(upload));
+    if (file == null || !mounted) return;
+    await _save(() async {
+      // Decodificar/redimensionar/comprimir corre en un Isolate (compute):
+      // el spinner sigue animado mientras tanto
+      final upload = await AvatarImageCompressor.compress(
+        await file.readAsBytes(),
+      );
+      if (upload == null) return _showError('avatarInvalid');
+      await widget.onUpload(upload);
+    });
   }
 
   Future<void> _save(Future<void> Function() action) async {

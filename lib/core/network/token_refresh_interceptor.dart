@@ -49,6 +49,11 @@ class TokenRefreshInterceptor extends Interceptor {
     try {
       final retryOptions = err.requestOptions
         ..headers['Authorization'] = 'Bearer $newAccessToken';
+      // Un FormData ya enviado no se puede reenviar: el clon vuelve a abrir
+      // los streams de sus archivos (p. ej. el video del salto)
+      if (retryOptions.data case final FormData formData) {
+        retryOptions.data = formData.clone();
+      }
       final response = await _refreshDio.fetch(retryOptions);
       handler.resolve(response);
     } on DioException catch (retryError) {

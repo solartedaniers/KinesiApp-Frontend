@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/app_scope.dart';
+import '../../core/error/error_message_resolver.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/navigation/analysis_flow.dart';
 import '../../core/navigation/app_routes.dart';
+import '../../core/network/api_exception.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../repositories/video_upload_repository.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/retry_state.dart';
 import '../../widgets/role_home_button.dart';
@@ -20,9 +23,9 @@ class VideoUploadView extends StatefulWidget {
 }
 
 class _VideoUploadViewState extends State<VideoUploadView> {
-  StreamSubscription<double>? _subscription;
+  StreamSubscription<VideoUploadProgress>? _subscription;
   double _progress = 0;
-  Object? _error;
+  String? _errorKey;
 
   @override
   void initState() {
@@ -34,18 +37,27 @@ class _VideoUploadViewState extends State<VideoUploadView> {
     _subscription?.cancel();
     setState(() {
       _progress = 0;
-      _error = null;
+      _errorKey = null;
     });
     _subscription = AppScope.read(context).videoUploadRepository
-        .upload(widget.flow.video)
+        .upload(athleteId: widget.flow.athleteId, video: widget.flow.video)
         .listen(
-          (progress) => setState(() => _progress = progress),
-          onError: (Object error) => setState(() => _error = error),
-          onDone: () {
-            if (mounted) {
-              context.go(AppRoutes.analysisStatus, extra: widget.flow);
+          (progress) {
+            if (!mounted) return;
+            if (progress.analysisId case final analysisId?) {
+              context.go(
+                AppRoutes.analysisStatus,
+                extra: widget.flow.withAnalysisId(analysisId),
+              );
+            } else {
+              setState(() => _progress = progress.fraction);
             }
           },
+          onError: (Object error) => setState(
+            () => _errorKey = error is ApiException
+                ? ErrorMessageResolver.keyFor(error.code)
+                : ErrorMessageResolver.genericKey,
+          ),
         );
   }
 
@@ -62,8 +74,8 @@ class _VideoUploadViewState extends State<VideoUploadView> {
       actions: const [RoleHomeButton()],
     ),
     body: Center(
-      child: _error != null
-          ? RetryState(messageKey: 'errorGeneric', onRetry: _upload)
+      child: _errorKey != null
+          ? RetryState(messageKey: _errorKey!, onRetry: _upload)
           : Padding(
               padding: const EdgeInsets.all(AppSpacing.xl),
               child: AppCard(
