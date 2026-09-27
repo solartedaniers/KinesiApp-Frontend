@@ -4,8 +4,8 @@ import '../../core/localization/app_localizations.dart';
 import '../../models/athlete/athlete_profile.dart';
 import '../../widgets/app_card.dart';
 
-/// Resumen del perfil real del deportista (sin datos de ejemplo): deporte,
-/// altura, peso y fecha de nacimiento tal como los devuelve `GET /athletes/me`.
+/// Resumen de la ficha física real del deportista (sin datos de ejemplo):
+/// nombre, género, altura, peso y fecha de nacimiento tal como los da la API.
 class AthleteProfileSummary extends StatelessWidget {
   const AthleteProfileSummary({super.key, required this.profile, this.onEdit});
 
@@ -23,7 +23,7 @@ class AthleteProfileSummary extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                profile.sport,
+                profile.displayName,
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -38,6 +38,11 @@ class AthleteProfileSummary extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
+        _SummaryRow(
+          icon: Icons.wc_outlined,
+          label: context.tr('gender'),
+          value: context.tr(profile.gender.labelKey),
+        ),
         _SummaryRow(
           icon: Icons.height,
           label: context.tr('heightCm'),

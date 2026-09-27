@@ -7,6 +7,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/retry_state.dart';
+import '../../widgets/role_home_button.dart';
 
 class AnalysisChatView extends StatefulWidget {
   const AnalysisChatView({super.key, required this.analysisId});
@@ -65,7 +66,10 @@ class _AnalysisChatViewState extends State<AnalysisChatView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(context.tr('analysisChatTitle'))),
+    appBar: AppBar(
+      title: Text(context.tr('analysisChatTitle')),
+      actions: const [RoleHomeButton()],
+    ),
     body: SafeArea(
       child: Column(
         children: [

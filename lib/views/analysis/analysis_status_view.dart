@@ -11,6 +11,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../repositories/jump_analysis_status_repository.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/retry_state.dart';
+import '../../widgets/role_home_button.dart';
 
 class AnalysisStatusView extends StatefulWidget {
   const AnalysisStatusView({super.key, required this.flow});
@@ -75,7 +76,10 @@ class _AnalysisStatusViewState extends State<AnalysisStatusView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(context.tr('analysisStatusTitle'))),
+    appBar: AppBar(
+      title: Text(context.tr('analysisStatusTitle')),
+      actions: const [RoleHomeButton()],
+    ),
     body: Center(
       child: _error != null
           ? RetryState(

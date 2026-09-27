@@ -6,12 +6,13 @@ import '../../core/network/api_exception.dart';
 import '../../core/validation/form_validators.dart';
 import '../../models/athlete/athlete_profile.dart';
 import '../../models/athlete/athlete_profile_form_data.dart';
+import '../../models/athlete/gender.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/app_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../auth/auth_error_banner.dart';
 
-/// Formulario de ficha física (deporte, altura, peso, fecha de nacimiento),
+/// Formulario de ficha física (género, altura, peso, fecha de nacimiento),
 /// reutilizado para el alta inicial del deportista, su edición posterior y el
 /// CRUD de deportistas gestionados por un coach. Solo captura y valida: quien
 /// lo usa decide a qué endpoint enviar los datos vía [onSubmit].
@@ -79,9 +80,7 @@ class _AthleteProfileFormState extends State<AthleteProfileForm> {
   late final _fullNameController = TextEditingController(
     text: widget.initialProfile?.displayName,
   );
-  late final _sportController = TextEditingController(
-    text: widget.initialProfile?.sport,
-  );
+  late Gender? _gender = widget.initialProfile?.gender;
   late final _heightController = TextEditingController(
     text: widget.initialProfile?.heightCm.toString(),
   );
@@ -95,7 +94,6 @@ class _AthleteProfileFormState extends State<AthleteProfileForm> {
   @override
   void dispose() {
     _fullNameController.dispose();
-    _sportController.dispose();
     _heightController.dispose();
     _weightController.dispose();
     super.dispose();
@@ -133,7 +131,7 @@ class _AthleteProfileFormState extends State<AthleteProfileForm> {
       await widget.onSubmit(
         AthleteProfileFormData(
           fullName: widget.askFullName ? _fullNameController.text.trim() : null,
-          sport: _sportController.text.trim(),
+          gender: _gender!,
           heightCm: double.parse(_heightController.text),
           weightKg: double.parse(_weightController.text),
           birthDate: _birthDate!,
@@ -178,12 +176,23 @@ class _AthleteProfileFormState extends State<AthleteProfileForm> {
                 ),
                 const SizedBox(height: 12),
               ],
-              AppTextField(
-                controller: _sportController,
-                label: context.tr('sport'),
-                icon: Icons.sports_gymnastics_outlined,
-                validator: (value) =>
-                    context.trValidator(FormValidators.required(value)),
+              DropdownButtonFormField<Gender>(
+                initialValue: _gender,
+                decoration: InputDecoration(
+                  labelText: context.tr('gender'),
+                  prefixIcon: const Icon(Icons.wc_outlined),
+                ),
+                items: Gender.values
+                    .map(
+                      (gender) => DropdownMenuItem(
+                        value: gender,
+                        child: Text(context.tr(gender.labelKey)),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (gender) => setState(() => _gender = gender),
+                validator: (gender) =>
+                    gender == null ? context.tr('validatorRequired') : null,
               ),
               const SizedBox(height: 12),
               AppTextField(

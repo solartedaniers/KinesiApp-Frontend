@@ -49,7 +49,7 @@ class AdminCoachAssignmentTab extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
                 leading: const Icon(Icons.directions_run),
                 title: Text(athlete.displayName),
-                subtitle: Text(athlete.sport),
+                subtitle: Text(context.tr(athlete.gender.labelKey)),
                 trailing: coachOptions.isEmpty
                     ? Text(context.tr('noCoachesAvailable'))
                     : DropdownButton<int>(

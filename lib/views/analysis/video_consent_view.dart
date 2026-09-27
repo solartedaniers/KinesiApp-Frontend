@@ -8,6 +8,7 @@ import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/primary_button.dart';
+import '../../widgets/role_home_button.dart';
 
 class VideoConsentView extends StatefulWidget {
   const VideoConsentView({super.key, required this.athleteId});
@@ -50,7 +51,10 @@ class _VideoConsentViewState extends State<VideoConsentView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(context.tr('videoConsentTitle'))),
+    appBar: AppBar(
+      title: Text(context.tr('videoConsentTitle')),
+      actions: const [RoleHomeButton()],
+    ),
     body: SafeArea(
       child: _checkingConsent
           ? const Center(child: CircularProgressIndicator())

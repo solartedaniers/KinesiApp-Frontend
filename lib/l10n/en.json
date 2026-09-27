@@ -39,6 +39,7 @@
   "newPassword": "New password",
 
   "sessionRestoreError": "We couldn't verify your session. Check your connection and try again.",
+  "backToHome": "Back to home",
   "retry": "Retry",
 
   "logout": "Sign out",
@@ -55,7 +56,10 @@
   "saveChanges": "Save changes",
   "athleteProfileSetupHint": "We need this to personalize your jump analyses.",
   "athleteProfileSetupAction": "Save profile",
-  "sport": "Sport",
+  "gender": "Gender",
+  "genderMale": "Male",
+  "genderFemale": "Female",
+  "genderOther": "Other",
   "heightCm": "Height (cm)",
   "weightKg": "Weight (kg)",
   "birthDate": "Birth date",

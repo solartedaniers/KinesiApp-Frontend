@@ -10,6 +10,7 @@ import '../../core/localization/app_localizations.dart';
 import '../../core/navigation/analysis_flow.dart';
 import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../widgets/role_home_button.dart';
 
 class VideoCaptureView extends StatefulWidget {
   const VideoCaptureView({super.key, required this.athleteId});
@@ -108,7 +109,10 @@ class _VideoCaptureViewState extends State<VideoCaptureView> {
   Widget build(BuildContext context) {
     final controller = _controller;
     return Scaffold(
-      appBar: AppBar(title: Text(context.tr('videoCaptureTitle'))),
+      appBar: AppBar(
+        title: Text(context.tr('videoCaptureTitle')),
+        actions: const [RoleHomeButton()],
+      ),
       body: SafeArea(
         child: _error != null
             ? Center(child: Text(context.tr('videoCameraError')))

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../app/app_scope.dart';
 import '../../core/error/error_message_resolver.dart';
 import '../../core/localization/app_localizations.dart';
+import '../../core/navigation/app_routes.dart';
 import '../../core/network/api_exception.dart';
 import '../../models/athlete/athlete_profile.dart';
 import '../../widgets/app_card.dart';
@@ -10,9 +12,9 @@ import '../../widgets/retry_state.dart';
 import '../../widgets/role_home_scaffold.dart';
 import '../athlete/athlete_profile_form.dart';
 
-/// Home de COACH: deportistas a cargo (`GET /coach/athletes`). Los gestionados
-/// por el coach (sin cuenta propia) se crean, editan y eliminan desde aquí; los
-/// que tienen cuenta propia solo se consultan, su ficha es del deportista.
+/// Home de COACH: tarjetas de los deportistas a cargo (`GET /coach/athletes`).
+/// Los gestionados (sin cuenta propia) se crean y eliminan desde aquí; al tocar
+/// cualquier tarjeta se abre su ficha con los análisis (CoachAthleteDetailView).
 class CoachHomeView extends StatefulWidget {
   const CoachHomeView({super.key});
 
@@ -46,17 +48,10 @@ class _CoachHomeViewState extends State<CoachHomeView> {
     if (saved) _reload();
   }
 
-  Future<void> _edit(AthleteProfile athlete) async {
-    final api = AppScope.read(context).managedAthleteApi;
-    final saved = await AthleteProfileForm.openAsPage(
-      context,
-      titleKey: 'editManagedAthlete',
-      actionKey: 'saveChanges',
-      askFullName: true,
-      initialProfile: athlete,
-      onSubmit: (data) => api.update(athlete.id, data),
-    );
-    if (saved) _reload();
+  Future<void> _openDetail(AthleteProfile athlete) async {
+    await context.push(AppRoutes.coachAthleteDetail, extra: athlete);
+    // La ficha pudo editarse en el detalle: se refresca al volver
+    if (mounted) _reload();
   }
 
   Future<void> _delete(AthleteProfile athlete) async {
@@ -120,7 +115,7 @@ class _CoachHomeViewState extends State<CoachHomeView> {
               .map(
                 (athlete) => _CoachedAthleteTile(
                   athlete: athlete,
-                  onEdit: athlete.isManaged ? () => _edit(athlete) : null,
+                  onOpen: () => _openDetail(athlete),
                   onDelete: athlete.isManaged ? () => _delete(athlete) : null,
                 ),
               )
@@ -134,12 +129,12 @@ class _CoachHomeViewState extends State<CoachHomeView> {
 class _CoachedAthleteTile extends StatelessWidget {
   const _CoachedAthleteTile({
     required this.athlete,
-    required this.onEdit,
+    required this.onOpen,
     required this.onDelete,
   });
 
   final AthleteProfile athlete;
-  final VoidCallback? onEdit;
+  final VoidCallback onOpen;
   final VoidCallback? onDelete;
 
   @override
@@ -151,10 +146,10 @@ class _CoachedAthleteTile extends StatelessWidget {
       ),
       title: Text(athlete.displayName),
       subtitle: Text(
-        '${athlete.sport} · ${athlete.heightCm.toStringAsFixed(0)} cm · '
+        '${context.tr(athlete.gender.labelKey)} · ${athlete.heightCm.toStringAsFixed(0)} cm · '
         '${athlete.weightKg.toStringAsFixed(1)} kg',
       ),
-      onTap: onEdit,
+      onTap: onOpen,
       trailing: onDelete == null
           ? null
           : IconButton(

@@ -10,6 +10,7 @@ import '../../core/navigation/app_routes.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/retry_state.dart';
+import '../../widgets/role_home_button.dart';
 
 class VideoUploadView extends StatefulWidget {
   const VideoUploadView({super.key, required this.flow});
@@ -56,7 +57,10 @@ class _VideoUploadViewState extends State<VideoUploadView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(context.tr('videoUploadTitle'))),
+    appBar: AppBar(
+      title: Text(context.tr('videoUploadTitle')),
+      actions: const [RoleHomeButton()],
+    ),
     body: Center(
       child: _error != null
           ? RetryState(messageKey: 'errorGeneric', onRetry: _upload)

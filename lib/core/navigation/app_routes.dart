@@ -10,6 +10,7 @@ abstract final class AppRoutes {
   // el alta de perfil en vez del contenido normal (ver AthleteHomeView).
   static const String athleteHome = '/athlete';
   static const String coachHome = '/coach';
+  static const String coachAthleteDetail = '/coach/athlete';
   static const String adminHome = '/admin';
   static const String videoConsent = '/analysis/consent';
   static const String videoCapture = '/analysis/capture';

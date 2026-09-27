@@ -1,8 +1,10 @@
+import 'gender.dart';
+
 /// Datos capturados por el formulario de ficha física. [fullName] solo se usa
 /// en deportistas gestionados por un coach (los demás usan el nombre de su cuenta).
 class AthleteProfileFormData {
   const AthleteProfileFormData({
-    required this.sport,
+    required this.gender,
     required this.heightCm,
     required this.weightKg,
     required this.birthDate,
@@ -10,14 +12,14 @@ class AthleteProfileFormData {
   });
 
   final String? fullName;
-  final String sport;
+  final Gender gender;
   final double heightCm;
   final double weightKg;
   final DateTime birthDate;
 
   Map<String, dynamic> toJson() => {
     if (fullName != null) 'full_name': fullName,
-    'sport': sport,
+    'gender': gender.name,
     'height_cm': heightCm,
     'weight_kg': weightKg,
     'birth_date': _isoDate(birthDate),

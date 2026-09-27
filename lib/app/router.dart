@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '../core/navigation/app_routes.dart';
 import '../core/navigation/role_home_resolver.dart';
+import '../core/navigation/route_access_policy.dart';
 import '../models/auth/session_status.dart';
 import '../services/auth/session_controller.dart';
 import '../views/admin/admin_home_view.dart';
@@ -11,6 +12,7 @@ import '../views/auth/otp_verification_view.dart';
 import '../views/auth/password_recovery_view.dart';
 import '../views/auth/register_view.dart';
 import '../views/auth/splash_view.dart';
+import '../views/coach/coach_athlete_detail_view.dart';
 import '../views/coach/coach_home_view.dart';
 import '../views/analysis/video_consent_view.dart';
 import '../views/analysis/video_capture_view.dart';
@@ -18,6 +20,7 @@ import '../views/analysis/video_upload_view.dart';
 import '../views/analysis/analysis_status_view.dart';
 import '../views/analysis/analysis_chat_view.dart';
 import '../core/navigation/analysis_flow.dart';
+import '../models/athlete/athlete_profile.dart';
 
 /// Construye el `GoRouter` de la app: la única guarda de acceso es [_redirect],
 /// que decide sólo con [SessionController.status] (y el rol), reevaluada
@@ -38,10 +41,10 @@ GoRouter buildAppRouter(SessionController session) {
       case SessionStatus.unauthenticated:
         return authRoutes.contains(location) ? null : AppRoutes.login;
       case SessionStatus.authenticated:
-        final home = RoleHomeResolver.resolve(session.currentUser!.role);
-        return (authRoutes.contains(location) || location == AppRoutes.splash)
-            ? home
-            : null;
+        final role = session.currentUser!.role;
+        return RouteAccessPolicy.canAccess(role, location)
+            ? null
+            : RoleHomeResolver.resolve(role);
     }
   }
 
@@ -79,6 +82,11 @@ GoRouter buildAppRouter(SessionController session) {
       GoRoute(
         path: AppRoutes.coachHome,
         builder: (context, state) => const CoachHomeView(),
+      ),
+      GoRoute(
+        path: AppRoutes.coachAthleteDetail,
+        builder: (context, state) =>
+            CoachAthleteDetailView(athlete: state.extra! as AthleteProfile),
       ),
       GoRoute(
         path: AppRoutes.adminHome,
