@@ -17,6 +17,13 @@ abstract final class ApiConfig {
     'VIDEO_CAPTURE_BITRATE',
     defaultValue: 2000000,
   );
+
+  /// Tope para que el plugin de cámara inicie o finalice una grabación: si no
+  /// responde, la pantalla se recupera en vez de quedar colgada.
+  static const int videoRecordingTimeoutSeconds = int.fromEnvironment(
+    'VIDEO_RECORDING_TIMEOUT_SECONDS',
+    defaultValue: 15,
+  );
   static const int consentVersion = int.fromEnvironment(
     'VIDEO_CONSENT_VERSION',
     defaultValue: 1,

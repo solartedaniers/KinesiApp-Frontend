@@ -5,6 +5,7 @@ import '../../app/app_scope.dart';
 import '../../controllers/loadable_controller.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../core/navigation/app_routes.dart';
+import '../../core/navigation/role_home_resolver.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../models/jump_analysis/jump_analysis_status.dart';
 import '../../models/jump_analysis/jump_analysis_summary.dart';
@@ -12,6 +13,7 @@ import '../../widgets/analysis_video_player.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/loadable_view.dart';
 import '../../widgets/role_home_button.dart';
+import 'delete_analysis_button.dart';
 
 typedef _AnalysisDetail = ({JumpAnalysisSummary analysis, Uri videoUrl});
 
@@ -47,11 +49,29 @@ class _AnalysisDetailViewState extends State<AnalysisDetailView> {
     super.dispose();
   }
 
+  /// Vuelve a la lista con `true` para que la recargue. Si se llegó sin pila
+  /// (al terminar el procesamiento de una grabación nueva), va a la home del rol.
+  void _leaveAfterDelete() {
+    if (context.canPop()) {
+      context.pop(true);
+    } else {
+      final role = AppScope.read(context).sessionController.currentUser!.role;
+      context.go(RoleHomeResolver.resolve(role));
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       title: Text(context.tr('analysisDetailTitle')),
-      actions: const [RoleHomeButton()],
+      actions: [
+        DeleteAnalysisButton(
+          delete: () =>
+              AppScope.read(context).jumpAnalysisApi.delete(widget.analysisId),
+          onDeleted: _leaveAfterDelete,
+        ),
+        const RoleHomeButton(),
+      ],
     ),
     body: SafeArea(
       child: LoadableView(

@@ -54,6 +54,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # Pruebas en emulador/dispositivo real (p. ej. grabación con la cámara)
+  integration_test:
+    sdk: flutter
 
   # Sólo para fakear FlutterSecureStoragePlatform.instance en tests (ver test/support/).
   flutter_secure_storage_platform_interface: ^1.1.2

@@ -89,6 +89,43 @@ void main() {
     expect(opened, 1);
   });
 
+  testWidgets('the list asks to reload when the detail reports a deletion', (
+    tester,
+  ) async {
+    var reloads = 0;
+    // El detalle falso hace lo mismo que el real tras borrar: pop(true)
+    final router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (_, _) => Scaffold(
+            body: JumpAnalysisList(
+              analyses: [_analysis],
+              onChanged: () => reloads++,
+            ),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.analysisDetail,
+          builder: (context, _) => TextButton(
+            onPressed: () => context.pop(true),
+            child: const Text('deleted'),
+          ),
+        ),
+      ],
+    );
+    await tester.pumpWidget(
+      localized(MaterialApp.router(routerConfig: router)),
+    );
+
+    await tester.tap(find.byType(ListTile));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('deleted'));
+    await tester.pumpAndSettle();
+
+    expect(reloads, 1);
+  });
+
   test('detail route carries the id in the query, not in `extra`', () {
     expect(
       AppRoutes.analysisDetailFor(42),

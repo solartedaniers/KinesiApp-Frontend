@@ -58,7 +58,12 @@ class AthleteDashboardView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          JumpAnalysisList(analyses: analyses.take(_recentCount).toList()),
+          JumpAnalysisList(
+            analyses: analyses.take(_recentCount).toList(),
+            onChanged: ControllerScope.read<JumpAnalysesController>(
+              context,
+            ).load,
+          ),
           if (analyses.length > _recentCount)
             TextButton(
               onPressed: () => context.go(AppRoutes.athleteAnalyses),

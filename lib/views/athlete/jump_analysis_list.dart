@@ -18,12 +18,17 @@ class JumpAnalysisList extends StatelessWidget {
     this.titleKey = 'recentAnalyses',
     this.emptyKey = 'noAnalysesYet',
     this.athleteNames = const {},
+    this.onChanged,
   });
 
   final List<JumpAnalysisSummary> analyses;
   final String titleKey;
   final String emptyKey;
   final Map<int, String> athleteNames;
+
+  /// Se llama cuando una grabación cambió en su detalle (p. ej. se borró), para
+  /// que quien tiene los datos los recargue.
+  final VoidCallback? onChanged;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -38,16 +43,29 @@ class JumpAnalysisList extends StatelessWidget {
           _JumpAnalysisTile(
             analysis: analysis,
             athleteName: athleteNames[analysis.athleteId],
+            onChanged: onChanged,
           ),
     ],
   );
 }
 
 class _JumpAnalysisTile extends StatelessWidget {
-  const _JumpAnalysisTile({required this.analysis, this.athleteName});
+  const _JumpAnalysisTile({
+    required this.analysis,
+    this.athleteName,
+    this.onChanged,
+  });
 
   final JumpAnalysisSummary analysis;
   final String? athleteName;
+  final VoidCallback? onChanged;
+
+  Future<void> _open(BuildContext context) async {
+    final changed = await context.push<bool>(
+      AppRoutes.analysisDetailFor(analysis.id),
+    );
+    if (changed ?? false) onChanged?.call();
+  }
 
   String _statusKey(JumpAnalysisStatus status) => switch (status) {
     JumpAnalysisStatus.pending => 'analysisStatusPending',
@@ -61,7 +79,7 @@ class _JumpAnalysisTile extends StatelessWidget {
     final risk = analysis.riskScore;
     final scheme = Theme.of(context).colorScheme;
     return AppCard(
-      onTap: () => context.push(AppRoutes.analysisDetailFor(analysis.id)),
+      onTap: () => _open(context),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         leading: const Icon(Icons.directions_run),

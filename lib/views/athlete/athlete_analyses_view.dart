@@ -18,8 +18,11 @@ class AthleteAnalysesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profile = ControllerScope.of<AthleteProfileController>(context).data!;
+    final analysesController = ControllerScope.of<JumpAnalysesController>(
+      context,
+    );
     return LoadableView(
-      controller: ControllerScope.of<JumpAnalysesController>(context),
+      controller: analysesController,
       builder: (context, analyses) => ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: [
@@ -30,7 +33,11 @@ class AthleteAnalysesView extends StatelessWidget {
                 context.go(AppRoutes.videoConsent, extra: profile.id),
           ),
           const SizedBox(height: AppSpacing.lg),
-          JumpAnalysisList(analyses: analyses, titleKey: 'navAnalyses'),
+          JumpAnalysisList(
+            analyses: analyses,
+            titleKey: 'navAnalyses',
+            onChanged: analysesController.load,
+          ),
         ],
       ),
     );

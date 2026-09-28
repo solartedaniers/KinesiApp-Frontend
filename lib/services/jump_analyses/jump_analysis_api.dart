@@ -28,6 +28,15 @@ class JumpAnalysisApi {
     }
   }
 
+  /// Borra el análisis con su video y sus mediciones (irreversible).
+  Future<void> delete(int analysisId) async {
+    try {
+      await _dio.delete(ApiPaths.jumpAnalysis(analysisId));
+    } on DioException catch (e) {
+      throw ApiException.fromDioError(e);
+    }
+  }
+
   /// URL reproducible del video: lleva un token de corta vida en la query
   /// porque el reproductor no puede mandar el header `Authorization`.
   Future<Uri> videoUrl(int analysisId) async {

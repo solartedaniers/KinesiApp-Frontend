@@ -18,8 +18,11 @@ class CoachTeamAnalysesView extends StatelessWidget {
       if (athletes.hasData)
         for (final athlete in athletes.data) athlete.id: athlete.displayName,
     };
+    final analysesController = ControllerScope.of<JumpAnalysesController>(
+      context,
+    );
     return LoadableView(
-      controller: ControllerScope.of<JumpAnalysesController>(context),
+      controller: analysesController,
       builder: (context, analyses) => ListView(
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.lg,
@@ -33,6 +36,7 @@ class CoachTeamAnalysesView extends StatelessWidget {
             titleKey: 'navTeamAnalyses',
             emptyKey: 'teamAnalysesEmpty',
             athleteNames: names,
+            onChanged: analysesController.load,
           ),
         ],
       ),

@@ -105,7 +105,7 @@ class _CoachAthleteDetailViewState extends State<CoachAthleteDetailView> {
                       context.go(AppRoutes.videoConsent, extra: _athlete.id),
                 ),
               const SizedBox(height: AppSpacing.lg),
-              JumpAnalysisList(analyses: analyses),
+              JumpAnalysisList(analyses: analyses, onChanged: _analyses.load),
             ],
           ),
         ),
