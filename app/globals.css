@@ -1,20 +1,96 @@
+/* Tokens de diseño: único lugar con colores, tipografía, espacios y radios.
+   Los componentes sólo usan var(--...). */
 :root {
-  --bg: #f6f8fa;
-  --surface: #ffffff;
-  --text: #16202a;
-  --muted: #56636f;
-  --accent: #0a7c6c;
-  --border: #dde3e8;
+  --color-bg: #f3f6f8;
+  --color-surface: #ffffff;
+  --color-surface-muted: #eaf0f3;
+  --color-text: #0f1d2a;
+  --color-text-muted: #566777;
+  --color-border: #d6e0e7;
+  --color-border-strong: #b5c4cf;
+
+  --color-primary: #0b7a75;
+  --color-primary-hover: #086661;
+  --color-primary-soft: #dcf1ef;
+  --color-on-primary: #ffffff;
+  --color-accent: #f2704e;
+
+  --color-danger: #c23b3b;
+  --color-danger-soft: #fbe9e9;
+  --color-success: #1d7f55;
+  --color-success-soft: #e2f4ec;
+  --color-info-soft: #e6f0f8;
+  --color-info: #245d8f;
+
+  --color-focus: rgb(11 122 117 / 0.35);
+
+  /* Panel de marca (pantallas de acceso) */
+  --color-brand-from: #0a2233;
+  --color-brand-to: #0b5e5a;
+  --color-on-brand: #eaf6f5;
+  --color-on-brand-muted: rgb(234 246 245 / 0.72);
+
+  --font-sans: var(--font-manrope), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --text-xs: 0.78rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-display: clamp(2.1rem, 5.5vw, 3.4rem);
+  --weight-regular: 450;
+  --weight-medium: 560;
+  --weight-bold: 720;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 2px rgb(15 29 42 / 0.05), 0 8px 24px rgb(15 29 42 / 0.06);
+  --control-height: 46px;
+  --content-max: 1080px;
+  --transition-fast: 140ms ease;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0f1419;
-    --surface: #182028;
-    --text: #e7ecef;
-    --muted: #9aa7b2;
-    --accent: #3cc4ae;
-    --border: #28333d;
+    --color-bg: #0a1117;
+    --color-surface: #111c24;
+    --color-surface-muted: #16242e;
+    --color-text: #e5edf2;
+    --color-text-muted: #93a5b4;
+    --color-border: #22323d;
+    --color-border-strong: #33485a;
+
+    --color-primary: #2db3a8;
+    --color-primary-hover: #45c6bb;
+    --color-primary-soft: #0f3532;
+    --color-on-primary: #03201d;
+    --color-accent: #ff8b6b;
+
+    --color-danger: #f07a7a;
+    --color-danger-soft: #3a1b1d;
+    --color-success: #5fd39f;
+    --color-success-soft: #123326;
+    --color-info-soft: #13283a;
+    --color-info: #8cc2ef;
+
+    --color-focus: rgb(45 179 168 / 0.4);
+
+    --color-brand-from: #061520;
+    --color-brand-to: #0a4440;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px rgb(0 0 0 / 0.35);
   }
 }
 
@@ -30,61 +106,43 @@ html {
 
 body {
   min-height: 100dvh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-md);
+  font-weight: var(--weight-regular);
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: var(--accent);
+  color: var(--color-primary);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
 }
 
-.landing {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 48px 16px;
-  display: grid;
-  gap: 40px;
+a:hover {
+  text-decoration: underline;
 }
 
-.landing h1 {
-  font-size: clamp(2rem, 6vw, 3.25rem);
-  line-height: 1.1;
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
-.landing .lead {
-  margin-top: 16px;
-  max-width: 60ch;
-  font-size: 1.125rem;
-  color: var(--muted);
+input,
+button,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
 }
 
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-  padding: 0;
-  list-style: none;
-}
-
-.features li {
-  padding: 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
-
-.features h2 {
-  font-size: 1.05rem;
-  margin-bottom: 6px;
-}
-
-.features p,
-.landing footer {
-  color: var(--muted);
-}
-
-.landing footer {
-  font-size: 0.875rem;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }

@@ -1,36 +1,47 @@
-// SSG: no usa cookies, headers ni datos por usuario, así que Next la genera en el
-// build y Vercel la sirve desde CDN (docs/design/web-frontend-architecture.md §3)
+import Link from "next/link";
+
+import { Logo } from "@/components/brand/Logo";
+import { ButtonLink } from "@/components/ui/Button";
+import { t } from "@/lib/i18n";
+import { ROUTES } from "@/lib/routes";
+
+import styles from "./landing.module.css";
+
+// SSG: sin cookies, headers ni datos por usuario; se genera en el build y se sirve desde CDN (§3)
 export default function LandingPage() {
   return (
-    <main className="landing">
-      <header>
-        <h1>KinesiApp</h1>
-        <p className="lead">
-          Graba un salto o una sentadilla desde el navegador y recibe una
-          estimación del riesgo de lesión de rodilla a partir de los ángulos
-          articulares del movimiento.
-        </p>
+    <div className={styles.page}>
+      <header className={styles.topbar}>
+        <Logo href={ROUTES.landing} />
+        <Link className={styles.topLink} href={ROUTES.login}>
+          {t.landing.signIn}
+        </Link>
       </header>
 
-      <ul className="features">
-        <li>
-          <h2>Deportistas</h2>
-          <p>Registra tus movimientos y sigue la evolución de tu riesgo.</p>
-        </li>
-        <li>
-          <h2>Entrenadores</h2>
-          <p>Gestiona a tu equipo y revisa los análisis de cada deportista.</p>
-        </li>
-        <li>
-          <h2>Desde cualquier dispositivo</h2>
-          <p>Funciona en el navegador del celular y del computador.</p>
-        </li>
-      </ul>
+      <main className={styles.hero}>
+        <div className={styles.copy}>
+          <p className={styles.eyebrow}>{t.landing.eyebrow}</p>
+          <h1 className={styles.title}>{t.landing.title}</h1>
+          <p className={styles.lead}>{t.landing.lead}</p>
+          <div className={styles.actions}>
+            <ButtonLink href={ROUTES.register}>{t.landing.createAccount}</ButtonLink>
+            <ButtonLink href={ROUTES.login} variant="secondary">
+              {t.landing.signIn}
+            </ButtonLink>
+          </div>
+        </div>
 
-      <footer>
-        KinesiApp es una herramienta de apoyo y no reemplaza la valoración de
-        un profesional de la salud.
-      </footer>
-    </main>
+        <ul className={styles.features}>
+          {t.landing.features.map((feature) => (
+            <li key={feature.title} className={styles.feature}>
+              <h2>{feature.title}</h2>
+              <p>{feature.body}</p>
+            </li>
+          ))}
+        </ul>
+      </main>
+
+      <footer className={styles.footer}>{t.app.disclaimer}</footer>
+    </div>
   );
 }

@@ -1,25 +1,30 @@
 import type { Metadata, Viewport } from "next";
+import { Manrope } from "next/font/google";
+
+import { t } from "@/lib/i18n";
+import { THEME_COLOR } from "@/lib/theme";
+
 import "./globals.css";
 
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
+
 export const metadata: Metadata = {
-  title: { default: "KinesiApp", template: "%s · KinesiApp" },
-  description:
-    "Análisis de video del salto y la sentadilla para detectar riesgo de lesión de rodilla.",
+  title: { default: t.app.name, template: `%s · ${t.app.name}` },
+  description: t.app.description,
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f8fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f1419" },
+    { media: "(prefers-color-scheme: light)", color: THEME_COLOR.light },
+    { media: "(prefers-color-scheme: dark)", color: THEME_COLOR.dark },
   ],
 };
 
-// Fase 1: idioma y tema desde las cookies kin_locale/kin_theme (§9.1)
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es">
+    <html lang="es" className={manrope.variable}>
       <body>{children}</body>
     </html>
   );

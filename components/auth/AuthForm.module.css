@@ -1,0 +1,15 @@
+.form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: calc(-1 * var(--space-2));
+  font-size: var(--text-sm);
+}
+
+.submit {
+  margin-top: var(--space-2);
+}

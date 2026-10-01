@@ -1,2 +1,94 @@
-// Fase 1: textos (es), incluidos los mensajes por ErrorCode del backend. Ver docs/design/web-frontend-architecture.md.
-export {};
+// Textos de la interfaz en español. Las variables van entre llaves: {email}, {seconds}.
+export const es = {
+  app: {
+    name: "KinesiApp",
+    description: "Análisis de video del salto y la sentadilla para detectar riesgo de lesión de rodilla.",
+    disclaimer:
+      "KinesiApp es una herramienta de apoyo y no reemplaza la valoración de un profesional de la salud.",
+  },
+  landing: {
+    eyebrow: "Biomecánica en tu navegador",
+    title: "Detecta el riesgo de lesión antes de que aparezca",
+    lead:
+      "Graba un salto o una sentadilla y recibe una estimación del riesgo de lesión de rodilla a partir de los ángulos articulares del movimiento.",
+    signIn: "Iniciar sesión",
+    createAccount: "Crear cuenta",
+    features: [
+      { title: "Deportistas", body: "Registra tus movimientos y sigue la evolución de tu riesgo." },
+      { title: "Entrenadores", body: "Gestiona a tu equipo y revisa los análisis de cada deportista." },
+      { title: "En cualquier dispositivo", body: "Funciona en el navegador del celular y del computador." },
+    ],
+  },
+  authShell: {
+    tagline: "Tu movimiento, medido con precisión.",
+    points: [
+      "Ángulos articulares de cada salto",
+      "Seguimiento del riesgo en el tiempo",
+      "Tu entrenador, al tanto de tu progreso",
+    ],
+  },
+  roles: {
+    athlete: "Deportista",
+    coach: "Entrenador",
+    admin: "Administrador",
+  },
+  fields: {
+    email: "Correo electrónico",
+    password: "Contraseña",
+    confirmPassword: "Confirmar contraseña",
+    fullName: "Nombre completo",
+    role: "Soy…",
+    showPassword: "Mostrar contraseña",
+    hidePassword: "Ocultar contraseña",
+    passwordHint: "Mínimo 8 caracteres, con al menos una letra y un número.",
+  },
+  login: {
+    metaTitle: "Iniciar sesión",
+    title: "Iniciar sesión",
+    subtitle: "Qué bueno tenerte de vuelta. Continúa tu proceso de movimiento.",
+    submit: "Iniciar sesión",
+    pending: "Ingresando…",
+    forgotPassword: "¿Olvidaste tu contraseña?",
+    noAccount: "¿Aún no tienes una cuenta?",
+    register: "Regístrate",
+    verifyNow: "Verificar mi correo",
+  },
+  register: {
+    metaTitle: "Crear cuenta",
+    title: "Crea tu cuenta",
+    subtitle: "Crea tu cuenta de deportista o entrenador para empezar a seguir tu movimiento.",
+    submit: "Crear cuenta",
+    pending: "Creando cuenta…",
+    hasAccount: "¿Ya tienes una cuenta?",
+    signIn: "Inicia sesión",
+    verifyNow: "Ir a verificar mi correo",
+  },
+  validation: {
+    required: "Este campo es obligatorio.",
+    invalidEmail: "Ingresa un correo válido.",
+    passwordTooShort: "La contraseña debe tener al menos 8 caracteres.",
+    passwordTooLong: "La contraseña debe tener como máximo 128 caracteres.",
+    passwordWeak: "Usa al menos una letra y un número.",
+    passwordMismatch: "Las contraseñas no coinciden.",
+    fullNameTooLong: "El nombre debe tener como máximo 150 caracteres.",
+    invalidOtp: "Ingresa el código de seis dígitos del correo.",
+    invalidOption: "Elige una de las opciones.",
+  },
+  // Por `code` estable del backend (app/core/exceptions.py), más los del propio cliente
+  errors: {
+    generic: "Ocurrió un error. Intenta de nuevo.",
+    network: "No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.",
+    validation_error: "Revisa los datos ingresados.",
+    invalid_credentials: "Correo o contraseña incorrectos.",
+    account_disabled: "Tu cuenta está deshabilitada.",
+    email_not_verified: "Verifica tu correo antes de iniciar sesión.",
+    invalid_otp: "El código ingresado no es válido.",
+    invalid_refresh_token: "Tu sesión expiró. Inicia sesión de nuevo.",
+    email_already_registered: "Ese correo ya está registrado.",
+    email_delivery_failed: "No pudimos enviar el correo. Inténtalo de nuevo en unos momentos.",
+    password_reused: "La nueva contraseña debe ser distinta de la actual.",
+    invalid_current_password: "Tu contraseña actual es incorrecta.",
+    forbidden: "No tienes permiso para hacer esto.",
+    not_found: "No encontramos lo que buscabas.",
+  },
+} as const;

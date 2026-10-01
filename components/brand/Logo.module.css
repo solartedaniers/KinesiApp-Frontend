@@ -1,0 +1,38 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: inherit;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-lg);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.logo:hover {
+  text-decoration: none;
+}
+
+.mark {
+  flex: none;
+}
+
+.markTile {
+  fill: var(--color-primary);
+}
+
+.markStroke {
+  stroke: var(--color-on-primary);
+}
+
+.markAccent {
+  stroke: var(--color-accent);
+}
+
+.onBrand .markTile {
+  fill: var(--color-on-brand);
+}
+
+.onBrand .markStroke {
+  stroke: var(--color-brand-from);
+}
