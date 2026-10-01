@@ -8,7 +8,7 @@ import { API_PATHS } from "../api-paths";
 import { ApiError, errorMessage, validationMessages } from "../errors";
 import { formText, type FormState } from "../form-state";
 import { NEXT_PARAM, ROUTES, safeNextPath, withEmail } from "../routes";
-import { clearSession, readRefreshToken, storeSession } from "../session";
+import { storeSession } from "../session";
 import { SIGNUP_ROLES, type TokenPair } from "../types";
 import {
   collectErrors,
@@ -41,16 +41,6 @@ export async function login(_previous: FormState<LoginField>, formData: FormData
 
   await storeSession(tokens);
   redirect((await nextFromReferer()) ?? ROUTES.home);
-}
-
-export async function logout(): Promise<void> {
-  const refreshToken = await readRefreshToken();
-  if (refreshToken) {
-    // Revoca el refresh token en el backend; si falla, la sesión local se cierra igual
-    await apiRequest(API_PATHS.logout, { method: "POST", body: { refresh_token: refreshToken } }).catch(() => undefined);
-  }
-  await clearSession();
-  redirect(ROUTES.login);
 }
 
 // `?next=` se lee del Referer (la propia página de login) y no de un campo del formulario:

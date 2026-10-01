@@ -67,6 +67,48 @@ export const es = {
   session: {
     logout: "Cerrar sesión",
   },
+  nav: {
+    label: "Navegación principal",
+    home: "Inicio",
+    analyses: "Grabaciones",
+    stats: "Estadísticas",
+    profile: "Perfil",
+    team: "Equipo",
+    users: "Usuarios",
+    assignments: "Coaches",
+  },
+  home: {
+    greeting: "Hola, {name}",
+    athlete: "Aquí verás tus análisis recientes y la evolución de tu riesgo.",
+    coach: "Aquí verás a tus deportistas y sus análisis más recientes.",
+    admin: "Aquí verás el resumen de usuarios, deportistas y asignaciones.",
+  },
+  comingSoon: {
+    title: "Muy pronto",
+    body: "Esta sección estará disponible en la próxima versión.",
+  },
+  account: {
+    title: "Mi cuenta",
+    section: "Cuenta",
+    role: "Rol",
+    changePassword: "Cambiar contraseña",
+    changePasswordHint: "Actualiza la contraseña con la que inicias sesión.",
+  },
+  changePassword: {
+    metaTitle: "Cambiar contraseña",
+    title: "Cambiar contraseña",
+    subtitle: "Por seguridad, cerraremos tus sesiones en otros dispositivos.",
+    currentPassword: "Contraseña actual",
+    submit: "Guardar contraseña",
+    pending: "Guardando…",
+    success: "Tu contraseña se cambió.",
+    back: "Volver a mi cuenta",
+  },
+  appError: {
+    title: "No pudimos cargar esta página",
+    body: "Puede ser un problema de conexión con el servidor. Intenta de nuevo en unos segundos.",
+    retry: "Reintentar",
+  },
   otp: {
     label: "Código de verificación",
     hint: "Seis dígitos, revisa también tu carpeta de spam.",

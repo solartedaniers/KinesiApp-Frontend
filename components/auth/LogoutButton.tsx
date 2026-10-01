@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 
-import { logout } from "@/lib/actions/auth";
+import { ROUTES } from "@/lib/routes";
 
-/** Formulario de servidor: cierra sesión incluso sin JavaScript. El aspecto lo decide quien lo usa. */
-export function LogoutButton({ className, children }: { className?: string; children: ReactNode }) {
+/** POST nativo al Route Handler de logout: funciona sin JS y fuerza una navegación completa. */
+export function LogoutButton({ className, label, children }: { className?: string; label: string; children: ReactNode }) {
   return (
-    <form action={logout}>
-      <button type="submit" className={className}>
+    <form method="post" action={ROUTES.logout}>
+      <button type="submit" className={className} aria-label={label} title={label}>
         {children}
       </button>
     </form>

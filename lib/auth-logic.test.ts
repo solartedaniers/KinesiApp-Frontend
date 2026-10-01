@@ -68,7 +68,7 @@ test("rutas privadas por defecto, de acceso y públicas", () => {
     assert.equal(isAuthRoute(path), true, path);
     assert.equal(isPrivateRoute(path), false, path);
   }
-  for (const path of ["/", "/legal/video-consent", "/manifest.webmanifest"]) {
+  for (const path of ["/", "/legal/video-consent", "/manifest.webmanifest", "/api/session/logout", "/api/session/expired"]) {
     assert.equal(isPrivateRoute(path), false, path);
   }
   assert.equal(isAuthRoute("/loginx"), false);
