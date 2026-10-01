@@ -2,8 +2,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { readTokenExpiry, secondsUntilExpiry } from "./jwt.ts";
-import { safeNextPath } from "./routes.ts";
+import { readTokenExpiry, secondsUntilExpiry, shouldRefresh } from "./jwt.ts";
+import { isAuthRoute, isPrivateRoute, safeNextPath } from "./routes.ts";
 import {
   collectErrors,
   validateEmail,
@@ -50,4 +50,26 @@ test("lee exp del JWT sin verificar firma", () => {
   assert.equal(secondsUntilExpiry(token, now), 90);
   assert.equal(secondsUntilExpiry(fakeJwt({ exp: now / 1000 - 5 }), now), 0);
   assert.equal(readTokenExpiry("no-es-un-jwt"), null);
+});
+
+test("renueva sin access o cuando le queda menos que el margen", () => {
+  const now = 1_700_000_000_000;
+  assert.equal(shouldRefresh(undefined, 60, now), true);
+  assert.equal(shouldRefresh(fakeJwt({ exp: now / 1000 + 59 }), 60, now), true);
+  assert.equal(shouldRefresh(fakeJwt({ exp: now / 1000 + 600 }), 60, now), false);
+  assert.equal(shouldRefresh("basura", 60, now), true);
+});
+
+test("rutas privadas por defecto, de acceso y públicas", () => {
+  for (const path of ["/home", "/athlete", "/admin/users", "/analysis/7", "/ruta-nueva"]) {
+    assert.equal(isPrivateRoute(path), true, path);
+  }
+  for (const path of ["/login", "/register", "/verify-email", "/password-recovery"]) {
+    assert.equal(isAuthRoute(path), true, path);
+    assert.equal(isPrivateRoute(path), false, path);
+  }
+  for (const path of ["/", "/legal/video-consent", "/manifest.webmanifest"]) {
+    assert.equal(isPrivateRoute(path), false, path);
+  }
+  assert.equal(isAuthRoute("/loginx"), false);
 });

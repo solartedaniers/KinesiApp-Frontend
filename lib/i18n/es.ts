@@ -64,6 +64,9 @@ export const es = {
     signIn: "Inicia sesión",
     verifyNow: "Ir a verificar mi correo",
   },
+  session: {
+    logout: "Cerrar sesión",
+  },
   otp: {
     label: "Código de verificación",
     hint: "Seis dígitos, revisa también tu carpeta de spam.",

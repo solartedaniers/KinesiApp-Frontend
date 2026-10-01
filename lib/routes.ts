@@ -9,6 +9,27 @@ export const ROUTES = {
   changePassword: "/account/password",
 } as const;
 
+// Pantallas de acceso: con sesión iniciada no tienen sentido y redirigen a /home
+const AUTH_ROUTES: readonly string[] = [ROUTES.login, ROUTES.register, ROUTES.verifyEmail, ROUTES.passwordRecovery];
+
+// Lo que no está aquí ni en AUTH_ROUTES exige sesión: privado por defecto, más seguro ante rutas nuevas
+const PUBLIC_PREFIXES: readonly string[] = ["/legal"];
+const PUBLIC_ROUTES: readonly string[] = [ROUTES.landing, "/manifest.webmanifest"];
+
+function matches(pathname: string, route: string): boolean {
+  return pathname === route || pathname.startsWith(`${route}/`);
+}
+
+export function isAuthRoute(pathname: string): boolean {
+  return AUTH_ROUTES.some((route) => matches(pathname, route));
+}
+
+export function isPrivateRoute(pathname: string): boolean {
+  return !isAuthRoute(pathname)
+    && !PUBLIC_ROUTES.includes(pathname)
+    && !PUBLIC_PREFIXES.some((prefix) => matches(pathname, prefix));
+}
+
 export const NEXT_PARAM = "next";
 export const EMAIL_PARAM = "email";
 
