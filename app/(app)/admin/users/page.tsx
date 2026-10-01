@@ -1,18 +1,25 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
-import { ComingSoon } from "@/components/app/ComingSoon";
 import styles from "@/components/app/Page.module.css";
 import { PageHeader } from "@/components/app/PageHeader";
+import { ListSkeleton } from "@/components/app/Skeleton";
+import { UsersTable } from "@/components/admin/AdminData";
+import { SECTION_ROLES } from "@/lib/access";
+import { requireRole } from "@/lib/guard";
 import { t } from "@/lib/i18n";
 
 export const metadata: Metadata = { title: t.nav.users };
 
-// Fase 2/3: usuarios y cambio de rol (§3). Sin datos todavía: la guarda de rol la aplica el layout
-export default function AdminUsersPage() {
+// SSR (§3): todas las cuentas; el cambio de rol (mutación) llega en la Fase 3
+export default async function Page() {
+  await requireRole(SECTION_ROLES.admin);
   return (
     <div className={styles.page}>
-      <PageHeader title={t.nav.users} />
-      <ComingSoon />
+      <PageHeader title={t.nav.users} subtitle={t.admin.usersSubtitle} />
+      <Suspense fallback={<ListSkeleton rows={6} />}>
+        <UsersTable />
+      </Suspense>
     </div>
   );
 }

@@ -22,6 +22,9 @@ export const ANALYSIS_POLLING = { initialDelayMs: 2_000, maxDelayMs: 30_000, max
 // Antes de que venza la URL firmada del video se pide otra: margen para no reproducir con una vencida
 export const VIDEO_URL_RENEW_MARGIN_MS = 5_000;
 
+// Tamaño de página de los listados de admin (GET /users, GET /athletes usan skip/limit)
+export const ADMIN_PAGE_SIZE = 100;
+
 export const SESSION_COOKIE = {
   access: "kin_at",
   refresh: "kin_rt",

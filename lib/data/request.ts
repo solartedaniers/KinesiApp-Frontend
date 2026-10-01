@@ -34,3 +34,13 @@ export async function authedGetOrNull<T>(path: string): Promise<T | null> {
     throw error;
   }
 }
+
+/** Lista paginada con skip/limit: pide páginas hasta recibir una incompleta, para no cortar en silencio. */
+export async function authedGetAllPages<T>(path: string, pageSize: number): Promise<T[]> {
+  const items: T[] = [];
+  for (let skip = 0; ; skip += pageSize) {
+    const page = await authedGet<T[]>(`${path}?${new URLSearchParams({ skip: String(skip), limit: String(pageSize) })}`);
+    items.push(...page);
+    if (page.length < pageSize) return items;
+  }
+}

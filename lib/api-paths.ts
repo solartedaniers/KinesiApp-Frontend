@@ -15,6 +15,8 @@ export const API_PATHS = {
   myAthleteProfile: "/athletes/me",
   coachAthletes: "/coach/athletes",
   teamAnalyses: "/jump-analyses/team",
+  users: "/users",
+  athletes: "/athletes",
   analysesByAthlete: (athleteId: number) => `/jump-analyses/by-athlete/${athleteId}`,
   analysis: (analysisId: number) => `/jump-analyses/${analysisId}`,
   analysisVideoAccess: (analysisId: number) => `/jump-analyses/${analysisId}/video-access`,
