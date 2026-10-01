@@ -73,3 +73,12 @@ test("rutas privadas por defecto, de acceso y públicas", () => {
   }
   assert.equal(isAuthRoute("/loginx"), false);
 });
+
+test("el proxy de lecturas sólo deja pasar la lista blanca", async () => {
+  const { isAllowedProxyRead } = await import("./proxy-allowlist.ts");
+  assert.equal(isAllowedProxyRead("jump-analyses/12"), true);
+  assert.equal(isAllowedProxyRead("jump-analyses/12/video-access"), true);
+  for (const path of ["jump-analyses/12/video", "users", "auth/me", "jump-analyses/team", "jump-analyses/1/../../users"]) {
+    assert.equal(isAllowedProxyRead(path), false, path);
+  }
+});

@@ -12,3 +12,9 @@ export const formatPercent = (fraction: number) => percent.format(fraction);
 
 /** "Ana María Pérez" → "Ana": el saludo usa sólo el primer nombre. */
 export const firstName = (fullName: string) => fullName.trim().split(/\s+/)[0] ?? fullName;
+
+const degrees = new Intl.NumberFormat(LOCALE, { style: "unit", unit: "degree", maximumFractionDigits: 0 });
+const seconds = new Intl.NumberFormat(LOCALE, { style: "unit", unit: "second", maximumFractionDigits: 2 });
+export const formatDegrees = (value: number) => degrees.format(value);
+/** Milisegundos desde el inicio del video → "0,4 s". */
+export const formatSecondsFromMs = (ms: number) => seconds.format(ms / 1000);

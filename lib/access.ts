@@ -62,3 +62,9 @@ export function activeNavHref(items: NavItem[], pathname: string): string | unde
     .filter((item) => within(item.href) || item.alsoActiveFor?.some(within))
     .sort((a, b) => b.href.length - a.href.length)[0]?.href;
 }
+
+/** Lista de grabaciones del rol (Grabaciones del deportista, Equipo del coach): destino de "volver". */
+export function analysesListHref(role: UserRole): string {
+  const item = NAV_BY_ROLE[role].find((entry) => entry.key === "analyses" || entry.key === "team");
+  return item?.href ?? HOME_BY_ROLE[role];
+}

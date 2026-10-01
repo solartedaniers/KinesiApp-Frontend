@@ -1,0 +1,10 @@
+.grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  }
+}
