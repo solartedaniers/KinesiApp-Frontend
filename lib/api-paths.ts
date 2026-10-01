@@ -13,6 +13,8 @@ export const API_PATHS = {
   me: "/auth/me",
 
   myAthleteProfile: "/athletes/me",
+  coachAthletes: "/coach/athletes",
+  teamAnalyses: "/jump-analyses/team",
   analysesByAthlete: (athleteId: number) => `/jump-analyses/by-athlete/${athleteId}`,
   analysis: (analysisId: number) => `/jump-analyses/${analysisId}`,
   analysisVideoAccess: (analysisId: number) => `/jump-analyses/${analysisId}/video-access`,

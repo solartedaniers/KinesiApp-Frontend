@@ -69,3 +69,28 @@ export function anglesByJoint(measurements: JointAngleMeasurement[]): JointSerie
     return { joint, points: sorted, peak: Math.max(...sorted.map((point) => point.angle_degrees)) };
   });
 }
+
+export type AthleteSummary = { athleteId: number; stats: AnalysisStatistics; latestScore: number | null };
+
+/** Estadísticas por deportista (vista de equipo del coach); sólo deportistas con grabaciones. */
+export function statsByAthlete(analyses: JumpAnalysis[]): Map<number, AthleteSummary> {
+  const groups = new Map<number, JumpAnalysis[]>();
+  for (const analysis of analyses) groups.set(analysis.athlete_id, [...(groups.get(analysis.athlete_id) ?? []), analysis]);
+  return new Map(
+    [...groups].map(([athleteId, own]) => [
+      athleteId,
+      {
+        athleteId,
+        stats: computeStatistics(own),
+        latestScore: sortByRecordedDesc(own).find((analysis) => analysis.risk_score !== null)?.risk_score ?? null,
+      },
+    ]),
+  );
+}
+
+/** Edad cumplida en `today` a partir de "AAAA-MM-DD" (fecha de nacimiento sin hora). */
+export function ageOn(birthDate: string, today: Date): number {
+  const [year, month, day] = birthDate.split("-").map(Number);
+  const hadBirthday = today.getMonth() + 1 > month || (today.getMonth() + 1 === month && today.getDate() >= day);
+  return today.getFullYear() - year - (hadBirthday ? 0 : 1);
+}

@@ -120,3 +120,14 @@
   margin: 0 auto;
   padding: var(--space-7) var(--space-4);
 }
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+}
+
+.backLink svg {
+  transform: rotate(180deg);
+}

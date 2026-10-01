@@ -18,3 +18,15 @@ const seconds = new Intl.NumberFormat(LOCALE, { style: "unit", unit: "second", m
 export const formatDegrees = (value: number) => degrees.format(value);
 /** Milisegundos desde el inicio del video → "0,4 s". */
 export const formatSecondsFromMs = (ms: number) => seconds.format(ms / 1000);
+
+const isoDate = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: APP_TIME_ZONE });
+/** "Hoy" en APP_TIME_ZONE (el servidor corre en UTC): para edades y otros cálculos por fecha. */
+export function todayInAppTimeZone(): Date {
+  const [year, month, day] = isoDate.format(new Date()).split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
+const centimeters = new Intl.NumberFormat(LOCALE, { style: "unit", unit: "centimeter", maximumFractionDigits: 0 });
+const kilograms = new Intl.NumberFormat(LOCALE, { style: "unit", unit: "kilogram", maximumFractionDigits: 1 });
+export const formatHeight = (cm: number) => centimeters.format(cm);
+export const formatWeight = (kg: number) => kilograms.format(kg);

@@ -16,6 +16,7 @@ import { FormAlert } from "@/components/ui/FormAlert";
 import { Icon } from "@/components/ui/Icon";
 import { analysesListHref, SECTION_ROLES } from "@/lib/access";
 import { getAnalysis } from "@/lib/data/analyses";
+import { listMyAthletes } from "@/lib/data/coach";
 import { formatDateTime } from "@/lib/format";
 import { requireRole } from "@/lib/guard";
 import { t } from "@/lib/i18n";
@@ -32,14 +33,18 @@ export default async function AnalysisPage({ params }: PageProps<"/analysis/[id]
   const analysisId = Number((await params).id);
   if (!Number.isInteger(analysisId) || analysisId <= 0) notFound();
   const analysis = await getAnalysis(analysisId);
+  // El coach ve grabaciones de varios deportistas: el subtítulo dice de quién es
+  const athleteName =
+    user.role === "coach" ? (await listMyAthletes()).find((athlete) => athlete.id === analysis.athlete_id)?.display_name : undefined;
+  const recordedAt = formatDateTime(analysis.recorded_at);
 
   return (
     <div className={pageStyles.page}>
-      <Link href={analysesListHref(user.role)} className={styles.back}>
+      <Link href={analysesListHref(user.role)} className={pageStyles.backLink}>
         <Icon name="chevronRight" size={16} />
         {t.analysisDetail.back}
       </Link>
-      <PageHeader title={t.analysis.movement[analysis.movement_type]} subtitle={formatDateTime(analysis.recorded_at)} />
+      <PageHeader title={t.analysis.movement[analysis.movement_type]} subtitle={athleteName ? `${athleteName} · ${recordedAt}` : recordedAt} />
 
       {analysis.status === "pending" && <AnalysisPoller analysisId={analysis.id} />}
       {analysis.status === "failed" && (

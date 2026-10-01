@@ -1,14 +1,3 @@
-.back {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  font-size: var(--text-sm);
-}
-
-.back svg {
-  transform: rotate(180deg);
-}
-
 .columns {
   display: grid;
   gap: var(--space-5);
