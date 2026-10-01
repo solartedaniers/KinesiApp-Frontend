@@ -23,3 +23,40 @@ export type User = {
   created_at: string;
   avatar_data_url: string | null;
 };
+
+export type Gender = "male" | "female" | "other";
+
+/** AthleteProfileRead. `user_id` es null en deportistas gestionados por un coach (sin cuenta). */
+export type AthleteProfile = {
+  id: number;
+  user_id: number | null;
+  coach_id: number | null;
+  display_name: string;
+  display_avatar: string | null;
+  is_managed: boolean;
+  gender: Gender;
+  height_cm: number;
+  weight_kg: number;
+  birth_date: string;
+};
+
+export type AnalysisStatus = "pending" | "processed" | "failed";
+export type MovementType = "jump" | "squat";
+
+export type JointAngleMeasurement = {
+  id: number;
+  joint_name: string;
+  angle_degrees: number;
+  frame_timestamp_ms: number;
+};
+
+/** JumpAnalysisRead. `risk_score` está en [0, 1] y es null hasta que el análisis termina. */
+export type JumpAnalysis = {
+  id: number;
+  athlete_id: number;
+  movement_type: MovementType;
+  status: AnalysisStatus;
+  risk_score: number | null;
+  recorded_at: string;
+  angle_measurements: JointAngleMeasurement[];
+};

@@ -11,4 +11,8 @@ export const API_PATHS = {
   refresh: "/auth/refresh",
   logout: "/auth/logout",
   me: "/auth/me",
+
+  myAthleteProfile: "/athletes/me",
+  analysesByAthlete: (athleteId: number) => `/jump-analyses/by-athlete/${athleteId}`,
+  analysis: (analysisId: number) => `/jump-analyses/${analysisId}`,
 } as const;

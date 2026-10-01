@@ -46,6 +46,10 @@ export function safeNextPath(value: string | null | undefined): string | null {
   return value;
 }
 
+export function analysisPath(analysisId: number): string {
+  return `/analysis/${analysisId}`;
+}
+
 export function withEmail(path: string, email: string): string {
   return `${path}?${new URLSearchParams({ [EMAIL_PARAM]: email })}`;
 }

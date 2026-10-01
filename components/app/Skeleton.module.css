@@ -1,0 +1,56 @@
+.stack {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.block {
+  border-radius: var(--radius-lg);
+  background: linear-gradient(90deg, var(--color-surface-muted) 0%, var(--color-surface) 50%, var(--color-surface-muted) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.title {
+  height: 28px;
+  width: 40%;
+}
+
+.tile {
+  height: 88px;
+}
+
+.row {
+  height: 72px;
+}
+
+.chart {
+  height: 300px;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .block {
+    animation: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .tiles {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+}

@@ -19,4 +19,8 @@ export const ACCESS_REFRESH_LEEWAY_SECONDS = 60;
 // Espera entre reenvíos de un código OTP (sólo UX: el backend decide si lo envía)
 export const OTP_RESEND_COOLDOWN_SECONDS = 30;
 
+// Las fechas se formatean en el servidor (SSR), que corre en UTC en Vercel: sin una zona fija, una
+// grabación de las 9:00 se vería a las 14:00. Configurable con APP_TIME_ZONE (IANA)
+export const APP_TIME_ZONE = process.env.APP_TIME_ZONE ?? "America/Bogota";
+
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";

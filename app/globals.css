@@ -24,6 +24,12 @@
   --color-info: #245d8f;
 
   --color-focus: rgb(11 122 117 / 0.35);
+  --color-warning: #9a5b00;
+  --color-warning-soft: #fdf0dc;
+
+  /* Serie de gráficos: validado con el validador de dataviz contra --color-surface (claro) */
+  --color-chart-series: #009688;
+  --color-chart-grid: #e3e9ee;
 
   /* Panel de marca (pantallas de acceso) */
   --color-brand-from: #0a2233;
@@ -90,6 +96,11 @@
     --color-info: #8cc2ef;
 
     --color-focus: rgb(45 179 168 / 0.4);
+    --color-warning: #f2b45c;
+    --color-warning-soft: #3a2a12;
+
+    --color-chart-series: #1fa396;
+    --color-chart-grid: #1d2b36;
 
     --color-brand-from: #061520;
     --color-brand-to: #0a4440;
