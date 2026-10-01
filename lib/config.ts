@@ -16,4 +16,7 @@ export const SESSION_COOKIE = {
 // Se renueva el access token cuando le queda menos que esto (§4.4 del diseño)
 export const ACCESS_REFRESH_LEEWAY_SECONDS = 60;
 
+// Espera entre reenvíos de un código OTP (sólo UX: el backend decide si lo envía)
+export const OTP_RESEND_COOLDOWN_SECONDS = 30;
+
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";

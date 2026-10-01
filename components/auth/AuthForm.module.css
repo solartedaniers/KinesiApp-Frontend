@@ -13,3 +13,8 @@
 .submit {
   margin-top: var(--space-2);
 }
+
+.hint {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}

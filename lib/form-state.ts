@@ -7,9 +7,17 @@ export type FormState<Field extends string = string> = {
   values?: Partial<Record<Field, string>>;
   /** Correo sin verificar: el formulario ofrece ir a verificarlo. */
   unverifiedEmail?: string;
+  /** Mensaje informativo o de éxito, ya traducido. */
+  notice?: string;
+  /** Cambia cada vez que se envía un código: reinicia la espera para reenviar. */
+  codeSentId?: number;
 };
 
-export const EMPTY_FORM_STATE: FormState = {};
+// Valor del botón que envió el formulario (name="intent") cuando un formulario tiene varias acciones
+export const FORM_INTENT = {
+  resend: "resend",
+  restart: "restart",
+} as const;
 
 export function formText(formData: FormData, name: string): string {
   const value = formData.get(name);

@@ -66,3 +66,11 @@
   font-size: var(--text-sm);
   color: var(--color-danger);
 }
+
+.otp {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.4em;
+  text-align: center;
+}
