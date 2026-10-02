@@ -122,6 +122,7 @@ export const es = {
   },
   joints: {
     knee_flexion: "Flexión de rodilla",
+    trunk_inclination: "Inclinación del tronco",
   } as Record<string, string>,
   angleChart: {
     subtitle: "Ángulo a lo largo del movimiento.",
