@@ -11,9 +11,19 @@ export type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   action?: ReactNode;
 };
 
-export function TextField({ name, label, hint, error, action, className, ...input }: TextFieldProps) {
+export function TextField({
+  name,
+  label,
+  hint,
+  error,
+  action,
+  className,
+  "aria-describedby": extraDescribedBy,
+  ...input
+}: TextFieldProps) {
   const id = `field-${name}`;
-  const describedBy = [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(" ") || undefined;
+  const describedBy =
+    [hint && `${id}-hint`, error && `${id}-error`, extraDescribedBy].filter(Boolean).join(" ") || undefined;
 
   return (
     <div className={styles.field}>
