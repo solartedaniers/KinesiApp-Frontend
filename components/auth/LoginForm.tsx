@@ -28,6 +28,7 @@ export function LoginForm() {
           {state.unverifiedEmail && (
             <Link href={withEmail(ROUTES.verifyEmail, state.unverifiedEmail)}>{t.login.verifyNow}</Link>
           )}
+          {state.emailNotRegistered && <Link href={ROUTES.register}>{t.login.registerNow}</Link>}
         </FormAlert>
       )}
 

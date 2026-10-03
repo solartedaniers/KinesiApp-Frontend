@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { OtpField } from "@/components/ui/OtpField";
+import { NewPasswordField } from "@/components/ui/NewPasswordField";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { TextField } from "@/components/ui/TextField";
 import { recoverPassword, type RecoveryState, type RecoveryStep } from "@/lib/actions/password-recovery";
@@ -84,14 +85,13 @@ export function PasswordRecoveryFlow() {
           <p className={styles.hint}>{t.recovery.passwordHint}</p>
           {/* Para que el gestor de contraseñas asocie la nueva clave a la cuenta correcta */}
           <input type="hidden" name="username" autoComplete="username" value={state.email ?? ""} readOnly />
-          <PasswordField
+          <NewPasswordField
             name="password"
             label={t.fields.newPassword}
             autoComplete="new-password"
             minLength={PASSWORD_MIN_LENGTH}
             required
             autoFocus
-            hint={t.fields.passwordHint}
             error={state.fieldErrors?.password}
           />
           <PasswordField

@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
+import { NewPasswordField } from "@/components/ui/NewPasswordField";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { TextField } from "@/components/ui/TextField";
@@ -13,7 +14,7 @@ import type { FormState } from "@/lib/form-state";
 import { t } from "@/lib/i18n";
 import { ROUTES, withEmail } from "@/lib/routes";
 import { SIGNUP_ROLES } from "@/lib/types";
-import { FULL_NAME_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "@/lib/validation";
+import { FULL_NAME_MAX_LENGTH, PASSWORD_MIN_LENGTH, validateFullName, type ValidationError } from "@/lib/validation";
 
 import styles from "./AuthForm.module.css";
 
@@ -22,6 +23,13 @@ const ROLE_OPTIONS = SIGNUP_ROLES.map((role) => ({ value: role, label: t.roles[r
 
 export function RegisterForm() {
   const [state, formAction, pending] = useActionState(register, INITIAL_STATE);
+  // Feedback inmediato del nombre mientras se escribe; "obligatorio" sólo se avisa al enviar
+  const [fullNameError, setFullNameError] = useState<ValidationError | null>(null);
+
+  function handleFullNameChange(value: string) {
+    const error = validateFullName(value);
+    setFullNameError(error === "required" ? null : error);
+  }
 
   return (
     <form action={formAction} className={styles.form} noValidate>
@@ -48,7 +56,8 @@ export function RegisterForm() {
         maxLength={FULL_NAME_MAX_LENGTH}
         required
         defaultValue={state.values?.full_name}
-        error={state.fieldErrors?.full_name}
+        onChange={(event) => handleFullNameChange(event.target.value)}
+        error={fullNameError ? t.validation[fullNameError] : state.fieldErrors?.full_name}
       />
       <TextField
         name="email"
@@ -60,13 +69,12 @@ export function RegisterForm() {
         defaultValue={state.values?.email}
         error={state.fieldErrors?.email}
       />
-      <PasswordField
+      <NewPasswordField
         name="password"
         label={t.fields.password}
         autoComplete="new-password"
         minLength={PASSWORD_MIN_LENGTH}
         required
-        hint={t.fields.passwordHint}
         error={state.fieldErrors?.password}
       />
       <PasswordField

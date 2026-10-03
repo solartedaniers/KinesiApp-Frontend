@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import styles from "@/components/auth/AuthForm.module.css";
 import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
+import { NewPasswordField } from "@/components/ui/NewPasswordField";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { changePassword, type ChangePasswordField } from "@/lib/actions/account";
 import type { FormState } from "@/lib/form-state";
@@ -30,13 +31,12 @@ export function ChangePasswordForm({ email }: { email: string }) {
         required
         error={state.fieldErrors?.current_password}
       />
-      <PasswordField
+      <NewPasswordField
         name="password"
         label={t.fields.newPassword}
         autoComplete="new-password"
         minLength={PASSWORD_MIN_LENGTH}
         required
-        hint={t.fields.passwordHint}
         error={state.fieldErrors?.password}
       />
       <PasswordField
