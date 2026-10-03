@@ -7,6 +7,9 @@ import { isAuthRoute, isPrivateRoute, safeNextPath } from "./routes.ts";
 import {
   collectErrors,
   validateEmail,
+  normalizeFullName,
+  passwordRequirementStatus,
+  validateFullName,
   validateNewPassword,
   validateOtp,
   validatePasswordConfirmation,
@@ -18,11 +21,30 @@ function fakeJwt(payload: object): string {
 
 test("la contraseña nueva sigue la política del backend", () => {
   assert.equal(validateNewPassword(""), "required");
-  assert.equal(validateNewPassword("abc1"), "passwordTooShort");
-  assert.equal(validateNewPassword("a1".repeat(65)), "passwordTooLong");
-  assert.equal(validateNewPassword("solamenteletras"), "passwordWeak");
-  assert.equal(validateNewPassword("12345678"), "passwordWeak");
-  assert.equal(validateNewPassword("ñandú2024"), null);
+  assert.equal(validateNewPassword("Ab1!"), "passwordTooShort");
+  assert.equal(validateNewPassword("Aa1!".repeat(33)), "passwordTooLong");
+  assert.equal(validateNewPassword("solamente1!"), "passwordNoUppercase");
+  assert.equal(validateNewPassword("SOLAMENTE1!"), "passwordNoLowercase");
+  assert.equal(validateNewPassword("SinNumeros!"), "passwordNoDigit");
+  assert.equal(validateNewPassword("Sin especial 1"), "passwordNoSpecial");
+  assert.equal(validateNewPassword("Ñandú2024!"), null);
+  assert.deepEqual(passwordRequirementStatus("abc"), {
+    minLength: false,
+    uppercase: false,
+    lowercase: true,
+    digit: false,
+    special: false,
+  });
+});
+
+test("el nombre completo sólo admite letras y espacios", () => {
+  assert.equal(validateFullName("  "), "required");
+  assert.equal(validateFullName("María José Ñúñez Güell"), null);
+  assert.equal(validateFullName("Mari\u0301a"), null); // tilde combinable, como la mandan algunos teclados
+  for (const invalid of ["Ana3", "Ana_Pérez", "R2-D2", "Ana!", "Luis ²"]) {
+    assert.equal(validateFullName(invalid), "fullNameInvalid", invalid);
+  }
+  assert.equal(normalizeFullName("  Ana   María "), "Ana María");
 });
 
 test("correo, confirmación y OTP", () => {

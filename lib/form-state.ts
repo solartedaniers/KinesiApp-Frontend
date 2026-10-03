@@ -7,6 +7,8 @@ export type FormState<Field extends string = string> = {
   values?: Partial<Record<Field, string>>;
   /** Correo sin verificar: el formulario ofrece ir a verificarlo. */
   unverifiedEmail?: string;
+  /** El correo no tiene cuenta: el formulario de login ofrece registrarse. */
+  emailNotRegistered?: boolean;
   /** Mensaje informativo o de éxito, ya traducido. */
   notice?: string;
   /** Cambia cada vez que se envía un código: reinicia la espera para reenviar. */

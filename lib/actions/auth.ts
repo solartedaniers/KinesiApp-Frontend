@@ -12,6 +12,7 @@ import { storeSession } from "../session";
 import { SIGNUP_ROLES, type TokenPair } from "../types";
 import {
   collectErrors,
+  normalizeFullName,
   validateEmail,
   validateFullName,
   validateNewPassword,
@@ -35,8 +36,13 @@ export async function login(_previous: FormState<LoginField>, formData: FormData
   try {
     tokens = await apiRequest<TokenPair>(API_PATHS.login, { method: "POST", body: { email, password } });
   } catch (error) {
-    const unverified = error instanceof ApiError && error.code === "email_not_verified";
-    return { error: errorMessage(error), values, unverifiedEmail: unverified ? email : undefined };
+    const code = error instanceof ApiError ? error.code : undefined;
+    return {
+      error: errorMessage(error),
+      values,
+      unverifiedEmail: code === "email_not_verified" ? email : undefined,
+      emailNotRegistered: code === "email_not_registered",
+    };
   }
 
   await storeSession(tokens);
@@ -59,7 +65,7 @@ export async function register(
   _previous: FormState<RegisterField>,
   formData: FormData,
 ): Promise<FormState<RegisterField>> {
-  const fullName = formText(formData, "full_name").trim();
+  const fullName = normalizeFullName(formText(formData, "full_name"));
   const email = formText(formData, "email").trim();
   const password = formText(formData, "password");
   const role = formText(formData, "role");
@@ -77,6 +83,10 @@ export async function register(
   try {
     await apiRequest(API_PATHS.register, { method: "POST", body: { full_name: fullName, email, password, role } });
   } catch (error) {
+    // Dominio sin correo: el error va junto al campo, para que se corrija ahí
+    if (error instanceof ApiError && error.code === "email_domain_undeliverable") {
+      return { fieldErrors: { email: errorMessage(error) }, values };
+    }
     // La cuenta sí quedó creada aunque el correo no salió: se puede pedir otro código al verificar
     const accountCreated = error instanceof ApiError && error.code === "email_delivery_failed";
     return { error: errorMessage(error), values, unverifiedEmail: accountCreated ? email : undefined };
