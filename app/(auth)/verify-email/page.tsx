@@ -4,14 +4,18 @@ import { Suspense } from "react";
 
 import { AuthShell } from "@/components/auth/AuthShell";
 import { VerifyEmailForm, VerifyEmailFromQuery } from "@/components/auth/VerifyEmailForm";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 
-export const metadata: Metadata = { title: t.verifyEmail.metaTitle };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.verifyEmail.metaTitle };
+}
 
-// Isla CSR en un shell estático (§3): el correo llega por `?email=` y se lee en el cliente.
-// El fallback es el mismo formulario sin correo precargado, así el HTML estático ya es usable
-export default function VerifyEmailPage() {
+// Isla CSR (§3): el correo llega por `?email=` y se lee en el cliente. El fallback es el mismo
+// formulario sin correo precargado, así el HTML del servidor ya es usable sin JavaScript
+export default async function VerifyEmailPage() {
+  const t = await getT();
   return (
     <AuthShell
       eyebrow={t.verifyEmail.eyebrow}

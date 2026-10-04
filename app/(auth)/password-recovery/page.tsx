@@ -3,13 +3,17 @@ import Link from "next/link";
 
 import { AuthShell } from "@/components/auth/AuthShell";
 import { PasswordRecoveryFlow } from "@/components/auth/PasswordRecoveryFlow";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 
-export const metadata: Metadata = { title: t.recovery.metaTitle };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.recovery.metaTitle };
+}
 
 // CSR: los 3 pasos viven en el estado del cliente; el código nunca queda en la URL (§3)
-export default function PasswordRecoveryPage() {
+export default async function PasswordRecoveryPage() {
+  const t = await getT();
   return (
     <AuthShell
       title={t.recovery.title}

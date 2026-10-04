@@ -1,35 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
+import { FullNameField } from "@/components/ui/FullNameField";
 import { NewPasswordField } from "@/components/ui/NewPasswordField";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { TextField } from "@/components/ui/TextField";
 import { register, type RegisterField } from "@/lib/actions/auth";
 import type { FormState } from "@/lib/form-state";
-import { t } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 import { ROUTES, withEmail } from "@/lib/routes";
 import { SIGNUP_ROLES } from "@/lib/types";
-import { FULL_NAME_MAX_LENGTH, PASSWORD_MIN_LENGTH, validateFullName, type ValidationError } from "@/lib/validation";
+import { PASSWORD_MIN_LENGTH } from "@/lib/validation";
 
 import styles from "./AuthForm.module.css";
 
 const INITIAL_STATE: FormState<RegisterField> = {};
-const ROLE_OPTIONS = SIGNUP_ROLES.map((role) => ({ value: role, label: t.roles[role] }));
 
 export function RegisterForm() {
+  const t = useT();
+  const roleOptions = SIGNUP_ROLES.map((role) => ({ value: role, label: t.roles[role] }));
   const [state, formAction, pending] = useActionState(register, INITIAL_STATE);
-  // Feedback inmediato del nombre mientras se escribe; "obligatorio" sólo se avisa al enviar
-  const [fullNameError, setFullNameError] = useState<ValidationError | null>(null);
-
-  function handleFullNameChange(value: string) {
-    const error = validateFullName(value);
-    setFullNameError(error === "required" ? null : error);
-  }
 
   return (
     <form action={formAction} className={styles.form} noValidate>
@@ -45,20 +40,11 @@ export function RegisterForm() {
       <SegmentedControl
         name="role"
         legend={t.fields.role}
-        options={ROLE_OPTIONS}
+        options={roleOptions}
         defaultValue={state.values?.role ?? SIGNUP_ROLES[0]}
         error={state.fieldErrors?.role}
       />
-      <TextField
-        name="full_name"
-        label={t.fields.fullName}
-        autoComplete="name"
-        maxLength={FULL_NAME_MAX_LENGTH}
-        required
-        defaultValue={state.values?.full_name}
-        onChange={(event) => handleFullNameChange(event.target.value)}
-        error={fullNameError ? t.validation[fullNameError] : state.fieldErrors?.full_name}
-      />
+      <FullNameField defaultValue={state.values?.full_name} error={state.fieldErrors?.full_name} />
       <TextField
         name="email"
         type="email"

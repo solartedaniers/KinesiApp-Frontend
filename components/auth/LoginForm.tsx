@@ -9,7 +9,7 @@ import { PasswordField } from "@/components/ui/PasswordField";
 import { TextField } from "@/components/ui/TextField";
 import { login, type LoginField } from "@/lib/actions/auth";
 import type { FormState } from "@/lib/form-state";
-import { t } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 import { ROUTES, withEmail } from "@/lib/routes";
 
 import styles from "./AuthForm.module.css";
@@ -18,6 +18,7 @@ const INITIAL_STATE: FormState<LoginField> = {};
 
 /** Cliente sólo por el estado de error/carga: sin JS, el <form> igual envía la Server Action. */
 export function LoginForm() {
+  const t = useT();
   const [state, formAction, pending] = useActionState(login, INITIAL_STATE);
 
   return (

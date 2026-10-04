@@ -10,7 +10,8 @@ import { PasswordField } from "@/components/ui/PasswordField";
 import { TextField } from "@/components/ui/TextField";
 import { recoverPassword, type RecoveryState, type RecoveryStep } from "@/lib/actions/password-recovery";
 import { FORM_INTENT } from "@/lib/form-state";
-import { format, t } from "@/lib/i18n";
+import { format } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 import { ROUTES } from "@/lib/routes";
 import { PASSWORD_MIN_LENGTH } from "@/lib/validation";
 
@@ -23,6 +24,7 @@ const STEP_ORDER: RecoveryStep[] = ["email", "code", "password"];
 
 /** Recuperación en 3 pasos dentro de una sola ruta: correo → código → contraseña nueva. */
 export function PasswordRecoveryFlow() {
+  const t = useT();
   const [state, formAction, pending] = useActionState(recoverPassword, INITIAL_STATE);
 
   if (state.step === "done") {
@@ -111,6 +113,7 @@ export function PasswordRecoveryFlow() {
 }
 
 function RestartButton({ disabled }: { disabled: boolean }) {
+  const t = useT();
   return (
     <Button type="submit" name="intent" value={FORM_INTENT.restart} variant="ghost" block disabled={disabled} formNoValidate>
       {t.recovery.changeEmail}

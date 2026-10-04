@@ -3,13 +3,17 @@ import Link from "next/link";
 
 import { AuthShell } from "@/components/auth/AuthShell";
 import { LoginForm } from "@/components/auth/LoginForm";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 
-export const metadata: Metadata = { title: t.login.metaTitle };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.login.metaTitle };
+}
 
-// SSG: el HTML es igual para todos; `?next=` lo resuelve la Server Action (lib/actions/auth.ts)
-export default function LoginPage() {
+// SSR por idioma (cookie): sin datos del usuario; `?next=` lo resuelve la Server Action (lib/actions/auth.ts)
+export default async function LoginPage() {
+  const t = await getT();
   return (
     <AuthShell
       title={t.login.title}

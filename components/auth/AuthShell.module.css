@@ -70,7 +70,7 @@
     gap: var(--space-7);
     padding: var(--space-7);
     background:
-      radial-gradient(circle at 85% 15%, rgb(255 255 255 / 0.08), transparent 45%),
+      radial-gradient(circle at 85% 15%, var(--color-brand-glow), transparent 45%),
       linear-gradient(160deg, var(--color-brand-from), var(--color-brand-to));
     color: var(--color-on-brand);
   }
@@ -121,4 +121,19 @@
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
   }
+}
+
+/* Acción de pie que no es un enlace (p. ej. cerrar sesión, que es un POST): se ve igual que uno */
+.footer button {
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--color-primary);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+}
+
+.preferences {
+  width: 100%;
+  max-width: 440px;
 }

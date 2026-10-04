@@ -1,13 +1,14 @@
 import type { ReactNode } from "react";
 
+import { PreferencesControls } from "@/components/app/PreferencesControls";
 import { Logo } from "@/components/brand/Logo";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 
 import styles from "./AuthShell.module.css";
 
 /** Marco de las pantallas de acceso: panel de marca en escritorio, sólo el logo en celular. */
-export function AuthShell({
+export async function AuthShell({
   eyebrow,
   title,
   subtitle,
@@ -20,6 +21,7 @@ export function AuthShell({
   footer?: ReactNode;
   children: ReactNode;
 }) {
+  const t = await getT();
   return (
     <div className={styles.shell}>
       <aside className={styles.brand}>
@@ -45,8 +47,9 @@ export function AuthShell({
             {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
           </header>
           {children}
-          {footer && <p className={styles.footer}>{footer}</p>}
+          {footer && <div className={styles.footer}>{footer}</div>}
         </section>
+        <PreferencesControls className={styles.preferences} />
       </main>
     </div>
   );

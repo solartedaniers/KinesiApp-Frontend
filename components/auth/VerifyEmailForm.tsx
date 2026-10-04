@@ -9,7 +9,7 @@ import { OtpField } from "@/components/ui/OtpField";
 import { TextField } from "@/components/ui/TextField";
 import { verifyEmail, type VerifyEmailField } from "@/lib/actions/email-verification";
 import type { FormState } from "@/lib/form-state";
-import { t } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 import { EMAIL_PARAM } from "@/lib/routes";
 
 import styles from "./AuthForm.module.css";
@@ -22,8 +22,9 @@ export function VerifyEmailFromQuery() {
   return <VerifyEmailForm defaultEmail={useSearchParams().get(EMAIL_PARAM) ?? ""} />;
 }
 
-/** También es el fallback estático de la página: sin JS, el usuario escribe su correo. */
+/** También es el fallback de la página: sin JS, el usuario escribe su correo. */
 export function VerifyEmailForm({ defaultEmail }: { defaultEmail: string }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState(verifyEmail, INITIAL_STATE);
 
   return (

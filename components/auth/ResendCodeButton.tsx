@@ -5,13 +5,15 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { OTP_RESEND_COOLDOWN_SECONDS } from "@/lib/config";
 import { FORM_INTENT } from "@/lib/form-state";
-import { format, t } from "@/lib/i18n";
+import { format } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 
 /**
  * Botón "enviar un código nuevo" con espera entre envíos. El padre lo monta con
  * `key={codeSentId}`: cada envío nuevo remonta el botón y reinicia la cuenta regresiva.
  */
 export function ResendCodeButton({ coolingDown, pending }: { coolingDown: boolean; pending: boolean }) {
+  const t = useT();
   const [remaining, setRemaining] = useState(coolingDown ? OTP_RESEND_COOLDOWN_SECONDS : 0);
 
   useEffect(() => {

@@ -3,12 +3,16 @@ import Link from "next/link";
 
 import { AuthShell } from "@/components/auth/AuthShell";
 import { RegisterForm } from "@/components/auth/RegisterForm";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 
-export const metadata: Metadata = { title: t.register.metaTitle };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.register.metaTitle };
+}
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const t = await getT();
   return (
     <AuthShell
       title={t.register.title}
