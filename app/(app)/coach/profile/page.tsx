@@ -3,18 +3,23 @@ import type { Metadata } from "next";
 import { AccountPanel } from "@/components/app/AccountPanel";
 import styles from "@/components/app/Page.module.css";
 import { PageHeader } from "@/components/app/PageHeader";
+import { ProfileSection } from "@/components/app/ProfileSection";
 import { SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 
-export const metadata: Metadata = { title: t.nav.profile };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.nav.profile };
+}
 
-// Fase 3 agrega aquí la edición del nombre y el avatar (§3)
 export default async function CoachProfilePage() {
+  const t = await getT();
   const user = await requireRole(SECTION_ROLES.coach);
   return (
     <div className={styles.page}>
       <PageHeader title={t.account.title} />
+      <ProfileSection user={user} />
       <AccountPanel user={user} />
     </div>
   );

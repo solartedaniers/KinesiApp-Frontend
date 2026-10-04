@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import styles from "@/components/app/Page.module.css";
 import { PageHeader } from "@/components/app/PageHeader";
 import { ListSkeleton } from "@/components/app/Skeleton";
-import { AthleteAnalyses } from "@/components/athlete/AthleteData";
+import { CoachAthletesList } from "@/components/coach/CoachData";
 import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { SECTION_ROLES } from "@/lib/access";
@@ -14,28 +14,23 @@ import { ROUTES } from "@/lib/routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
-  return { title: t.nav.analyses };
+  return { title: t.nav.athletes };
 }
 
-// SSR streaming (§3): la lista llega detrás del encabezado
-export default async function Page() {
+export default async function CoachAthletesPage() {
   const t = await getT();
-  await requireRole(SECTION_ROLES.athlete);
+  await requireRole(SECTION_ROLES.coach);
   return (
     <div className={styles.page}>
       <div className={styles.headerRow}>
-        <PageHeader title={t.nav.analyses} />
-        <ButtonLink href={ROUTES.newAnalysis}>
-          <Icon name="upload" size={18} />
-          {t.capture.newRecording}
+        <PageHeader title={t.nav.athletes} subtitle={t.coach.athletesSubtitle} />
+        <ButtonLink href={ROUTES.newCoachAthlete}>
+          <Icon name="plus" size={18} />
+          {t.coach.newAthlete}
         </ButtonLink>
       </div>
-      <Suspense
-        fallback={
-          <ListSkeleton rows={5} />
-        }
-      >
-        <AthleteAnalyses />
+      <Suspense fallback={<ListSkeleton />}>
+        <CoachAthletesList />
       </Suspense>
     </div>
   );

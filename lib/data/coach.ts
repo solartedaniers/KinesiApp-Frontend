@@ -5,16 +5,15 @@ import { cache } from "react";
 
 import { sortByRecordedDesc } from "../analysis-stats";
 import { API_PATHS } from "../api-paths";
-import { LOCALE } from "../i18n";
+import { getLocale } from "../i18n/server";
 import type { AthleteProfile, JumpAnalysis } from "../types";
 import { authedGet } from "./request";
 
 /** Deportistas del coach (gestionados y asignados por un admin), por nombre. */
-export const listMyAthletes = cache(async (): Promise<AthleteProfile[]> =>
-  (await authedGet<AthleteProfile[]>(API_PATHS.coachAthletes)).sort((a, b) =>
-    a.display_name.localeCompare(b.display_name, LOCALE),
-  ),
-);
+export const listMyAthletes = cache(async (): Promise<AthleteProfile[]> => {
+  const [athletes, locale] = await Promise.all([authedGet<AthleteProfile[]>(API_PATHS.coachAthletes), getLocale()]);
+  return athletes.sort((a, b) => a.display_name.localeCompare(b.display_name, locale));
+});
 
 /**
  * Ficha de un deportista del coach, tomada de su propia lista: GET /athletes/{id} del backend no

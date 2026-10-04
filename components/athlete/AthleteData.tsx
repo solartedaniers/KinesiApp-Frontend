@@ -5,12 +5,13 @@ import { statTiles } from "@/components/analysis/statTiles";
 import { Section } from "@/components/app/Section";
 import { NAV_BY_ROLE } from "@/lib/access";
 import { computeStatistics, riskTrend } from "@/lib/analysis-stats";
+import { redirect } from "next/navigation";
+
 import { listAnalysesByAthlete } from "@/lib/data/analyses";
 import { getMyAthleteProfile } from "@/lib/data/athletes";
-import { t } from "@/lib/i18n";
+import { getFormat, getT } from "@/lib/i18n/server";
+import { ROUTES } from "@/lib/routes";
 import type { JumpAnalysis } from "@/lib/types";
-
-import { ProfileMissing } from "./ProfileMissing";
 
 // Async Server Components que cada página envuelve en <Suspense>: el encabezado sale de inmediato
 // y estos bloques llegan después, en otro chunk del mismo stream HTTP (SSR streaming, §10.2)
@@ -18,21 +19,23 @@ import { ProfileMissing } from "./ProfileMissing";
 const RECENT_COUNT = 3;
 const analysesHref = NAV_BY_ROLE.athlete.find((item) => item.key === "analyses")?.href;
 
-/** Ficha del deportista → sus análisis. Sin ficha no hay análisis que pedir. */
-async function myAnalyses(): Promise<JumpAnalysis[] | null> {
+/** Ficha del deportista → sus análisis. El layout ya exige la ficha: sin ella, al alta obligatoria. */
+async function myAnalyses(): Promise<JumpAnalysis[]> {
   const profile = await getMyAthleteProfile();
-  return profile ? listAnalysesByAthlete(profile.id) : null;
+  if (!profile) redirect(ROUTES.onboarding);
+  return listAnalysesByAthlete(profile.id);
 }
 
 export async function AthleteOverview() {
+  const fmt = await getFormat();
+  const t = await getT();
   const analyses = await myAnalyses();
-  if (!analyses) return <ProfileMissing />;
   const stats = computeStatistics(analyses);
 
   return (
     <>
       <Section title={t.athleteHome.summary}>
-        <StatGrid tiles={statTiles(stats, ["total", "averageRisk", "highestRisk", "lastRecordedAt"])} />
+        <StatGrid tiles={statTiles(t, fmt, stats, ["total", "averageRisk", "highestRisk", "lastRecordedAt"])} />
       </Section>
       <Section
         title={t.athleteHome.recent}
@@ -46,18 +49,19 @@ export async function AthleteOverview() {
 
 export async function AthleteAnalyses() {
   const analyses = await myAnalyses();
-  return analyses ? <AnalysisList analyses={analyses} /> : <ProfileMissing />;
+  return <AnalysisList analyses={analyses} />;
 }
 
 export async function AthleteStats() {
+  const t = await getT();
+  const fmt = await getFormat();
   const analyses = await myAnalyses();
-  if (!analyses) return <ProfileMissing />;
   const stats = computeStatistics(analyses);
 
   return (
     <>
       <StatGrid
-        tiles={statTiles(stats, [
+        tiles={statTiles(t, fmt, stats, [
           "total",
           "processed",
           "pending",

@@ -7,12 +7,17 @@ import { ChartSkeleton, TilesSkeleton } from "@/components/app/Skeleton";
 import { TeamStats } from "@/components/coach/CoachData";
 import { SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
+import { TEAM_PARAM } from "@/lib/routes";
 
-export const metadata: Metadata = { title: t.nav.stats };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.nav.stats };
+}
 
-// SSR streaming (§3): cifras del equipo y riesgo promedio por deportista
-export default async function Page() {
+// SSR streaming (§3): cifras y riesgo por deportista, de todos o de un equipo (?team=), y por equipo
+export default async function Page({ searchParams }: PageProps<"/coach/stats">) {
+  const t = await getT();
   await requireRole(SECTION_ROLES.coach);
   return (
     <div className={styles.page}>
@@ -25,7 +30,7 @@ export default async function Page() {
           </>
         }
       >
-        <TeamStats />
+        <TeamStats teamParam={(await searchParams)[TEAM_PARAM]} />
       </Suspense>
     </div>
   );

@@ -3,18 +3,29 @@ import Link from "next/link";
 import { RiskBadge } from "@/components/analysis/RiskBadge";
 import { Avatar } from "@/components/app/Avatar";
 import { EmptyState } from "@/components/app/EmptyState";
+import { ButtonLink } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { ageOn, type AthleteSummary } from "@/lib/analysis-stats";
 import { todayInAppTimeZone } from "@/lib/format";
-import { format, t } from "@/lib/i18n";
-import { coachAthletePath } from "@/lib/routes";
+import { format } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
+import { coachAthletePath, ROUTES } from "@/lib/routes";
 import type { AthleteProfile } from "@/lib/types";
 
 import styles from "./AthleteRoster.module.css";
 
 /** Tarjetas de los deportistas del coach con su último riesgo y cantidad de grabaciones. */
-export function AthleteRoster({ athletes, summaries }: { athletes: AthleteProfile[]; summaries: Map<number, AthleteSummary> }) {
+export async function AthleteRoster({ athletes, summaries }: { athletes: AthleteProfile[]; summaries: Map<number, AthleteSummary> }) {
+  const t = await getT();
   if (athletes.length === 0) {
-    return <EmptyState icon="users" title={t.coach.rosterEmpty} body={t.coach.rosterEmptyHint} />;
+    return (
+      <EmptyState icon="users" title={t.coach.rosterEmpty} body={t.coach.rosterEmptyHint}>
+        <ButtonLink href={ROUTES.newCoachAthlete}>
+          <Icon name="plus" size={18} />
+          {t.coach.newAthlete}
+        </ButtonLink>
+      </EmptyState>
+    );
   }
   const today = todayInAppTimeZone();
 
