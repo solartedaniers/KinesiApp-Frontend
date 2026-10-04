@@ -1,15 +1,14 @@
-import { es } from "./es";
+// Idiomas de la interfaz: un diccionario JSON por idioma. Compartido por servidor y cliente: el
+// diccionario activo se obtiene con getT() (lib/i18n/server.ts) en Server Components y Server
+// Actions, y con useT() (lib/i18n/client.tsx) en Client Components.
+import en from "./en.json";
+import es from "./es.json";
+import type { Locale } from "./locale";
 
-// Un solo idioma por ahora: el idioma por cookie haría dinámicas las páginas SSG
-// (ver docs/status, desviaciones de la Fase 1)
-export const t = es;
+export { DEFAULT_LOCALE, format, isLocale, type Locale, LOCALES, resolveLocale } from "./locale";
 
-/** Locale de Intl (fechas, números) para el idioma activo. */
-export const LOCALE = "es";
+// `joints` se indexa con el nombre de articulación que manda el backend, que puede ser nuevo
+export type Dictionary = Omit<typeof es, "joints"> & { joints: Record<string, string> };
 
-/** Reemplaza {variable} por su valor: format("Dura {seconds} s", { seconds: 45 }). */
-export function format(template: string, values: Record<string, string | number>): string {
-  return template.replace(/\{(\w+)\}/g, (match, key: string) =>
-    key in values ? String(values[key]) : match,
-  );
-}
+// El tipo obliga a que en.json tenga exactamente las mismas claves que es.json
+export const DICTIONARIES: Record<Locale, Dictionary> = { es, en };

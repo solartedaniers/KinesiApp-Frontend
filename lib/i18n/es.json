@@ -1,0 +1,555 @@
+{
+  "app": {
+    "name": "KinesiApp",
+    "description": "Análisis de video del salto y la sentadilla para detectar riesgo de lesión de rodilla.",
+    "disclaimer": "KinesiApp es una herramienta de apoyo y no reemplaza la valoración de un profesional de la salud."
+  },
+  "landing": {
+    "eyebrow": "Biomecánica en tu navegador",
+    "title": "Detecta el riesgo de lesión antes de que aparezca",
+    "lead": "Graba un salto o una sentadilla y recibe una estimación del riesgo de lesión de rodilla a partir de los ángulos articulares del movimiento.",
+    "signIn": "Iniciar sesión",
+    "createAccount": "Crear cuenta",
+    "features": [
+      {
+        "title": "Deportistas",
+        "body": "Registra tus movimientos y sigue la evolución de tu riesgo."
+      },
+      {
+        "title": "Entrenadores",
+        "body": "Gestiona a tu equipo y revisa los análisis de cada deportista."
+      },
+      {
+        "title": "En cualquier dispositivo",
+        "body": "Funciona en el navegador del celular y del computador."
+      }
+    ]
+  },
+  "authShell": {
+    "tagline": "Tu movimiento, medido con precisión.",
+    "points": [
+      "Ángulos articulares de cada salto",
+      "Seguimiento del riesgo en el tiempo",
+      "Tu entrenador, al tanto de tu progreso"
+    ]
+  },
+  "roles": {
+    "athlete": "Deportista",
+    "coach": "Entrenador",
+    "admin": "Administrador"
+  },
+  "fields": {
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "newPassword": "Contraseña nueva",
+    "fullName": "Nombre completo",
+    "role": "Soy…",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "passwordRequirementsTitle": "La contraseña debe tener:",
+    "passwordRequirements": {
+      "minLength": "Al menos {min} caracteres",
+      "uppercase": "Una letra mayúscula",
+      "lowercase": "Una letra minúscula",
+      "digit": "Un número",
+      "special": "Un carácter especial (por ejemplo ! @ # $ %)"
+    },
+    "passwordRequirementMet": "cumplido",
+    "passwordRequirementMissing": "falta"
+  },
+  "login": {
+    "metaTitle": "Iniciar sesión",
+    "title": "Iniciar sesión",
+    "subtitle": "Qué bueno tenerte de vuelta. Continúa tu proceso de movimiento.",
+    "submit": "Iniciar sesión",
+    "pending": "Ingresando…",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿Aún no tienes una cuenta?",
+    "register": "Regístrate",
+    "verifyNow": "Verificar mi correo",
+    "registerNow": "Crear una cuenta con este correo"
+  },
+  "register": {
+    "metaTitle": "Crear cuenta",
+    "title": "Crea tu cuenta",
+    "subtitle": "Crea tu cuenta de deportista o entrenador para empezar a seguir tu movimiento.",
+    "submit": "Crear cuenta",
+    "pending": "Creando cuenta…",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "signIn": "Inicia sesión",
+    "verifyNow": "Ir a verificar mi correo"
+  },
+  "session": {
+    "logout": "Cerrar sesión"
+  },
+  "common": {
+    "cancel": "Cancelar",
+    "working": "Procesando…",
+    "save": "Guardar cambios",
+    "saving": "Guardando…",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "back": "Volver"
+  },
+  "nav": {
+    "label": "Navegación principal",
+    "home": "Inicio",
+    "analyses": "Grabaciones",
+    "stats": "Estadísticas",
+    "profile": "Perfil",
+    "athletes": "Deportistas",
+    "teams": "Equipos",
+    "users": "Usuarios",
+    "assignments": "Coaches",
+    "menu": "Menú",
+    "openMenu": "Abrir el menú",
+    "closeMenu": "Cerrar el menú"
+  },
+  "home": {
+    "greeting": "Hola, {name}",
+    "athlete": "Aquí verás tus análisis recientes y la evolución de tu riesgo.",
+    "coach": "Aquí verás a tus deportistas y sus análisis más recientes.",
+    "admin": "Aquí verás el resumen de usuarios, deportistas y asignaciones."
+  },
+  "analysis": {
+    "status": {
+      "pending": "En proceso",
+      "processed": "Procesado",
+      "failed": "Falló"
+    },
+    "movement": {
+      "jump": "Salto",
+      "squat": "Sentadilla"
+    },
+    "risk": {
+      "low": "Riesgo bajo",
+      "moderate": "Riesgo moderado",
+      "high": "Riesgo alto"
+    },
+    "riskShort": {
+      "low": "Bajo",
+      "moderate": "Moderado",
+      "high": "Alto"
+    },
+    "riskValue": "{value} de riesgo",
+    "noScore": "Sin puntaje",
+    "open": "Ver detalle de la grabación del {date}",
+    "listEmpty": "Todavía no hay grabaciones.",
+    "listEmptyHint": "Cuando se analice un salto o una sentadilla, aparecerá aquí."
+  },
+  "analysisDetail": {
+    "metaTitle": "Grabación",
+    "back": "Volver a las grabaciones",
+    "video": "Video",
+    "videoError": "No se pudo reproducir el video.",
+    "videoUnsupported": "Tu navegador no puede reproducir este video.",
+    "result": "Resultado",
+    "riskScore": "Puntaje de riesgo",
+    "riskExplanation": {
+      "low": "El movimiento no muestra señales relevantes de riesgo de lesión de rodilla.",
+      "moderate": "Hay algunas señales de riesgo. Conviene revisar la técnica de aterrizaje.",
+      "high": "El movimiento muestra señales claras de riesgo. Consulta a un profesional antes de seguir entrenando este gesto."
+    },
+    "pendingTitle": "Estamos analizando tu movimiento",
+    "pendingBody": "Esto suele tardar menos de un minuto. La página se actualizará sola.",
+    "pendingStalled": "El análisis está tardando más de lo normal. Vuelve a revisar en unos minutos.",
+    "pendingRetry": "Revisar de nuevo",
+    "failedTitle": "No se pudo completar el análisis",
+    "failedBody": "El video no se pudo procesar. Intenta grabarlo de nuevo con buena luz y de cuerpo completo.",
+    "angles": "Ángulos articulares",
+    "anglesEmpty": "Este análisis no tiene mediciones de ángulos.",
+    "peak": "Máximo: {value}",
+    "delete": "Eliminar grabación",
+    "deleteTitle": "¿Eliminar esta grabación?",
+    "deleteBody": "Se borrarán el video, el análisis y la conversación con el asistente. Esta acción no se puede deshacer.",
+    "movement": "Movimiento",
+    "recordedAt": "Fecha",
+    "status": "Estado"
+  },
+  "joints": {
+    "knee_flexion": "Flexión de rodilla",
+    "trunk_inclination": "Inclinación del tronco"
+  },
+  "capture": {
+    "metaTitle": "Nueva grabación",
+    "title": "Nueva grabación",
+    "subtitle": "Sube un video de tu salto o sentadilla para analizar el riesgo de lesión.",
+    "forAthlete": "Video de {name}. Se analizará como una grabación suya.",
+    "newRecording": "Nueva grabación",
+    "movement": "Movimiento",
+    "chooseVideo": "Grabar o elegir un video",
+    "changeVideo": "Cambiar el video",
+    "limitHint": "Un solo video, de hasta {max} MB.",
+    "submit": "Subir y analizar",
+    "uploading": "Subiendo video…",
+    "progress": "Subido: {percent}",
+    "cancel": "Cancelar subida",
+    "guide": {
+      "title": "Para un análisis confiable",
+      "items": [
+        "Graba a 30 fps y sube el archivo original, sin reenviarlo por WhatsApp u otras apps que lo compriman.",
+        "Sin espejos ni otras personas en el fondo.",
+        "Los pies dentro del cuadro durante todo el movimiento, también al aterrizar.",
+        "Cámara fija, de costado o a tres cuartos del deportista."
+      ]
+    },
+    "errors": {
+      "videoRequired": "Elige un video para continuar.",
+      "videoInvalidType": "El archivo elegido no es un video.",
+      "videoTooLarge": "El video supera el máximo de {max} MB."
+    }
+  },
+  "consent": {
+    "title": "Consentimiento para el video",
+    "paragraphs": [
+      "El video se analiza de forma automática para estimar los ángulos de las articulaciones y la técnica del movimiento.",
+      "Se guarda junto a su análisis y se elimina cuando se borra la grabación. No constituye un diagnóstico médico."
+    ],
+    "checkbox": "Leí y acepto este tratamiento del video.",
+    "continue": "Aceptar y continuar",
+    "readLegal": "Ver el texto completo"
+  },
+  "chat": {
+    "metaTitle": "Asistente",
+    "title": "Pregúntale al asistente",
+    "open": "Preguntar al asistente",
+    "back": "Volver a la grabación",
+    "empty": "Todavía no hay mensajes. Pregunta, por ejemplo, qué significa tu resultado o cómo mejorar la técnica.",
+    "label": "Tu pregunta",
+    "placeholder": "Escribe tu pregunta sobre este análisis…",
+    "send": "Enviar",
+    "sending": "Enviando…",
+    "thinking": "El asistente está escribiendo…",
+    "roles": {
+      "user": "Tú",
+      "assistant": "Asistente"
+    },
+    "disclaimer": "El asistente explica el resultado del análisis de forma general. No reemplaza la valoración de un profesional de la salud."
+  },
+  "angleChart": {
+    "subtitle": "Ángulo a lo largo del movimiento.",
+    "pointLabel": "{time}: {value}",
+    "tableToggle": "Ver como tabla",
+    "time": "Tiempo",
+    "angle": "Ángulo",
+    "notEnough": "No hay suficientes mediciones para trazar la curva."
+  },
+  "stats": {
+    "recordings": "Grabaciones",
+    "processed": "Procesadas",
+    "pending": "En proceso",
+    "failed": "Con error",
+    "averageRisk": "Riesgo promedio",
+    "highestRisk": "Riesgo máximo",
+    "highRiskCount": "Con riesgo alto",
+    "lastRecording": "Última grabación",
+    "none": "—",
+    "empty": "Graba un movimiento para ver tus estadísticas."
+  },
+  "riskChart": {
+    "title": "Evolución del riesgo",
+    "subtitle": "Puntaje de riesgo de cada grabación procesada, en orden cronológico.",
+    "threshold": "Riesgo alto",
+    "pointLabel": "{date}: {value}",
+    "tableToggle": "Ver como tabla",
+    "date": "Fecha",
+    "score": "Riesgo",
+    "notEnough": "Se necesitan al menos dos grabaciones procesadas para mostrar la evolución."
+  },
+  "athleteHome": {
+    "summary": "Resumen",
+    "recent": "Grabaciones recientes",
+    "seeAll": "Ver todas las grabaciones"
+  },
+  "onboarding": {
+    "metaTitle": "Completa tu ficha",
+    "eyebrow": "Último paso",
+    "title": "Completa tu ficha física",
+    "subtitle": "Necesitamos estos datos para interpretar tus movimientos. Podrás cambiarlos luego desde tu perfil.",
+    "submit": "Guardar y continuar",
+    "pending": "Guardando…"
+  },
+  "biometrics": {
+    "title": "Ficha física",
+    "birthDate": "Fecha de nacimiento",
+    "birthDateHint": "Tu edad se calcula sola a partir de esta fecha.",
+    "heightCm": "Estatura (cm)",
+    "weightKg": "Peso (kg)",
+    "submit": "Guardar ficha",
+    "pending": "Guardando…",
+    "saved": "Tu ficha se actualizó."
+  },
+  "athleteProfile": {
+    "gender": {
+      "male": "Masculino",
+      "female": "Femenino",
+      "other": "Otro"
+    },
+    "genderLabel": "Sexo",
+    "age": "Edad",
+    "ageValue": "{years} años",
+    "height": "Estatura",
+    "weight": "Peso",
+    "managed": "Gestionado",
+    "managedHint": "Sin cuenta propia: lo administras tú.",
+    "withAccount": "Con cuenta"
+  },
+  "coach": {
+    "teamSummary": "Tu equipo",
+    "athletes": "Deportistas",
+    "athletesCount": "Deportistas",
+    "rosterEmpty": "Todavía no tienes deportistas.",
+    "rosterEmptyHint": "Crea deportistas sin cuenta con «Nuevo deportista», o espera a que un administrador te asigne deportistas con cuenta.",
+    "athletesSubtitle": "Deportistas con cuenta propia que te asignó un administrador y deportistas que gestionas tú.",
+    "newAthlete": "Nuevo deportista",
+    "newAthleteTitle": "Nuevo deportista",
+    "newAthleteSubtitle": "Sin correo ni contraseña: lo gestionas tú, le subes los videos y ves sus análisis.",
+    "createAthlete": "Crear deportista",
+    "creatingAthlete": "Creando…",
+    "editAthleteTitle": "Editar deportista",
+    "editAthlete": "Editar ficha",
+    "uploadVideo": "Subir video",
+    "deleteAthlete": "Eliminar deportista",
+    "deleteAthleteTitle": "¿Eliminar a {name}?",
+    "deleteAthleteBody": "Se borrarán también todas sus grabaciones y análisis. Esta acción no se puede deshacer.",
+    "accountAthleteHint": "Tiene cuenta propia: sus datos y sus videos los gestiona el propio deportista.",
+    "recordings": "{count} grabaciones",
+    "noRecordings": "Sin grabaciones",
+    "latestRisk": "Último riesgo",
+    "openAthlete": "Ver ficha de {name}",
+    "athleteMetaTitle": "Deportista",
+    "backToTeam": "Volver a mis deportistas",
+    "profile": "Ficha física",
+    "recordingsTitle": "Grabaciones",
+    "teamStatsTitle": "Resumen del equipo",
+    "byAthleteTitle": "Riesgo promedio por deportista",
+    "byAthleteSubtitle": "Promedio de las grabaciones procesadas de cada deportista, de mayor a menor.",
+    "byAthleteEmpty": "Ningún deportista tiene grabaciones procesadas todavía.",
+    "athleteColumn": "Deportista"
+  },
+  "teams": {
+    "name": "Nombre del equipo",
+    "newTeam": "Nuevo equipo",
+    "create": "Crear equipo",
+    "coachSubtitle": "Agrupa a tus deportistas, con cuenta o gestionados, y compara sus estadísticas por equipo.",
+    "adminSubtitle": "Todos los equipos del sistema, de entrenadores y administradores.",
+    "empty": "Todavía no hay equipos.",
+    "emptyHint": "Crea uno con un nombre, por ejemplo «Sub 17», y después asígnale deportistas.",
+    "members": "{count} deportistas",
+    "unknownOwner": "Sin dueño",
+    "ownedBy": "Equipo de {name}",
+    "back": "Volver a los equipos",
+    "rename": "Nombre",
+    "renamed": "El nombre del equipo se actualizó.",
+    "delete": "Eliminar equipo",
+    "deleteTitle": "¿Eliminar el equipo {name}?",
+    "deleteBody": "Se elimina el grupo; los deportistas y sus grabaciones no se borran.",
+    "athletes": "Deportistas del equipo",
+    "coachCandidatesHint": "Puedes agregar a cualquiera de tus deportistas. Un deportista puede estar en varios equipos.",
+    "adminCandidatesHint": "En el equipo de un entrenador sólo pueden estar sus deportistas; en el de un administrador, cualquiera.",
+    "addMember": "Agregar",
+    "removeMember": "Quitar",
+    "noCandidates": "No hay deportistas para agregar.",
+    "noCandidatesHint": "Primero crea deportistas o pide que te asignen deportistas con cuenta.",
+    "viewStats": "Ver estadísticas del equipo",
+    "filterLabel": "Equipo",
+    "allAthletes": "Todos mis deportistas",
+    "applyFilter": "Aplicar",
+    "showingTeam": "Mostrando sólo el equipo {name}.",
+    "byTeamTitle": "Riesgo promedio por equipo",
+    "byTeamSubtitle": "Promedio de las grabaciones procesadas de los deportistas de cada equipo.",
+    "byTeamEmpty": "Ningún equipo tiene grabaciones procesadas todavía."
+  },
+  "admin": {
+    "summary": "Resumen del sistema",
+    "users": "Usuarios",
+    "coaches": "Entrenadores",
+    "athletes": "Deportistas",
+    "unassigned": "Sin entrenador",
+    "pendingVerification": "Sin verificar",
+    "shortcuts": "Accesos rápidos",
+    "manageUsers": "Gestionar usuarios",
+    "manageAssignments": "Ver asignaciones de entrenador",
+    "manageTeams": "Ver equipos",
+    "usersSubtitle": "Todas las cuentas del sistema. Cambia el rol de una cuenta o desactívala para que no pueda iniciar sesión.",
+    "assignmentsSubtitle": "Entrenador de cada deportista. Al cambiarlo, el deportista sale de los equipos del entrenador anterior.",
+    "columns": {
+      "name": "Nombre",
+      "email": "Correo",
+      "role": "Rol",
+      "status": "Estado",
+      "createdAt": "Alta",
+      "actions": "Acciones",
+      "athlete": "Deportista",
+      "type": "Tipo",
+      "coach": "Entrenador"
+    },
+    "apply": "Guardar",
+    "roleFor": "Rol de {name}",
+    "coachFor": "Entrenador de {name}",
+    "chooseCoach": "Elige un entrenador",
+    "noCoachesYet": "Todavía no hay entrenadores.",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "yourAccount": "Tu cuenta",
+    "status": {
+      "active": "Activa",
+      "unverified": "Sin verificar",
+      "disabled": "Deshabilitada"
+    },
+    "noCoach": "Sin entrenador",
+    "usersEmpty": "No hay usuarios registrados.",
+    "athletesEmpty": "No hay perfiles de deportista.",
+    "unassignedFirst": "Los deportistas sin entrenador aparecen primero."
+  },
+  "profile": {
+    "title": "Perfil",
+    "photo": "Foto de perfil",
+    "nameSaved": "Tu nombre se actualizó."
+  },
+  "avatar": {
+    "add": "Agregar foto",
+    "change": "Cambiar foto",
+    "remove": "Quitar foto",
+    "hint": "JPG, PNG o WebP. La ajustamos automáticamente a un tamaño liviano.",
+    "invalidType": "El archivo elegido no es una imagen.",
+    "tooLarge": "No pudimos achicar esta imagen lo suficiente. Prueba con otra.",
+    "unreadable": "No pudimos leer esta imagen. Prueba con otra."
+  },
+  "account": {
+    "title": "Mi cuenta",
+    "section": "Cuenta",
+    "role": "Rol",
+    "changePassword": "Cambiar contraseña",
+    "changePasswordHint": "Actualiza la contraseña con la que inicias sesión."
+  },
+  "changePassword": {
+    "metaTitle": "Cambiar contraseña",
+    "title": "Cambiar contraseña",
+    "subtitle": "Por seguridad, cerraremos tus sesiones en otros dispositivos.",
+    "currentPassword": "Contraseña actual",
+    "submit": "Guardar contraseña",
+    "pending": "Guardando…",
+    "success": "Tu contraseña se cambió.",
+    "back": "Volver a mi cuenta"
+  },
+  "notFound": {
+    "metaTitle": "No encontrado",
+    "code": "404",
+    "title": "No encontramos esta página",
+    "body": "Puede que el enlace esté mal escrito, que el contenido ya no exista o que no tengas acceso a él.",
+    "home": "Ir al inicio"
+  },
+  "appError": {
+    "title": "No pudimos cargar esta página",
+    "body": "Puede ser un problema de conexión con el servidor. Intenta de nuevo en unos segundos.",
+    "retry": "Reintentar"
+  },
+  "otp": {
+    "label": "Código de verificación",
+    "hint": "Seis dígitos, revisa también tu carpeta de spam.",
+    "resend": "Enviar un código nuevo",
+    "resendIn": "Puedes pedir otro código en {seconds} s"
+  },
+  "verifyEmail": {
+    "metaTitle": "Verificar correo",
+    "eyebrow": "Un paso más",
+    "title": "Verifica tu correo",
+    "subtitle": "Ingresa el código que enviamos a tu correo para activar tu cuenta.",
+    "submit": "Verificar",
+    "pending": "Verificando…",
+    "codeSent": "Si esta cuenta puede verificarse, pronto llegará un código nuevo.",
+    "backToLogin": "Volver a iniciar sesión"
+  },
+  "recovery": {
+    "metaTitle": "Recuperar contraseña",
+    "title": "Restablece tu contraseña",
+    "steps": {
+      "email": "Paso 1 de 3 · Correo",
+      "code": "Paso 2 de 3 · Código",
+      "password": "Paso 3 de 3 · Nueva contraseña"
+    },
+    "emailHint": "Escribe el correo de tu cuenta y te enviaremos un código de un solo uso.",
+    "codeHint": "Ingresa el código de 6 dígitos que enviamos a {email}.",
+    "passwordHint": "Elige una contraseña nueva distinta de la actual.",
+    "sendCode": "Enviarme un código",
+    "verifyCode": "Verificar código",
+    "savePassword": "Guardar contraseña nueva",
+    "pending": "Procesando…",
+    "changeEmail": "Usar otro correo",
+    "codeSent": "Si el correo existe, te enviamos un código nuevo.",
+    "doneTitle": "Contraseña actualizada",
+    "done": "Tu contraseña se actualizó. Por seguridad cerramos las sesiones abiertas en otros dispositivos.",
+    "goToLogin": "Iniciar sesión",
+    "backToLogin": "Volver a iniciar sesión"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio.",
+    "invalidEmail": "Ingresa un correo válido.",
+    "passwordTooShort": "La contraseña debe tener al menos {min} caracteres.",
+    "passwordTooLong": "La contraseña debe tener como máximo {max} caracteres.",
+    "passwordNoUppercase": "Agrega al menos una letra mayúscula.",
+    "passwordNoLowercase": "Agrega al menos una letra minúscula.",
+    "passwordNoDigit": "Agrega al menos un número.",
+    "passwordNoSpecial": "Agrega al menos un carácter especial (por ejemplo ! @ # $ %).",
+    "passwordMismatch": "Las contraseñas no coinciden.",
+    "fullNameTooLong": "El nombre debe tener como máximo {max} caracteres.",
+    "fullNameInvalid": "Usa sólo letras y espacios, sin números ni símbolos.",
+    "invalidOtp": "Ingresa el código de seis dígitos del correo.",
+    "invalidOption": "Elige una de las opciones.",
+    "consentRequired": "Debes aceptar el consentimiento para continuar.",
+    "chatMessageTooLong": "El mensaje debe tener como máximo {max} caracteres.",
+    "teamNameTooLong": "El nombre del equipo debe tener como máximo {max} caracteres.",
+    "invalidDate": "Ingresa una fecha válida.",
+    "birthDateInFuture": "La fecha de nacimiento debe ser anterior a hoy.",
+    "ageOutOfRange": "La edad debe estar entre {min} y {max} años.",
+    "invalidNumber": "Ingresa un número, por ejemplo 72,5.",
+    "heightOutOfRange": "Ingresa una estatura entre 1 y {max} cm.",
+    "weightOutOfRange": "Ingresa un peso entre 1 y {max} kg."
+  },
+  "errors": {
+    "generic": "Ocurrió un error. Intenta de nuevo.",
+    "network": "No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.",
+    "validation_error": "Revisa los datos ingresados.",
+    "invalid_credentials": "Correo o contraseña incorrectos.",
+    "email_not_registered": "No hay ninguna cuenta con ese correo.",
+    "email_domain_undeliverable": "El dominio de ese correo no existe o no recibe correos. Revisa que esté bien escrito.",
+    "account_disabled": "Tu cuenta está deshabilitada.",
+    "email_not_verified": "Verifica tu correo antes de iniciar sesión.",
+    "invalid_otp": "El código ingresado no es válido.",
+    "invalid_refresh_token": "Tu sesión expiró. Inicia sesión de nuevo.",
+    "email_already_registered": "Ese correo ya está registrado.",
+    "email_delivery_failed": "No pudimos enviar el correo. Inténtalo de nuevo en unos momentos.",
+    "password_reused": "La nueva contraseña debe ser distinta de la actual.",
+    "invalid_current_password": "Tu contraseña actual es incorrecta.",
+    "forbidden": "No tienes permiso para hacer esto.",
+    "not_found": "No encontramos lo que buscabas.",
+    "invalid_video": "El archivo no es un video válido.",
+    "video_too_large": "El video supera el tamaño máximo permitido.",
+    "storage_unavailable": "No pudimos guardar el archivo en este momento. Inténtalo de nuevo en unos minutos.",
+    "consent_required": "Debes aceptar el consentimiento de video antes de subir una grabación.",
+    "analysis_not_processed": "El asistente estará disponible cuando termine el análisis.",
+    "chat_rate_limited": "Hiciste muchas preguntas seguidas. Espera un momento antes de enviar otra.",
+    "assistant_unavailable": "El asistente no está disponible en este momento. Inténtalo más tarde.",
+    "team_name_taken": "Ya tienes un equipo con ese nombre.",
+    "invalid_team_member": "Ese deportista no puede estar en este equipo.",
+    "cannot_modify_own_account": "No puedes cambiar el rol ni el estado de tu propia cuenta.",
+    "coach_has_athletes": "Este entrenador todavía tiene deportistas. Reasígnalos antes de cambiarle el rol.",
+    "invalid_role_assignment": "Ese usuario no tiene el rol necesario para esta asignación."
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "language": "Idioma",
+    "languageNames": {
+      "es": "Español",
+      "en": "English"
+    },
+    "theme": "Tema",
+    "themeNames": {
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    }
+  }
+}

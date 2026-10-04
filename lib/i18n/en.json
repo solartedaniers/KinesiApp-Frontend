@@ -1,0 +1,555 @@
+{
+  "app": {
+    "name": "KinesiApp",
+    "description": "Video analysis of jumps and squats to detect knee injury risk.",
+    "disclaimer": "KinesiApp is a support tool and does not replace an assessment by a health professional."
+  },
+  "landing": {
+    "eyebrow": "Biomechanics in your browser",
+    "title": "Spot injury risk before it shows up",
+    "lead": "Record a jump or a squat and get an estimate of your knee injury risk based on the joint angles of the movement.",
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "features": [
+      {
+        "title": "Athletes",
+        "body": "Record your movements and follow how your risk evolves."
+      },
+      {
+        "title": "Coaches",
+        "body": "Manage your team and review each athlete's analyses."
+      },
+      {
+        "title": "On any device",
+        "body": "Works in the browser on your phone and your computer."
+      }
+    ]
+  },
+  "authShell": {
+    "tagline": "Your movement, measured precisely.",
+    "points": [
+      "Joint angles for every jump",
+      "Risk tracking over time",
+      "Your coach, up to date with your progress"
+    ]
+  },
+  "roles": {
+    "athlete": "Athlete",
+    "coach": "Coach",
+    "admin": "Administrator"
+  },
+  "fields": {
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "newPassword": "New password",
+    "fullName": "Full name",
+    "role": "I am…",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "passwordRequirementsTitle": "The password must have:",
+    "passwordRequirements": {
+      "minLength": "At least {min} characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "digit": "One number",
+      "special": "One special character (for example ! @ # $ %)"
+    },
+    "passwordRequirementMet": "met",
+    "passwordRequirementMissing": "missing"
+  },
+  "login": {
+    "metaTitle": "Sign in",
+    "title": "Sign in",
+    "subtitle": "Good to have you back. Pick up where you left off.",
+    "submit": "Sign in",
+    "pending": "Signing in…",
+    "forgotPassword": "Forgot your password?",
+    "noAccount": "Don't have an account yet?",
+    "register": "Sign up",
+    "verifyNow": "Verify my email",
+    "registerNow": "Create an account with this email"
+  },
+  "register": {
+    "metaTitle": "Create account",
+    "title": "Create your account",
+    "subtitle": "Create your athlete or coach account to start tracking your movement.",
+    "submit": "Create account",
+    "pending": "Creating account…",
+    "hasAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "verifyNow": "Go verify my email"
+  },
+  "session": {
+    "logout": "Sign out"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "working": "Working…",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home",
+    "analyses": "Recordings",
+    "stats": "Statistics",
+    "profile": "Profile",
+    "athletes": "Athletes",
+    "teams": "Teams",
+    "users": "Users",
+    "assignments": "Coaches",
+    "menu": "Menu",
+    "openMenu": "Open the menu",
+    "closeMenu": "Close the menu"
+  },
+  "home": {
+    "greeting": "Hi, {name}",
+    "athlete": "Here you'll see your recent analyses and how your risk evolves.",
+    "coach": "Here you'll see your athletes and their latest analyses.",
+    "admin": "Here you'll see a summary of users, athletes and assignments."
+  },
+  "analysis": {
+    "status": {
+      "pending": "Processing",
+      "processed": "Processed",
+      "failed": "Failed"
+    },
+    "movement": {
+      "jump": "Jump",
+      "squat": "Squat"
+    },
+    "risk": {
+      "low": "Low risk",
+      "moderate": "Moderate risk",
+      "high": "High risk"
+    },
+    "riskShort": {
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High"
+    },
+    "riskValue": "{value} risk",
+    "noScore": "No score",
+    "open": "View the recording from {date}",
+    "listEmpty": "No recordings yet.",
+    "listEmptyHint": "When a jump or a squat is analyzed, it will show up here."
+  },
+  "analysisDetail": {
+    "metaTitle": "Recording",
+    "back": "Back to recordings",
+    "video": "Video",
+    "videoError": "The video couldn't be played.",
+    "videoUnsupported": "Your browser can't play this video.",
+    "result": "Result",
+    "riskScore": "Risk score",
+    "riskExplanation": {
+      "low": "The movement shows no relevant signs of knee injury risk.",
+      "moderate": "There are some signs of risk. It's worth reviewing the landing technique.",
+      "high": "The movement shows clear signs of risk. See a professional before you keep training this movement."
+    },
+    "pendingTitle": "We're analyzing your movement",
+    "pendingBody": "This usually takes less than a minute. The page will update on its own.",
+    "pendingStalled": "The analysis is taking longer than usual. Check back in a few minutes.",
+    "pendingRetry": "Check again",
+    "failedTitle": "The analysis couldn't be completed",
+    "failedBody": "The video couldn't be processed. Try recording it again in good light, with the whole body in frame.",
+    "angles": "Joint angles",
+    "anglesEmpty": "This analysis has no angle measurements.",
+    "peak": "Peak: {value}",
+    "delete": "Delete recording",
+    "deleteTitle": "Delete this recording?",
+    "deleteBody": "The video, the analysis and the conversation with the assistant will be deleted. This can't be undone.",
+    "movement": "Movement",
+    "recordedAt": "Date",
+    "status": "Status"
+  },
+  "joints": {
+    "knee_flexion": "Knee flexion",
+    "trunk_inclination": "Trunk inclination"
+  },
+  "capture": {
+    "metaTitle": "New recording",
+    "title": "New recording",
+    "subtitle": "Upload a video of your jump or squat to analyze the injury risk.",
+    "forAthlete": "Video of {name}. It will be analyzed as one of their recordings.",
+    "newRecording": "New recording",
+    "movement": "Movement",
+    "chooseVideo": "Record or choose a video",
+    "changeVideo": "Change the video",
+    "limitHint": "A single video, up to {max} MB.",
+    "submit": "Upload and analyze",
+    "uploading": "Uploading video…",
+    "progress": "Uploaded: {percent}",
+    "cancel": "Cancel upload",
+    "guide": {
+      "title": "For a reliable analysis",
+      "items": [
+        "Record at 30 fps and upload the original file, without forwarding it through WhatsApp or other apps that compress it.",
+        "No mirrors or other people in the background.",
+        "Feet inside the frame for the whole movement, including the landing.",
+        "A steady camera, to the side or at three quarters of the athlete."
+      ]
+    },
+    "errors": {
+      "videoRequired": "Choose a video to continue.",
+      "videoInvalidType": "The selected file isn't a video.",
+      "videoTooLarge": "The video exceeds the {max} MB limit."
+    }
+  },
+  "consent": {
+    "title": "Video consent",
+    "paragraphs": [
+      "The video is analyzed automatically to estimate the joint angles and the movement technique.",
+      "It's stored with its analysis and deleted when the recording is deleted. It isn't a medical diagnosis."
+    ],
+    "checkbox": "I have read and agree to this video processing.",
+    "continue": "Accept and continue",
+    "readLegal": "Read the full text"
+  },
+  "chat": {
+    "metaTitle": "Assistant",
+    "title": "Ask the assistant",
+    "open": "Ask the assistant",
+    "back": "Back to the recording",
+    "empty": "No messages yet. Ask, for example, what your result means or how to improve your technique.",
+    "label": "Your question",
+    "placeholder": "Type your question about this analysis…",
+    "send": "Send",
+    "sending": "Sending…",
+    "thinking": "The assistant is typing…",
+    "roles": {
+      "user": "You",
+      "assistant": "Assistant"
+    },
+    "disclaimer": "The assistant explains the analysis result in general terms. It doesn't replace an assessment by a health professional."
+  },
+  "angleChart": {
+    "subtitle": "Angle throughout the movement.",
+    "pointLabel": "{time}: {value}",
+    "tableToggle": "Show as table",
+    "time": "Time",
+    "angle": "Angle",
+    "notEnough": "There aren't enough measurements to draw the curve."
+  },
+  "stats": {
+    "recordings": "Recordings",
+    "processed": "Processed",
+    "pending": "Processing",
+    "failed": "With errors",
+    "averageRisk": "Average risk",
+    "highestRisk": "Highest risk",
+    "highRiskCount": "High risk",
+    "lastRecording": "Last recording",
+    "none": "—",
+    "empty": "Record a movement to see your statistics."
+  },
+  "riskChart": {
+    "title": "Risk over time",
+    "subtitle": "Risk score of each processed recording, in chronological order.",
+    "threshold": "High risk",
+    "pointLabel": "{date}: {value}",
+    "tableToggle": "Show as table",
+    "date": "Date",
+    "score": "Risk",
+    "notEnough": "At least two processed recordings are needed to show the trend."
+  },
+  "athleteHome": {
+    "summary": "Summary",
+    "recent": "Recent recordings",
+    "seeAll": "See all recordings"
+  },
+  "onboarding": {
+    "metaTitle": "Complete your profile",
+    "eyebrow": "Last step",
+    "title": "Complete your physical profile",
+    "subtitle": "We need this information to interpret your movements. You can change it later from your profile.",
+    "submit": "Save and continue",
+    "pending": "Saving…"
+  },
+  "biometrics": {
+    "title": "Physical profile",
+    "birthDate": "Date of birth",
+    "birthDateHint": "Your age is calculated automatically from this date.",
+    "heightCm": "Height (cm)",
+    "weightKg": "Weight (kg)",
+    "submit": "Save profile",
+    "pending": "Saving…",
+    "saved": "Your profile was updated."
+  },
+  "athleteProfile": {
+    "gender": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "genderLabel": "Sex",
+    "age": "Age",
+    "ageValue": "{years} years",
+    "height": "Height",
+    "weight": "Weight",
+    "managed": "Managed",
+    "managedHint": "No account of their own: you manage them.",
+    "withAccount": "Has an account"
+  },
+  "coach": {
+    "teamSummary": "Your team",
+    "athletes": "Athletes",
+    "athletesCount": "Athletes",
+    "rosterEmpty": "You don't have any athletes yet.",
+    "rosterEmptyHint": "Create athletes without an account with \"New athlete\", or wait for an administrator to assign you athletes who have one.",
+    "athletesSubtitle": "Athletes with their own account assigned to you by an administrator, and athletes you manage.",
+    "newAthlete": "New athlete",
+    "newAthleteTitle": "New athlete",
+    "newAthleteSubtitle": "No email or password: you manage them, upload their videos and see their analyses.",
+    "createAthlete": "Create athlete",
+    "creatingAthlete": "Creating…",
+    "editAthleteTitle": "Edit athlete",
+    "editAthlete": "Edit profile",
+    "uploadVideo": "Upload video",
+    "deleteAthlete": "Delete athlete",
+    "deleteAthleteTitle": "Delete {name}?",
+    "deleteAthleteBody": "All their recordings and analyses will be deleted too. This can't be undone.",
+    "accountAthleteHint": "Has their own account: their data and videos are managed by the athlete.",
+    "recordings": "{count} recordings",
+    "noRecordings": "No recordings",
+    "latestRisk": "Latest risk",
+    "openAthlete": "View {name}'s profile",
+    "athleteMetaTitle": "Athlete",
+    "backToTeam": "Back to my athletes",
+    "profile": "Physical profile",
+    "recordingsTitle": "Recordings",
+    "teamStatsTitle": "Team summary",
+    "byAthleteTitle": "Average risk per athlete",
+    "byAthleteSubtitle": "Average of each athlete's processed recordings, from highest to lowest.",
+    "byAthleteEmpty": "No athlete has processed recordings yet.",
+    "athleteColumn": "Athlete"
+  },
+  "teams": {
+    "name": "Team name",
+    "newTeam": "New team",
+    "create": "Create team",
+    "coachSubtitle": "Group your athletes, with an account or managed, and compare their statistics by team.",
+    "adminSubtitle": "Every team in the system, from coaches and administrators.",
+    "empty": "No teams yet.",
+    "emptyHint": "Create one with a name, for example \"Under 17\", and then add athletes to it.",
+    "members": "{count} athletes",
+    "unknownOwner": "No owner",
+    "ownedBy": "{name}'s team",
+    "back": "Back to teams",
+    "rename": "Name",
+    "renamed": "The team name was updated.",
+    "delete": "Delete team",
+    "deleteTitle": "Delete the team {name}?",
+    "deleteBody": "The group is deleted; the athletes and their recordings are kept.",
+    "athletes": "Team athletes",
+    "coachCandidatesHint": "You can add any of your athletes. An athlete can belong to several teams.",
+    "adminCandidatesHint": "A coach's team can only include that coach's athletes; an administrator's team, anyone.",
+    "addMember": "Add",
+    "removeMember": "Remove",
+    "noCandidates": "There are no athletes to add.",
+    "noCandidatesHint": "First create athletes or ask to be assigned athletes who have an account.",
+    "viewStats": "View team statistics",
+    "filterLabel": "Team",
+    "allAthletes": "All my athletes",
+    "applyFilter": "Apply",
+    "showingTeam": "Showing only the team {name}.",
+    "byTeamTitle": "Average risk per team",
+    "byTeamSubtitle": "Average of the processed recordings of each team's athletes.",
+    "byTeamEmpty": "No team has processed recordings yet."
+  },
+  "admin": {
+    "summary": "System summary",
+    "users": "Users",
+    "coaches": "Coaches",
+    "athletes": "Athletes",
+    "unassigned": "Without a coach",
+    "pendingVerification": "Unverified",
+    "shortcuts": "Shortcuts",
+    "manageUsers": "Manage users",
+    "manageAssignments": "View coach assignments",
+    "manageTeams": "View teams",
+    "usersSubtitle": "Every account in the system. Change an account's role or deactivate it so it can't sign in.",
+    "assignmentsSubtitle": "Each athlete's coach. When it changes, the athlete leaves the previous coach's teams.",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "createdAt": "Created",
+      "actions": "Actions",
+      "athlete": "Athlete",
+      "type": "Type",
+      "coach": "Coach"
+    },
+    "apply": "Save",
+    "roleFor": "Role of {name}",
+    "coachFor": "Coach of {name}",
+    "chooseCoach": "Choose a coach",
+    "noCoachesYet": "There are no coaches yet.",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "yourAccount": "Your account",
+    "status": {
+      "active": "Active",
+      "unverified": "Unverified",
+      "disabled": "Disabled"
+    },
+    "noCoach": "No coach",
+    "usersEmpty": "There are no registered users.",
+    "athletesEmpty": "There are no athlete profiles.",
+    "unassignedFirst": "Athletes without a coach are listed first."
+  },
+  "profile": {
+    "title": "Profile",
+    "photo": "Profile photo",
+    "nameSaved": "Your name was updated."
+  },
+  "avatar": {
+    "add": "Add photo",
+    "change": "Change photo",
+    "remove": "Remove photo",
+    "hint": "JPG, PNG or WebP. We resize it automatically to a light size.",
+    "invalidType": "The selected file isn't an image.",
+    "tooLarge": "We couldn't make this image small enough. Try another one.",
+    "unreadable": "We couldn't read this image. Try another one."
+  },
+  "account": {
+    "title": "My account",
+    "section": "Account",
+    "role": "Role",
+    "changePassword": "Change password",
+    "changePasswordHint": "Update the password you sign in with."
+  },
+  "changePassword": {
+    "metaTitle": "Change password",
+    "title": "Change password",
+    "subtitle": "For security, we'll sign you out on your other devices.",
+    "currentPassword": "Current password",
+    "submit": "Save password",
+    "pending": "Saving…",
+    "success": "Your password was changed.",
+    "back": "Back to my account"
+  },
+  "notFound": {
+    "metaTitle": "Not found",
+    "code": "404",
+    "title": "We couldn't find this page",
+    "body": "The link may be mistyped, the content may no longer exist, or you may not have access to it.",
+    "home": "Go home"
+  },
+  "appError": {
+    "title": "We couldn't load this page",
+    "body": "There may be a problem connecting to the server. Try again in a few seconds.",
+    "retry": "Try again"
+  },
+  "otp": {
+    "label": "Verification code",
+    "hint": "Six digits; check your spam folder too.",
+    "resend": "Send a new code",
+    "resendIn": "You can request another code in {seconds} s"
+  },
+  "verifyEmail": {
+    "metaTitle": "Verify email",
+    "eyebrow": "One more step",
+    "title": "Verify your email",
+    "subtitle": "Enter the code we sent to your email to activate your account.",
+    "submit": "Verify",
+    "pending": "Verifying…",
+    "codeSent": "If this account can be verified, a new code will arrive soon.",
+    "backToLogin": "Back to sign in"
+  },
+  "recovery": {
+    "metaTitle": "Recover password",
+    "title": "Reset your password",
+    "steps": {
+      "email": "Step 1 of 3 · Email",
+      "code": "Step 2 of 3 · Code",
+      "password": "Step 3 of 3 · New password"
+    },
+    "emailHint": "Enter your account's email and we'll send you a one-time code.",
+    "codeHint": "Enter the 6-digit code we sent to {email}.",
+    "passwordHint": "Choose a new password different from the current one.",
+    "sendCode": "Send me a code",
+    "verifyCode": "Verify code",
+    "savePassword": "Save new password",
+    "pending": "Working…",
+    "changeEmail": "Use another email",
+    "codeSent": "If the email exists, we sent you a new code.",
+    "doneTitle": "Password updated",
+    "done": "Your password was updated. For security, we signed you out on your other devices.",
+    "goToLogin": "Sign in",
+    "backToLogin": "Back to sign in"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "invalidEmail": "Enter a valid email.",
+    "passwordTooShort": "The password must have at least {min} characters.",
+    "passwordTooLong": "The password must have at most {max} characters.",
+    "passwordNoUppercase": "Add at least one uppercase letter.",
+    "passwordNoLowercase": "Add at least one lowercase letter.",
+    "passwordNoDigit": "Add at least one number.",
+    "passwordNoSpecial": "Add at least one special character (for example ! @ # $ %).",
+    "passwordMismatch": "The passwords don't match.",
+    "fullNameTooLong": "The name must have at most {max} characters.",
+    "fullNameInvalid": "Use only letters and spaces, without numbers or symbols.",
+    "invalidOtp": "Enter the six-digit code from the email.",
+    "invalidOption": "Choose one of the options.",
+    "consentRequired": "You must accept the consent to continue.",
+    "chatMessageTooLong": "The message must have at most {max} characters.",
+    "teamNameTooLong": "The team name must have at most {max} characters.",
+    "invalidDate": "Enter a valid date.",
+    "birthDateInFuture": "The date of birth must be before today.",
+    "ageOutOfRange": "The age must be between {min} and {max} years.",
+    "invalidNumber": "Enter a number, for example 72.5.",
+    "heightOutOfRange": "Enter a height between 1 and {max} cm.",
+    "weightOutOfRange": "Enter a weight between 1 and {max} kg."
+  },
+  "errors": {
+    "generic": "Something went wrong. Try again.",
+    "network": "We couldn't reach the server. Check your connection and try again.",
+    "validation_error": "Check the information you entered.",
+    "invalid_credentials": "Incorrect email or password.",
+    "email_not_registered": "There's no account with that email.",
+    "email_domain_undeliverable": "That email's domain doesn't exist or doesn't receive email. Check that it's spelled correctly.",
+    "account_disabled": "Your account is disabled.",
+    "email_not_verified": "Verify your email before signing in.",
+    "invalid_otp": "The code you entered isn't valid.",
+    "invalid_refresh_token": "Your session expired. Sign in again.",
+    "email_already_registered": "That email is already registered.",
+    "email_delivery_failed": "We couldn't send the email. Try again in a few moments.",
+    "password_reused": "The new password must be different from the current one.",
+    "invalid_current_password": "Your current password is incorrect.",
+    "forbidden": "You don't have permission to do this.",
+    "not_found": "We couldn't find what you were looking for.",
+    "invalid_video": "The file isn't a valid video.",
+    "video_too_large": "The video exceeds the maximum allowed size.",
+    "storage_unavailable": "We couldn't save the file right now. Try again in a few minutes.",
+    "consent_required": "You must accept the video consent before uploading a recording.",
+    "analysis_not_processed": "The assistant will be available when the analysis finishes.",
+    "chat_rate_limited": "You've asked many questions in a row. Wait a moment before sending another.",
+    "assistant_unavailable": "The assistant isn't available right now. Try again later.",
+    "team_name_taken": "You already have a team with that name.",
+    "invalid_team_member": "That athlete can't be in this team.",
+    "cannot_modify_own_account": "You can't change the role or status of your own account.",
+    "coach_has_athletes": "This coach still has athletes. Reassign them before changing the role.",
+    "invalid_role_assignment": "That user doesn't have the role required for this assignment."
+  },
+  "preferences": {
+    "title": "Preferences",
+    "language": "Language",
+    "languageNames": {
+      "es": "Español",
+      "en": "English"
+    },
+    "theme": "Theme",
+    "themeNames": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    }
+  }
+}
