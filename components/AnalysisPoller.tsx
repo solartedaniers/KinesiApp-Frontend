@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { API_PATHS } from "@/lib/api-paths";
 import { ANALYSIS_POLLING } from "@/lib/config";
-import { t } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 import { proxyUrl } from "@/lib/proxy-allowlist";
 import type { JumpAnalysis } from "@/lib/types";
 
@@ -18,6 +18,7 @@ import styles from "./AnalysisPoller.module.css";
  * servidor con el resultado. Con la pestaña oculta no consulta.
  */
 export function AnalysisPoller({ analysisId }: { analysisId: number }) {
+  const t = useT();
   const router = useRouter();
   const [attempt, setAttempt] = useState(0);
   const stalled = attempt >= ANALYSIS_POLLING.maxAttempts;

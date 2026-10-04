@@ -2,16 +2,20 @@ import type { Metadata } from "next";
 
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/Button";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 
 import styles from "./not-found.module.css";
 
-export const metadata: Metadata = { title: t.notFound.metaTitle };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.notFound.metaTitle };
+}
 
 // Única página 404: también la muestran los recursos ajenos (403 del backend → notFound) sin
 // revelar que existen. "Ir al inicio" pasa por /home, que decide según haya sesión o no
-export default function NotFound() {
+export default async function NotFound() {
+  const t = await getT();
   return (
     <main className={styles.page}>
       <Logo href={ROUTES.landing} />

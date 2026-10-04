@@ -4,7 +4,8 @@ import { apiRequest } from "../api";
 import { API_PATHS } from "../api-paths";
 import { ApiError, errorMessage, validationMessages } from "../errors";
 import { FORM_INTENT, formText, type FormState } from "../form-state";
-import { t } from "../i18n";
+import type { Dictionary } from "../i18n";
+import { getT } from "../i18n/server";
 import {
   collectErrors,
   validateEmail,
@@ -23,18 +24,20 @@ export type RecoveryField = "email" | "code" | "password" | "confirm_password";
 export type RecoveryState = FormState<RecoveryField> & { step: RecoveryStep; email?: string; code?: string };
 
 export async function recoverPassword(previous: RecoveryState, formData: FormData): Promise<RecoveryState> {
+  const t = await getT();
   const intent = formText(formData, "intent");
   if (intent === FORM_INTENT.restart) return { step: "email", values: { email: previous.email } };
 
   switch (previous.step) {
     case "email":
-      return requestCode(formText(formData, "email").trim(), previous);
+      return requestCode(t, formText(formData, "email").trim(), previous);
     case "code":
       return intent === FORM_INTENT.resend
-        ? requestCode(previous.email ?? "", previous)
-        : verifyCode(previous.email ?? "", formText(formData, "code").trim());
+        ? requestCode(t, previous.email ?? "", previous)
+        : verifyCode(t, previous.email ?? "", formText(formData, "code").trim());
     case "password":
       return confirmNewPassword(
+        t,
         previous,
         formText(formData, "password"),
         formText(formData, "confirm_password"),
@@ -44,13 +47,13 @@ export async function recoverPassword(previous: RecoveryState, formData: FormDat
   }
 }
 
-async function requestCode(email: string, previous: RecoveryState): Promise<RecoveryState> {
+async function requestCode(t: Dictionary, email: string, previous: RecoveryState): Promise<RecoveryState> {
   const errors = collectErrors({ email: validateEmail(email) });
-  if (errors) return { step: "email", fieldErrors: validationMessages(errors), values: { email } };
+  if (errors) return { step: "email", fieldErrors: validationMessages(t, errors), values: { email } };
   try {
     await apiRequest(API_PATHS.requestPasswordReset, { method: "POST", body: { email } });
   } catch (error) {
-    return { ...previous, error: errorMessage(error), values: { email } };
+    return { ...previous, error: errorMessage(t, error), values: { email } };
   }
   return {
     step: "code",
@@ -60,18 +63,19 @@ async function requestCode(email: string, previous: RecoveryState): Promise<Reco
   };
 }
 
-async function verifyCode(email: string, code: string): Promise<RecoveryState> {
+async function verifyCode(t: Dictionary, email: string, code: string): Promise<RecoveryState> {
   const errors = collectErrors({ code: validateOtp(code) });
-  if (errors) return { step: "code", email, fieldErrors: validationMessages(errors) };
+  if (errors) return { step: "code", email, fieldErrors: validationMessages(t, errors) };
   try {
     await apiRequest(API_PATHS.verifyPasswordResetCode, { method: "POST", body: { email, code } });
   } catch (error) {
-    return { step: "code", email, error: errorMessage(error) };
+    return { step: "code", email, error: errorMessage(t, error) };
   }
   return { step: "password", email, code };
 }
 
 async function confirmNewPassword(
+  t: Dictionary,
   previous: RecoveryState,
   password: string,
   confirmation: string,
@@ -81,7 +85,7 @@ async function confirmNewPassword(
     password: validateNewPassword(password),
     confirm_password: validatePasswordConfirmation(password, confirmation),
   });
-  if (errors) return { step: "password", email, code, fieldErrors: validationMessages(errors) };
+  if (errors) return { step: "password", email, code, fieldErrors: validationMessages(t, errors) };
 
   try {
     await apiRequest(API_PATHS.confirmPasswordReset, {
@@ -92,8 +96,8 @@ async function confirmNewPassword(
     // El código venció o se agotaron los intentos entre el paso 2 y el 3: hay que pedir otro
     const codeRejected = error instanceof ApiError && error.code === "invalid_otp";
     return codeRejected
-      ? { step: "code", email, error: errorMessage(error) }
-      : { step: "password", email, code, error: errorMessage(error) };
+      ? { step: "code", email, error: errorMessage(t, error) }
+      : { step: "password", email, code, error: errorMessage(t, error) };
   }
   return { step: "done", email };
 }

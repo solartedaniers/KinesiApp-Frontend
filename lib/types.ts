@@ -21,10 +21,12 @@ export type User = {
   is_active: boolean;
   is_verified: boolean;
   created_at: string;
-  avatar_data_url: string | null;
+  avatar_url: string | null;
+  video_consent_version: number | null;
 };
 
-export type Gender = "male" | "female" | "other";
+export const GENDERS = ["male", "female", "other"] as const;
+export type Gender = (typeof GENDERS)[number];
 
 /** AthleteProfileRead. `user_id` es null en deportistas gestionados por un coach (sin cuenta). */
 export type AthleteProfile = {
@@ -41,7 +43,8 @@ export type AthleteProfile = {
 };
 
 export type AnalysisStatus = "pending" | "processed" | "failed";
-export type MovementType = "jump" | "squat";
+export const MOVEMENT_TYPES = ["jump", "squat"] as const;
+export type MovementType = (typeof MOVEMENT_TYPES)[number];
 
 export type JointAngleMeasurement = {
   id: number;
@@ -49,6 +52,15 @@ export type JointAngleMeasurement = {
   angle_degrees: number;
   frame_timestamp_ms: number;
 };
+
+/** TeamRead: grupo de deportistas de un coach (o de un admin). */
+export type Team = { id: number; name: string; owner_id: number; athlete_ids: number[]; created_at: string };
+
+export type VideoUploadToken = { token: string; expires_at: string };
+export type VideoLimits = { max_size_bytes: number };
+
+export type ChatRole = "user" | "assistant";
+export type ChatMessage = { id: number; role: ChatRole; content: string; created_at: string };
 
 /** JumpAnalysisRead. `risk_score` está en [0, 1] y es null hasta que el análisis termina. */
 export type JumpAnalysis = {

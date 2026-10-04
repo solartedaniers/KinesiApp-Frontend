@@ -1,31 +1,36 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 
-import { t } from "@/lib/i18n";
-import { THEME_COLOR } from "@/lib/theme";
+import { I18nProvider } from "@/lib/i18n/client";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { getTheme } from "@/lib/preferences";
+import { browserThemeColors, themeAttribute } from "@/lib/theme";
 
 import "./globals.css";
 
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
 
-export const metadata: Metadata = {
-  title: { default: t.app.name, template: `%s · ${t.app.name}` },
-  description: t.app.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return {
+    title: { default: t.app.name, template: `%s · ${t.app.name}` },
+    description: t.app.description,
+  };
+}
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: THEME_COLOR.light },
-    { media: "(prefers-color-scheme: dark)", color: THEME_COLOR.dark },
-  ],
-};
+export async function generateViewport(): Promise<Viewport> {
+  return { width: "device-width", initialScale: 1, themeColor: browserThemeColors(await getTheme()) };
+}
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+// Idioma y tema salen de cookies ya en el servidor: el HTML llega traducido y con el tema correcto,
+// sin parpadeo ni desajuste de hidratación. Sin data-theme, el CSS sigue al sistema operativo
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const [locale, theme] = await Promise.all([getLocale(), getTheme()]);
   return (
-    <html lang="es" className={manrope.variable}>
-      <body>{children}</body>
+    <html lang={locale} data-theme={themeAttribute(theme)} className={manrope.variable}>
+      <body>
+        <I18nProvider locale={locale}>{children}</I18nProvider>
+      </body>
     </html>
   );
 }

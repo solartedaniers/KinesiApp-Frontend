@@ -1,14 +1,16 @@
 import Link from "next/link";
 
+import { PreferencesControls } from "@/components/app/PreferencesControls";
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/Button";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 
 import styles from "./landing.module.css";
 
-// SSG: sin cookies, headers ni datos por usuario; se genera en el build y se sirve desde CDN (§3)
-export default function LandingPage() {
+// SSR sólo por el idioma (cookie o Accept-Language): no hay datos del usuario
+export default async function LandingPage() {
+  const t = await getT();
   return (
     <div className={styles.page}>
       <header className={styles.topbar}>
@@ -41,7 +43,10 @@ export default function LandingPage() {
         </ul>
       </main>
 
-      <footer className={styles.footer}>{t.app.disclaimer}</footer>
+      <footer className={styles.footer}>
+        <PreferencesControls className={styles.preferences} />
+        <p>{t.app.disclaimer}</p>
+      </footer>
     </div>
   );
 }

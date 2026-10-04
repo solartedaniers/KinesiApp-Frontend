@@ -107,3 +107,8 @@
   font-size: var(--text-sm);
   border-top: 1px solid var(--color-border);
 }
+
+.preferences {
+  width: min(100%, 320px);
+  margin: 0 auto var(--space-3);
+}

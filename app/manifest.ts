@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
 
-import { t } from "@/lib/i18n";
 import { ROUTES } from "@/lib/routes";
 import { THEME_COLOR } from "@/lib/theme";
+import { DEFAULT_LOCALE, DICTIONARIES } from "@/lib/i18n";
 
-// Fase 6 completa íconos y el Service Worker (§7.2)
+// El manifest es uno solo para todos (lo cachea el navegador al instalar): va en el idioma por defecto
 export default function manifest(): MetadataRoute.Manifest {
+  const t = DICTIONARIES[DEFAULT_LOCALE];
   return {
     name: t.app.name,
     short_name: t.app.name,

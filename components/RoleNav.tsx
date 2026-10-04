@@ -5,21 +5,22 @@ import { usePathname } from "next/navigation";
 
 import { Icon } from "@/components/ui/Icon";
 import { activeNavHref, type NavItem } from "@/lib/access";
-import { t } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 
 import styles from "./RoleNav.module.css";
 
 /** Cliente sólo para marcar la pestaña activa (usePathname). */
-export function RoleNav({ items, variant, className }: { items: NavItem[]; variant: "sidebar" | "bottom"; className?: string }) {
+export function RoleNav({ items, className }: { items: NavItem[]; className?: string }) {
+  const t = useT();
   const active = activeNavHref(items, usePathname());
 
   return (
-    <nav className={[styles[variant], className].filter(Boolean).join(" ")} aria-label={t.nav.label}>
+    <nav className={className} aria-label={t.nav.label}>
       <ul className={styles.list}>
         {items.map((item) => (
           <li key={item.href}>
             <Link href={item.href} className={styles.link} aria-current={item.href === active ? "page" : undefined}>
-              <Icon name={item.icon} size={variant === "bottom" ? 22 : 20} />
+              <Icon name={item.icon} size={20} />
               <span>{t.nav[item.key]}</span>
             </Link>
           </li>

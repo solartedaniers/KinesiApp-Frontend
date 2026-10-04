@@ -4,7 +4,7 @@ import { apiRequest } from "../api";
 import { API_PATHS } from "../api-paths";
 import { errorMessage, validationMessages } from "../errors";
 import { formText, type FormState } from "../form-state";
-import { t } from "../i18n";
+import { getT } from "../i18n/server";
 import { readAccessToken, storeSession } from "../session";
 import type { TokenPair } from "../types";
 import { collectErrors, validateNewPassword, validatePasswordConfirmation, validateRequired } from "../validation";
@@ -15,6 +15,7 @@ export async function changePassword(
   _previous: FormState<ChangePasswordField>,
   formData: FormData,
 ): Promise<FormState<ChangePasswordField>> {
+  const t = await getT();
   const currentPassword = formText(formData, "current_password");
   const password = formText(formData, "password");
 
@@ -23,7 +24,7 @@ export async function changePassword(
     password: validateNewPassword(password),
     confirm_password: validatePasswordConfirmation(password, formText(formData, "confirm_password")),
   });
-  if (errors) return { fieldErrors: validationMessages(errors) };
+  if (errors) return { fieldErrors: validationMessages(t, errors) };
 
   let tokens: TokenPair;
   try {
@@ -33,7 +34,7 @@ export async function changePassword(
       accessToken: (await readAccessToken()) ?? undefined,
     });
   } catch (error) {
-    return { error: errorMessage(error) };
+    return { error: errorMessage(t, error) };
   }
 
   // El backend revoca todos los refresh tokens y emite un par nuevo para este dispositivo

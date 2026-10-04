@@ -1,6 +1,26 @@
-import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import Link from "next/link";
 
-// Fase 4: texto de consentimiento, ISR con la versión de GET /public/video-consent (§3). Ver docs/design/web-frontend-architecture.md.
-export default function Page() {
-  notFound();
+import styles from "@/components/app/Page.module.css";
+import { PageHeader } from "@/components/app/PageHeader";
+import { VideoConsentText } from "@/components/consent/VideoConsentText";
+import { getT } from "@/lib/i18n/server";
+import { ROUTES } from "@/lib/routes";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.consent.title };
+}
+
+// Pública: se puede leer antes de crear la cuenta
+export default async function LegalVideoConsentPage() {
+  const t = await getT();
+  return (
+    <main className={`${styles.page} ${styles.errorPage} ${styles.narrow}`}>
+      <PageHeader title={t.consent.title} />
+      <VideoConsentText />
+      <p>{t.app.disclaimer}</p>
+      <Link href={ROUTES.landing}>{t.notFound.home}</Link>
+    </main>
+  );
 }

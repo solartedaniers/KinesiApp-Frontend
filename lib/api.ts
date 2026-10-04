@@ -3,7 +3,7 @@ import "server-only";
 import { apiBaseUrl } from "./config";
 import { ApiError, NETWORK_ERROR_CODE, VALIDATION_ERROR_CODE } from "./errors";
 
-type RequestOptions = {
+export type RequestOptions = {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: unknown;
   accessToken?: string;

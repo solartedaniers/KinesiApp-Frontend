@@ -5,7 +5,7 @@ import type { IconName } from "@/components/ui/Icon";
 import { ROUTES } from "./routes";
 import type { UserRole } from "./types";
 
-export type NavKey = "home" | "analyses" | "stats" | "profile" | "team" | "users" | "assignments";
+export type NavKey = "home" | "analyses" | "stats" | "profile" | "athletes" | "teams" | "users" | "assignments";
 export type NavItem = {
   key: NavKey;
   href: string;
@@ -29,7 +29,9 @@ export const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
   ],
   coach: [
     { key: "home", href: "/coach", icon: "home" },
-    { key: "team", href: "/coach/analyses", icon: "video" },
+    { key: "athletes", href: ROUTES.coachAthletes, icon: "users" },
+    { key: "teams", href: "/coach/teams", icon: "folder" },
+    { key: "analyses", href: "/coach/analyses", icon: "video" },
     { key: "stats", href: "/coach/stats", icon: "chart" },
     { key: "profile", href: "/coach/profile", icon: "user", alsoActiveFor: [ROUTES.changePassword] },
   ],
@@ -37,6 +39,7 @@ export const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
     { key: "home", href: "/admin", icon: "home" },
     { key: "users", href: "/admin/users", icon: "users" },
     { key: "assignments", href: "/admin/assignments", icon: "link" },
+    { key: "teams", href: "/admin/teams", icon: "folder" },
     { key: "profile", href: "/admin/profile", icon: "user", alsoActiveFor: [ROUTES.changePassword] },
   ],
 };
@@ -63,8 +66,8 @@ export function activeNavHref(items: NavItem[], pathname: string): string | unde
     .sort((a, b) => b.href.length - a.href.length)[0]?.href;
 }
 
-/** Lista de grabaciones del rol (Grabaciones del deportista, Equipo del coach): destino de "volver". */
+/** Lista de grabaciones del rol: destino de "volver" desde el detalle de un análisis. */
 export function analysesListHref(role: UserRole): string {
-  const item = NAV_BY_ROLE[role].find((entry) => entry.key === "analyses" || entry.key === "team");
+  const item = NAV_BY_ROLE[role].find((entry) => entry.key === "analyses");
   return item?.href ?? HOME_BY_ROLE[role];
 }

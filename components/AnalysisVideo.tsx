@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { API_PATHS } from "@/lib/api-paths";
 import { publicApiBaseUrl, VIDEO_URL_RENEW_MARGIN_MS } from "@/lib/config";
-import { t } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 import { proxyUrl } from "@/lib/proxy-allowlist";
 import { videoSource, type VideoAccess, type VideoSource } from "@/lib/video";
 
@@ -17,6 +17,7 @@ import styles from "./AnalysisVideo.module.css";
  * falla; entonces se pide otra URL por /api/proxy y se retoma en el mismo segundo.
  */
 export function AnalysisVideo({ analysisId, initial }: { analysisId: number; initial: VideoSource }) {
+  const t = useT();
   const videoRef = useRef<HTMLVideoElement>(null);
   const resumeAt = useRef(0);
   const [source, setSource] = useState(initial);

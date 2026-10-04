@@ -1,0 +1,50 @@
+.editor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.controls {
+  display: grid;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 200px;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* El <label> del input de archivo, con el aspecto del botón secundario */
+.pick {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: 0 var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.pick:hover,
+.pick:focus-within {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.pick[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}

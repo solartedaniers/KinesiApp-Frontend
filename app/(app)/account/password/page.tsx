@@ -6,11 +6,15 @@ import styles from "@/components/app/Page.module.css";
 import { PageHeader } from "@/components/app/PageHeader";
 import { NAV_BY_ROLE, SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 
-export const metadata: Metadata = { title: t.changePassword.metaTitle };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.changePassword.metaTitle };
+}
 
 export default async function ChangePasswordPage() {
+  const t = await getT();
   const user = await requireRole(SECTION_ROLES.account);
   const profileHref = NAV_BY_ROLE[user.role].find((item) => item.key === "profile")?.href;
 

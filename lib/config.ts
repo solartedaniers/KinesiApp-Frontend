@@ -30,6 +30,14 @@ export const SESSION_COOKIE = {
   refresh: "kin_rt",
 } as const;
 
+// Preferencias del usuario (no son secretas ni de sesión): el servidor las lee para renderizar ya
+// en el idioma y el tema correctos, sin parpadeo
+export const PREFERENCE_COOKIE = {
+  locale: "kin_locale",
+  theme: "kin_theme",
+} as const;
+export const PREFERENCE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
+
 // Se renueva el access token cuando le queda menos que esto (§4.4 del diseño)
 export const ACCESS_REFRESH_LEEWAY_SECONDS = 60;
 
