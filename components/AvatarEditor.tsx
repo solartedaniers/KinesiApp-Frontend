@@ -81,7 +81,6 @@ export function AvatarEditor({
             </Button>
           )}
         </div>
-        <p className={styles.hint}>{t.avatar.hint}</p>
       </div>
     </div>
   );

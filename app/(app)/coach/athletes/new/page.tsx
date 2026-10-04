@@ -27,7 +27,7 @@ export default async function NewManagedAthletePage() {
         <Icon name="chevronRight" size={16} />
         {t.coach.backToTeam}
       </Link>
-      <PageHeader title={t.coach.newAthleteTitle} subtitle={t.coach.newAthleteSubtitle} />
+      <PageHeader title={t.coach.newAthleteTitle} />
       <section className={`${styles.card} ${styles.narrow}`}>
         <ManagedAthleteForm
           action={createManagedAthlete}

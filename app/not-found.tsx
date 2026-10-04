@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { Logo } from "@/components/brand/Logo";
+import { PreferencesControls } from "@/components/app/PreferencesControls";
 import { ButtonLink } from "@/components/ui/Button";
 import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
@@ -18,6 +19,7 @@ export default async function NotFound() {
   const t = await getT();
   return (
     <main className={styles.page}>
+      <PreferencesControls className={styles.preferences} />
       <Logo href={ROUTES.landing} />
       <p className={styles.code}>{t.notFound.code}</p>
       <h1 className={styles.title}>{t.notFound.title}</h1>

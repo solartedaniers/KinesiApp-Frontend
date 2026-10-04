@@ -23,7 +23,7 @@ export default async function CoachAthletesPage() {
   return (
     <div className={styles.page}>
       <div className={styles.headerRow}>
-        <PageHeader title={t.nav.athletes} subtitle={t.coach.athletesSubtitle} />
+        <PageHeader title={t.nav.athletes} />
         <ButtonLink href={ROUTES.newCoachAthlete}>
           <Icon name="plus" size={18} />
           {t.coach.newAthlete}
