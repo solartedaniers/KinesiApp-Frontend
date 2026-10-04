@@ -2,8 +2,8 @@ import Link from "next/link";
 
 import { EmptyState } from "@/components/app/EmptyState";
 import { Icon } from "@/components/ui/Icon";
-import { formatDateTime } from "@/lib/format";
-import { format, t } from "@/lib/i18n";
+import { format } from "@/lib/i18n";
+import { getFormat, getT } from "@/lib/i18n/server";
 import { analysisPath } from "@/lib/routes";
 import type { JumpAnalysis } from "@/lib/types";
 
@@ -12,13 +12,15 @@ import { RiskBadge } from "./RiskBadge";
 import { StatusBadge } from "./StatusBadge";
 
 /** Lista de grabaciones (ya ordenada por quien la pide). `subtitleFor` agrega contexto, p. ej. el deportista. */
-export function AnalysisList({
+export async function AnalysisList({
   analyses,
   subtitleFor,
 }: {
   analyses: JumpAnalysis[];
   subtitleFor?: (analysis: JumpAnalysis) => string | undefined;
 }) {
+  const t = await getT();
+  const fmt = await getFormat();
   if (analyses.length === 0) {
     return <EmptyState icon="video" title={t.analysis.listEmpty} body={t.analysis.listEmptyHint} />;
   }
@@ -26,7 +28,7 @@ export function AnalysisList({
   return (
     <ul className={styles.list}>
       {analyses.map((analysis) => {
-        const date = formatDateTime(analysis.recorded_at);
+        const date = fmt.dateTime(analysis.recorded_at);
         const subtitle = subtitleFor?.(analysis);
         return (
           <li key={analysis.id} className={styles.item}>

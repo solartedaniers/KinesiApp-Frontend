@@ -1,31 +1,31 @@
 import type { AnalysisStatistics } from "@/lib/analysis-stats";
-import { formatDateTime, formatPercent } from "@/lib/format";
-import { t } from "@/lib/i18n";
+import type { Formatters } from "@/lib/format";
+import type { Dictionary } from "@/lib/i18n";
 
 import type { StatTile } from "./StatGrid";
 
 type StatKey = keyof AnalysisStatistics;
 
-const LABELS: Record<StatKey, string> = {
-  total: t.stats.recordings,
-  processed: t.stats.processed,
-  pending: t.stats.pending,
-  failed: t.stats.failed,
-  averageRisk: t.stats.averageRisk,
-  highestRisk: t.stats.highestRisk,
-  highRiskCount: t.stats.highRiskCount,
-  lastRecordedAt: t.stats.lastRecording,
+const LABEL_KEYS: Record<StatKey, keyof Dictionary["stats"]> = {
+  total: "recordings",
+  processed: "processed",
+  pending: "pending",
+  failed: "failed",
+  averageRisk: "averageRisk",
+  highestRisk: "highestRisk",
+  highRiskCount: "highRiskCount",
+  lastRecordedAt: "lastRecording",
 };
 
-function display(stats: AnalysisStatistics, key: StatKey): string {
+function display(t: Dictionary, fmt: Formatters, stats: AnalysisStatistics, key: StatKey): string {
   const value = stats[key];
   if (value === null) return t.stats.none;
-  if (key === "averageRisk" || key === "highestRisk") return formatPercent(value as number);
-  if (key === "lastRecordedAt") return formatDateTime(value as string);
+  if (key === "averageRisk" || key === "highestRisk") return fmt.percent(value as number);
+  if (key === "lastRecordedAt") return fmt.dateTime(value as string);
   return String(value);
 }
 
-/** Tarjetas en el orden pedido: el dashboard muestra 4, la pestaña de estadísticas las 8. */
-export function statTiles(stats: AnalysisStatistics, keys: StatKey[]): StatTile[] {
-  return keys.map((key) => ({ label: LABELS[key], value: display(stats, key) }));
+/** Tarjetas en el orden pedido, en el idioma activo: el dashboard muestra 4, la pestaña de estadísticas las 8. */
+export function statTiles(t: Dictionary, fmt: Formatters, stats: AnalysisStatistics, keys: StatKey[]): StatTile[] {
+  return keys.map((key) => ({ label: t.stats[LABEL_KEYS[key]], value: display(t, fmt, stats, key) }));
 }

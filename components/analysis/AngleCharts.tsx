@@ -1,6 +1,6 @@
 import { anglesByJoint, type JointSeries } from "@/lib/analysis-stats";
-import { formatDegrees, formatSecondsFromMs } from "@/lib/format";
-import { format, t } from "@/lib/i18n";
+import { format } from "@/lib/i18n";
+import { getFormat, getT } from "@/lib/i18n/server";
 import type { JointAngleMeasurement } from "@/lib/types";
 
 import styles from "./AngleCharts.module.css";
@@ -10,7 +10,8 @@ import { ChartFigure, ChartNote, ChartTable, LineChart } from "./LineChart";
 const DEGREE_STEP = 30;
 
 /** Un gráfico pequeño por articulación (small multiples), no varias series de colores en uno. */
-export function AngleCharts({ measurements }: { measurements: JointAngleMeasurement[] }) {
+export async function AngleCharts({ measurements }: { measurements: JointAngleMeasurement[] }) {
+  const t = await getT();
   const series = anglesByJoint(measurements);
   if (series.length === 0) return <ChartNote>{t.analysisDetail.anglesEmpty}</ChartNote>;
   return (
@@ -22,14 +23,16 @@ export function AngleCharts({ measurements }: { measurements: JointAngleMeasurem
   );
 }
 
-function JointChart({ series }: { series: JointSeries }) {
+async function JointChart({ series }: { series: JointSeries }) {
+  const t = await getT();
+  const fmt = await getFormat();
   const max = Math.max(DEGREE_STEP, Math.ceil(series.peak / DEGREE_STEP) * DEGREE_STEP);
   const title = t.joints[series.joint] ?? series.joint;
   const first = series.points[0];
   const last = series.points[series.points.length - 1];
 
   return (
-    <ChartFigure title={title} subtitle={format(t.analysisDetail.peak, { value: formatDegrees(series.peak) })}>
+    <ChartFigure title={title} subtitle={format(t.analysisDetail.peak, { value: fmt.degrees(series.peak) })}>
       {series.points.length < 2 ? (
         <ChartNote>{t.angleChart.notEnough}</ChartNote>
       ) : (
@@ -39,12 +42,12 @@ function JointChart({ series }: { series: JointSeries }) {
             x: point.frame_timestamp_ms,
             y: point.angle_degrees,
             label: format(t.angleChart.pointLabel, {
-              time: formatSecondsFromMs(point.frame_timestamp_ms),
-              value: formatDegrees(point.angle_degrees),
+              time: fmt.secondsFromMs(point.frame_timestamp_ms),
+              value: fmt.degrees(point.angle_degrees),
             }),
           }))}
-          yAxis={{ min: 0, max, ticks: [0, max / 2, max], format: formatDegrees }}
-          xLabels={[formatSecondsFromMs(first.frame_timestamp_ms), formatSecondsFromMs(last.frame_timestamp_ms)]}
+          yAxis={{ min: 0, max, ticks: [0, max / 2, max], format: fmt.degrees }}
+          xLabels={[fmt.secondsFromMs(first.frame_timestamp_ms), fmt.secondsFromMs(last.frame_timestamp_ms)]}
         />
       )}
       <ChartTable
@@ -52,7 +55,7 @@ function JointChart({ series }: { series: JointSeries }) {
         headers={[t.angleChart.time, t.angleChart.angle]}
         rows={series.points.map((point) => ({
           key: point.id,
-          cells: [formatSecondsFromMs(point.frame_timestamp_ms), formatDegrees(point.angle_degrees)],
+          cells: [fmt.secondsFromMs(point.frame_timestamp_ms), fmt.degrees(point.angle_degrees)],
         }))}
       />
     </ChartFigure>

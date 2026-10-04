@@ -4,7 +4,7 @@ import { cache } from "react";
 
 import { sortByRecordedDesc } from "../analysis-stats";
 import { API_PATHS } from "../api-paths";
-import type { JumpAnalysis } from "../types";
+import type { ChatMessage, JumpAnalysis } from "../types";
 import type { VideoAccess } from "../video";
 import { authedGet } from "./request";
 
@@ -21,4 +21,9 @@ export const getAnalysis = cache((analysisId: number): Promise<JumpAnalysis> =>
 /** Token corto para el <video>: mismo control de acceso que el análisis. */
 export function getVideoAccess(analysisId: number): Promise<VideoAccess> {
   return authedGet<VideoAccess>(API_PATHS.analysisVideoAccess(analysisId));
+}
+
+/** Hilo del chat del usuario de la sesión sobre un análisis (cada usuario tiene el suyo). */
+export function listChatMessages(analysisId: number): Promise<ChatMessage[]> {
+  return authedGet<ChatMessage[]>(API_PATHS.chatMessages(analysisId));
 }

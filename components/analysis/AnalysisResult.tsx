@@ -1,7 +1,6 @@
 import pageStyles from "@/components/app/Page.module.css";
 import { riskLevel } from "@/lib/analysis-stats";
-import { formatDateTime, formatPercent } from "@/lib/format";
-import { t } from "@/lib/i18n";
+import { getFormat, getT } from "@/lib/i18n/server";
 import type { JumpAnalysis } from "@/lib/types";
 
 import styles from "./AnalysisDetail.module.css";
@@ -9,7 +8,9 @@ import { RiskBadge } from "./RiskBadge";
 import { StatusBadge } from "./StatusBadge";
 
 /** Puntaje de riesgo (la cifra principal de la pantalla) y los datos de la grabación. */
-export function AnalysisResult({ analysis }: { analysis: JumpAnalysis }) {
+export async function AnalysisResult({ analysis }: { analysis: JumpAnalysis }) {
+  const t = await getT();
+  const fmt = await getFormat();
   const score = analysis.risk_score;
   return (
     <section className={`${pageStyles.card} ${styles.result}`} aria-labelledby="result-title">
@@ -20,7 +21,7 @@ export function AnalysisResult({ analysis }: { analysis: JumpAnalysis }) {
         <div className={styles.score}>
           <span className={styles.scoreLabel}>{t.analysisDetail.riskScore}</span>
           <span className={styles.scoreValue}>
-            {formatPercent(score)}
+            {fmt.percent(score)}
             <RiskBadge score={score} withValue={false} />
           </span>
           <p className={styles.explanation}>{t.analysisDetail.riskExplanation[riskLevel(score)]}</p>
@@ -33,7 +34,7 @@ export function AnalysisResult({ analysis }: { analysis: JumpAnalysis }) {
         </div>
         <div>
           <dt>{t.analysisDetail.recordedAt}</dt>
-          <dd>{formatDateTime(analysis.recorded_at)}</dd>
+          <dd>{fmt.dateTime(analysis.recorded_at)}</dd>
         </div>
         <div>
           <dt>{t.analysisDetail.status}</dt>
