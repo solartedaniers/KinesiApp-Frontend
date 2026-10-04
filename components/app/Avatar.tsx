@@ -9,10 +9,11 @@ function initials(name: string): string {
     .join("");
 }
 
-/** Foto (data URL del backend) o iniciales. Decorativa: el nombre siempre va en texto al lado. */
+/** Foto (URL pública del bucket de imágenes) o iniciales. Decorativa: el nombre siempre va en texto al lado. */
 export function Avatar({ name, imageUrl, size = "md" }: { name: string; imageUrl?: string | null; size?: "md" | "lg" }) {
   const className = `${styles.avatar} ${styles[size]}`;
-  // next/image no aporta nada sobre una data URL ya incrustada
+  // <img> y no next/image: es una foto chica ya comprimida a 512 px, y next/image exigiría declarar
+  // el dominio del bucket en next.config y pasar cada foto por el optimizador
   // eslint-disable-next-line @next/next/no-img-element
   return imageUrl ? <img className={className} src={imageUrl} alt="" /> : <span className={className} aria-hidden>{initials(name)}</span>;
 }

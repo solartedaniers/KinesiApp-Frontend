@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import { format, t } from "@/lib/i18n";
+import { format } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 import { PASSWORD_MIN_LENGTH, type PasswordRequirement, passwordRequirementStatus } from "@/lib/validation";
 
 import { Icon } from "./Icon";
@@ -12,6 +13,7 @@ import styles from "./NewPasswordField.module.css";
 
 /** Contraseña nueva con la lista de requisitos marcándose mientras se escribe (feedback inmediato). */
 export function NewPasswordField(props: Omit<TextFieldProps, "type" | "action" | "hint" | "onChange">) {
+  const t = useT();
   const [value, setValue] = useState("");
   const status = passwordRequirementStatus(value);
   const listId = `field-${props.name}-requirements`;

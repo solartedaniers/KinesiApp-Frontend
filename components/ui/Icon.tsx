@@ -1,4 +1,4 @@
-// Íconos de trazo en SVG en línea: sin librería para una docena de glifos.
+// Íconos de trazo en SVG en línea: sin librería para unas decenas de glifos.
 const PATHS = {
   eye: "M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
   eyeOff:
@@ -16,6 +16,19 @@ const PATHS = {
   lock: "M5 11h14v10H5z M8 11V7a4 4 0 0 1 8 0v4",
   chevronRight: "M9 6l6 6-6 6",
   clock: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z M12 6v6l4 2",
+  plus: "M12 5v14 M5 12h14",
+  upload: "M12 15V3 M7 8l5-5 5 5 M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4",
+  trash: "M3 6h18 M8 6V4h8v2 M6 6l1 15h10l1-15 M10 11v6 M14 11v6",
+  edit: "M4 20h4L19 9l-4-4L4 16v4Z M13.5 6.5l4 4",
+  chat: "M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12Z",
+  menu: "M4 6h16 M4 12h16 M4 18h16",
+  close: "M6 6l12 12 M18 6 6 18",
+  sun: "M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z M12 1v2 M12 21v2 M4.2 4.2l1.4 1.4 M18.4 18.4l1.4 1.4 M1 12h2 M21 12h2 M4.2 19.8l1.4-1.4 M18.4 5.6l1.4-1.4",
+  moon: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z",
+  monitor: "M3 4h18v12H3z M8 20h8 M12 16v4",
+  globe: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z M2 12h20 M12 2a15 15 0 0 1 0 20 M12 2a15 15 0 0 0 0 20",
+  camera: "M4 7h3l2-3h6l2 3h3v13H4z M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z",
+  folder: "M3 6a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z",
 } as const;
 
 export type IconName = keyof typeof PATHS;

@@ -1,21 +1,21 @@
 import Link from "next/link";
 
 import { Icon } from "@/components/ui/Icon";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 import type { User } from "@/lib/types";
 
 import styles from "./Page.module.css";
-import { UserBadge } from "./UserBadge";
+import { PreferencesControls } from "./PreferencesControls";
 
 /** Datos de la cuenta (sólo lectura) y acceso al cambio de contraseña, común a los tres roles. */
-export function AccountPanel({ user }: { user: User }) {
+export async function AccountPanel({ user }: { user: User }) {
+  const t = await getT();
   return (
     <section className={`${styles.card} ${styles.narrow}`} aria-labelledby="account-section">
       <h2 id="account-section" className={styles.sectionTitle}>
         {t.account.section}
       </h2>
-      <UserBadge user={user} />
       <dl className={styles.details}>
         <div className={styles.detail}>
           <dt>{t.fields.email}</dt>
@@ -36,6 +36,8 @@ export function AccountPanel({ user }: { user: User }) {
         </span>
         <Icon name="chevronRight" />
       </Link>
+      <h2 className={styles.sectionTitle}>{t.preferences.title}</h2>
+      <PreferencesControls />
     </section>
   );
 }

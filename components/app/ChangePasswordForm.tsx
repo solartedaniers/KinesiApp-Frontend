@@ -9,12 +9,13 @@ import { NewPasswordField } from "@/components/ui/NewPasswordField";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { changePassword, type ChangePasswordField } from "@/lib/actions/account";
 import type { FormState } from "@/lib/form-state";
-import { t } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 import { PASSWORD_MIN_LENGTH } from "@/lib/validation";
 
 const INITIAL_STATE: FormState<ChangePasswordField> = {};
 
 export function ChangePasswordForm({ email }: { email: string }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState(changePassword, INITIAL_STATE);
 
   return (

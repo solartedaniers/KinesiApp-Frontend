@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { t } from "@/lib/i18n";
+import { useT } from "@/lib/i18n/client";
 import { PASSWORD_MAX_LENGTH } from "@/lib/validation";
 
 import { Icon } from "./Icon";
@@ -11,6 +11,7 @@ import { TextField, type TextFieldProps } from "./TextField";
 
 /** Campo de contraseña con botón para mostrarla: la única razón de ser componente de cliente. */
 export function PasswordField(props: Omit<TextFieldProps, "type" | "action">) {
+  const t = useT();
   const [visible, setVisible] = useState(false);
   const toggleLabel = visible ? t.fields.hidePassword : t.fields.showPassword;
 

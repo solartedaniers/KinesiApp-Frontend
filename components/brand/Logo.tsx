@@ -1,11 +1,12 @@
 import Link from "next/link";
 
-import { t } from "@/lib/i18n";
 
 import styles from "./Logo.module.css";
+import { getT } from "@/lib/i18n/server";
 
 /** Marca: cadera-rodilla-tobillo con el ángulo de la rodilla resaltado. */
-export function Logo({ href, onBrand = false, size = 32 }: { href: string; onBrand?: boolean; size?: number }) {
+export async function Logo({ href, onBrand = false, size = 32 }: { href: string; onBrand?: boolean; size?: number }) {
+  const t = await getT();
   return (
     <Link href={href} className={`${styles.logo} ${onBrand ? styles.onBrand : ""}`} aria-label={t.app.name}>
       <svg className={styles.mark} width={size} height={size} viewBox="0 0 32 32" aria-hidden>

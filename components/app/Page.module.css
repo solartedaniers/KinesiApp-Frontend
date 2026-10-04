@@ -131,3 +131,18 @@
 .backLink svg {
   transform: rotate(180deg);
 }
+
+/* Encabezado de página con una acción principal a la derecha; en celular la acción baja */
+.headerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}

@@ -1,4 +1,6 @@
-import { t } from "@/lib/i18n";
+"use client";
+
+import { useT } from "@/lib/i18n/client";
 import { OTP_LENGTH } from "@/lib/validation";
 
 import styles from "./Field.module.css";
@@ -6,6 +8,7 @@ import { TextField } from "./TextField";
 
 /** Código de un solo uso: teclado numérico y autocompletado desde el SMS/correo del sistema. */
 export function OtpField({ error, autoFocus }: { error?: string; autoFocus?: boolean }) {
+  const t = useT();
   return (
     <TextField
       name="code"
