@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { PreferencesControls } from "@/components/app/PreferencesControls";
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/Button";
@@ -15,10 +13,9 @@ export default async function LandingPage() {
     <div className={styles.page}>
       <header className={styles.topbar}>
         <Logo href={ROUTES.landing} />
-        <Link className={styles.topLink} href={ROUTES.login}>
-          {t.landing.signIn}
-        </Link>
       </header>
+
+      <PreferencesControls className={styles.preferences} />
 
       <main className={styles.hero}>
         <div className={styles.copy}>
@@ -44,7 +41,6 @@ export default async function LandingPage() {
       </main>
 
       <footer className={styles.footer}>
-        <PreferencesControls className={styles.preferences} />
         <p>{t.app.disclaimer}</p>
       </footer>
     </div>

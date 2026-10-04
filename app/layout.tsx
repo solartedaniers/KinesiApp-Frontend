@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 
 import { I18nProvider } from "@/lib/i18n/client";
+import { AmbientScene } from "@/components/app/AmbientScene";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { getTheme } from "@/lib/preferences";
 import { browserThemeColors, themeAttribute } from "@/lib/theme";
@@ -29,6 +30,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang={locale} data-theme={themeAttribute(theme)} className={manrope.variable}>
       <body>
+        <AmbientScene />
         <I18nProvider locale={locale}>{children}</I18nProvider>
       </body>
     </html>
