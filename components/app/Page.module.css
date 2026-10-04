@@ -3,6 +3,19 @@
   gap: var(--space-6);
 }
 
+.preferences {
+  position: fixed;
+  z-index: 20;
+  top: var(--space-4);
+  right: var(--space-5);
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(14px);
+}
+
 .header {
   display: grid;
   gap: var(--space-2);
@@ -27,7 +40,11 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
+
+.card:hover { border-color: var(--color-border-strong); box-shadow: 0 12px 30px var(--color-shadow-far); }
 
 .narrow {
   max-width: 520px;
@@ -98,6 +115,7 @@
 
 .rowLink:hover {
   background: var(--color-surface-muted);
+  transform: translateX(3px);
   text-decoration: none;
 }
 

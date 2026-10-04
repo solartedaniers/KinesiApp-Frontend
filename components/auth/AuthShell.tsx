@@ -13,17 +13,19 @@ export async function AuthShell({
   title,
   subtitle,
   footer,
+  login = false,
   children,
 }: {
   eyebrow?: string;
   title: string;
   subtitle?: ReactNode;
   footer?: ReactNode;
+  login?: boolean;
   children: ReactNode;
 }) {
   const t = await getT();
   return (
-    <div className={styles.shell}>
+    <div className={[styles.shell, login ? styles.loginShell : ""].filter(Boolean).join(" ")}>
       <aside className={styles.brand}>
         <Logo href={ROUTES.landing} onBrand />
         <p className={styles.tagline}>{t.authShell.tagline}</p>

@@ -8,6 +8,7 @@ import styles from "./AppShell.module.css";
 import { BfcacheGuard } from "./BfcacheGuard";
 import { MobileMenu } from "./MobileMenu";
 import { NavigationPanel } from "./NavigationPanel";
+import { PreferencesControls } from "./PreferencesControls";
 
 /**
  * Marco de la app autenticada según el rol: barra lateral en escritorio; en celular, barra superior
@@ -29,6 +30,8 @@ export function AppShell({ user, children }: { user: User; children: ReactNode }
         </MobileMenu>
         <Logo href={home} size={28} />
       </header>
+
+      <div className={styles.preferences}><PreferencesControls /></div>
 
       <main className={styles.content}>{children}</main>
       <BfcacheGuard />

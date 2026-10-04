@@ -13,24 +13,32 @@ const THEME_ICONS: Record<Theme, IconName> = { system: "monitor", light: "sun", 
  * Preferencias de la interfaz como botones de formulario con su Server Action: funcionan sin JS y la
  * página vuelve renderizada en el servidor ya con la preferencia aplicada.
  */
-export async function PreferencesControls({ className, compact = false }: { className?: string; compact?: boolean }) {
+export async function PreferencesControls({ className }: { className?: string; compact?: boolean }) {
   const [t, locale, theme] = await Promise.all([getT(), getLocale(), getTheme()]);
   return (
     <div className={[styles.controls, className].filter(Boolean).join(" ")}>
       <fieldset className={styles.group}>
-        <legend className={styles.legend}>{t.preferences.language}</legend>
+        <legend className={styles.visuallyHidden}>{t.preferences.language}</legend>
         <div className={styles.options}>
+          <span className={styles.globe} aria-hidden="true"><Icon name="globe" size={16} /></span>
           {LOCALES.map((option) => (
             <form key={option} action={setLocale.bind(null, option)}>
-              <button type="submit" className={styles.option} aria-pressed={option === locale} lang={option}>
-                {t.preferences.languageNames[option]}
+              <button
+                type="submit"
+                className={styles.option}
+                aria-pressed={option === locale}
+                aria-label={t.preferences.languageNames[option]}
+                title={t.preferences.languageNames[option]}
+                lang={option}
+              >
+                {option.toUpperCase()}
               </button>
             </form>
           ))}
         </div>
       </fieldset>
       <fieldset className={styles.group}>
-        <legend className={styles.legend}>{t.preferences.theme}</legend>
+        <legend className={styles.visuallyHidden}>{t.preferences.theme}</legend>
         <div className={styles.options}>
           {THEMES.map((option) => (
             <form key={option} action={setTheme.bind(null, option)}>
@@ -42,8 +50,6 @@ export async function PreferencesControls({ className, compact = false }: { clas
                 title={t.preferences.themeNames[option]}
               >
                 <Icon name={THEME_ICONS[option]} size={16} />
-                {/* Compacto (barra lateral, menú): sólo el ícono; el nombre queda en aria-label y title */}
-                {!compact && <span className={styles.optionLabel}>{t.preferences.themeNames[option]}</span>}
               </button>
             </form>
           ))}
