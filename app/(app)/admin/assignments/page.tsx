@@ -7,12 +7,16 @@ import { ListSkeleton } from "@/components/app/Skeleton";
 import { AssignmentsTable } from "@/components/admin/AdminData";
 import { SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 
-export const metadata: Metadata = { title: t.nav.assignments };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.nav.assignments };
+}
 
-// SSR (§3): entrenador de cada deportista; asignar (mutación) llega en la Fase 3
+// SSR (§3): entrenador de cada deportista, con la asignación en la misma fila
 export default async function Page() {
+  const t = await getT();
   await requireRole(SECTION_ROLES.admin);
   return (
     <div className={styles.page}>

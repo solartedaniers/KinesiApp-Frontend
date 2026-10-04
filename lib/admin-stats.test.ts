@@ -6,7 +6,7 @@ import { accountStatus, systemSummary, unassignedFirst } from "./admin-stats.ts"
 import type { AthleteProfile, User } from "./types.ts";
 
 const user = (id: number, role: User["role"], is_verified: boolean, is_active: boolean): User => ({
-  id, email: `u${id}@k.app`, full_name: `U${id}`, role, is_active, is_verified, created_at: "2026-09-01T00:00:00Z", avatar_data_url: null,
+  id, email: `u${id}@k.app`, full_name: `U${id}`, role, is_active, is_verified, created_at: "2026-09-01T00:00:00Z", avatar_url: null, video_consent_version: null,
 });
 const athlete = (id: number, name: string, coach_id: number | null): AthleteProfile => ({
   id, user_id: null, coach_id, display_name: name, display_avatar: null, is_managed: true, gender: "other", height_cm: 170, weight_kg: 60, birth_date: "2000-01-01",

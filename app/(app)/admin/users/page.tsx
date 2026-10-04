@@ -7,18 +7,22 @@ import { ListSkeleton } from "@/components/app/Skeleton";
 import { UsersTable } from "@/components/admin/AdminData";
 import { SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 
-export const metadata: Metadata = { title: t.nav.users };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getT();
+  return { title: t.nav.users };
+}
 
-// SSR (§3): todas las cuentas; el cambio de rol (mutación) llega en la Fase 3
+// SSR (§3): todas las cuentas, con cambio de rol y activación por fila
 export default async function Page() {
-  await requireRole(SECTION_ROLES.admin);
+  const t = await getT();
+  const admin = await requireRole(SECTION_ROLES.admin);
   return (
     <div className={styles.page}>
       <PageHeader title={t.nav.users} subtitle={t.admin.usersSubtitle} />
       <Suspense fallback={<ListSkeleton rows={6} />}>
-        <UsersTable />
+        <UsersTable currentUserId={admin.id} />
       </Suspense>
     </div>
   );

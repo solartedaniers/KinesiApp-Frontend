@@ -1,7 +1,7 @@
 import badgeStyles from "@/components/analysis/Badge.module.css";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import type { AccountStatus } from "@/lib/admin-stats";
-import { t } from "@/lib/i18n";
+import { getT } from "@/lib/i18n/server";
 
 const STYLE: Record<AccountStatus, { tone: string; icon: IconName }> = {
   active: { tone: badgeStyles.success, icon: "check" },
@@ -9,7 +9,8 @@ const STYLE: Record<AccountStatus, { tone: string; icon: IconName }> = {
   disabled: { tone: badgeStyles.danger, icon: "alert" },
 };
 
-export function AccountStatusBadge({ status }: { status: AccountStatus }) {
+export async function AccountStatusBadge({ status }: { status: AccountStatus }) {
+  const t = await getT();
   return (
     <span className={`${badgeStyles.badge} ${STYLE[status].tone}`}>
       <Icon name={STYLE[status].icon} size={14} />
