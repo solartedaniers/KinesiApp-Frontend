@@ -1,41 +1,48 @@
-/* Tokens de diseño: único lugar con colores, tipografía, espacios y radios.
+/* Tokens de diseño: único lugar con colores, tipografía, espacios y radios. Cada color define su
+   par claro/oscuro con light-dark(); Lightning CSS (Next) lo transpila para navegadores viejos.
    Los componentes sólo usan var(--...). Punto de corte único: 900px (celular por debajo,
    escritorio desde ahí); CSS no admite variables en @media, por eso va escrito en cada módulo. */
 :root {
-  --color-bg: #f3f6f8;
-  --color-surface: #ffffff;
-  --color-surface-muted: #eaf0f3;
-  --color-text: #0f1d2a;
-  --color-text-muted: #566777;
-  --color-border: #d6e0e7;
-  --color-border-strong: #b5c4cf;
+  /* Sistema por defecto; data-theme (cookie kin_theme) lo fija en claro u oscuro */
+  color-scheme: light dark;
 
-  --color-primary: #0b7a75;
-  --color-primary-hover: #086661;
-  --color-primary-soft: #dcf1ef;
-  --color-on-primary: #ffffff;
-  --color-accent: #f2704e;
+  --color-bg: light-dark(#f3f6f8, #0a1117);
+  --color-surface: light-dark(#ffffff, #111c24);
+  --color-surface-muted: light-dark(#eaf0f3, #16242e);
+  --color-text: light-dark(#0f1d2a, #e5edf2);
+  --color-text-muted: light-dark(#566777, #93a5b4);
+  --color-border: light-dark(#d6e0e7, #22323d);
+  --color-border-strong: light-dark(#b5c4cf, #33485a);
 
-  --color-danger: #c23b3b;
-  --color-danger-soft: #fbe9e9;
-  --color-success: #1d7f55;
-  --color-success-soft: #e2f4ec;
-  --color-info-soft: #e6f0f8;
-  --color-info: #245d8f;
+  --color-primary: light-dark(#0b7a75, #2db3a8);
+  --color-primary-hover: light-dark(#086661, #45c6bb);
+  --color-primary-soft: light-dark(#dcf1ef, #0f3532);
+  --color-on-primary: light-dark(#ffffff, #03201d);
+  --color-accent: light-dark(#f2704e, #ff8b6b);
 
-  --color-focus: rgb(11 122 117 / 0.35);
-  --color-warning: #9a5b00;
-  --color-warning-soft: #fdf0dc;
+  --color-danger: light-dark(#c23b3b, #f07a7a);
+  --color-danger-soft: light-dark(#fbe9e9, #3a1b1d);
+  --color-on-danger: light-dark(#ffffff, #2a0b0c);
+  --color-backdrop: light-dark(rgb(15 29 42 / 0.45), rgb(0 0 0 / 0.6));
+  --color-success: light-dark(#1d7f55, #5fd39f);
+  --color-success-soft: light-dark(#e2f4ec, #123326);
+  --color-info-soft: light-dark(#e6f0f8, #13283a);
+  --color-info: light-dark(#245d8f, #8cc2ef);
+
+  --color-focus: light-dark(rgb(11 122 117 / 0.35), rgb(45 179 168 / 0.4));
+  --color-warning: light-dark(#9a5b00, #f2b45c);
+  --color-warning-soft: light-dark(#fdf0dc, #3a2a12);
 
   /* Serie de gráficos: validado con el validador de dataviz contra --color-surface (claro) */
-  --color-chart-series: #009688;
-  --color-chart-grid: #e3e9ee;
+  --color-chart-series: light-dark(#009688, #1fa396);
+  --color-chart-grid: light-dark(#e3e9ee, #1d2b36);
 
   /* Panel de marca (pantallas de acceso) */
-  --color-brand-from: #0a2233;
-  --color-brand-to: #0b5e5a;
+  --color-brand-from: light-dark(#0a2233, #061520);
+  --color-brand-to: light-dark(#0b5e5a, #0a4440);
   --color-on-brand: #eaf6f5;
   --color-on-brand-muted: rgb(234 246 245 / 0.72);
+  --color-brand-glow: rgb(255 255 255 / 0.08);
 
   --font-sans: var(--font-manrope), system-ui, -apple-system, "Segoe UI", sans-serif;
   --text-xs: 0.78rem;
@@ -63,50 +70,25 @@
   --radius-lg: 18px;
   --radius-pill: 999px;
 
-  --shadow-card: 0 1px 2px rgb(15 29 42 / 0.05), 0 8px 24px rgb(15 29 42 / 0.06);
+  --color-shadow-near: light-dark(rgb(15 29 42 / 0.05), rgb(0 0 0 / 0.4));
+  --color-shadow-far: light-dark(rgb(15 29 42 / 0.06), rgb(0 0 0 / 0.35));
+  --shadow-card: 0 1px 2px var(--color-shadow-near), 0 8px 24px var(--color-shadow-far);
   --control-height: 46px;
   --content-max: 1080px;
   --sidebar-width: 256px;
   --topbar-height: 60px;
-  --bottom-nav-height: 64px;
   --transition-fast: 140ms ease;
+  /* Cambio de tema y apertura del menú: corto, para que se note sin demorar */
+  --transition-theme: 220ms ease;
+  --transition-panel: 200ms ease;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0a1117;
-    --color-surface: #111c24;
-    --color-surface-muted: #16242e;
-    --color-text: #e5edf2;
-    --color-text-muted: #93a5b4;
-    --color-border: #22323d;
-    --color-border-strong: #33485a;
+:root[data-theme="light"] {
+  color-scheme: light;
+}
 
-    --color-primary: #2db3a8;
-    --color-primary-hover: #45c6bb;
-    --color-primary-soft: #0f3532;
-    --color-on-primary: #03201d;
-    --color-accent: #ff8b6b;
-
-    --color-danger: #f07a7a;
-    --color-danger-soft: #3a1b1d;
-    --color-success: #5fd39f;
-    --color-success-soft: #123326;
-    --color-info-soft: #13283a;
-    --color-info: #8cc2ef;
-
-    --color-focus: rgb(45 179 168 / 0.4);
-    --color-warning: #f2b45c;
-    --color-warning-soft: #3a2a12;
-
-    --color-chart-series: #1fa396;
-    --color-chart-grid: #1d2b36;
-
-    --color-brand-from: #061520;
-    --color-brand-to: #0a4440;
-
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px rgb(0 0 0 / 0.35);
-  }
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 * {
@@ -115,7 +97,6 @@
 }
 
 html {
-  color-scheme: light dark;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -123,6 +104,7 @@ body {
   min-height: 100dvh;
   background: var(--color-bg);
   color: var(--color-text);
+  transition: background-color var(--transition-theme), color var(--transition-theme);
   font-family: var(--font-sans);
   font-size: var(--text-md);
   font-weight: var(--weight-regular);
@@ -153,6 +135,11 @@ textarea {
   color: inherit;
 }
 
+/* Con un diálogo modal abierto (menú, confirmación) la página de fondo no se desplaza */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -160,4 +147,15 @@ textarea {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+
+/* Quien pidió menos movimiento no ve transiciones ni animaciones */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
