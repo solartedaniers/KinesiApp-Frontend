@@ -12,6 +12,8 @@ import pageStyles from "@/components/app/Page.module.css";
 import { PageHeader } from "@/components/app/PageHeader";
 import { Section } from "@/components/app/Section";
 import { ChartSkeleton } from "@/components/app/Skeleton";
+import { AnalysisChatCard } from "@/components/chat/AnalysisChatCard";
+import { ChatCardSkeleton } from "@/components/chat/ChatCardSkeleton";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { ButtonLink } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
@@ -22,7 +24,7 @@ import { getAnalysis } from "@/lib/data/analyses";
 import { listMyAthletes } from "@/lib/data/coach";
 import { requireRole } from "@/lib/guard";
 import { getFormat, getT } from "@/lib/i18n/server";
-import { chatPath } from "@/lib/routes";
+import { reportPath } from "@/lib/routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
@@ -59,9 +61,9 @@ export default async function AnalysisPage({ params }: PageProps<"/analysis/[id]
 
       <div className={pageStyles.actions}>
         {analysis.status === "processed" && (
-          <ButtonLink href={chatPath(analysis.id)}>
-            <Icon name="chat" size={18} />
-            {t.chat.open}
+          <ButtonLink href={reportPath(analysis.id)} variant="secondary">
+            <Icon name="upload" size={18} />
+            {t.report.export}
           </ButtonLink>
         )}
         {canDelete && (
@@ -91,6 +93,15 @@ export default async function AnalysisPage({ params }: PageProps<"/analysis/[id]
         </Section>
         <AnalysisResult analysis={analysis} />
       </div>
+
+      {/* La explicación de la IA llega sola apenas el resultado está listo; se puede seguir preguntando */}
+      {analysis.status === "processed" && (
+        <Section title={t.chat.title}>
+          <Suspense fallback={<ChatCardSkeleton />}>
+            <AnalysisChatCard analysisId={analysis.id} />
+          </Suspense>
+        </Section>
+      )}
 
       {analysis.status === "processed" && (
         <Section title={t.analysisDetail.angles}>

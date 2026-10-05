@@ -85,12 +85,13 @@ export function teamStatsPath(teamId: number): string {
   return `/coach/stats?${new URLSearchParams({ [TEAM_PARAM]: String(teamId) })}`;
 }
 
-export function withNext(path: string, next: string): string {
-  return `${path}?${new URLSearchParams({ [NEXT_PARAM]: next })}`;
+/** Informe imprimible (Guardar como PDF) de un análisis concreto. */
+export function reportPath(analysisId: number): string {
+  return `/report/${analysisId}`;
 }
 
-export function chatPath(analysisId: number): string {
-  return `${analysisPath(analysisId)}/chat`;
+export function withNext(path: string, next: string): string {
+  return `${path}?${new URLSearchParams({ [NEXT_PARAM]: next })}`;
 }
 
 export function withEmail(path: string, email: string): string {

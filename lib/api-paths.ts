@@ -37,4 +37,5 @@ export const API_PATHS = {
   analysisVideoAccess: (analysisId: number) => `/jump-analyses/${analysisId}/video-access`,
   analysisVideo: (analysisId: number) => `/jump-analyses/${analysisId}/video`,
   chatMessages: (analysisId: number) => `/jump-analyses/${analysisId}/chat/messages`,
+  chatOpening: (analysisId: number) => `/jump-analyses/${analysisId}/chat/opening`,
 } as const;
