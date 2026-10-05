@@ -18,7 +18,7 @@ export default async function LegalVideoConsentPage() {
   const t = await getT();
   return (
     <>
-      <PreferencesControls className={styles.preferences} />
+      <PreferencesControls />
       <main className={`${styles.page} ${styles.errorPage} ${styles.narrow}`}>
         <PageHeader title={t.consent.title} />
         <VideoConsentText />

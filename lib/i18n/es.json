@@ -21,7 +21,7 @@
       },
       {
         "title": "En cualquier dispositivo",
-        "body": "Funciona en el navegador del celular y del computador."
+        "body": "Funciona en el navegador: puedes acceder desde tu celular o desde tu computador."
       }
     ]
   },
@@ -188,8 +188,7 @@
     "guide": {
       "title": "Para un análisis confiable",
       "items": [
-        "Graba a 30 fps y sube el archivo original, sin reenviarlo por WhatsApp u otras apps que lo compriman.",
-        "Sin espejos ni otras personas en el fondo.",
+        "Graba a 30 fps y sube el archivo original.",
         "Los pies dentro del cuadro durante todo el movimiento, también al aterrizar.",
         "Cámara fija, de costado o a tres cuartos del deportista."
       ]
@@ -211,10 +210,7 @@
     "readLegal": "Ver el texto completo"
   },
   "chat": {
-    "metaTitle": "Asistente",
-    "title": "Pregúntale al asistente",
-    "open": "Preguntar al asistente",
-    "back": "Volver a la grabación",
+    "title": "Explicación del asistente",
     "empty": "Todavía no hay mensajes. Pregunta, por ejemplo, qué significa tu resultado o cómo mejorar la técnica.",
     "label": "Tu pregunta",
     "placeholder": "Escribe tu pregunta sobre este análisis…",
@@ -225,7 +221,8 @@
       "user": "Tú",
       "assistant": "Asistente"
     },
-    "disclaimer": "El asistente explica el resultado del análisis de forma general. No reemplaza la valoración de un profesional de la salud."
+    "disclaimer": "El asistente explica el resultado del análisis de forma general. No reemplaza la valoración de un profesional de la salud.",
+    "preparing": "El asistente está preparando la explicación del resultado…"
   },
   "angleChart": {
     "subtitle": "Ángulo a lo largo del movimiento.",
@@ -539,7 +536,6 @@
     "invalid_role_assignment": "Ese usuario no tiene el rol necesario para esta asignación."
   },
   "preferences": {
-    "title": "Preferencias",
     "language": "Idioma",
     "languageNames": {
       "es": "Español",
@@ -551,5 +547,22 @@
       "light": "Claro",
       "dark": "Oscuro"
     }
+  },
+  "report": {
+    "export": "Exportar a PDF",
+    "download": "Descargar PDF",
+    "back": "Volver al análisis",
+    "printHint": "En el diálogo que se abre, elige «Guardar como PDF» como destino.",
+    "fileTitle": "Informe de análisis {date}",
+    "title": "Informe del análisis de movimiento",
+    "subtitle": "{movement} · {date}",
+    "coach": "Entrenador responsable",
+    "noCoach": "Sin entrenador asignado",
+    "athlete": "Deportista",
+    "charts": "Gráficas y datos de los ángulos articulares",
+    "explanation": "Explicación del asistente",
+    "noExplanation": "El asistente todavía no generó una explicación para este análisis.",
+    "disclaimerTitle": "Importante",
+    "disclaimer": "Este informe es una estimación automática a partir de un video, con umbrales sin validación clínica. No es un diagnóstico y no reemplaza la evaluación de un profesional de la salud."
   }
 }

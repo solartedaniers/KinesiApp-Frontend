@@ -15,7 +15,7 @@ export default async function LandingPage() {
         <Logo href={ROUTES.landing} />
       </header>
 
-      <PreferencesControls className={styles.preferences} />
+      <PreferencesControls />
 
       <main className={styles.hero}>
         <div className={styles.copy}>

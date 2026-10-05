@@ -21,7 +21,7 @@
       },
       {
         "title": "On any device",
-        "body": "Works in the browser on your phone and your computer."
+        "body": "Works in the browser: you can use it from your phone or your computer."
       }
     ]
   },
@@ -188,8 +188,7 @@
     "guide": {
       "title": "For a reliable analysis",
       "items": [
-        "Record at 30 fps and upload the original file, without forwarding it through WhatsApp or other apps that compress it.",
-        "No mirrors or other people in the background.",
+        "Record at 30 fps and upload the original file.",
         "Feet inside the frame for the whole movement, including the landing.",
         "A steady camera, to the side or at three quarters of the athlete."
       ]
@@ -211,10 +210,7 @@
     "readLegal": "Read the full text"
   },
   "chat": {
-    "metaTitle": "Assistant",
-    "title": "Ask the assistant",
-    "open": "Ask the assistant",
-    "back": "Back to the recording",
+    "title": "Assistant's explanation",
     "empty": "No messages yet. Ask, for example, what your result means or how to improve your technique.",
     "label": "Your question",
     "placeholder": "Type your question about this analysis…",
@@ -225,7 +221,8 @@
       "user": "You",
       "assistant": "Assistant"
     },
-    "disclaimer": "The assistant explains the analysis result in general terms. It doesn't replace an assessment by a health professional."
+    "disclaimer": "The assistant explains the analysis result in general terms. It doesn't replace an assessment by a health professional.",
+    "preparing": "The assistant is preparing the explanation of the result…"
   },
   "angleChart": {
     "subtitle": "Angle throughout the movement.",
@@ -539,7 +536,6 @@
     "invalid_role_assignment": "That user doesn't have the role required for this assignment."
   },
   "preferences": {
-    "title": "Preferences",
     "language": "Language",
     "languageNames": {
       "es": "Español",
@@ -551,5 +547,22 @@
       "light": "Light",
       "dark": "Dark"
     }
+  },
+  "report": {
+    "export": "Export to PDF",
+    "download": "Download PDF",
+    "back": "Back to the analysis",
+    "printHint": "In the dialog that opens, choose \"Save as PDF\" as the destination.",
+    "fileTitle": "Analysis report {date}",
+    "title": "Movement analysis report",
+    "subtitle": "{movement} · {date}",
+    "coach": "Responsible coach",
+    "noCoach": "No coach assigned",
+    "athlete": "Athlete",
+    "charts": "Joint angle charts and data",
+    "explanation": "Assistant's explanation",
+    "noExplanation": "The assistant hasn't generated an explanation for this analysis yet.",
+    "disclaimerTitle": "Important",
+    "disclaimer": "This report is an automatic estimate based on a video, with thresholds that have no clinical validation. It is not a diagnosis and does not replace an assessment by a health professional."
   }
 }
