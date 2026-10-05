@@ -6,7 +6,6 @@ import { ROUTES } from "@/lib/routes";
 import type { User } from "@/lib/types";
 
 import styles from "./Page.module.css";
-import { PreferencesControls } from "./PreferencesControls";
 
 /** Datos de la cuenta (sólo lectura) y acceso al cambio de contraseña, común a los tres roles. */
 export async function AccountPanel({ user }: { user: User }) {
@@ -36,8 +35,6 @@ export async function AccountPanel({ user }: { user: User }) {
         </span>
         <Icon name="chevronRight" />
       </Link>
-      <h2 className={styles.sectionTitle}>{t.preferences.title}</h2>
-      <PreferencesControls />
     </section>
   );
 }

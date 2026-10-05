@@ -19,7 +19,7 @@ export default async function NotFound() {
   const t = await getT();
   return (
     <main className={styles.page}>
-      <PreferencesControls className={styles.preferences} />
+      <PreferencesControls />
       <Logo href={ROUTES.landing} />
       <p className={styles.code}>{t.notFound.code}</p>
       <h1 className={styles.title}>{t.notFound.title}</h1>
