@@ -28,10 +28,10 @@ export function AppShell({ user, children }: { user: User; children: ReactNode }
         <MobileMenu>
           <NavigationPanel user={user} />
         </MobileMenu>
-        <Logo href={home} size={28} />
+        <Logo href={home} size={28} collapsible />
       </header>
 
-      <div className={styles.preferences}><PreferencesControls /></div>
+      <PreferencesControls />
 
       <main className={styles.content}>{children}</main>
       <BfcacheGuard />

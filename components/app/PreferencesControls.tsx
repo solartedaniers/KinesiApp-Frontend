@@ -13,10 +13,10 @@ const THEME_ICONS: Record<Theme, IconName> = { system: "monitor", light: "sun", 
  * Preferencias de la interfaz como botones de formulario con su Server Action: funcionan sin JS y la
  * página vuelve renderizada en el servidor ya con la preferencia aplicada.
  */
-export async function PreferencesControls({ className }: { className?: string; compact?: boolean }) {
+export async function PreferencesControls() {
   const [t, locale, theme] = await Promise.all([getT(), getLocale(), getTheme()]);
   return (
-    <div className={[styles.controls, className].filter(Boolean).join(" ")}>
+    <div className={styles.controls}>
       <fieldset className={styles.group}>
         <legend className={styles.visuallyHidden}>{t.preferences.language}</legend>
         <div className={styles.options}>

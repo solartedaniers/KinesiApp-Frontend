@@ -167,3 +167,14 @@ html:has(dialog[open]) {
     animation-iteration-count: 1 !important;
   }
 }
+
+@media print {
+  :root,
+  :root[data-theme] {
+    color-scheme: light;
+  }
+
+  body {
+    background: var(--color-surface);
+  }
+}

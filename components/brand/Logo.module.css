@@ -36,3 +36,8 @@
 .onBrand .markStroke {
   stroke: var(--color-brand-from);
 }
+
+/* Donde comparte fila con el menú y las preferencias (barra superior de la app) */
+@media (max-width: 359px) {
+  .collapsible span { display: none; }
+}
