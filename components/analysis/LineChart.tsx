@@ -99,9 +99,20 @@ export function LineChart({
 }
 
 /** Vista accesible de los datos de un gráfico, plegada por defecto. */
-export function ChartTable({ toggle, headers, rows }: { toggle: string; headers: [string, string]; rows: { key: string | number; cells: [ReactNode, ReactNode] }[] }) {
+export function ChartTable({
+  toggle,
+  headers,
+  rows,
+  open = false,
+}: {
+  toggle: string;
+  headers: [string, string];
+  rows: { key: string | number; cells: [ReactNode, ReactNode] }[];
+  /** Abierta de entrada: el informe imprimible muestra la tabla además del gráfico. */
+  open?: boolean;
+}) {
   return (
-    <details className={styles.table}>
+    <details className={styles.table} open={open}>
       <summary>{toggle}</summary>
       <table>
         <thead>

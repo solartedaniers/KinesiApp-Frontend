@@ -23,6 +23,20 @@ export async function authedGet<T>(path: string): Promise<T> {
   }
 }
 
+/**
+ * POST idempotente desde un Server Component (p. ej. abrir el chat al mostrar un análisis). Como
+ * authedGet, cierra la sesión con 401 y esconde 403/404; cualquier otro error se propaga a quien llama.
+ */
+export async function authedPost<T>(path: string): Promise<T> {
+  try {
+    return await apiRequest<T>(path, { method: "POST", accessToken: (await readAccessToken()) ?? undefined });
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 401) redirect(ROUTES.sessionExpired);
+    if (error instanceof ApiError && (error.status === 403 || error.status === 404)) notFound();
+    throw error;
+  }
+}
+
 /** Igual que authedGet, pero un 404 es un resultado válido (p. ej. "todavía no tiene ficha"). */
 export async function authedGetOrNull<T>(path: string): Promise<T | null> {
   try {

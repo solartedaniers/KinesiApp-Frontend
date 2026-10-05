@@ -10,20 +10,20 @@ import { ChartFigure, ChartNote, ChartTable, LineChart } from "./LineChart";
 const DEGREE_STEP = 30;
 
 /** Un gráfico pequeño por articulación (small multiples), no varias series de colores en uno. */
-export async function AngleCharts({ measurements }: { measurements: JointAngleMeasurement[] }) {
+export async function AngleCharts({ measurements, tablesOpen = false }: { measurements: JointAngleMeasurement[]; tablesOpen?: boolean }) {
   const t = await getT();
   const series = anglesByJoint(measurements);
   if (series.length === 0) return <ChartNote>{t.analysisDetail.anglesEmpty}</ChartNote>;
   return (
     <div className={styles.grid}>
       {series.map((joint) => (
-        <JointChart key={joint.joint} series={joint} />
+        <JointChart key={joint.joint} series={joint} tableOpen={tablesOpen} />
       ))}
     </div>
   );
 }
 
-async function JointChart({ series }: { series: JointSeries }) {
+async function JointChart({ series, tableOpen }: { series: JointSeries; tableOpen: boolean }) {
   const t = await getT();
   const fmt = await getFormat();
   const max = Math.max(DEGREE_STEP, Math.ceil(series.peak / DEGREE_STEP) * DEGREE_STEP);
@@ -51,6 +51,7 @@ async function JointChart({ series }: { series: JointSeries }) {
         />
       )}
       <ChartTable
+        open={tableOpen}
         toggle={t.angleChart.tableToggle}
         headers={[t.angleChart.time, t.angleChart.angle]}
         rows={series.points.map((point) => ({

@@ -51,7 +51,7 @@ export async function AuthShell({
           {children}
           {footer && <div className={styles.footer}>{footer}</div>}
         </section>
-        <PreferencesControls className={styles.preferences} />
+        <PreferencesControls />
       </main>
     </div>
   );
