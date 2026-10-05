@@ -33,6 +33,7 @@ export type AthleteProfile = {
   id: number;
   user_id: number | null;
   coach_id: number | null;
+  coach_name: string | null;
   display_name: string;
   display_avatar: string | null;
   is_managed: boolean;

@@ -6,7 +6,7 @@ import { findTeam, scopeToTeam, statsByTeam } from "./team-stats.ts";
 import type { AthleteProfile, JumpAnalysis, Team } from "./types.ts";
 
 const athlete = (id: number): AthleteProfile => ({
-  id, user_id: null, coach_id: 1, display_name: `A${id}`, display_avatar: null, is_managed: true,
+  id, user_id: null, coach_id: 1, coach_name: "Coach", display_name: `A${id}`, display_avatar: null, is_managed: true,
   gender: "female", height_cm: 160, weight_kg: 55, birth_date: "2008-01-01",
 });
 const analysis = (id: number, athleteId: number, score: number | null): JumpAnalysis => ({
