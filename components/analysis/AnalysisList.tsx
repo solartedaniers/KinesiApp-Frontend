@@ -7,9 +7,21 @@ import { getFormat, getT } from "@/lib/i18n/server";
 import { analysisPath } from "@/lib/routes";
 import type { JumpAnalysis } from "@/lib/types";
 
-import styles from "./AnalysisList.module.css";
 import { RiskBadge } from "./RiskBadge";
 import { StatusBadge } from "./StatusBadge";
+
+// Grabaciones en una lista continua (no tarjetas sueltas): movimiento, deportista y fecha, riesgo a la derecha
+const styles = {
+  list: "divide-y divide-line overflow-hidden rounded-panel border border-line bg-panel",
+  item: "",
+  link: "group flex items-center gap-3 px-4 py-3 text-ink transition-colors duration-fast hover:bg-sunken hover:no-underline",
+  icon: "grid size-10 flex-none place-items-center rounded-control bg-sunken text-ink-muted group-hover:text-accent",
+  text: "grid min-w-0 flex-1",
+  title: "font-semibold",
+  meta: "flex flex-wrap gap-x-3 text-sm text-ink-muted",
+  badges: "flex flex-wrap justify-end gap-1.5",
+  chevron: "hidden text-line-strong group-hover:text-accent sm:block",
+};
 
 /** Lista de grabaciones (ya ordenada por quien la pide). `subtitleFor` agrega contexto, p. ej. el deportista. */
 export async function AnalysisList({
@@ -38,7 +50,10 @@ export async function AnalysisList({
               </span>
               <span className={styles.text}>
                 <span className={styles.title}>{t.analysis.movement[analysis.movement_type]}</span>
-                <span className={styles.meta}>{subtitle ? `${subtitle} · ${date}` : date}</span>
+                <span className={styles.meta}>
+                  {subtitle && <span className="font-medium text-ink">{subtitle}</span>}
+                  <span>{date}</span>
+                </span>
               </span>
               <span className={styles.badges}>
                 {analysis.risk_score !== null && <RiskBadge score={analysis.risk_score} />}

@@ -312,6 +312,7 @@
     "recordings": "{count} grabaciones",
     "noRecordings": "Sin grabaciones",
     "latestRisk": "Último riesgo",
+    "accountColumn": "Cuenta",
     "openAthlete": "Ver ficha de {name}",
     "athleteMetaTitle": "Deportista",
     "backToTeam": "Volver a mis deportistas",

@@ -12,9 +12,11 @@ import { getT } from "@/lib/i18n/server";
 import { coachAthletePath, ROUTES } from "@/lib/routes";
 import type { AthleteProfile } from "@/lib/types";
 
-import styles from "./AthleteRoster.module.css";
+// Una fila por deportista, columnas alineadas para escanear el riesgo de un vistazo. En celular,
+// nombre y datos en dos líneas con el riesgo a la derecha (los encabezados se ocultan)
+const COLUMNS = "md:grid-cols-[minmax(0,2.2fr)_5rem_7.5rem_7.5rem_9rem_1.25rem]";
 
-/** Tarjetas de los deportistas del coach con su último riesgo y cantidad de grabaciones. */
+/** Lista de los deportistas del coach con su último riesgo y cantidad de grabaciones. */
 export async function AthleteRoster({ athletes, summaries }: { athletes: AthleteProfile[]; summaries: Map<number, AthleteSummary> }) {
   const t = await getT();
   if (athletes.length === 0) {
@@ -30,36 +32,54 @@ export async function AthleteRoster({ athletes, summaries }: { athletes: Athlete
   const today = todayInAppTimeZone();
 
   return (
-    <ul className={styles.grid}>
-      {athletes.map((athlete) => {
-        const summary = summaries.get(athlete.id);
-        return (
-          <li key={athlete.id}>
-            <Link
-              href={coachAthletePath(athlete.id)}
-              className={styles.card}
-              aria-label={format(t.coach.openAthlete, { name: athlete.display_name })}
-            >
-              <span className={styles.top}>
-                <Avatar name={athlete.display_name} imageUrl={athlete.display_avatar} />
-                <span className={styles.identity}>
-                  <span className={styles.name}>{athlete.display_name}</span>
-                  <span className={styles.meta}>
-                    {format(t.athleteProfile.ageValue, { years: ageOn(athlete.birth_date, today) })} ·{" "}
-                    {athlete.is_managed ? t.athleteProfile.managed : t.athleteProfile.withAccount}
+    <div className="overflow-hidden rounded-panel border border-line bg-panel">
+      <div className={`hidden gap-4 border-b border-line bg-sunken px-4 py-2.5 text-sm font-medium text-ink-muted md:grid ${COLUMNS}`} aria-hidden>
+        <span>{t.coach.athleteMetaTitle}</span>
+        <span>{t.athleteProfile.age}</span>
+        <span>{t.coach.accountColumn}</span>
+        <span>{t.coach.recordingsTitle}</span>
+        <span>{t.coach.latestRisk}</span>
+        <span />
+      </div>
+      <ul className="divide-y divide-line">
+        {athletes.map((athlete) => {
+          const summary = summaries.get(athlete.id);
+          const age = format(t.athleteProfile.ageValue, { years: ageOn(athlete.birth_date, today) });
+          const account = athlete.is_managed ? t.athleteProfile.managed : t.athleteProfile.withAccount;
+          const recordings = summary ? format(t.coach.recordings, { count: summary.stats.total }) : t.coach.noRecordings;
+          return (
+            <li key={athlete.id}>
+              <Link
+                href={coachAthletePath(athlete.id)}
+                className={`group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-0.5 px-4 py-3 text-ink transition-colors duration-fast hover:bg-sunken hover:no-underline md:min-h-16 ${COLUMNS}`}
+                aria-label={format(t.coach.openAthlete, { name: athlete.display_name })}
+              >
+                <span className="flex min-w-0 items-center gap-3">
+                  <Avatar name={athlete.display_name} imageUrl={athlete.display_avatar} />
+                  <span className="grid min-w-0">
+                    <span className="truncate font-semibold">{athlete.display_name}</span>
+                    {/* Celular: los datos de las columnas en una segunda línea */}
+                    <span className="flex flex-wrap gap-x-3 text-sm text-ink-muted md:hidden">
+                      <span>{age}</span>
+                      <span>{account}</span>
+                      <span>{recordings}</span>
+                    </span>
                   </span>
                 </span>
-              </span>
-              <span className={styles.bottom}>
-                <span className={styles.meta}>
-                  {summary ? format(t.coach.recordings, { count: summary.stats.total }) : t.coach.noRecordings}
+                <span className="hidden text-sm tabular-nums text-ink-muted md:block">{age}</span>
+                <span className="hidden text-sm text-ink-muted md:block">{account}</span>
+                <span className="hidden text-sm tabular-nums text-ink-muted md:block">{recordings}</span>
+                <span className="justify-self-end md:justify-self-start">
+                  {summary?.latestScore != null ? <RiskBadge score={summary.latestScore} /> : <span className="text-sm text-ink-muted">-</span>}
                 </span>
-                {summary?.latestScore != null && <RiskBadge score={summary.latestScore} />}
-              </span>
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
+                <span className="hidden text-line-strong transition-colors group-hover:text-accent md:block">
+                  <Icon name="chevronRight" size={18} />
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }

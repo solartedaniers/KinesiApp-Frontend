@@ -312,6 +312,7 @@
     "recordings": "{count} recordings",
     "noRecordings": "No recordings",
     "latestRisk": "Latest risk",
+    "accountColumn": "Account",
     "openAthlete": "View {name}'s profile",
     "athleteMetaTitle": "Athlete",
     "backToTeam": "Back to my athletes",
