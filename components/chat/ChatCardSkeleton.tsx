@@ -1,7 +1,7 @@
 import { ChartSkeleton } from "@/components/app/Skeleton";
 import { getT } from "@/lib/i18n/server";
 
-import styles from "./ChatPanel.module.css";
+import { chatStyles as styles } from "./chat-classes";
 
 /** Mientras la IA prepara la explicación inicial (unos segundos). */
 export async function ChatCardSkeleton() {

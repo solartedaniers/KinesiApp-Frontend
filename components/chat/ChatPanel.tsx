@@ -2,6 +2,7 @@
 
 import { useActionState, useOptimistic } from "react";
 
+import { LogoMark } from "@/components/brand/LogoMark";
 import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
 import type { ChatField } from "@/lib/actions/chat";
@@ -10,7 +11,7 @@ import { useT } from "@/lib/i18n/client";
 import type { ChatMessage } from "@/lib/types";
 import { CHAT_MESSAGE_MAX_LENGTH } from "@/lib/validation";
 
-import styles from "./ChatPanel.module.css";
+import { chatStyles as styles } from "./chat-classes";
 
 type ChatAction = (previous: FormState<ChatField>, formData: FormData) => Promise<FormState<ChatField>>;
 
@@ -37,6 +38,12 @@ export function ChatPanel({ messages, action }: { messages: ChatMessage[]; actio
         <ol className={styles.thread} aria-live="polite">
           {optimisticMessages.map((message, index) => (
             <li key={message.id === PENDING_ID ? `pending-${index}` : message.id} className={styles[message.role]}>
+              {message.role === "assistant" && (
+                <span className={styles.author} aria-hidden>
+                  <LogoMark size={18} />
+                  {t.chat.roles.assistant}
+                </span>
+              )}
               <span className="visually-hidden">{t.chat.roles[message.role]}: </span>
               {message.content}
             </li>
@@ -50,21 +57,23 @@ export function ChatPanel({ messages, action }: { messages: ChatMessage[]; actio
         <label htmlFor="chat-content" className="visually-hidden">
           {t.chat.label}
         </label>
-        <textarea
-          id="chat-content"
-          name="content"
-          className={styles.input}
-          rows={3}
-          maxLength={CHAT_MESSAGE_MAX_LENGTH}
-          placeholder={t.chat.placeholder}
-          defaultValue={state.values?.content}
-          aria-invalid={state.fieldErrors?.content ? true : undefined}
-          required
-        />
+        <div className={styles.composer}>
+          <textarea
+            id="chat-content"
+            name="content"
+            className={styles.input}
+            rows={3}
+            maxLength={CHAT_MESSAGE_MAX_LENGTH}
+            placeholder={t.chat.placeholder}
+            defaultValue={state.values?.content}
+            aria-invalid={state.fieldErrors?.content ? true : undefined}
+            required
+          />
+          <Button type="submit" pending={pending} pendingLabel={t.chat.sending} className={styles.send}>
+            {t.chat.send}
+          </Button>
+        </div>
         {state.fieldErrors?.content && <p className={styles.error}>{state.fieldErrors.content}</p>}
-        <Button type="submit" pending={pending} pendingLabel={t.chat.sending}>
-          {t.chat.send}
-        </Button>
       </form>
       <p className={styles.disclaimer}>{t.chat.disclaimer}</p>
     </div>
