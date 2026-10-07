@@ -244,7 +244,7 @@
     "highestRisk": "Riesgo máximo",
     "highRiskCount": "Con riesgo alto",
     "lastRecording": "Última grabación",
-    "none": "—",
+    "none": "Sin datos",
     "empty": "Graba un movimiento para ver tus estadísticas."
   },
   "riskChart": {
@@ -465,9 +465,9 @@
     "metaTitle": "Recuperar contraseña",
     "title": "Restablece tu contraseña",
     "steps": {
-      "email": "Paso 1 de 3 · Correo",
-      "code": "Paso 2 de 3 · Código",
-      "password": "Paso 3 de 3 · Nueva contraseña"
+      "email": "Paso 1 de 3: Correo",
+      "code": "Paso 2 de 3: Código",
+      "password": "Paso 3 de 3: Nueva contraseña"
     },
     "emailHint": "Escribe el correo de tu cuenta y te enviaremos un código de un solo uso.",
     "codeHint": "Ingresa el código de 6 dígitos que enviamos a {email}.",
@@ -557,7 +557,7 @@
     "printHint": "En el diálogo que se abre, elige «Guardar como PDF» como destino.",
     "fileTitle": "Informe de análisis {date}",
     "title": "Informe del análisis de movimiento",
-    "subtitle": "{movement} · {date}",
+    "subtitle": "{movement}, {date}",
     "coach": "Entrenador responsable",
     "noCoach": "Sin entrenador asignado",
     "athlete": "Deportista",

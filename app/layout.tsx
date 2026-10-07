@@ -15,7 +15,7 @@ const plex = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return {
-    title: { default: t.app.name, template: `%s · ${t.app.name}` },
+    title: { default: t.app.name, template: `%s | ${t.app.name}` },
     description: t.app.description,
   };
 }

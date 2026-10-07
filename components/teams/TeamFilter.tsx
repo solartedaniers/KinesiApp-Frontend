@@ -5,7 +5,11 @@ import { useT } from "@/lib/i18n/client";
 import { TEAM_PARAM } from "@/lib/routes";
 import type { Team } from "@/lib/types";
 
-import styles from "./Teams.module.css";
+const styles = {
+  filter: "flex flex-wrap items-end gap-3",
+  filterLabel: "grid gap-1.5 text-sm font-medium text-ink",
+  select: "min-h-control min-w-55 rounded-control border border-line-strong bg-panel px-3 text-ink focus:border-accent focus:outline-none focus:ring-3 focus:ring-accent/20",
+};
 
 /**
  * Filtro por equipo como formulario GET (`?team=`): la página se renderiza en el servidor ya

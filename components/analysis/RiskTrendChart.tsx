@@ -31,7 +31,7 @@ export async function RiskTrendChart({ points }: { points: RiskPoint[] }) {
           }))}
           yAxis={{ min: 0, max: 1, ticks: Y_TICKS, format: fmt.percent }}
           xLabels={[fmt.shortDate(points[0].recordedAt), fmt.shortDate(points[points.length - 1].recordedAt)]}
-          reference={{ value: RISK_THRESHOLDS.high, label: `${t.riskChart.threshold} · ${fmt.percent(RISK_THRESHOLDS.high)}` }}
+          reference={{ value: RISK_THRESHOLDS.high, label: `${t.riskChart.threshold} (${fmt.percent(RISK_THRESHOLDS.high)})` }}
         />
       )}
       {points.length > 0 && (

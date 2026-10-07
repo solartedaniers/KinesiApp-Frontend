@@ -9,7 +9,10 @@ import type { ConsentField } from "@/lib/actions/analyses";
 import type { FormState } from "@/lib/form-state";
 import { useT } from "@/lib/i18n/client";
 
-import fieldStyles from "./ConsentForm.module.css";
+const fieldStyles = {
+  checkbox: "flex cursor-pointer items-start gap-3 [&_input]:mt-0.5 [&_input]:size-5 [&_input]:flex-none [&_input]:accent-accent",
+  error: "text-sm font-medium text-ink",
+};
 
 type ConsentAction = (previous: FormState<ConsentField>, formData: FormData) => Promise<FormState<ConsentField>>;
 

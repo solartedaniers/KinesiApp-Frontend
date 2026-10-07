@@ -6,7 +6,12 @@ import { Button } from "@/components/ui/Button";
 import type { InlineResult } from "@/lib/actions/admin";
 import { useT } from "@/lib/i18n/client";
 
-import styles from "./InlineControls.module.css";
+const styles = {
+  form: "flex flex-wrap items-center gap-2",
+  select: "min-h-10 rounded-control border border-line-strong bg-panel px-3 text-sm text-ink focus:border-accent focus:outline-none focus:ring-3 focus:ring-accent/20",
+  button: "min-h-10 px-3 text-sm",
+  error: "basis-full text-xs font-medium text-ink",
+};
 
 type InlineAction = (previous: InlineResult, formData: FormData) => Promise<InlineResult>;
 

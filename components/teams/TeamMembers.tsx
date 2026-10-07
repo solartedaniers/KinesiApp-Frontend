@@ -6,7 +6,13 @@ import { setTeamMember } from "@/lib/actions/teams";
 import { getT } from "@/lib/i18n/server";
 import type { AthleteProfile, Team } from "@/lib/types";
 
-import styles from "./Teams.module.css";
+const styles = {
+  members: "divide-y divide-line overflow-hidden rounded-panel border border-line bg-panel",
+  memberRow: "flex flex-wrap items-center gap-3 px-4 py-3",
+  cardText: "grid min-w-0 flex-1",
+  cardTitle: "font-semibold [overflow-wrap:anywhere]",
+  meta: "flex flex-wrap gap-x-3 text-sm font-normal text-ink-muted",
+};
 
 /**
  * Deportistas que pueden estar en el equipo, con un botón para agregarlos o quitarlos. Cada botón

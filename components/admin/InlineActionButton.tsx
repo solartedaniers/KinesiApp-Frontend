@@ -6,7 +6,11 @@ import { Button } from "@/components/ui/Button";
 import type { InlineResult } from "@/lib/actions/admin";
 import { useT } from "@/lib/i18n/client";
 
-import styles from "./InlineControls.module.css";
+const styles = {
+  form: "flex flex-wrap items-center gap-2",
+  button: "min-h-10 px-3 text-sm",
+  error: "basis-full text-xs font-medium text-ink",
+};
 
 /** Un botón con su Server Action ligada dentro de una fila de tabla, con el error al lado. */
 export function InlineActionButton({ label, action }: { label: string; action: () => Promise<InlineResult> }) {

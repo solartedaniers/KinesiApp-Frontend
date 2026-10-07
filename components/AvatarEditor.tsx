@@ -11,7 +11,12 @@ import { type AvatarPayload, isImageFile } from "@/lib/avatar";
 import { AvatarTooLargeError, prepareAvatar } from "@/lib/avatar-upload";
 import { useT } from "@/lib/i18n/client";
 
-import styles from "./AvatarEditor.module.css";
+const styles = {
+  editor: "flex flex-wrap items-center gap-4",
+  controls: "grid min-w-50 flex-1 gap-2",
+  buttons: "flex flex-wrap gap-2",
+  pick: "inline-flex min-h-control cursor-pointer items-center gap-2 rounded-control border border-line-strong bg-panel px-4 text-[0.95rem] font-semibold text-ink transition-colors duration-fast hover:border-accent hover:text-accent focus-within:border-accent focus-within:text-accent aria-disabled:cursor-progress aria-disabled:opacity-60",
+};
 
 /**
  * Foto de perfil: elegir (o tomar con la cámara) → comprimir en un Web Worker → subir por Server

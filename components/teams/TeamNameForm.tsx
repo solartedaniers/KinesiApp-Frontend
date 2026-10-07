@@ -10,7 +10,10 @@ import type { FormState } from "@/lib/form-state";
 import { useT } from "@/lib/i18n/client";
 import { TEAM_NAME_MAX_LENGTH } from "@/lib/validation";
 
-import styles from "./Teams.module.css";
+const styles = {
+  nameForm: "grid gap-3",
+  nameRow: "grid items-end gap-3 sm:grid-cols-[1fr_auto]",
+};
 
 type TeamNameAction = (previous: FormState<TeamField>, formData: FormData) => Promise<FormState<TeamField>>;
 

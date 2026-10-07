@@ -1,5 +1,6 @@
 import { AnalysisResult } from "@/components/analysis/AnalysisResult";
 import { AngleCharts } from "@/components/analysis/AngleCharts";
+import { LogoMark } from "@/components/brand/LogoMark";
 import type { ChatOpening } from "@/lib/data/analyses";
 import { codeMessage } from "@/lib/errors";
 import { format } from "@/lib/i18n";
@@ -7,7 +8,20 @@ import { getFormat, getT } from "@/lib/i18n/server";
 import { openingExplanation } from "@/lib/report";
 import type { AthleteProfile, JumpAnalysis } from "@/lib/types";
 
-import styles from "./AnalysisReport.module.css";
+// En papel: gráficas sin cortarse, tablas largas a dos columnas y sin el rótulo "Ver como tabla"
+const styles = {
+  report: "mx-auto grid max-w-4xl gap-6 [&_table]:text-sm print:max-w-none print:[&_details_summary]:hidden print:[&_details_table]:columns-2 print:[&_figure]:break-inside-avoid",
+  header: "grid gap-1 border-b-2 border-accent pb-4",
+  brand: "flex items-center gap-2 font-semibold text-accent",
+  title: "font-display text-3xl font-semibold text-ink",
+  meta: "text-ink-muted",
+  note: "text-ink-muted",
+  people: "grid gap-3 sm:grid-cols-2 [&_dd]:font-display [&_dd]:text-lg [&_dd]:font-semibold [&_dt]:text-sm [&_dt]:text-ink-muted",
+  section: "grid gap-3",
+  sectionTitle: "font-display text-lg font-semibold text-ink",
+  explanation: "whitespace-pre-wrap",
+  disclaimer: "grid gap-1 rounded-control border border-l-4 border-ink bg-panel p-4 text-sm",
+};
 
 /**
  * Contenido del informe en el orden pedido: entrenador responsable, deportista, gráficas, tabla de
@@ -29,7 +43,10 @@ export async function AnalysisReport({
   return (
     <article className={styles.report}>
       <header className={styles.header}>
-        <p className={styles.brand}>{t.app.name}</p>
+        <p className={styles.brand}>
+          <LogoMark size={22} />
+          {t.app.name}
+        </p>
         <h1 className={styles.title}>{t.report.title}</h1>
         <p className={styles.meta}>
           {format(t.report.subtitle, {

@@ -3,7 +3,11 @@
 import { format } from "@/lib/i18n";
 import { useFormat, useT } from "@/lib/i18n/client";
 
-import styles from "./UploadProgress.module.css";
+const styles = {
+  wrapper: "grid gap-2",
+  bar: "h-2.5 w-full appearance-none overflow-hidden rounded-full border-0 bg-sunken [&::-moz-progress-bar]:bg-accent [&::-webkit-progress-bar]:bg-sunken [&::-webkit-progress-value]:bg-accent [&::-webkit-progress-value]:transition-[width]",
+  label: "text-sm tabular-nums text-ink-muted",
+};
 
 /** Barra de progreso de la subida: <progress> nativo, que los lectores de pantalla ya anuncian. */
 export function UploadProgress({ fraction }: { fraction: number }) {

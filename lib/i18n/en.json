@@ -244,7 +244,7 @@
     "highestRisk": "Highest risk",
     "highRiskCount": "High risk",
     "lastRecording": "Last recording",
-    "none": "—",
+    "none": "No data",
     "empty": "Record a movement to see your statistics."
   },
   "riskChart": {
@@ -465,9 +465,9 @@
     "metaTitle": "Recover password",
     "title": "Reset your password",
     "steps": {
-      "email": "Step 1 of 3 · Email",
-      "code": "Step 2 of 3 · Code",
-      "password": "Step 3 of 3 · New password"
+      "email": "Step 1 of 3: Email",
+      "code": "Step 2 of 3: Code",
+      "password": "Step 3 of 3: New password"
     },
     "emailHint": "Enter your account's email and we'll send you a one-time code.",
     "codeHint": "Enter the 6-digit code we sent to {email}.",
@@ -557,7 +557,7 @@
     "printHint": "In the dialog that opens, choose \"Save as PDF\" as the destination.",
     "fileTitle": "Analysis report {date}",
     "title": "Movement analysis report",
-    "subtitle": "{movement} · {date}",
+    "subtitle": "{movement}, {date}",
     "coach": "Responsible coach",
     "noCoach": "No coach assigned",
     "athlete": "Athlete",

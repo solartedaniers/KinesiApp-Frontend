@@ -15,7 +15,13 @@ import { getFormat, getT } from "@/lib/i18n/server";
 import { analysisPath } from "@/lib/routes";
 import type { AthleteProfile, JumpAnalysis, User } from "@/lib/types";
 
-import styles from "./report.module.css";
+// En papel sólo va el informe
+const styles = {
+  page: "grid gap-4 px-4 pb-12 pt-6 print:p-0",
+  toolbar: "mx-auto flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 print:hidden",
+  back: "inline-flex items-center gap-1 text-sm [&_svg]:rotate-180",
+  hint: "mx-auto w-full max-w-4xl text-sm text-ink-muted print:hidden",
+};
 
 /** Ficha del deportista del análisis, con los mismos permisos que ya aplica la pantalla del análisis. */
 async function reportAthlete(user: User, analysis: JumpAnalysis): Promise<AthleteProfile | undefined> {

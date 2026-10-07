@@ -11,11 +11,16 @@ import { getFormat, getLocale, getT } from "@/lib/i18n/server";
 import { USER_ROLES } from "@/lib/types";
 
 import { AccountStatusBadge } from "./AccountStatusBadge";
-import styles from "./AdminData.module.css";
 import { DataTable } from "./DataTable";
 import { InlineActionButton } from "./InlineActionButton";
 import { InlineSelectForm } from "./InlineSelectForm";
 
+const styles = {
+  shortcuts: "flex flex-wrap gap-3",
+  email: "text-ink-muted [overflow-wrap:anywhere]",
+  note: "text-sm text-ink-muted",
+  unassigned: "inline-flex items-center gap-1.5 font-semibold text-ink before:size-1.5 before:rounded-full before:bg-ink before:content-['']",
+};
 
 // Async Server Components que cada página del admin envuelve en <Suspense> (SSR streaming, §3)
 

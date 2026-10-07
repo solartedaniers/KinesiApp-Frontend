@@ -24,8 +24,19 @@ import {
   type VideoUpload,
 } from "@/lib/video-upload";
 
-import styles from "./CaptureFlow.module.css";
 import { UploadProgress } from "./UploadProgress";
+
+const styles = {
+  flow: "grid max-w-2xl gap-5",
+  guide: "grid gap-2 rounded-panel border border-line bg-panel px-5 py-4 text-ink",
+  guideTitle: "font-semibold text-ink",
+  guideList: "grid list-disc gap-1 pl-5 text-sm text-ink-muted marker:text-accent",
+  picker: "grid cursor-pointer justify-items-center gap-1 rounded-panel border-2 border-dashed border-line-strong bg-panel px-4 py-8 text-center transition-colors duration-fast hover:border-accent focus-within:border-accent",
+  pickerLabel: "font-semibold text-accent",
+  pickerHint: "text-sm text-ink-muted [overflow-wrap:anywhere]",
+  preview: "max-h-90 w-full rounded-stage bg-stage",
+  actions: "flex flex-wrap gap-3",
+};
 
 type Phase = { kind: "idle" } | { kind: "uploading"; fraction: number } | { kind: "done" };
 
