@@ -63,7 +63,7 @@ export const config = {
       // Todo salvo archivos estáticos (incluido el Web Worker de public/workers). Los prefetch del
       // router se excluyen: nunca renuevan tokens, porque varios en paralelo gastarían el mismo
       // refresh token rotado (§4.4)
-      source: "/((?!_next/static|_next/image|favicon.ico|workers/).*)",
+      source: "/((?!_next/static|_next/image|icon.svg|workers/).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },

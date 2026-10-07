@@ -27,7 +27,7 @@ export async function AuthShell({
   return (
     <div className={[styles.shell, login ? styles.loginShell : ""].filter(Boolean).join(" ")}>
       <aside className={styles.brand}>
-        <Logo href={ROUTES.landing} onBrand />
+        <Logo href={ROUTES.landing} />
         <p className={styles.tagline}>{t.authShell.tagline}</p>
         <ul className={styles.points}>
           {t.authShell.points.map((point) => (
