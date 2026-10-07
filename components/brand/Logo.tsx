@@ -16,7 +16,7 @@ export async function Logo({ href, collapsible = false, size = 30 }: { href: str
       className="inline-flex items-center gap-2.5 rounded-control font-display text-lg font-semibold tracking-tight text-ink [font-stretch:112%] hover:no-underline"
     >
       <LogoMark size={size} />
-      <span className={collapsible ? "max-[359px]:hidden" : undefined}>{t.app.name}</span>
+      <span className={collapsible ? "max-[399px]:hidden" : undefined}>{t.app.name}</span>
     </Link>
   );
 }

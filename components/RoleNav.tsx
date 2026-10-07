@@ -7,7 +7,10 @@ import { Icon } from "@/components/ui/Icon";
 import { activeNavHref, type NavItem } from "@/lib/access";
 import { useT } from "@/lib/i18n/client";
 
-import styles from "./RoleNav.module.css";
+const styles = {
+  list: "grid gap-0.5",
+  link: "flex min-h-control items-center gap-3 rounded-control px-3 text-[0.95rem] font-medium text-ink-muted transition-colors duration-fast hover:bg-sunken hover:text-ink hover:no-underline aria-[current=page]:bg-accent-soft aria-[current=page]:font-semibold aria-[current=page]:text-accent",
+};
 
 /** Cliente sólo para marcar la pestaña activa (usePathname). */
 export function RoleNav({ items, className }: { items: NavItem[]; className?: string }) {

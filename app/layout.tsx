@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Archivo, IBM_Plex_Sans } from "next/font/google";
 
 import { I18nProvider } from "@/lib/i18n/client";
-import { AmbientScene } from "@/components/app/AmbientScene";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { getTheme } from "@/lib/preferences";
 import { browserThemeColors, themeAttribute } from "@/lib/theme";
@@ -32,7 +31,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang={locale} data-theme={themeAttribute(theme)} className={`${archivo.variable} ${plex.variable}`}>
       <body>
-        <AmbientScene />
         <I18nProvider locale={locale}>{children}</I18nProvider>
       </body>
     </html>

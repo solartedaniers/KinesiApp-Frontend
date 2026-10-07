@@ -6,7 +6,14 @@ import { type ReactNode, useEffect, useRef } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { useT } from "@/lib/i18n/client";
 
-import styles from "./MobileMenu.module.css";
+const styles = {
+  trigger: "grid size-control place-items-center rounded-control text-ink hover:bg-sunken",
+  drawer: "m-0 h-dvh max-h-none w-[min(20rem,calc(100vw-3rem))] max-w-none border-r border-line bg-panel p-0 text-ink shadow-overlay backdrop:bg-backdrop open:animate-[drawer-in_200ms_ease-out]",
+  panel: "flex h-full flex-col gap-4 px-4 pb-5 pt-2",
+  header: "flex h-topbar items-center justify-between",
+  title: "font-display text-lg font-semibold",
+  close: "grid size-control place-items-center rounded-control text-ink-muted hover:bg-sunken hover:text-ink",
+};
 
 /**
  * Menú hamburguesa del celular: un <dialog> modal que se desliza desde el costado. El navegador
