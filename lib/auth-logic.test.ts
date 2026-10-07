@@ -83,7 +83,7 @@ test("renueva sin access o cuando le queda menos que el margen", () => {
 });
 
 test("rutas privadas por defecto, de acceso y públicas", () => {
-  for (const path of ["/home", "/athlete", "/admin/users", "/analysis/7", "/ruta-nueva"]) {
+  for (const path of ["/home", "/athlete", "/admin/users", "/analyses/7", "/ruta-nueva"]) {
     assert.equal(isPrivateRoute(path), true, path);
   }
   for (const path of ["/login", "/register", "/verify-email", "/password-recovery"]) {

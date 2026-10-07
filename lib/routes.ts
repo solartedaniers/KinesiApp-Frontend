@@ -8,8 +8,8 @@ export const ROUTES = {
   home: "/home",
   coachAthletes: "/coach/athletes",
   newCoachAthlete: "/coach/athletes/new",
-  newAnalysis: "/analysis/new",
-  videoConsent: "/analysis/consent",
+  newAnalysis: "/analyses/new",
+  videoConsent: "/analyses/consent",
   legalVideoConsent: "/legal/video-consent",
   // Ficha biométrica obligatoria del deportista antes de entrar a la app por primera vez
   onboarding: "/onboarding",
@@ -56,7 +56,7 @@ export function safeNextPath(value: string | null | undefined): string | null {
 }
 
 export function analysisPath(analysisId: number): string {
-  return `/analysis/${analysisId}`;
+  return `/analyses/${analysisId}`;
 }
 
 export function coachAthletePath(athleteId: number): string {
@@ -87,7 +87,7 @@ export function teamStatsPath(teamId: number): string {
 
 /** Informe imprimible (Guardar como PDF) de un análisis concreto. */
 export function reportPath(analysisId: number): string {
-  return `/report/${analysisId}`;
+  return `${analysisPath(analysisId)}/report`;
 }
 
 export function withNext(path: string, next: string): string {

@@ -29,7 +29,7 @@ async function uploadTarget(user: User, athleteParam: string | string[] | undefi
 }
 
 // SSR de la decisión (a quién se sube, consentimiento, límites) + isla CSR con la subida
-export default async function NewAnalysisPage({ searchParams }: PageProps<"/analysis/new">) {
+export default async function NewAnalysisPage({ searchParams }: PageProps<"/analyses/new">) {
   const t = await getT();
   const user = await requireRole(SECTION_ROLES.analysis);
   const athlete = await uploadTarget(user, (await searchParams)[ATHLETE_PARAM]);

@@ -24,6 +24,13 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  // Rutas renombradas: los enlaces viejos (marcadores, correos, historial) siguen funcionando
+  async redirects() {
+    return [
+      { source: "/analysis/:path*", destination: "/analyses/:path*", permanent: true },
+      { source: "/report/:id", destination: "/analyses/:id/report", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

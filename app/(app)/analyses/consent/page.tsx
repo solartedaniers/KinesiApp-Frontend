@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // Quien sube (el deportista, o el coach por un gestionado) acepta la versión vigente antes de subir
-export default async function VideoConsentPage({ searchParams }: PageProps<"/analysis/consent">) {
+export default async function VideoConsentPage({ searchParams }: PageProps<"/analyses/consent">) {
   const t = await getT();
   await requireRole(SECTION_ROLES.analysis);
   const nextParam = (await searchParams)[NEXT_PARAM];

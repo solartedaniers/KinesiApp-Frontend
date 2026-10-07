@@ -35,7 +35,7 @@ function parseId(raw: string): number {
   return id;
 }
 
-export async function generateMetadata({ params }: PageProps<"/report/[id]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/analyses/[id]/report">): Promise<Metadata> {
   // El título de la pestaña es el nombre que propone el navegador al guardar el PDF
   const [t, fmt] = await Promise.all([getT(), getFormat()]);
   const analysis = await getAnalysis(parseId((await params).id));
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: PageProps<"/report/[id]">): P
 
 // Informe imprimible fuera del marco de la app: sin barra lateral ni controles, listo para "Guardar
 // como PDF". Mismos roles que la sección de análisis (deportista y entrenador)
-export default async function AnalysisReportPage({ params }: PageProps<"/report/[id]">) {
+export default async function AnalysisReportPage({ params }: PageProps<"/analyses/[id]/report">) {
   const t = await getT();
   const user = await requireRole(SECTION_ROLES.analysis);
   await requireOnboarded(user);

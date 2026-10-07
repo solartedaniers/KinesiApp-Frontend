@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
  * AnalysisPoller consulta hasta que cambie y pide un nuevo render. El video va en su propio
  * Suspense: la URL firmada no retrasa el resto de la página.
  */
-export default async function AnalysisPage({ params }: PageProps<"/analysis/[id]">) {
+export default async function AnalysisPage({ params }: PageProps<"/analyses/[id]">) {
   const t = await getT();
   const fmt = await getFormat();
   const user = await requireRole(SECTION_ROLES.analysis);
