@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import styles from "@/components/app/Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 import { PageHeader } from "@/components/app/PageHeader";
 import { PreferencesControls } from "@/components/app/PreferencesControls";
 import { VideoConsentText } from "@/components/consent/VideoConsentText";

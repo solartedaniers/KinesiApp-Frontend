@@ -3,7 +3,7 @@
 import { useT } from "@/lib/i18n/client";
 import { OTP_LENGTH } from "@/lib/validation";
 
-import styles from "./Field.module.css";
+import { fieldStyles as styles } from "./field-classes";
 import { TextField } from "./TextField";
 
 /** Código de un solo uso: teclado numérico y autocompletado desde el SMS/correo del sistema. */

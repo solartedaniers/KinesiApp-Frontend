@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import styles from "@/components/app/Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 import { PageHeader } from "@/components/app/PageHeader";
 import { ListSkeleton, TilesSkeleton } from "@/components/app/Skeleton";
 import { AthleteOverview } from "@/components/athlete/AthleteData";

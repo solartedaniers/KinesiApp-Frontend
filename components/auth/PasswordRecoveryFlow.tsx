@@ -15,7 +15,7 @@ import { useT } from "@/lib/i18n/client";
 import { ROUTES } from "@/lib/routes";
 import { PASSWORD_MIN_LENGTH } from "@/lib/validation";
 
-import styles from "./AuthForm.module.css";
+import { formStyles as styles } from "@/components/app/page-classes";
 import { ResendCodeButton } from "./ResendCodeButton";
 import { StepIndicator } from "./StepIndicator";
 

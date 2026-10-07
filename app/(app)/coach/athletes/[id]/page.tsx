@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-import styles from "@/components/app/Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 import { PageHeader } from "@/components/app/PageHeader";
 import { ChartSkeleton, ListSkeleton, TilesSkeleton } from "@/components/app/Skeleton";
 import { AthleteProfileCard } from "@/components/coach/AthleteProfileCard";

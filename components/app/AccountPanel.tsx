@@ -5,7 +5,7 @@ import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 import type { User } from "@/lib/types";
 
-import styles from "./Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 
 /** Datos de la cuenta (sólo lectura) y acceso al cambio de contraseña, común a los tres roles. */
 export async function AccountPanel({ user }: { user: User }) {

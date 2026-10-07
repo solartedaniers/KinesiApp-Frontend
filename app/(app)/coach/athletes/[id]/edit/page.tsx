@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import styles from "@/components/app/Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 import { PageHeader } from "@/components/app/PageHeader";
 import { AvatarEditor } from "@/components/AvatarEditor";
 import { ManagedAthleteForm } from "@/components/coach/ManagedAthleteForm";

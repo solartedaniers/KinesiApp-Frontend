@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import { Icon, type IconName } from "@/components/ui/Icon";
 
-import styles from "./Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 
 export function EmptyState({ icon, title, body, children }: { icon: IconName; title: string; body?: string; children?: ReactNode }) {
   return (

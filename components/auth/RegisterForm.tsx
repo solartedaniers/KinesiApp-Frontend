@@ -17,7 +17,7 @@ import { ROUTES, withEmail } from "@/lib/routes";
 import { SIGNUP_ROLES } from "@/lib/types";
 import { PASSWORD_MIN_LENGTH } from "@/lib/validation";
 
-import styles from "./AuthForm.module.css";
+import { formStyles as styles } from "@/components/app/page-classes";
 
 const INITIAL_STATE: FormState<RegisterField> = {};
 

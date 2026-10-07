@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { useT } from "@/lib/i18n/client";
 
-import styles from "@/components/app/Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 
 // Backend caído u otro fallo inesperado: se ofrece reintentar sin cerrar la sesión (lib/session.ts)
 export default function AppError({ retry }: { error: Error & { digest?: string }; retry: () => void }) {

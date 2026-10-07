@@ -1,6 +1,7 @@
 import type { InputHTMLAttributes, ReactNode } from "react";
 
-import styles from "./Field.module.css";
+import { fieldStyles as styles } from "./field-classes";
+import { Icon } from "./Icon";
 
 export type TextFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
@@ -30,7 +31,7 @@ export function TextField({
       <label className={styles.label} htmlFor={id}>
         {label}
       </label>
-      <div className={styles.control}>
+      <div className="relative">
         <input
           id={id}
           name={name}
@@ -48,6 +49,7 @@ export function TextField({
       )}
       {error && (
         <p id={`${id}-error`} className={styles.error}>
+          <Icon name="alert" size={16} />
           {error}
         </p>
       )}

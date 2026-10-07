@@ -1,13 +1,13 @@
+import { badgeStyles as styles } from "@/components/ui/badge-classes";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { getT } from "@/lib/i18n/server";
 import type { AnalysisStatus } from "@/lib/types";
 
-import styles from "./Badge.module.css";
 
 const STYLE: Record<AnalysisStatus, { tone: string; icon: IconName }> = {
   pending: { tone: styles.neutral, icon: "clock" },
-  processed: { tone: styles.success, icon: "check" },
-  failed: { tone: styles.danger, icon: "alert" },
+  processed: { tone: styles.positive, icon: "check" },
+  failed: { tone: styles.attention, icon: "alert" },
 };
 
 /** Estado con ícono y texto: nunca sólo color. */

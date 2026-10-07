@@ -7,7 +7,16 @@ import { Button } from "@/components/ui/Button";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { useT } from "@/lib/i18n/client";
 
-import styles from "./ConfirmDialog.module.css";
+// Sin rojo en la acción destructiva (el rojo es del riesgo): botón en tinta, confirmado en un diálogo
+const styles = {
+  trigger: "px-3",
+  dialog:
+    "m-auto w-[min(26rem,calc(100vw-2rem))] rounded-panel border border-line bg-panel p-0 text-ink shadow-overlay backdrop:bg-backdrop",
+  body: "grid gap-3 p-6",
+  title: "text-xl font-semibold",
+  actions: "mt-3 flex flex-wrap justify-end gap-2",
+  danger: "bg-ink! text-panel! hover:bg-ink-muted!",
+};
 
 /**
  * Confirmación antes de una acción destructiva. <dialog> nativo: foco atrapado, Escape y fondo

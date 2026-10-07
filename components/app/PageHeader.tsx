@@ -1,4 +1,4 @@
-import styles from "./Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 
 export function PageHeader({ title, subtitle }: { title: string; subtitle?: string }) {
   return (

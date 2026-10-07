@@ -8,7 +8,7 @@ import styles from "@/components/analysis/AnalysisDetail.module.css";
 import { AnalysisResult } from "@/components/analysis/AnalysisResult";
 import { AnalysisVideoPanel } from "@/components/analysis/AnalysisVideoPanel";
 import { AngleCharts } from "@/components/analysis/AngleCharts";
-import pageStyles from "@/components/app/Page.module.css";
+import { pageStyles } from "@/components/app/page-classes";
 import { PageHeader } from "@/components/app/PageHeader";
 import { Section } from "@/components/app/Section";
 import { ChartSkeleton } from "@/components/app/Skeleton";

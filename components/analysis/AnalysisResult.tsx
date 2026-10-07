@@ -1,4 +1,4 @@
-import pageStyles from "@/components/app/Page.module.css";
+import { pageStyles } from "@/components/app/page-classes";
 import { riskLevel } from "@/lib/analysis-stats";
 import { getFormat, getT } from "@/lib/i18n/server";
 import type { JumpAnalysis } from "@/lib/types";

@@ -1,5 +1,5 @@
 import { Avatar } from "@/components/app/Avatar";
-import pageStyles from "@/components/app/Page.module.css";
+import { pageStyles } from "@/components/app/page-classes";
 import { ageOn } from "@/lib/analysis-stats";
 import { todayInAppTimeZone } from "@/lib/format";
 import { format } from "@/lib/i18n";

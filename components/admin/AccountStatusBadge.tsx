@@ -1,12 +1,12 @@
-import badgeStyles from "@/components/analysis/Badge.module.css";
+import { badgeStyles } from "@/components/ui/badge-classes";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import type { AccountStatus } from "@/lib/admin-stats";
 import { getT } from "@/lib/i18n/server";
 
 const STYLE: Record<AccountStatus, { tone: string; icon: IconName }> = {
-  active: { tone: badgeStyles.success, icon: "check" },
+  active: { tone: badgeStyles.positive, icon: "check" },
   unverified: { tone: badgeStyles.neutral, icon: "clock" },
-  disabled: { tone: badgeStyles.danger, icon: "alert" },
+  disabled: { tone: badgeStyles.attention, icon: "alert" },
 };
 
 export async function AccountStatusBadge({ status }: { status: AccountStatus }) {

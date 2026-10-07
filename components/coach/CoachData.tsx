@@ -3,7 +3,7 @@ import { RiskBars } from "@/components/analysis/RiskBars";
 import { RiskTrendChart } from "@/components/analysis/RiskTrendChart";
 import { StatGrid } from "@/components/analysis/StatGrid";
 import { statTiles } from "@/components/analysis/statTiles";
-import pageStyles from "@/components/app/Page.module.css";
+import { pageStyles } from "@/components/app/page-classes";
 import { Section } from "@/components/app/Section";
 import { TeamFilter } from "@/components/teams/TeamFilter";
 import { computeStatistics, riskTrend, statsByAthlete } from "@/lib/analysis-stats";

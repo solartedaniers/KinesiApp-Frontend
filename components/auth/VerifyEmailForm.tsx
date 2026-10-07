@@ -12,7 +12,7 @@ import type { FormState } from "@/lib/form-state";
 import { useT } from "@/lib/i18n/client";
 import { EMAIL_PARAM } from "@/lib/routes";
 
-import styles from "./AuthForm.module.css";
+import { formStyles as styles } from "@/components/app/page-classes";
 import { ResendCodeButton } from "./ResendCodeButton";
 
 const INITIAL_STATE: FormState<VerifyEmailField> = {};

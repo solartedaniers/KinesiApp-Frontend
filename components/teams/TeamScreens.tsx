@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import pageStyles from "@/components/app/Page.module.css";
+import { pageStyles } from "@/components/app/page-classes";
 import { PageHeader } from "@/components/app/PageHeader";
 import { Section } from "@/components/app/Section";
 import { ConfirmDialog } from "@/components/ConfirmDialog";

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-import formStyles from "@/components/auth/AuthForm.module.css";
+import { formStyles } from "@/components/app/page-classes";
 import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";

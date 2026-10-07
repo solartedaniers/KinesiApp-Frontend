@@ -1,4 +1,12 @@
-import styles from "./Skeleton.module.css";
+const styles = {
+  block: "animate-pulse rounded-panel bg-sunken motion-reduce:animate-none",
+  tiles: "grid grid-cols-2 gap-3 lg:grid-cols-4",
+  tile: "h-24",
+  stack: "grid gap-4",
+  row: "h-16",
+  chart: "aspect-video w-full",
+  title: "h-9 w-64 max-w-full",
+};
 
 /** Esqueletos de carga: fallback de Suspense y de loading.tsx mientras llega el stream (§10.2). */
 export function TilesSkeleton({ count = 4 }: { count?: number }) {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { AccountPanel } from "@/components/app/AccountPanel";
-import styles from "@/components/app/Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 import { PageHeader } from "@/components/app/PageHeader";
 import { ProfileSection } from "@/components/app/ProfileSection";
 import { BiometricsForm } from "@/components/athlete/BiometricsForm";

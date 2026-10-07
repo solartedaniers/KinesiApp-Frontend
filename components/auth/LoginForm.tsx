@@ -12,7 +12,7 @@ import type { FormState } from "@/lib/form-state";
 import { useT } from "@/lib/i18n/client";
 import { ROUTES, withEmail } from "@/lib/routes";
 
-import styles from "./AuthForm.module.css";
+import { formStyles as styles } from "@/components/app/page-classes";
 
 const INITIAL_STATE: FormState<LoginField> = {};
 

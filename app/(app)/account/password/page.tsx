@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ChangePasswordForm } from "@/components/app/ChangePasswordForm";
-import styles from "@/components/app/Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 import { PageHeader } from "@/components/app/PageHeader";
 import { NAV_BY_ROLE, SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";

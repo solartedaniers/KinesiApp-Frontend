@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 
 import { BiometricsFields } from "@/components/athlete/BiometricsFields";
-import styles from "@/components/auth/AuthForm.module.css";
+import { formStyles as styles } from "@/components/app/page-classes";
 import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { FullNameField } from "@/components/ui/FullNameField";

@@ -3,7 +3,7 @@ import { removeMyAvatar, uploadMyAvatar } from "@/lib/actions/profile";
 import { getT } from "@/lib/i18n/server";
 import type { User } from "@/lib/types";
 
-import styles from "./Page.module.css";
+import { pageStyles as styles } from "@/components/app/page-classes";
 import { ProfileNameForm } from "./ProfileNameForm";
 
 /** Foto y nombre de la cuenta propia: igual para deportista, entrenador y administrador. */
