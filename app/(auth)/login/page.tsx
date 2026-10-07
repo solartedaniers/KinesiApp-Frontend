@@ -16,7 +16,6 @@ export default async function LoginPage() {
   const t = await getT();
   return (
     <AuthShell
-      login
       title={t.login.title}
       subtitle={t.login.subtitle}
       footer={

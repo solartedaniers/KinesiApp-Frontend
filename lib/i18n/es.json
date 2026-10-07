@@ -5,7 +5,6 @@
     "disclaimer": "KinesiApp es una herramienta de apoyo y no reemplaza la valoración de un profesional de la salud."
   },
   "landing": {
-    "eyebrow": "Biomecánica en tu navegador",
     "title": "Detecta el riesgo de lesión antes de que aparezca",
     "lead": "Graba un salto o una sentadilla y recibe una estimación del riesgo de lesión de rodilla a partir de los ángulos articulares del movimiento.",
     "signIn": "Iniciar sesión",
@@ -261,7 +260,6 @@
   },
   "onboarding": {
     "metaTitle": "Completa tu ficha",
-    "eyebrow": "Último paso",
     "title": "Completa tu ficha física",
     "subtitle": "Necesitamos estos datos para interpretar tus movimientos. Podrás cambiarlos luego desde tu perfil.",
     "submit": "Guardar y continuar",
@@ -451,7 +449,6 @@
   },
   "verifyEmail": {
     "metaTitle": "Verificar correo",
-    "eyebrow": "Un paso más",
     "title": "Verifica tu correo",
     "subtitle": "Ingresa el código que enviamos a tu correo para activar tu cuenta.",
     "submit": "Verificar",

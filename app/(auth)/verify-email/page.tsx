@@ -18,7 +18,6 @@ export default async function VerifyEmailPage() {
   const t = await getT();
   return (
     <AuthShell
-      eyebrow={t.verifyEmail.eyebrow}
       title={t.verifyEmail.title}
       subtitle={t.verifyEmail.subtitle}
       footer={<Link href={ROUTES.login}>{t.verifyEmail.backToLogin}</Link>}

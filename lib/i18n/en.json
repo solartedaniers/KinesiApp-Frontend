@@ -5,7 +5,6 @@
     "disclaimer": "KinesiApp is a support tool and does not replace an assessment by a health professional."
   },
   "landing": {
-    "eyebrow": "Biomechanics in your browser",
     "title": "Spot injury risk before it shows up",
     "lead": "Record a jump or a squat and get an estimate of your knee injury risk based on the joint angles of the movement.",
     "signIn": "Sign in",
@@ -261,7 +260,6 @@
   },
   "onboarding": {
     "metaTitle": "Complete your profile",
-    "eyebrow": "Last step",
     "title": "Complete your physical profile",
     "subtitle": "We need this information to interpret your movements. You can change it later from your profile.",
     "submit": "Save and continue",
@@ -451,7 +449,6 @@
   },
   "verifyEmail": {
     "metaTitle": "Verify email",
-    "eyebrow": "One more step",
     "title": "Verify your email",
     "subtitle": "Enter the code we sent to your email to activate your account.",
     "submit": "Verify",

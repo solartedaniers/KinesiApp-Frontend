@@ -30,7 +30,6 @@ export default async function OnboardingPage() {
 
   return (
     <AuthShell
-      eyebrow={t.onboarding.eyebrow}
       title={t.onboarding.title}
       subtitle={t.onboarding.subtitle}
       footer={<LogoutButton label={t.session.logout}>{t.session.logout}</LogoutButton>}
