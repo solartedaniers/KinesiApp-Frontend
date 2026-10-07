@@ -1,8 +1,0 @@
-.video {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  background: var(--color-brand-from);
-  border-radius: var(--radius-md);
-  object-fit: contain;
-}

@@ -10,7 +10,10 @@ import { useT } from "@/lib/i18n/client";
 import { proxyUrl } from "@/lib/proxy-allowlist";
 import type { JumpAnalysis } from "@/lib/types";
 
-import styles from "./AnalysisPoller.module.css";
+const styles = {
+  poller: "flex flex-wrap items-center gap-4 rounded-panel border border-accent bg-accent-soft px-5 py-4 text-ink [&_p]:text-sm [&_strong]:font-semibold",
+  spinner: "size-5 flex-none animate-spin rounded-full border-[3px] border-accent border-r-transparent motion-reduce:[animation-duration:3s]",
+};
 
 /**
  * Isla CSR del detalle (§3): mientras el análisis está en proceso consulta su estado con backoff

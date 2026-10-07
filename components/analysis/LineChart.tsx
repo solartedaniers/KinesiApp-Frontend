@@ -1,7 +1,27 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import styles from "./LineChart.module.css";
+const styles = {
+  figure: "m-0 grid gap-4 rounded-panel border border-line bg-panel p-5",
+  caption: "grid gap-1",
+  title: "font-semibold text-ink",
+  subtitle: "text-sm text-ink-muted",
+  plot: "grid grid-cols-[auto_1fr] gap-2",
+  yAxis: "relative w-[3.2em] text-xs tabular-nums text-ink-muted",
+  yTick: "absolute right-0 -translate-y-1/2",
+  area: "relative h-56",
+  svg: "absolute inset-0 size-full overflow-visible",
+  grid: "stroke-line [stroke-width:1]",
+  threshold: "stroke-ink-muted [stroke-dasharray:4_4] [stroke-width:1]",
+  line: "fill-none stroke-accent [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:2]",
+  thresholdLabel: "absolute right-0 -translate-y-[120%] text-xs text-ink-muted",
+  point: "group absolute grid size-7 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full",
+  dot: "size-2.5 rounded-full bg-accent ring-2 ring-panel transition-transform duration-fast group-hover:scale-125 group-focus-visible:scale-125",
+  tooltip: "pointer-events-none absolute bottom-[calc(100%+0.25rem)] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-tag bg-ink px-2 py-1 text-xs font-medium text-canvas opacity-0 transition-opacity duration-fast group-hover:opacity-100 group-focus-visible:opacity-100",
+  xAxis: "col-start-2 flex justify-between text-xs tabular-nums text-ink-muted",
+  table: "text-sm [&_summary]:cursor-pointer [&_summary]:font-medium [&_summary]:text-accent [&_table]:mt-3 [&_table]:w-full [&_table]:border-collapse [&_table]:tabular-nums [&_td]:border-b [&_td]:border-line [&_td]:py-2 [&_td]:text-left [&_td:last-child]:text-right [&_th]:border-b [&_th]:border-line [&_th]:py-2 [&_th]:text-left [&_th]:font-medium [&_th]:text-ink-muted [&_th:last-child]:text-right",
+  notEnough: "text-sm text-ink-muted",
+};
 
 export type ChartPoint = {
   key: string | number;
@@ -16,6 +36,9 @@ type Axis = { min: number; max: number; ticks: number[]; format: (value: number)
 
 // Margen horizontal (en % del ancho) para que el primer y el último punto no queden cortados
 const X_PADDING = 3;
+// Con más puntos que esto (ángulos frame a frame) la línea sola se lee mejor que cientos de puntos;
+// los valores siguen en la tabla de datos
+const MAX_MARKED_POINTS = 40;
 
 /**
  * Línea de una sola serie, sin JavaScript. El SVG traza grilla y línea (vector-effect: el trazo no
@@ -70,7 +93,7 @@ export function LineChart({
             {reference.label}
           </span>
         )}
-        {points.map((point) => {
+        {points.length <= MAX_MARKED_POINTS && points.map((point) => {
           const position = { left: `${x(point.x)}%`, top: `${y(point.y)}%` };
           const content = (
             <>

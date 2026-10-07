@@ -4,12 +4,10 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { AnalysisPoller } from "@/components/AnalysisPoller";
-import styles from "@/components/analysis/AnalysisDetail.module.css";
 import { AnalysisResult } from "@/components/analysis/AnalysisResult";
 import { AnalysisVideoPanel } from "@/components/analysis/AnalysisVideoPanel";
 import { AngleCharts } from "@/components/analysis/AngleCharts";
 import { pageStyles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
 import { Section } from "@/components/app/Section";
 import { ChartSkeleton } from "@/components/app/Skeleton";
 import { AnalysisChatCard } from "@/components/chat/AnalysisChatCard";
@@ -57,24 +55,31 @@ export default async function AnalysisPage({ params }: PageProps<"/analysis/[id]
         <Icon name="chevronRight" size={16} />
         {t.analysisDetail.back}
       </Link>
-      <PageHeader title={t.analysis.movement[analysis.movement_type]} subtitle={athleteName ? `${athleteName} · ${recordedAt}` : recordedAt} />
-
-      <div className={pageStyles.actions}>
-        {analysis.status === "processed" && (
-          <ButtonLink href={reportPath(analysis.id)} variant="secondary">
-            <Icon name="upload" size={18} />
-            {t.report.export}
-          </ButtonLink>
-        )}
-        {canDelete && (
-          <ConfirmDialog
-            triggerLabel={t.analysisDetail.delete}
-            title={t.analysisDetail.deleteTitle}
-            body={t.analysisDetail.deleteBody}
-            confirmLabel={t.common.delete}
-            action={deleteAnalysis.bind(null, analysis.id)}
-          />
-        )}
+      <div className={pageStyles.headerRow}>
+        <header className={pageStyles.header}>
+          <h1 className={pageStyles.title}>{t.analysis.movement[analysis.movement_type]}</h1>
+          <p className="flex flex-wrap gap-x-3 text-ink-muted">
+            {athleteName && <span className="font-medium text-ink">{athleteName}</span>}
+            <span>{recordedAt}</span>
+          </p>
+        </header>
+        <div className={pageStyles.actions}>
+          {analysis.status === "processed" && (
+            <ButtonLink href={reportPath(analysis.id)} variant="secondary">
+              <Icon name="upload" size={18} />
+              {t.report.export}
+            </ButtonLink>
+          )}
+          {canDelete && (
+            <ConfirmDialog
+              triggerLabel={t.analysisDetail.delete}
+              title={t.analysisDetail.deleteTitle}
+              body={t.analysisDetail.deleteBody}
+              confirmLabel={t.common.delete}
+              action={deleteAnalysis.bind(null, analysis.id)}
+            />
+          )}
+        </div>
       </div>
 
       {analysis.status === "pending" && <AnalysisPoller analysisId={analysis.id} />}
@@ -85,12 +90,13 @@ export default async function AnalysisPage({ params }: PageProps<"/analysis/[id]
         </FormAlert>
       )}
 
-      <div className={styles.columns}>
-        <Section title={t.analysisDetail.video}>
+      {/* El video con la línea de tiempo es el protagonista: ocupa el ancho; el resultado va al costado */}
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_19rem] xl:grid-cols-[minmax(0,1fr)_21rem]">
+        <section aria-label={t.analysisDetail.video}>
           <Suspense fallback={<ChartSkeleton />}>
-            <AnalysisVideoPanel analysisId={analysis.id} />
+            <AnalysisVideoPanel analysis={analysis} />
           </Suspense>
-        </Section>
+        </section>
         <AnalysisResult analysis={analysis} />
       </div>
 
@@ -109,7 +115,7 @@ export default async function AnalysisPage({ params }: PageProps<"/analysis/[id]
         </Section>
       )}
 
-      <p className={styles.disclaimer}>{t.app.disclaimer}</p>
+      <p className="text-sm text-ink-muted">{t.app.disclaimer}</p>
     </div>
   );
 }

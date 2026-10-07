@@ -3,8 +3,11 @@ import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
 import type { JointAngleMeasurement } from "@/lib/types";
 
-import styles from "./AngleCharts.module.css";
 import { ChartFigure, ChartNote, ChartTable, LineChart } from "./LineChart";
+
+const styles = {
+  grid: "grid gap-4 lg:grid-cols-2",
+};
 
 // Escala en pasos de 30°: el eje termina en el primer múltiplo que contiene el pico
 const DEGREE_STEP = 30;
