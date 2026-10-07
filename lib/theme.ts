@@ -18,11 +18,11 @@ export function themeAttribute(theme: Theme): "light" | "dark" | undefined {
 }
 
 // Colores que el navegador necesita fuera del CSS (barra del navegador, manifest): una meta tag no
-// puede leer variables CSS. Deben coincidir con --color-bg / --color-primary de app/globals.css.
+// puede leer variables CSS. Deben coincidir con canvas / accent de tailwind.config.ts.
 export const THEME_COLOR = {
-  light: "#f3f6f8",
-  dark: "#0a1117",
-  brand: "#0b7a75",
+  light: "#f6f7f9",
+  dark: "#111418",
+  brand: "#0b7a70",
 } as const;
 
 /** Color de la barra del navegador según el tema; con "system", uno por cada preferencia del SO. */

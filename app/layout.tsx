@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope } from "next/font/google";
+import { Archivo, IBM_Plex_Sans } from "next/font/google";
 
 import { I18nProvider } from "@/lib/i18n/client";
 import { AmbientScene } from "@/components/app/AmbientScene";
@@ -9,7 +9,9 @@ import { browserThemeColors, themeAttribute } from "@/lib/theme";
 
 import "./globals.css";
 
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
+// Dos familias: Archivo (ancho expandido) para títulos y cifras, IBM Plex Sans para la interfaz y las tablas
+const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
+const plex = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-plex", display: "swap" });
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
@@ -28,7 +30,7 @@ export async function generateViewport(): Promise<Viewport> {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [locale, theme] = await Promise.all([getLocale(), getTheme()]);
   return (
-    <html lang={locale} data-theme={themeAttribute(theme)} className={manrope.variable}>
+    <html lang={locale} data-theme={themeAttribute(theme)} className={`${archivo.variable} ${plex.variable}`}>
       <body>
         <AmbientScene />
         <I18nProvider locale={locale}>{children}</I18nProvider>
