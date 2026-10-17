@@ -566,5 +566,19 @@
     "noExplanation": "El asistente todavía no generó una explicación para este análisis.",
     "disclaimerTitle": "Importante",
     "disclaimer": "Este informe es una estimación automática a partir de un video, con umbrales sin validación clínica. No es un diagnóstico y no reemplaza la evaluación de un profesional de la salud."
+  },
+  "systemPing": {
+    "title": "Prueba de conexión con el backend",
+    "subtitle": "Next.js llama al RPC Ping del backend por gRPC-Web, a través de Envoy.",
+    "probe": "hola desde Next.js",
+    "sent": "Mensaje enviado",
+    "received": "Mensaje recibido",
+    "serverTime": "Hora del servidor",
+    "roundTrip": "Ida y vuelta",
+    "errors": {
+      "unavailable": "El backend no está disponible. Si estaba dormido, espera un minuto y recarga.",
+      "timeout": "El backend tardó demasiado en responder. Recarga para intentar de nuevo.",
+      "generic": "La llamada al backend falló."
+    }
   }
 }

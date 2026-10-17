@@ -566,5 +566,19 @@
     "noExplanation": "The assistant hasn't generated an explanation for this analysis yet.",
     "disclaimerTitle": "Important",
     "disclaimer": "This report is an automatic estimate based on a video, with thresholds that have no clinical validation. It is not a diagnosis and does not replace an assessment by a health professional."
+  },
+  "systemPing": {
+    "title": "Backend connection test",
+    "subtitle": "Next.js calls the backend Ping RPC over gRPC-Web, through Envoy.",
+    "probe": "hello from Next.js",
+    "sent": "Message sent",
+    "received": "Message received",
+    "serverTime": "Server time",
+    "roundTrip": "Round trip",
+    "errors": {
+      "unavailable": "The backend is unavailable. If it was asleep, wait a minute and reload.",
+      "timeout": "The backend took too long to respond. Reload to try again.",
+      "generic": "The call to the backend failed."
+    }
   }
 }
