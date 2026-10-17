@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Código generado de los contratos (npm run generate)
+    "lib/gen/**",
   ]),
 ]);
 
