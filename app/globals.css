@@ -7,11 +7,16 @@
     -webkit-text-size-adjust: 100%;
   }
 
-  body {
-    min-height: 100dvh;
+  body,
+  [data-design="lab"],
+  [data-design="lab"] [data-theme] {
     background-color: var(--kin-canvas);
     color: var(--kin-ink);
-    font-family: var(--font-plex), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--kin-font-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  body {
+    min-height: 100dvh;
     font-size: 1rem;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -21,8 +26,8 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
-    font-stretch: 112%;
+    font-family: var(--kin-font-display), ui-sans-serif, system-ui, sans-serif;
+    font-stretch: var(--kin-display-stretch);
     letter-spacing: -0.01em;
   }
 

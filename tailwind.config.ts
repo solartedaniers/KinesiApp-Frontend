@@ -1,6 +1,8 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 
+import { LAB_COLORS } from "./lib/design/palette.ts";
+
 /*
  * Tokens de diseño: único lugar con colores, tipografía, radios y medidas de layout.
  * Cada color define su par [claro, oscuro]; el plugin de abajo los publica como variables CSS
@@ -38,15 +40,27 @@ const COLORS = {
   backdrop: ["rgb(17 20 24 / 0.5)", "rgb(0 0 0 / 0.65)"],
 } as const;
 
-type ColorName = keyof typeof COLORS;
+type Palette = Record<string, readonly [string, string]>;
 
-function variables(mode: 0 | 1): Record<string, string> {
-  return Object.fromEntries(Object.entries(COLORS).map(([name, pair]) => [`--kin-${name}`, pair[mode]]));
+function variables(mode: 0 | 1, palette: Palette = COLORS): Record<string, string> {
+  return Object.fromEntries(Object.entries(palette).map(([name, pair]) => [`--kin-${name}`, pair[mode]]));
 }
 
+// La paleta del laboratorio (lib/design/palette.ts) es un superconjunto de la actual
 const themeColors = Object.fromEntries(
-  (Object.keys(COLORS) as ColorName[]).map((name) => [name, `var(--kin-${name})`]),
+  Object.keys({ ...COLORS, ...LAB_COLORS }).map((name) => [name, `var(--kin-${name})`]),
 );
+
+// Familias por variable: el rediseño cambia las tres sin tocar las clases font-*
+const FONTS = {
+  current: { "--kin-font-display": "var(--font-archivo)", "--kin-font-sans": "var(--font-plex)", "--kin-font-mono": "ui-monospace", "--kin-display-stretch": "112%" },
+  lab: { "--kin-font-display": "var(--font-lab-display)", "--kin-font-sans": "var(--font-lab-sans)", "--kin-font-mono": "var(--font-lab-mono)", "--kin-display-stretch": "normal" },
+};
+
+// Mientras no se apruebe el rediseño, la paleta y las fuentes nuevas sólo rigen dentro de
+// data-design="lab" (la guía de estilo). Un data-theme anidado fuerza un modo para comparar ambos
+const LAB = '[data-design="lab"]';
+const lab = (mode: 0 | 1) => ({ colorScheme: mode ? "dark" : "light", ...variables(mode, LAB_COLORS) });
 
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
@@ -55,9 +69,11 @@ const config: Config = {
       colors: themeColors,
       fontFamily: {
         // Títulos y cifras grandes (puntaje, grados): Archivo en ancho expandido
-        display: ["var(--font-archivo)", "ui-sans-serif", "system-ui", "sans-serif"],
-        // Interfaz, listas y tablas: IBM Plex Sans, cifras tabulares legibles
-        sans: ["var(--font-plex)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--kin-font-display)", "ui-serif", "Georgia", "serif"],
+        // Interfaz, listas y tablas
+        sans: ["var(--kin-font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        // Métricas: grados, tiempos, conteos; cifras tabulares por diseño
+        mono: ["var(--kin-font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
       },
       fontSize: {
         xs: ["0.75rem", { lineHeight: "1rem" }],
@@ -99,14 +115,20 @@ const config: Config = {
   plugins: [
     plugin(({ addBase }) => {
       addBase({
-        ":root": { colorScheme: "light", ...variables(0) },
+        ":root": { colorScheme: "light", ...variables(0), ...FONTS.current },
+        ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
+        [LAB]: { ...lab(0), ...FONTS.lab },
         // Sin data-theme (preferencia "sistema") sigue al sistema operativo
         "@media (prefers-color-scheme: dark)": {
           ":root:not([data-theme])": { colorScheme: "dark", ...variables(1) },
+          [`:root:not([data-theme]) ${LAB}`]: lab(1),
         },
-        ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
+        [`:root[data-theme="dark"] ${LAB}`]: lab(1),
+        [`${LAB} [data-theme="light"]`]: lab(0),
+        [`${LAB} [data-theme="dark"]`]: lab(1),
         "@media print": {
           ":root, :root[data-theme]": { colorScheme: "light", ...variables(0) },
+          [`${LAB}, ${LAB} [data-theme]`]: lab(0),
         },
       });
     }),
