@@ -1,8 +1,8 @@
 // Análisis de ejemplo para la guía de estilo: una sentadilla de 40 s a 30 fps con la forma de los
 // datos reales (flexión de rodilla e inclinación del tronco por frame, repeticiones con su puntaje).
 // Es determinista (semilla fija) para que el render del servidor y el del cliente coincidan.
+import type { RiskLevel } from "./risk";
 
-export type RiskLevel = "low" | "moderate" | "high";
 export type SampleJoint = "knee" | "trunk";
 export type AngleSample = { ms: number; degrees: number };
 export type SampleRepetition = { startMs: number; endMs: number; score: number; level: RiskLevel; peakKnee: number };
