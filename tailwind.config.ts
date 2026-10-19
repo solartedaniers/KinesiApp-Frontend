@@ -63,7 +63,7 @@ const LAB = '[data-design="lab"]';
 const lab = (mode: 0 | 1) => ({ colorScheme: mode ? "dark" : "light", ...variables(mode, LAB_COLORS) });
 
 // Papel milimetrado: una celda de 1 mm visual y una línea mayor cada cinco celdas
-const LAB_MEASURES = { "--kin-grid-cell": "0.5rem", "--kin-grid-major": "2.5rem" };
+const LAB_MEASURES = { "--kin-grid-cell-size": "0.5rem", "--kin-grid-major-size": "2.5rem" };
 
 // Tiempos del movimiento: los trazos se dibujan despacio porque son el contenido; la interfaz responde rápido
 const LAB_MOTION = {

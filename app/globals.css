@@ -65,10 +65,10 @@
     linear-gradient(var(--kin-grid-minor) 1px, transparent 1px),
     linear-gradient(90deg, var(--kin-grid-minor) 1px, transparent 1px);
   background-size:
-    var(--kin-grid-major) var(--kin-grid-major),
-    var(--kin-grid-major) var(--kin-grid-major),
-    var(--kin-grid-cell) var(--kin-grid-cell),
-    var(--kin-grid-cell) var(--kin-grid-cell);
+    var(--kin-grid-major-size) var(--kin-grid-major-size),
+    var(--kin-grid-major-size) var(--kin-grid-major-size),
+    var(--kin-grid-cell-size) var(--kin-grid-cell-size),
+    var(--kin-grid-cell-size) var(--kin-grid-cell-size);
 }
 
 .visually-hidden {
