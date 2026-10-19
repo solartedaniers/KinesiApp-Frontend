@@ -62,6 +62,9 @@ const FONTS = {
 const LAB = '[data-design="lab"]';
 const lab = (mode: 0 | 1) => ({ colorScheme: mode ? "dark" : "light", ...variables(mode, LAB_COLORS) });
 
+// Papel milimetrado: una celda de 1 mm visual y una línea mayor cada cinco celdas
+const LAB_MEASURES = { "--kin-grid-cell": "0.5rem", "--kin-grid-major": "2.5rem" };
+
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   theme: {
@@ -117,7 +120,7 @@ const config: Config = {
       addBase({
         ":root": { colorScheme: "light", ...variables(0), ...FONTS.current },
         ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
-        [LAB]: { ...lab(0), ...FONTS.lab },
+        [LAB]: { ...lab(0), ...FONTS.lab, ...LAB_MEASURES },
         // Sin data-theme (preferencia "sistema") sigue al sistema operativo
         "@media (prefers-color-scheme: dark)": {
           ":root:not([data-theme])": { colorScheme: "dark", ...variables(1) },

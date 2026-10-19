@@ -19,6 +19,8 @@ export const ROUTES = {
   sessionExpired: "/api/session/expired",
   // Comprobación del transporte gRPC-Web: la dejo pública para poder probarla sin el backend REST
   systemPing: "/system/ping",
+  // Guía de estilo del rediseño: pública para revisarla en el preview sin cuenta
+  styleGuide: "/style-guide",
 } as const;
 
 // Pantallas de acceso: con sesión iniciada no tienen sentido y redirigen a /home
@@ -28,7 +30,7 @@ const AUTH_ROUTES: readonly string[] = [ROUTES.login, ROUTES.register, ROUTES.ve
 const PUBLIC_PREFIXES: readonly string[] = ["/legal"];
 // Los Route Handlers de sesión deben poder correr sin sesión: si fueran privados, /login?next= los
 // volvería a llamar después de iniciar sesión y cerraría la sesión recién abierta
-const PUBLIC_ROUTES: readonly string[] = [ROUTES.landing, "/manifest.webmanifest", ROUTES.logout, ROUTES.sessionExpired, ROUTES.systemPing];
+const PUBLIC_ROUTES: readonly string[] = [ROUTES.landing, "/manifest.webmanifest", ROUTES.logout, ROUTES.sessionExpired, ROUTES.systemPing, ROUTES.styleGuide];
 
 function matches(pathname: string, route: string): boolean {
   return pathname === route || pathname.startsWith(`${route}/`);

@@ -56,6 +56,21 @@
   }
 }
 
+/* Papel milimetrado de laboratorio de marcha; en la sala oscura las líneas son trazos tenues */
+@utility paper-grid {
+  background-color: var(--kin-canvas);
+  background-image:
+    linear-gradient(var(--kin-grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--kin-grid-major) 1px, transparent 1px),
+    linear-gradient(var(--kin-grid-minor) 1px, transparent 1px),
+    linear-gradient(90deg, var(--kin-grid-minor) 1px, transparent 1px);
+  background-size:
+    var(--kin-grid-major) var(--kin-grid-major),
+    var(--kin-grid-major) var(--kin-grid-major),
+    var(--kin-grid-cell) var(--kin-grid-cell),
+    var(--kin-grid-cell) var(--kin-grid-cell);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
