@@ -580,5 +580,61 @@
       "timeout": "El backend tardó demasiado en responder. Recarga para intentar de nuevo.",
       "generic": "La llamada al backend falló."
     }
+  },
+  "styleGuide": {
+    "metaTitle": "Direcciones visuales",
+    "title": "Tres direcciones para KinesiApp",
+    "lead": "Cada página muestra el encabezado de la app, una ficha de resultado, la gráfica de ángulos y la animación propia de la dirección. El modo claro y el oscuro se cambian desde el encabezado.",
+    "sampleNote": "Las cifras son datos de ejemplo generados para comparar las direcciones.",
+    "switcher": "Direcciones visuales",
+    "directionLabel": "Dirección {id}",
+    "open": "Ver la dirección {id}",
+    "directions": {
+      "a": {
+        "name": "Estela",
+        "phrase": "El movimiento como una fotografía de larga exposición: cada articulación deja una estela de luz y los datos se leen como el rastro que dejó el salto.",
+        "animationTitle": "Larga exposición de un salto",
+        "animationCaption": "Salto con contramovimiento. La cabeza, la muñeca, la rodilla y el pie dejan su estela; el punto que viaja con el cuerpo es el centro de gravedad."
+      },
+      "b": {
+        "name": "Ritmo",
+        "phrase": "El deporte como ritmo: cada repetición es un pulso, y las curvas de los propios datos se vuelven las formas que le dan energía a la interfaz.",
+        "animationTitle": "Cada repetición es un pulso",
+        "animationCaption": "El anillo late en la parte más baja de la sentadilla y el contador marca la repetición. Las bandas de abajo son la curva de la rodilla, del tronco y del centro de gravedad."
+      },
+      "c": {
+        "name": "Instrumento",
+        "phrase": "La claridad de un instrumento de medición moderno: capas suaves, lecturas en vivo y color sólo donde hay una medida que leer.",
+        "animationTitle": "Lectura en vivo",
+        "animationCaption": "La aguja sigue la flexión de rodilla de la primera repetición y la marca guarda el pico. La franja azul clara es el rango objetivo."
+      }
+    },
+    "header": {
+      "aiReady": "IA activada"
+    },
+    "result": {
+      "title": "Último análisis",
+      "athlete": "Valentina Ríos",
+      "peakKnee": "Flexión máxima de rodilla",
+      "repetitions": "Repeticiones",
+      "risk": "Riesgo",
+      "score": "Puntaje",
+      "riskSteps": "Nivel {step} de 3",
+      "depths": "Profundidad de cada repetición",
+      "open": "Ver la gráfica"
+    },
+    "chart": {
+      "title": "Ángulos durante la serie",
+      "label": "Flexión de rodilla e inclinación del tronco durante los 40 segundos de la serie",
+      "seconds": "s",
+      "target": "Rango objetivo",
+      "peaks": "Pico de cada repetición",
+      "repetition": "Repetición {index}"
+    },
+    "live": {
+      "reading": "Flexión de rodilla",
+      "peak": "Pico",
+      "skeleton": "Esqueleto de perfil haciendo una sentadilla"
+    }
   }
 }

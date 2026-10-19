@@ -580,5 +580,61 @@
       "timeout": "The backend took too long to respond. Reload to try again.",
       "generic": "The call to the backend failed."
     }
+  },
+  "styleGuide": {
+    "metaTitle": "Visual directions",
+    "title": "Three directions for KinesiApp",
+    "lead": "Each page shows the app header, an analysis result card, the angle chart and the direction's own animation. Switch between light and dark mode from the header.",
+    "sampleNote": "All figures are generated sample data for comparing the directions.",
+    "switcher": "Visual directions",
+    "directionLabel": "Direction {id}",
+    "open": "View direction {id}",
+    "directions": {
+      "a": {
+        "name": "Trail",
+        "phrase": "Movement as a long-exposure photograph: every joint leaves a trail of light, and the data reads like the trace the jump left behind.",
+        "animationTitle": "Long exposure of a jump",
+        "animationCaption": "Countermovement jump. The head, wrist, knee and foot leave their trails; the dot traveling with the body is the center of mass."
+      },
+      "b": {
+        "name": "Rhythm",
+        "phrase": "Sport as rhythm: every repetition is a beat, and the curves of the data itself become the shapes that give the interface its energy.",
+        "animationTitle": "Every repetition is a beat",
+        "animationCaption": "The ring pulses at the bottom of the squat and the counter marks the repetition. The bands below are the knee, trunk and center-of-mass curves."
+      },
+      "c": {
+        "name": "Instrument",
+        "phrase": "The clarity of a modern measuring instrument: soft layers, live readings and color only where there is a measurement to read.",
+        "animationTitle": "Live reading",
+        "animationCaption": "The needle follows the knee flexion of the first repetition and the marker holds the peak. The light blue band is the target range."
+      }
+    },
+    "header": {
+      "aiReady": "AI ready"
+    },
+    "result": {
+      "title": "Latest analysis",
+      "athlete": "Valentina Ríos",
+      "peakKnee": "Peak knee flexion",
+      "repetitions": "Repetitions",
+      "risk": "Risk",
+      "score": "Score",
+      "riskSteps": "Level {step} of 3",
+      "depths": "Depth of each repetition",
+      "open": "View the chart"
+    },
+    "chart": {
+      "title": "Angles across the set",
+      "label": "Knee flexion and trunk inclination over the 40 seconds of the set",
+      "seconds": "s",
+      "target": "Target range",
+      "peaks": "Peak of each repetition",
+      "repetition": "Repetition {index}"
+    },
+    "live": {
+      "reading": "Knee flexion",
+      "peak": "Peak",
+      "skeleton": "Side-view skeleton doing a squat"
+    }
   }
 }
