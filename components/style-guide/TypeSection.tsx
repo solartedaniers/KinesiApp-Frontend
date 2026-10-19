@@ -14,7 +14,7 @@ const styles = {
   specimens: "grid gap-4 lg:grid-cols-[1.4fr_1fr]",
   specimen: `${panel} grid content-between gap-6`,
   role: "text-sm text-ink-muted",
-  display: "font-display text-4xl leading-[1.05] font-medium tracking-[-0.02em] text-ink text-balance sm:text-6xl",
+  display: "font-display text-6xl leading-[0.92] font-medium tracking-[-0.03em] text-ink text-balance sm:text-8xl",
   sans: "max-w-prose text-xl text-ink",
   mono: "font-mono text-6xl font-medium tracking-[-0.03em] text-ink [font-variant-numeric:tabular-nums] sm:text-7xl",
   side: "grid gap-4",
