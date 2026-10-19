@@ -50,7 +50,7 @@ export async function TypeSection() {
           {SCALE.map((step) => (
             <li key={step.key} className={styles.step}>
               <span className={styles.stepSize}>{step.size} px</span>
-              <span className={`${step.className} truncate text-ink`}>{ty.scaleNames[step.key]}</span>
+              <span className={`${step.className} text-ink`}>{ty.scaleNames[step.key]}</span>
             </li>
           ))}
         </ul>
