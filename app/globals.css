@@ -244,3 +244,17 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Transiciones entre vistas (View Transitions); sin la API del navegador el cambio es instantáneo */
+::view-transition-group(.lab-morph) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--kin-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
