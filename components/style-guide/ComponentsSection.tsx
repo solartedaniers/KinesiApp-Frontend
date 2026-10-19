@@ -47,7 +47,7 @@ export async function ComponentsSection() {
             />
             <div>
               <LabCheckbox name="sg-consent">{c.consent}</LabCheckbox>
-              <Link className="ml-9 text-sm" href={ROUTES.legalVideoConsent}>{c.consentLink}</Link>
+              <Link className="ml-9 inline-flex min-h-11 items-center text-sm" href={ROUTES.legalVideoConsent}>{c.consentLink}</Link>
             </div>
           </div>
           <div className={styles.block}>
