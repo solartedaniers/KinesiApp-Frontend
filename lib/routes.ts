@@ -21,16 +21,17 @@ export const ROUTES = {
   systemPing: "/system/ping",
   // Guía de estilo del rediseño: pública para revisarla en el preview sin cuenta
   styleGuide: "/style-guide",
+  styleGuideDirection: (id: string) => `/style-guide/${id}`,
 } as const;
 
 // Pantallas de acceso: con sesión iniciada no tienen sentido y redirigen a /home
 const AUTH_ROUTES: readonly string[] = [ROUTES.login, ROUTES.register, ROUTES.verifyEmail, ROUTES.passwordRecovery];
 
 // Lo que no está aquí ni en AUTH_ROUTES exige sesión: privado por defecto, más seguro ante rutas nuevas
-const PUBLIC_PREFIXES: readonly string[] = ["/legal"];
+const PUBLIC_PREFIXES: readonly string[] = ["/legal", ROUTES.styleGuide];
 // Los Route Handlers de sesión deben poder correr sin sesión: si fueran privados, /login?next= los
 // volvería a llamar después de iniciar sesión y cerraría la sesión recién abierta
-const PUBLIC_ROUTES: readonly string[] = [ROUTES.landing, "/manifest.webmanifest", ROUTES.logout, ROUTES.sessionExpired, ROUTES.systemPing, ROUTES.styleGuide];
+const PUBLIC_ROUTES: readonly string[] = [ROUTES.landing, "/manifest.webmanifest", ROUTES.logout, ROUTES.sessionExpired, ROUTES.systemPing];
 
 function matches(pathname: string, route: string): boolean {
   return pathname === route || pathname.startsWith(`${route}/`);
