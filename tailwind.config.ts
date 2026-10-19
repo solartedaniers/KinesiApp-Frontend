@@ -65,6 +65,16 @@ const lab = (mode: 0 | 1) => ({ colorScheme: mode ? "dark" : "light", ...variabl
 // Papel milimetrado: una celda de 1 mm visual y una línea mayor cada cinco celdas
 const LAB_MEASURES = { "--kin-grid-cell": "0.5rem", "--kin-grid-major": "2.5rem" };
 
+// Tiempos del movimiento: los trazos se dibujan despacio porque son el contenido; la interfaz responde rápido
+const LAB_MOTION = {
+  "--kin-motion-press": "90ms",
+  "--kin-motion-hover": "160ms",
+  "--kin-motion-draw": "900ms",
+  "--kin-motion-measure": "1200ms",
+  "--kin-motion-stagger": "140ms",
+  "--kin-ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
+};
+
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   theme: {
@@ -120,7 +130,7 @@ const config: Config = {
       addBase({
         ":root": { colorScheme: "light", ...variables(0), ...FONTS.current },
         ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
-        [LAB]: { ...lab(0), ...FONTS.lab, ...LAB_MEASURES },
+        [LAB]: { ...lab(0), ...FONTS.lab, ...LAB_MEASURES, ...LAB_MOTION },
         // Sin data-theme (preferencia "sistema") sigue al sistema operativo
         "@media (prefers-color-scheme: dark)": {
           ":root:not([data-theme])": { colorScheme: "dark", ...variables(1) },
