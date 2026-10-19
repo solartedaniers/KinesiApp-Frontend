@@ -14,6 +14,9 @@ const GROUPS: Record<"surfaces" | "ink" | "accent" | "risk", LabColor[]> = {
   risk: ["risk-low", "risk-moderate", "risk-high"],
 };
 
+// Las superficies no llevan texto encima de su propio color: su contraste con el papel no dice nada
+const SURFACES: LabColor[] = ["canvas", "panel", "sunken", "accent-soft"];
+
 const styles = {
   modes: "grid gap-4 md:grid-cols-2",
   mode: "paper-grid grid gap-6 rounded-tag p-5 shadow-[inset_0_0_0_1px_var(--kin-line)] sm:p-6",
@@ -25,7 +28,7 @@ const styles = {
   chip: "h-11 rounded-[3px] shadow-[inset_0_0_0_1px_var(--kin-line)]",
   name: "text-sm font-semibold text-ink",
   hex: "block font-mono text-xs text-ink-muted uppercase",
-  ratio: "text-right font-mono text-xs text-ink [font-variant-numeric:tabular-nums]",
+  ratio: "text-right text-xs text-ink-muted [font-variant-numeric:tabular-nums]",
   risk: "grid gap-4",
   riskRow: "flex flex-wrap gap-3",
 };
@@ -50,7 +53,7 @@ async function ModePanel({ mode }: { mode: 0 | 1 }) {
                     <span className={styles.name}>{c.names[name as keyof typeof c.names]}</span>
                     <span className={styles.hex}>{hex}</span>
                   </span>
-                  {name !== "canvas" && <span className={styles.ratio}>{format(c.contrastOn, { ratio: ratio.toFixed(1) })}</span>}
+                  {!SURFACES.includes(name) && <span className={styles.ratio}>{format(c.contrastOn, { ratio: ratio.toFixed(1) })}</span>}
                 </li>
               );
             })}
