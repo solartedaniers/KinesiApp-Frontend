@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 
+import { DIRECTION_COLORS, DIRECTION_IDS, type DirectionId } from "./lib/design/directions.ts";
 import { LAB_COLORS } from "./lib/design/palette.ts";
 
 /*
@@ -48,7 +49,7 @@ function variables(mode: 0 | 1, palette: Palette = COLORS): Record<string, strin
 
 // La paleta del laboratorio (lib/design/palette.ts) es un superconjunto de la actual
 const themeColors = Object.fromEntries(
-  Object.keys({ ...COLORS, ...LAB_COLORS }).map((name) => [name, `var(--kin-${name})`]),
+  Object.keys({ ...COLORS, ...LAB_COLORS, ...DIRECTION_COLORS.a }).map((name) => [name, `var(--kin-${name})`]),
 );
 
 // Familias por variable: el rediseño cambia las tres sin tocar las clases font-*
@@ -57,13 +58,34 @@ const FONTS = {
   lab: { "--kin-font-display": "var(--font-lab-display)", "--kin-font-sans": "var(--font-lab-sans)", "--kin-font-mono": "var(--font-lab-mono)", "--kin-display-stretch": "normal" },
 };
 
+// Cada dirección candidata trae su par de familias; las cifras usan la display con números tabulares
+const DIRECTION_FONTS: Record<DirectionId, { display: string; sans: string; stretch: string }> = {
+  a: { display: "var(--font-trail-display)", sans: "var(--font-trail-sans)", stretch: "118%" },
+  b: { display: "var(--font-rhythm-display)", sans: "var(--font-rhythm-sans)", stretch: "normal" },
+  c: { display: "var(--font-instrument-display)", sans: "var(--font-instrument-sans)", stretch: "92%" },
+};
+
+const directionSelector = (id: DirectionId) => `[data-design="${id}"]`;
+const directionMode = (id: DirectionId, mode: 0 | 1) => ({ colorScheme: mode ? "dark" : "light", ...variables(mode, DIRECTION_COLORS[id]) });
+const directionBase = (id: DirectionId) => {
+  const { display, sans, stretch } = DIRECTION_FONTS[id];
+  return {
+    ...directionMode(id, 0),
+    ...LAB_MOTION,
+    "--kin-font-display": display,
+    "--kin-font-sans": sans,
+    "--kin-font-mono": display,
+    "--kin-display-stretch": stretch,
+  };
+};
+// Las direcciones siguen el mismo tema que el resto de la app: data-theme en <html> o el sistema
+const directionRules = (mode: 0 | 1, prefix: string) =>
+  Object.fromEntries(DIRECTION_IDS.map((id) => [`${prefix} ${directionSelector(id)}`, directionMode(id, mode)]));
+
 // Mientras no se apruebe el rediseño, la paleta y las fuentes nuevas sólo rigen dentro de
 // data-design="lab" (la guía de estilo). Un data-theme anidado fuerza un modo para comparar ambos
 const LAB = '[data-design="lab"]';
 const lab = (mode: 0 | 1) => ({ colorScheme: mode ? "dark" : "light", ...variables(mode, LAB_COLORS) });
-
-// Papel milimetrado: una celda de 1 mm visual y una línea mayor cada cinco celdas
-const LAB_MEASURES = { "--kin-grid-cell-size": "0.5rem", "--kin-grid-major-size": "2.5rem" };
 
 // Tiempos del movimiento: los trazos se dibujan despacio porque son el contenido; la interfaz responde rápido
 const LAB_MOTION = {
@@ -130,18 +152,22 @@ const config: Config = {
       addBase({
         ":root": { colorScheme: "light", ...variables(0), ...FONTS.current },
         ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
-        [LAB]: { ...lab(0), ...FONTS.lab, ...LAB_MEASURES, ...LAB_MOTION },
+        [LAB]: { ...lab(0), ...FONTS.lab, ...LAB_MOTION },
+        ...Object.fromEntries(DIRECTION_IDS.map((id) => [directionSelector(id), directionBase(id)])),
         // Sin data-theme (preferencia "sistema") sigue al sistema operativo
         "@media (prefers-color-scheme: dark)": {
           ":root:not([data-theme])": { colorScheme: "dark", ...variables(1) },
           [`:root:not([data-theme]) ${LAB}`]: lab(1),
+          ...directionRules(1, ":root:not([data-theme])"),
         },
+        ...directionRules(1, ':root[data-theme="dark"]'),
         [`:root[data-theme="dark"] ${LAB}`]: lab(1),
         [`${LAB} [data-theme="light"]`]: lab(0),
         [`${LAB} [data-theme="dark"]`]: lab(1),
         "@media print": {
           ":root, :root[data-theme]": { colorScheme: "light", ...variables(0) },
           [`${LAB}, ${LAB} [data-theme]`]: lab(0),
+          ...directionRules(0, ":root"),
         },
       });
     }),

@@ -8,8 +8,8 @@
   }
 
   body,
-  [data-design="lab"],
-  [data-design="lab"] [data-theme] {
+  [data-design],
+  [data-design] [data-theme] {
     background-color: var(--kin-canvas);
     color: var(--kin-ink);
     font-family: var(--kin-font-sans), ui-sans-serif, system-ui, sans-serif;
@@ -54,21 +54,6 @@
   ::selection {
     background-color: var(--kin-accent-soft);
   }
-}
-
-/* Papel milimetrado de laboratorio de marcha; en la sala oscura las líneas son trazos tenues */
-@utility paper-grid {
-  background-color: var(--kin-canvas);
-  background-image:
-    linear-gradient(var(--kin-grid-major) 1px, transparent 1px),
-    linear-gradient(90deg, var(--kin-grid-major) 1px, transparent 1px),
-    linear-gradient(var(--kin-grid-minor) 1px, transparent 1px),
-    linear-gradient(90deg, var(--kin-grid-minor) 1px, transparent 1px);
-  background-size:
-    var(--kin-grid-major-size) var(--kin-grid-major-size),
-    var(--kin-grid-major-size) var(--kin-grid-major-size),
-    var(--kin-grid-cell-size) var(--kin-grid-cell-size),
-    var(--kin-grid-cell-size) var(--kin-grid-cell-size);
 }
 
 .visually-hidden {
