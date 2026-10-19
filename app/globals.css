@@ -180,6 +180,39 @@
   }
 }
 
+/* Etiqueta de muestra: esquina superior derecha cortada y un ojal a la izquierda */
+.lab-tag {
+  clip-path: polygon(0 0, calc(100% - 1.25rem) 0, 100% 1.25rem, 100% 100%, 0 100%);
+}
+
+.lab-tag::before {
+  content: "";
+  position: absolute;
+  top: 1.35rem;
+  left: 0.9rem;
+  width: 0.7rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--kin-canvas);
+  box-shadow: inset 0 0 0 1.5px var(--kin-line-strong);
+}
+
+/* La IA despertando: el keypoint late como un pulso; en la sala oscura, además, brilla */
+.lab-ai-waking {
+  box-shadow: 0 0 0 0 var(--kin-accent-soft), 0 0 10px var(--kin-glow);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lab-ai-waking {
+    animation: lab-pulse 1400ms var(--kin-ease-out) infinite;
+  }
+}
+
+@keyframes lab-pulse {
+  0% { box-shadow: 0 0 0 0 var(--kin-accent), 0 0 10px var(--kin-glow); }
+  100% { box-shadow: 0 0 0 9px transparent, 0 0 10px var(--kin-glow); }
+}
+
 @keyframes lab-oscillate {
   from { transform: rotate(-10deg); }
   to { transform: rotate(80deg); }
