@@ -138,6 +138,11 @@
   }
 }
 
+/* En la sala oscura los trazos de cobalto brillan; en papel --kin-glow es transparente */
+.lab-glow {
+  filter: drop-shadow(0 0 3px var(--kin-glow));
+}
+
 /* Campo enfocado: borde de cobalto y una regla que se extiende bajo el texto */
 .lab-field:focus-within {
   box-shadow: inset 0 0 0 1.5px var(--kin-accent);

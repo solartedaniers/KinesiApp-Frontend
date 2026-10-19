@@ -12,7 +12,7 @@ const styles = {
   tick: "stroke-line-strong [stroke-width:1]",
   tickMajor: "stroke-ink-muted [stroke-width:1.2]",
   tickLabel: "fill-ink-muted font-sans text-[8px] [font-variant-numeric:tabular-nums]",
-  sweep: "lab-sweep fill-none stroke-accent [stroke-width:6]",
+  sweep: "lab-sweep lab-glow fill-none stroke-accent [stroke-width:6]",
   needle: "lab-needle stroke-accent [stroke-width:1.6]",
   pivot: "fill-accent",
   caption: "flex items-baseline gap-3",

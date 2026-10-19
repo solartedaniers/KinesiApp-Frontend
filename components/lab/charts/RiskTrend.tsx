@@ -10,7 +10,7 @@ const BANDS: Record<RiskLevel, [number, number]> = { low: [0, 0.34], moderate: [
 
 const styles = {
   band: "opacity-[0.22]",
-  line: "fill-none stroke-accent [stroke-width:2] [vector-effect:non-scaling-stroke]",
+  line: "lab-glow fill-none stroke-accent [stroke-width:2] [vector-effect:non-scaling-stroke]",
   point: "absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent shadow-[0_0_0_3px_var(--kin-panel)]",
   last: "absolute -translate-x-full -translate-y-[160%] font-mono text-sm font-medium text-ink [font-variant-numeric:tabular-nums]",
 };

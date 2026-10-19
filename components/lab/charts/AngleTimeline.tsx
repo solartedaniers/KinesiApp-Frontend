@@ -19,7 +19,7 @@ const styles = {
   readingLabel: "flex items-center gap-2 text-sm text-ink-muted",
   swatch: { accent: "h-0.5 w-4 bg-accent", alt: "h-0.5 w-4 bg-trace-alt" },
   readingValue: "font-mono text-3xl font-medium text-ink [font-variant-numeric:tabular-nums]",
-  series: { accent: "fill-none stroke-accent [stroke-width:2] [vector-effect:non-scaling-stroke]", alt: "fill-none stroke-trace-alt [stroke-width:1.5] [vector-effect:non-scaling-stroke]" },
+  series: { accent: "lab-glow fill-none stroke-accent [stroke-width:2] [vector-effect:non-scaling-stroke]", alt: "fill-none stroke-trace-alt [stroke-width:1.5] [vector-effect:non-scaling-stroke]" },
   playhead: "pointer-events-none absolute inset-y-0 w-px -translate-x-1/2 bg-ink",
   reps: "relative flex h-9 gap-px",
   rep:

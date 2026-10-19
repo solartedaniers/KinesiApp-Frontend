@@ -12,7 +12,7 @@ const styles = {
   figure: "text-ink",
   bones: "stroke-ink [stroke-width:1.6]",
   ground: "stroke-line-strong [stroke-width:0.8]",
-  trajectory: "lab-draw fill-none stroke-accent [stroke-width:1.4]",
+  trajectory: "lab-draw lab-glow fill-none stroke-accent [stroke-width:1.4]",
 };
 
 /**
