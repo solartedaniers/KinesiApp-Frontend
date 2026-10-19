@@ -32,7 +32,7 @@ const styles = {
   grid: "stroke-line [stroke-width:1] [vector-effect:non-scaling-stroke]",
   baseline: "stroke-line-strong [stroke-width:1.5] [vector-effect:non-scaling-stroke]",
   xAxis: "relative col-start-2",
-  xLabel: "absolute top-1.5 -translate-x-1/2 text-xs whitespace-nowrap text-ink-muted [font-variant-numeric:tabular-nums] first:translate-x-0 last:-translate-x-full",
+  xLabel: "absolute top-1.5 -translate-x-1/2 text-xs whitespace-nowrap text-ink-muted [font-variant-numeric:tabular-nums] first:translate-x-0 last:-translate-x-full max-sm:even:not-last:hidden",
 };
 
 export function ChartFrame({
