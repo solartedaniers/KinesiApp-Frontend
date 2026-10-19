@@ -21,7 +21,7 @@ const styles = {
   readingValue: "font-mono text-3xl font-medium text-ink [font-variant-numeric:tabular-nums]",
   series: { accent: "lab-glow fill-none stroke-accent [stroke-width:2] [vector-effect:non-scaling-stroke]", alt: "fill-none stroke-trace-alt [stroke-width:1.5] [vector-effect:non-scaling-stroke]" },
   playhead: "pointer-events-none absolute inset-y-0 w-px -translate-x-1/2 bg-ink",
-  reps: "relative flex h-9 gap-px",
+  reps: "relative flex h-9 gap-px pointer-coarse:h-11",
   rep:
     "relative grid flex-1 place-items-center overflow-hidden rounded-[2px] bg-sunken text-xs font-semibold " +
     "transition-[transform] duration-[var(--kin-motion-hover)] hover:-translate-y-0.5 aria-current:outline-2 aria-current:outline-ink",
