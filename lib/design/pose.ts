@@ -123,6 +123,14 @@ export function sequence(phases: Phase[], spacing: number, ground: number): Fram
   });
 }
 
+/** Caja que contiene todas las poses, con margen; el suelo (y = 0) queda dentro. */
+export function frameBounds(frames: Keypoints[], padding: number): { x: number; y: number; width: number; height: number } {
+  const points = frames.flatMap((keypoints) => Object.values(keypoints));
+  const [minX, maxX] = [Math.min(...points.map((p) => p.x)), Math.max(...points.map((p) => p.x))];
+  const [minY, maxY] = [Math.min(...points.map((p) => p.y)), Math.max(0, ...points.map((p) => p.y))];
+  return { x: minX - padding, y: minY - padding, width: maxX - minX + 2 * padding, height: maxY - minY + 2 * padding };
+}
+
 const round = (n: number) => Math.round(n * 100) / 100;
 
 /** Curva suave que pasa por todos los puntos (Catmull-Rom convertida a Bézier cúbicas). */

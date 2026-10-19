@@ -2,7 +2,7 @@ import { CenterOfMassMark } from "./CenterOfMassMark";
 import { LabIcon } from "./LabIcon";
 import { Skeleton } from "./Skeleton";
 
-import { JUMP_PHASES, sequence, smoothPath } from "@/lib/design/pose";
+import { frameBounds, JUMP_PHASES, sequence, smoothPath } from "@/lib/design/pose";
 
 // Mismas etapas que AnalysisStage del contrato, en el orden en que llegan por WatchAnalysis
 export const ANALYSIS_STAGES = ["queued", "downloading", "pose", "repetitions", "risk"] as const;
@@ -10,9 +10,7 @@ export type AnalysisStageKey = (typeof ANALYSIS_STAGES)[number];
 
 const SPACING = 30;
 const FRAMES = sequence(JUMP_PHASES, SPACING, 0);
-const xs = FRAMES.flatMap(({ keypoints }) => Object.values(keypoints).map((p) => p.x));
-const ys = FRAMES.flatMap(({ keypoints }) => Object.values(keypoints).map((p) => p.y));
-const VIEW = { x: Math.min(...xs) - 10, y: Math.min(...ys) - 10, width: Math.max(...xs) - Math.min(...xs) + 20, height: 10 - Math.min(...ys) + 10 };
+const VIEW = frameBounds(FRAMES.map(({ keypoints }) => keypoints), 10);
 
 const styles = {
   root: "grid gap-5",

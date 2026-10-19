@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { CenterOfMassMark } from "./CenterOfMassMark";
 import { Skeleton } from "./Skeleton";
 
-import { type Phase, sequence, smoothPath } from "@/lib/design/pose";
+import { frameBounds, type Phase, sequence, smoothPath } from "@/lib/design/pose";
 
 const SPACING = 30;
 const PADDING = 12;
@@ -22,14 +22,11 @@ const styles = {
  */
 export function Chronophotograph({ phases, label, className }: { phases: Phase[]; label: string; className?: string }) {
   const frames = sequence(phases, SPACING, 0);
-  const xs = frames.flatMap(({ keypoints }) => Object.values(keypoints).map((p) => p.x));
-  const ys = frames.flatMap(({ keypoints }) => Object.values(keypoints).map((p) => p.y));
-  const [minX, maxX, minY] = [Math.min(...xs) - PADDING, Math.max(...xs) + PADDING, Math.min(...ys) - PADDING];
-  const viewBox = `${minX} ${minY} ${maxX - minX} ${PADDING - minY}`;
+  const box = frameBounds(frames.map(({ keypoints }) => keypoints), PADDING);
 
   return (
-    <svg viewBox={viewBox} role="img" aria-label={label} className={`${styles.figure} ${className ?? ""}`}>
-      <line className={styles.ground} x1={minX} x2={maxX} y1={0.5} y2={0.5} />
+    <svg viewBox={`${box.x} ${box.y} ${box.width} ${box.height}`} role="img" aria-label={label} className={`${styles.figure} ${className ?? ""}`}>
+      <line className={styles.ground} x1={box.x} x2={box.x + box.width} y1={0.5} y2={0.5} />
       {frames.map(({ keypoints }, index) => (
         <Skeleton
           key={index}

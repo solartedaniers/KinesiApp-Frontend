@@ -35,7 +35,7 @@ export function Protractor({ degrees, label, valueText }: { degrees: number; lab
   const start = onArc(0, R);
   const end = onArc(180, R);
   return (
-    <figure className={styles.figure} style={{ "--lab-angle": clamped } as CSSProperties}>
+    <div className={styles.figure} style={{ "--lab-angle": clamped } as CSSProperties}>
       <svg viewBox="0 0 200 104" className={styles.svg} aria-hidden>
         <path className={styles.scale} d={`M${start.x} ${start.y}A${R} ${R} 0 0 1 ${end.x} ${end.y}`} />
         {TICKS.map((deg) => {
@@ -54,10 +54,10 @@ export function Protractor({ degrees, label, valueText }: { degrees: number; lab
         <line className={styles.needle} x1={CX} y1={CY} x2={CX - (R - 4)} y2={CY} />
         <circle className={styles.pivot} cx={CX} cy={CY} r={3} />
       </svg>
-      <figcaption className={styles.caption}>
+      <p className={styles.caption}>
         <span className={styles.value}>{valueText}</span>
         <span className={styles.label}>{label}</span>
-      </figcaption>
-    </figure>
+      </p>
+    </div>
   );
 }

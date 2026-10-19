@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { centerOfMass, interiorAngle, JUMP_PHASES, SEGMENTS, sequence, smoothPath, solvePose, SQUAT_PHASES } from "./pose.ts";
+import { centerOfMass, frameBounds, interiorAngle, JUMP_PHASES, SEGMENTS, sequence, smoothPath, solvePose, SQUAT_PHASES } from "./pose.ts";
 
 const STANDING = { shank: 0, knee: 0, hip: 0, shoulder: 0, elbow: 0 };
 const close = (a: number, b: number, tolerance = 0.01) => assert.ok(Math.abs(a - b) < tolerance, `${a} ≉ ${b}`);
@@ -40,4 +40,14 @@ test("la curva suave empieza y termina en los puntos dados", () => {
   assert.match(d, /^M0 0 C/);
   assert.match(d, / 20 0$/);
   assert.equal(smoothPath([]), "");
+});
+
+test("la caja de las poses las contiene con su margen y deja el suelo adentro", () => {
+  const frames = sequence(JUMP_PHASES, 30, 0).map(({ keypoints }) => keypoints);
+  const box = frameBounds(frames, 5);
+  for (const p of frames.flatMap((k) => Object.values(k))) {
+    assert.ok(p.x >= box.x + 5 - 1e-9 && p.x <= box.x + box.width - 5 + 1e-9);
+    assert.ok(p.y >= box.y + 5 - 1e-9);
+  }
+  assert.ok(box.y + box.height >= 5);
 });
