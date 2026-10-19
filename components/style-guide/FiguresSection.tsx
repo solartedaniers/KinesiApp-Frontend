@@ -13,7 +13,7 @@ const box = frameBounds([bottom], 8);
 const styles = {
   layout: "grid gap-4 lg:grid-cols-[1fr_1.2fr]",
   figure: `${panel} lab-scroll grid content-between gap-6`,
-  skeleton: "mx-auto w-full max-w-[18rem] stroke-ink [stroke-width:1.4]",
+  skeleton: "mx-auto w-full max-w-[24rem] self-center stroke-ink [stroke-width:1.4]",
   side: "grid gap-4",
 };
 
