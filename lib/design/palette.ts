@@ -4,7 +4,7 @@
  * Mantengo los nombres semánticos de la paleta anterior para que, al aprobarla, baste con moverla
  * a :root. Los contrastes AA los compruebo en palette.test.ts, no a ojo.
  *
- * risk-* sigue siendo exclusiva del riesgo; trace-right es la segunda serie (lado derecho) de las
+ * risk-* sigue siendo exclusiva del riesgo; trace-alt es la segunda serie (inclinación del tronco) de las
  * gráficas, en un tono que no se confunde con ninguna del riesgo.
  */
 export const LAB_COLORS = {
@@ -22,7 +22,7 @@ export const LAB_COLORS = {
   "accent-soft": ["#E0E3F4", "#182142"],
   "on-accent": ["#FFFFFF", "#0B1020"],
   "accent-vivid": ["#7F97FF", "#8BA1FF"],
-  "trace-right": ["#8E2C6C", "#E78DC6"],
+  "trace-alt": ["#8E2C6C", "#E78DC6"],
   "risk-low": ["#2C6A4C", "#5CC995"],
   "risk-low-soft": ["#DCEBE1", "#10261C"],
   "risk-moderate": ["#875800", "#E2AE48"],
@@ -42,7 +42,7 @@ const SURFACES = ["canvas", "panel", "sunken"] as const;
 
 // Texto normal: 4.5:1 sobre las tres superficies. Elementos de interfaz (bordes, trazos): 3:1
 export const CONTRAST_REQUIREMENTS: { fg: LabColor; bg: LabColor; min: number }[] = [
-  ...(["ink", "ink-muted", "accent", "accent-hover", "trace-right", "risk-low", "risk-moderate", "risk-high"] as const)
+  ...(["ink", "ink-muted", "accent", "accent-hover", "trace-alt", "risk-low", "risk-moderate", "risk-high"] as const)
     .flatMap((fg) => SURFACES.map((bg) => ({ fg, bg, min: 4.5 }))),
   { fg: "risk-low", bg: "risk-low-soft", min: 4.5 },
   { fg: "risk-moderate", bg: "risk-moderate-soft", min: 4.5 },
