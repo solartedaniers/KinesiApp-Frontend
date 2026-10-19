@@ -16,7 +16,7 @@ const styles = {
   root: "grid gap-5",
   plate: "w-full text-ink",
   bones: "stroke-ink [stroke-width:1.6]",
-  trajectory: "fill-none stroke-accent [stroke-width:1.4]",
+  trajectory: "lab-glow fill-none stroke-accent [stroke-width:1.4]",
   meter: "grid gap-2",
   meterHead: "flex items-baseline justify-between gap-4",
   stage: "text-base font-semibold text-ink",
@@ -49,9 +49,14 @@ export function AnalysisProgress({
     <div className={styles.root}>
       <svg className={styles.plate} viewBox={`${VIEW.x} ${VIEW.y} ${VIEW.width} ${VIEW.height}`} role="img" aria-label={labels.plate}>
         <line className="stroke-line-strong [stroke-width:0.8]" x1={VIEW.x} x2={VIEW.x + VIEW.width} y1={0.5} y2={0.5} />
-        {FRAMES.slice(0, visible).map(({ keypoints }, index) => (
-          <Skeleton key={index} keypoints={keypoints} className={styles.bones} opacity={0.3 + (0.7 * index) / (FRAMES.length - 1)} />
-        ))}
+        {FRAMES.map(({ keypoints }, index) =>
+          // Lo que falta procesar queda como sombra tenue; al exponerse, la pose se monta de nuevo y se traza
+          index < visible ? (
+            <Skeleton key={`${index}-on`} keypoints={keypoints} className={styles.bones} opacity={0.3 + (0.7 * index) / (FRAMES.length - 1)} />
+          ) : (
+            <Skeleton key={`${index}-off`} keypoints={keypoints} className={styles.bones} opacity={0.08} animate={false} />
+          ),
+        )}
         {visible > 1 && <path className={styles.trajectory} d={smoothPath(FRAMES.slice(0, visible).map(({ center }) => center))} />}
         {FRAMES.slice(0, visible).map(({ center }, index) => <CenterOfMassMark key={index} x={center.x} y={center.y} size={5} />)}
       </svg>
