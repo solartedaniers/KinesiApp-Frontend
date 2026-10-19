@@ -1,10 +1,6 @@
-import type { RiskLevel } from "@/lib/design/risk";
+import { RISK_SOFT, RISK_STEP as BARS, RISK_TEXT, type RiskLevel } from "@/lib/design/risk";
 
-// El riesgo nunca depende sólo del color: cada nivel suma una barra y tiene su propia trama
-const BARS: Record<RiskLevel, number> = { low: 1, moderate: 2, high: 3 };
-
-export const RISK_TEXT: Record<RiskLevel, string> = { low: "text-risk-low", moderate: "text-risk-moderate", high: "text-risk-high" };
-const RISK_SOFT: Record<RiskLevel, string> = { low: "bg-risk-low-soft", moderate: "bg-risk-moderate-soft", high: "bg-risk-high-soft" };
+export { RISK_TEXT };
 
 /** Id del <pattern> de cada nivel; las definiciones las monta RiskPatterns una vez por página. */
 export const riskPatternId = (level: RiskLevel) => `lab-risk-${level}`;
