@@ -447,6 +447,14 @@
   box-shadow: inset 0 1px 3px var(--kin-shade), 0 0 0 2px var(--kin-ink);
 }
 
+/* Con error y foco a la vez conservo el anillo del foco; si no, la regla del error lo borraba */
+.kin-field:has([aria-invalid="true"]):focus-within {
+  box-shadow:
+    inset 0 1px 3px var(--kin-shade),
+    0 0 0 2px var(--kin-ink),
+    0 0 0 5px var(--kin-accent);
+}
+
 .kin-check-box {
   background: linear-gradient(180deg, var(--kin-panel), var(--kin-raised));
   box-shadow: inset 0 0 0 1.5px var(--kin-line-strong), 0 1px 2px var(--kin-shade);
