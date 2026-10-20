@@ -72,7 +72,7 @@ const MOTION = {
 // (la guía y sus pantallas). Un data-theme anidado fuerza un modo, como el escenario del video
 const INSTRUMENT = '[data-design="instrument"]';
 // Cuánto color lleva el brillo de bordes y medidores: discreto sobre blanco, intenso en la cabina oscura
-const GLOW_MIX = ["24%", "60%"];
+const GLOW_MIX = ["42%", "62%"];
 const instrument = (mode: 0 | 1) => ({
   colorScheme: mode ? "dark" : "light",
   ...variables(mode, INSTRUMENT_COLORS),

@@ -16,13 +16,13 @@
 .kin-ambient {
   background-color: var(--kin-canvas);
   background-image:
-    radial-gradient(70rem 40rem at -10% -12%, color-mix(in srgb, var(--kin-knee) 16%, transparent), transparent 62%),
-    radial-gradient(56rem 34rem at 112% 4%, color-mix(in srgb, var(--kin-center) 13%, transparent), transparent 60%),
-    radial-gradient(60rem 36rem at 50% 118%, color-mix(in srgb, var(--kin-trunk) 11%, transparent), transparent 60%);
+    radial-gradient(70rem 40rem at -10% -12%, color-mix(in srgb, var(--kin-knee) 26%, transparent), transparent 62%),
+    radial-gradient(56rem 34rem at 112% 4%, color-mix(in srgb, var(--kin-center) 22%, transparent), transparent 60%),
+    radial-gradient(60rem 36rem at 50% 118%, color-mix(in srgb, var(--kin-hip) 14%, transparent), transparent 60%);
 }
 
 .kin-tinted {
-  --kin-card-light: radial-gradient(46rem 22rem at 0% 0%, color-mix(in srgb, var(--tint, var(--kin-knee)) 11%, transparent), transparent 70%);
+  --kin-card-light: radial-gradient(46rem 24rem at 0% 0%, color-mix(in srgb, var(--tint, var(--kin-knee)) 18%, transparent), transparent 70%);
   background-image: var(--kin-card-light);
 }
 
@@ -61,7 +61,11 @@
 /* Pozo hundido para lecturas y campos: la sombra interior dice que está "dentro" del instrumento */
 .kin-well {
   border-radius: 0.875rem;
-  background: linear-gradient(180deg, var(--kin-sunken), color-mix(in srgb, var(--kin-sunken) 70%, var(--kin-panel)));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--tint, var(--kin-knee)) 7%, var(--kin-sunken)),
+    color-mix(in srgb, var(--kin-sunken) 70%, var(--kin-panel))
+  );
   box-shadow: inset 0 2px 5px var(--kin-shade), inset 0 -1px 0 var(--kin-highlight);
 }
 
@@ -110,6 +114,14 @@
   pointer-events: none;
 }
 
+/* Escenario del video: un pozo oscuro con el mismo relieve de la esfera, pero rectangular */
+.kin-stage {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--kin-knee) 16%, var(--kin-stage)), var(--kin-stage) 70%);
+  box-shadow: inset 0 2px 12px rgb(0 0 0 / 0.6), 0 0 0 1px var(--kin-line);
+}
+
 /* La aguja y el arco del valor giran desde el cero; --angle y --fill los pone el componente */
 .kin-needle {
   transform-box: view-box;
@@ -120,6 +132,14 @@
 .kin-fill {
   stroke-dasharray: 100 100;
   stroke-dashoffset: calc(100 - var(--fill));
+}
+
+.kin-dial-label {
+  font-family: var(--kin-font-display);
+  font-size: 10.5px;
+  font-weight: 600;
+  fill: var(--kin-ink-muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .kin-signal-glow {
@@ -400,7 +420,13 @@
 /* ---- Carga ---- */
 
 .kin-shimmer {
-  background: linear-gradient(90deg, var(--kin-sunken) 0%, var(--kin-raised) 50%, var(--kin-sunken) 100%) 0 0 / 200% 100%;
+  background: linear-gradient(
+      90deg,
+      var(--kin-sunken) 0%,
+      color-mix(in srgb, var(--tint, var(--kin-knee)) 22%, var(--kin-sunken)) 50%,
+      var(--kin-sunken) 100%
+    )
+    0 0 / 200% 100%;
 }
 
 /* ---- Transiciones entre vistas: la esfera del último análisis se transforma en la del detalle ---- */
