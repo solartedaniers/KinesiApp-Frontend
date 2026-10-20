@@ -13,7 +13,7 @@ const styles = {
   wordmark: "font-display text-xl font-semibold tracking-[-0.01em] [font-stretch:92%]",
   nav: "order-last w-full overflow-x-auto pb-1 lg:order-none lg:w-auto lg:pb-0",
   track: "instrument-inset flex w-max gap-0.5 rounded-[0.875rem] bg-sunken p-1",
-  link: "flex min-h-10 items-center gap-2 rounded-[0.625rem] px-3.5 text-sm font-medium whitespace-nowrap text-ink-muted hover:text-ink hover:no-underline aria-[current=page]:bg-panel aria-[current=page]:text-ink aria-[current=page]:shadow-[0_1px_2px_rgb(15_25_35/0.12),0_4px_12px_-6px_rgb(15_25_35/0.2)]",
+  link: "flex min-h-11 items-center gap-2 rounded-[0.625rem] px-3.5 text-sm font-medium whitespace-nowrap text-ink-muted hover:text-ink hover:no-underline aria-[current=page]:bg-panel aria-[current=page]:text-ink aria-[current=page]:shadow-[0_1px_2px_rgb(15_25_35/0.12),0_4px_12px_-6px_rgb(15_25_35/0.2)]",
   status: "flex min-h-9 items-center gap-2 rounded-[0.625rem] bg-sunken px-3 text-sm font-medium text-ink",
 };
 
