@@ -81,6 +81,23 @@ export function interiorAngle(a: Point, vertex: Point, b: Point): number {
   return (Math.acos(Math.min(1, Math.max(-1, cos))) * 180) / Math.PI;
 }
 
+/**
+ * Sector de la flexión en la rodilla, entre la prolongación de la pierna y el muslo, con radio `radius`.
+ * Es el ángulo que mide la IA: 0 con la pierna extendida.
+ */
+export function flexionArc(ankle: Point, knee: Point, hip: Point, radius: number): string {
+  const unit = (from: Point, to: Point) => {
+    const length = Math.hypot(to.x - from.x, to.y - from.y);
+    return { x: (to.x - from.x) / length, y: (to.y - from.y) / length };
+  };
+  const extension = unit(ankle, knee);
+  const thigh = unit(knee, hip);
+  const start = { x: knee.x + extension.x * radius, y: knee.y + extension.y * radius };
+  const end = { x: knee.x + thigh.x * radius, y: knee.y + thigh.y * radius };
+  const sweep = extension.x * thigh.y - extension.y * thigh.x > 0 ? 1 : 0;
+  return `M${round(knee.x)} ${round(knee.y)}L${round(start.x)} ${round(start.y)}A${radius} ${radius} 0 0 ${sweep} ${round(end.x)} ${round(end.y)}Z`;
+}
+
 /** Huesos del esqueleto, como pares de keypoints. */
 export const BONES: [Joint, Joint][] = [
   ["heel", "toe"], ["ankle", "knee"], ["knee", "hip"], ["hip", "shoulder"], ["shoulder", "neck"],

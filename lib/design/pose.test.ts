@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { centerOfMass, frameBounds, interiorAngle, JUMP_PHASES, SEGMENTS, sequence, smoothPath, solvePose, squatPoseAt, SQUAT_PHASES } from "./pose.ts";
+import { centerOfMass, flexionArc, frameBounds, interiorAngle, JUMP_PHASES, SEGMENTS, sequence, smoothPath, solvePose, squatPoseAt, SQUAT_PHASES } from "./pose.ts";
 
 const STANDING = { shank: 0, knee: 0, hip: 0, shoulder: 0, elbow: 0 };
 const close = (a: number, b: number, tolerance = 0.01) => assert.ok(Math.abs(a - b) < tolerance, `${a} ≉ ${b}`);
@@ -57,4 +57,15 @@ test("la sentadilla por ángulo coincide con sus fases extremas y respeta la rod
   assert.deepEqual(squatPoseAt(SQUAT_PHASES[3].angles.knee), solvePose(SQUAT_PHASES[3].angles));
   const k = squatPoseAt(80);
   assert.ok(Math.abs(180 - interiorAngle(k.ankle, k.knee, k.hip) - 80) < 1e-9);
+});
+
+test("el sector de flexión nace en la rodilla y termina sobre el muslo", () => {
+  const k = squatPoseAt(90);
+  const d = flexionArc(k.ankle, k.knee, k.hip, 10);
+  assert.ok(d.startsWith(`M${Math.round(k.knee.x * 100) / 100} ${Math.round(k.knee.y * 100) / 100}`));
+  const [x, y] = d.split(" ").slice(-2).map((n) => Number(n.replace("Z", "")));
+  const towardHip = { x: k.hip.x - k.knee.x, y: k.hip.y - k.knee.y };
+  const towardEnd = { x: x - k.knee.x, y: y - k.knee.y };
+  assert.ok(towardHip.x * towardEnd.x + towardHip.y * towardEnd.y > 0);
+  assert.ok(Math.abs(Math.hypot(towardEnd.x, towardEnd.y) - 10) < 0.05);
 });
