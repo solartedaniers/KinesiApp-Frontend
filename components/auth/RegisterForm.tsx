@@ -21,6 +21,11 @@ import { formStyles as styles } from "@/components/app/page-classes";
 
 const INITIAL_STATE: FormState<RegisterField> = {};
 
+const consentStyles = {
+  checkbox: "flex cursor-pointer items-start gap-3 text-sm [&_input]:mt-0.5 [&_input]:size-5 [&_input]:flex-none [&_input]:accent-accent",
+  error: "text-sm font-medium text-ink",
+};
+
 export function RegisterForm() {
   const t = useT();
   const roleOptions = SIGNUP_ROLES.map((role) => ({ value: role, label: t.roles[role] }));
@@ -70,6 +75,27 @@ export function RegisterForm() {
         required
         error={state.fieldErrors?.confirm_password}
       />
+      {/* Obligatorio: Register exige la versión vigente del consentimiento de video */}
+      <label className={consentStyles.checkbox}>
+        <input
+          type="checkbox"
+          name="video_consent"
+          required
+          aria-invalid={state.fieldErrors?.video_consent ? true : undefined}
+          aria-describedby={state.fieldErrors?.video_consent ? "video-consent-error" : undefined}
+        />
+        <span>
+          {t.register.videoConsent}{" "}
+          <Link href={ROUTES.legalVideoConsent} target="_blank">
+            {t.register.videoConsentLink}
+          </Link>
+        </span>
+      </label>
+      {state.fieldErrors?.video_consent && (
+        <p id="video-consent-error" className={consentStyles.error}>
+          {state.fieldErrors.video_consent}
+        </p>
+      )}
       <Button type="submit" block pending={pending} pendingLabel={t.register.pending} className={styles.submit}>
         {t.register.submit}
       </Button>
