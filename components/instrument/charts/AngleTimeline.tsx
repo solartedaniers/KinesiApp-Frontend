@@ -74,7 +74,7 @@ export function AngleTimeline({ knee, trunk, repetitions, durationMs }: Props) {
   return (
     <div className="grid gap-5">
       <div className="grid gap-4 sm:grid-cols-[13rem_1fr] sm:items-stretch">
-        <figure data-theme="dark" className="kin-face relative grid aspect-[4/5] place-items-center overflow-hidden rounded-stage bg-stage text-on-stage sm:aspect-auto">
+        <figure data-theme="dark" className="kin-stage grid aspect-[4/3] place-items-center rounded-stage text-on-stage sm:aspect-auto">
           <svg viewBox="-50 -116 106 126" className="h-full max-h-60 w-full" role="img" aria-label={`${c.stage}: ${seconds(ms)}`}>
             <line x1="-50" x2="56" y1="0" y2="0" className="stroke-line-strong" strokeWidth="0.8" />
             <PoseFigure keypoints={squatPoseAt(kneeNow)} />
@@ -133,14 +133,14 @@ export function AngleTimeline({ knee, trunk, repetitions, durationMs }: Props) {
 
       <div className="grid grid-cols-[2.75rem_1fr]">
         <span />
-        <div className="flex h-11 gap-1" role="group" aria-label={c.repetitions}>
+        <div className="grid grid-cols-5 gap-1 sm:grid-cols-10" role="group" aria-label={c.repetitions}>
           {repetitions.map((rep, i) => {
             const z = ZONE_CLASS[zoneOf(rep.peak.degrees)];
             return (
               <button
                 key={rep.startMs}
                 type="button"
-                className={`kin-light grid min-w-0 flex-1 place-items-center rounded-control text-xs font-semibold [font-variant-numeric:tabular-nums] transition-transform duration-[var(--kin-motion-hover)] hover:-translate-y-0.5 aria-current:outline-2 aria-current:outline-offset-2 aria-current:outline-ink ${z.soft} ${z.text}`}
+                className={`kin-light grid min-h-11 min-w-0 place-items-center rounded-control text-xs font-semibold [font-variant-numeric:tabular-nums] transition-transform duration-[var(--kin-motion-hover)] hover:-translate-y-0.5 aria-current:outline-2 aria-current:outline-offset-2 aria-current:outline-ink ${z.soft} ${z.text}`}
                 style={cssVars({ "--i": i })}
                 aria-current={i === current || undefined}
                 aria-label={format(c.repetition, { index: i + 1, risk: t.analysis.risk[rep.level], peak: f.degrees(rep.peak.degrees) })}
