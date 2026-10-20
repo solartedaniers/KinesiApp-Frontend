@@ -1,7 +1,7 @@
 // Análisis de ejemplo para la guía de estilo: una sentadilla de 40 s a 30 fps con la forma de los
 // datos reales (flexión de rodilla e inclinación del tronco por frame, repeticiones con su puntaje).
 // Es determinista (semilla fija) para que el render del servidor y el del cliente coincidan.
-import { VIDEO_MAX_SECONDS } from "../config";
+import { VIDEO_MAX_SECONDS } from "../config.ts";
 import type { RiskLevel } from "./risk";
 
 export type SampleJoint = "knee" | "trunk";
