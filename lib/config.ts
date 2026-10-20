@@ -49,3 +49,6 @@ export const OTP_RESEND_COOLDOWN_SECONDS = 30;
 export const APP_TIME_ZONE = process.env.APP_TIME_ZONE ?? "America/Bogota";
 
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
+// Tope de duración de los videos: la cámara se detiene sola y un archivo más largo se rechaza
+export const VIDEO_MAX_SECONDS = 40;
