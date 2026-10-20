@@ -34,10 +34,12 @@ export function EmptyState({ title, body, action }: { title: string; body: strin
 
 /** Carga con la forma de lo que viene: un medidor y tres renglones con brillo que barre. */
 export function LoadingState({ label }: { label: string }) {
+  // El texto va dentro de la región viva: un aria-label sobre un role="status" vacío no siempre se anuncia
   return (
-    <div className="kin-card grid grid-cols-[4.5rem_1fr] items-center gap-4 p-5" role="status" aria-label={label}>
-      <span className="kin-shimmer aspect-square rounded-full" />
-      <span className="grid gap-2.5">
+    <div className="kin-card grid grid-cols-[4.5rem_1fr] items-center gap-4 p-5" role="status">
+      <span className="visually-hidden">{label}</span>
+      <span className="kin-shimmer aspect-square rounded-full" aria-hidden />
+      <span className="grid gap-2.5" aria-hidden>
         <span className="kin-shimmer h-3.5 w-3/5 rounded-full" />
         <span className="kin-shimmer h-3 w-full rounded-full" />
         <span className="kin-shimmer h-3 w-4/5 rounded-full" />
