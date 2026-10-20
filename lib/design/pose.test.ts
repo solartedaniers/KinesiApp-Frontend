@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { centerOfMass, frameBounds, interiorAngle, JUMP_PHASES, SEGMENTS, sequence, smoothPath, solvePose, SQUAT_PHASES } from "./pose.ts";
+import { centerOfMass, frameBounds, interiorAngle, JUMP_PHASES, SEGMENTS, sequence, smoothPath, solvePose, squatPoseAt, SQUAT_PHASES } from "./pose.ts";
 
 const STANDING = { shank: 0, knee: 0, hip: 0, shoulder: 0, elbow: 0 };
 const close = (a: number, b: number, tolerance = 0.01) => assert.ok(Math.abs(a - b) < tolerance, `${a} ≉ ${b}`);
@@ -50,4 +50,11 @@ test("la caja de las poses las contiene con su margen y deja el suelo adentro", 
     assert.ok(p.y >= box.y + 5 - 1e-9);
   }
   assert.ok(box.y + box.height >= 5);
+});
+
+test("la sentadilla por ángulo coincide con sus fases extremas y respeta la rodilla pedida", () => {
+  assert.deepEqual(squatPoseAt(0), solvePose(SQUAT_PHASES[0].angles));
+  assert.deepEqual(squatPoseAt(SQUAT_PHASES[3].angles.knee), solvePose(SQUAT_PHASES[3].angles));
+  const k = squatPoseAt(80);
+  assert.ok(Math.abs(180 - interiorAngle(k.ankle, k.knee, k.hip) - 80) < 1e-9);
 });

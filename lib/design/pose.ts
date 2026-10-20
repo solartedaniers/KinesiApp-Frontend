@@ -113,6 +113,21 @@ export const SQUAT_PHASES: Phase[] = [
   { angles: { shank: 0, knee: 0, hip: 0, shoulder: 80, elbow: 0 }, lift: 0 },
 ];
 
+const STANDING = SQUAT_PHASES[0].angles;
+const DEEPEST = SQUAT_PHASES[3].angles;
+
+/**
+ * Postura de sentadilla para una flexión de rodilla dada: interpolo cada ángulo entre estar de pie y
+ * la fase más profunda, así una serie de ángulos medidos mueve un esqueleto coherente.
+ */
+export function squatPoseAt(knee: number, ankle: Point = { x: 0, y: 0 }): Keypoints {
+  const depth = Math.max(0, knee) / DEEPEST.knee;
+  const angles = Object.fromEntries(
+    (Object.keys(STANDING) as (keyof PoseAngles)[]).map((key) => [key, STANDING[key] + (DEEPEST[key] - STANDING[key]) * depth]),
+  ) as PoseAngles;
+  return solvePose({ ...angles, knee }, ankle);
+}
+
 export type Frame = { keypoints: Keypoints; center: Point };
 
 /** Cada fase resuelta y desplazada `spacing` a la derecha, como en una placa de Marey. */
