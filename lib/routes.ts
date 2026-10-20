@@ -1,6 +1,11 @@
+import { DEFAULT_LOCALE, type Locale } from "./i18n/locale.ts";
+import type { MovementType } from "./types.ts";
+
 // Rutas de la app en un solo lugar: ningún componente escribe un path suelto.
 export const ROUTES = {
   landing: "/",
+  guide: "/guide",
+  offline: "/offline",
   login: "/login",
   register: "/register",
   verifyEmail: "/verify-email",
@@ -28,10 +33,10 @@ export const ROUTES = {
 const AUTH_ROUTES: readonly string[] = [ROUTES.login, ROUTES.register, ROUTES.verifyEmail, ROUTES.passwordRecovery];
 
 // Lo que no está aquí ni en AUTH_ROUTES exige sesión: privado por defecto, más seguro ante rutas nuevas
-const PUBLIC_PREFIXES: readonly string[] = ["/legal", ROUTES.styleGuide];
+const PUBLIC_PREFIXES: readonly string[] = ["/legal", ROUTES.styleGuide, ROUTES.guide, "/en"];
 // Los Route Handlers de sesión deben poder correr sin sesión: si fueran privados, /login?next= los
 // volvería a llamar después de iniciar sesión y cerraría la sesión recién abierta
-const PUBLIC_ROUTES: readonly string[] = [ROUTES.landing, "/manifest.webmanifest", ROUTES.logout, ROUTES.sessionExpired, ROUTES.systemPing];
+const PUBLIC_ROUTES: readonly string[] = [ROUTES.landing, ROUTES.offline, "/manifest.webmanifest", "/sitemap.xml", "/robots.txt", ROUTES.logout, ROUTES.sessionExpired, ROUTES.systemPing];
 
 function matches(pathname: string, route: string): boolean {
   return pathname === route || pathname.startsWith(`${route}/`);
@@ -45,6 +50,16 @@ export function isPrivateRoute(pathname: string): boolean {
   return !isAuthRoute(pathname)
     && !PUBLIC_ROUTES.includes(pathname)
     && !PUBLIC_PREFIXES.some((prefix) => matches(pathname, prefix));
+}
+
+/** Páginas públicas por idioma: el español va sin prefijo (`/guide/jump`) y el inglés con `/en`. */
+export function localizedPath(locale: Locale, path: string): string {
+  if (locale === DEFAULT_LOCALE) return path;
+  return path === ROUTES.landing ? `/${locale}` : `/${locale}${path}`;
+}
+
+export function guidePath(movement: MovementType, locale: Locale = DEFAULT_LOCALE): string {
+  return localizedPath(locale, `${ROUTES.guide}/${movement}`);
 }
 
 export const NEXT_PARAM = "next";

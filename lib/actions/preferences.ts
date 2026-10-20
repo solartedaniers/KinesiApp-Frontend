@@ -8,9 +8,9 @@ import { isLocale } from "../i18n";
 import { isTheme } from "../theme";
 
 async function storePreference(name: string, value: string): Promise<void> {
-  // httpOnly: sólo la lee el servidor, que renderiza ya con la preferencia aplicada
+  // Sin httpOnly: las páginas estáticas la leen en el navegador (no es un secreto)
   (await cookies()).set(name, value, {
-    httpOnly: true,
+    httpOnly: false,
     secure: IS_PRODUCTION,
     sameSite: "lax",
     path: "/",

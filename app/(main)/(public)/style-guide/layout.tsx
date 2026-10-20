@@ -1,4 +1,4 @@
-import "./instrument.css";
+import "@/app/instrument.css";
 
 import { RevealRoot } from "@/components/instrument/RevealRoot";
 import { INSTRUMENT_FONT_VARIABLES } from "@/lib/design/fonts";

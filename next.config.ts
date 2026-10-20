@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+import { DEFAULT_LOCALE } from "./lib/i18n/locale.ts";
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -15,6 +17,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Hay dos layouts raíz (el sitio público estático y la app): no existe uno común para el 404
+  experimental: { globalNotFound: true },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
@@ -23,7 +27,19 @@ const nextConfig: NextConfig = {
     return [
       { source: "/analysis/:path*", destination: "/analyses/:path*", permanent: true },
       { source: "/report/:id", destination: "/analyses/:id/report", permanent: true },
+      // El español va sin prefijo: /es duplicaría las mismas páginas
+      { source: `/${DEFAULT_LOCALE}`, destination: "/", permanent: true },
+      { source: `/${DEFAULT_LOCALE}/:path*`, destination: "/:path*", permanent: true },
     ];
+  },
+  // El sitio público vive en app/(site)/[locale]; sin prefijo sirvo las páginas prerenderizadas del español
+  async rewrites() {
+    return {
+      beforeFiles: [
+        { source: "/", destination: `/${DEFAULT_LOCALE}` },
+        { source: "/guide/:movement", destination: `/${DEFAULT_LOCALE}/guide/:movement` },
+      ],
+    };
   },
 };
 

@@ -4,25 +4,134 @@
     "description": "Video analysis of jumps and squats to detect knee injury risk.",
     "disclaimer": "KinesiApp is a support tool and does not replace an assessment by a health professional."
   },
-  "landing": {
-    "title": "Spot injury risk before it shows up",
-    "lead": "Record a jump or a squat and get an estimate of your knee injury risk based on the joint angles of the movement.",
+  "site": {
+    "nav": "Site navigation",
+    "home": "KinesiApp home",
+    "guides": "Recording guides",
     "signIn": "Sign in",
     "createAccount": "Create account",
-    "features": [
+    "language": "Language",
+    "theme": "Theme",
+    "legal": "Video consent",
+    "sampleData": "Example with sample data"
+  },
+  "landing": {
+    "metaTitle": "KinesiApp · Biomechanical analysis of jumps and squats",
+    "metaDescription": "Record a jump or a squat from the side and measure knee and trunk angles, repetitions and knee injury risk, with an assistant that explains the result.",
+    "title": "See how your knees move in every jump",
+    "lead": "Record a jump or a squat from the side. KinesiApp tracks your joints frame by frame and shows angles, repetitions and knee injury risk, with an assistant that explains every number.",
+    "signIn": "I already have an account",
+    "createAccount": "Create a free account",
+    "heroCaption": "Countermovement jump: each silhouette is a phase and the curve is the path of the center of gravity.",
+    "stepsTitle": "From video to reading in three steps",
+    "steps": [
       {
-        "title": "Athletes",
-        "body": "Record your movements and follow how your risk evolves."
+        "title": "Choose the movement",
+        "body": "Vertical jump or squat: each one is analyzed with its own phases and thresholds."
       },
       {
-        "title": "Coaches",
-        "body": "Manage your team and review each athlete's analyses."
+        "title": "Record from the side",
+        "body": "A fixed camera, about three meters away at hip height. Up to {seconds} seconds per video."
       },
       {
-        "title": "On any device",
-        "body": "Works in the browser: you can use it from your phone or your computer."
+        "title": "Read your movement",
+        "body": "Angles, repetitions and risk on one screen, plus a chat that answers your questions about the result."
       }
-    ]
+    ],
+    "measuresTitle": "What it measures",
+    "measuresLead": "Each signal has its own color, the same on the skeleton, the charts and the gauges.",
+    "measures": {
+      "knee": {
+        "name": "Knee flexion",
+        "body": "How much the knee bends in each repetition and whether it reaches the target zone."
+      },
+      "trunk": {
+        "name": "Trunk lean",
+        "body": "How far the trunk leans forward: compensating with the back loads the knee more."
+      },
+      "center": {
+        "name": "Center of gravity",
+        "body": "Its path shows whether you go down and up in line or drift."
+      },
+      "risk": {
+        "name": "Injury risk",
+        "body": "A low, moderate or high estimate based on the pattern of every repetition."
+      }
+    },
+    "rolesTitle": "For those who train and those who coach",
+    "roles": {
+      "athlete": {
+        "title": "Athletes",
+        "body": "Record your movements, compare each attempt with the previous ones and download the PDF report."
+      },
+      "coach": {
+        "title": "Coaches",
+        "body": "Build your teams, review each athlete's analyses and compare them side by side."
+      }
+    },
+    "guidesTitle": "Before you record",
+    "guidesLead": "A short guide per movement: where to place the camera and how to perform it so the measurement is reliable."
+  },
+  "guide": {
+    "metaDescription": "How to place the camera and perform {movement} so KinesiApp measures your joint angles correctly.",
+    "eyebrow": "Recording guide",
+    "setupTitle": "Set up the camera",
+    "setup": [
+      "From the side: the camera faces your side, not your front.",
+      "Fixed, on a tripod or propped up: don't follow the movement by hand.",
+      "About three meters away and at hip height, with your whole body in frame, from feet to head.",
+      "Good light, a clear background and clothes that let the knee and hip show."
+    ],
+    "diagram": {
+      "label": "Diagram: the camera about three meters away, from the side and at hip height.",
+      "distance": "≈ 3 m",
+      "height": "hip height"
+    },
+    "limitsTitle": "Video limits",
+    "limitDuration": "Up to {seconds} seconds per video. Recording stops by itself when it gets there.",
+    "limitSize": "Files up to {size} MB.",
+    "limitsNote": "The server sets these limits and this page updates itself when they change.",
+    "executionTitle": "How to perform it",
+    "mistakesTitle": "What ruins the measurement",
+    "phasesLabel": "Phases of {movement}, from left to right, with the path of the center of gravity.",
+    "start": "Record now",
+    "other": "See the guide for {movement}",
+    "back": "Back to home",
+    "movements": {
+      "jump": {
+        "name": "the jump",
+        "title": "How to record your jump",
+        "lead": "A countermovement vertical jump: you dip, drive up with your arms and land in the same spot.",
+        "execution": [
+          "Start standing still for a second, side-on to the camera.",
+          "Dip quickly bending knees and hips, and swing your arms back.",
+          "Jump as high as you can, swinging your arms up.",
+          "Land on the balls of your feet and absorb by bending your knees.",
+          "You can do several jumps in the same video, with a short pause between them."
+        ],
+        "mistakes": [
+          "Leaving the frame during flight: leave room above your head.",
+          "Turning your body toward the camera when landing.",
+          "Recording in slow motion or with a filter that crops the video."
+        ]
+      },
+      "squat": {
+        "name": "the squat",
+        "title": "How to record your squat",
+        "lead": "A bodyweight squat: you lower with control to a comfortable depth and stand back up.",
+        "execution": [
+          "Feet hip-width apart and arms forward for balance.",
+          "Lower by pushing your hips back, chest up.",
+          "Go as deep as you can without lifting your heels.",
+          "Stand up without bouncing and repeat at a steady pace."
+        ],
+        "mistakes": [
+          "Facing the camera: from the front it can't see how much the knee bends.",
+          "Someone else crossing the frame during the set.",
+          "Cutting the video before the last rep is up."
+        ]
+      }
+    }
   },
   "authShell": {
     "tagline": "Your movement, measured precisely.",

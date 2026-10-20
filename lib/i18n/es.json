@@ -4,25 +4,134 @@
     "description": "Análisis de video del salto y la sentadilla para detectar riesgo de lesión de rodilla.",
     "disclaimer": "KinesiApp es una herramienta de apoyo y no reemplaza la valoración de un profesional de la salud."
   },
-  "landing": {
-    "title": "Detecta el riesgo de lesión antes de que aparezca",
-    "lead": "Graba un salto o una sentadilla y recibe una estimación del riesgo de lesión de rodilla a partir de los ángulos articulares del movimiento.",
+  "site": {
+    "nav": "Navegación del sitio",
+    "home": "Inicio de KinesiApp",
+    "guides": "Guías de grabación",
     "signIn": "Iniciar sesión",
     "createAccount": "Crear cuenta",
-    "features": [
+    "language": "Idioma",
+    "theme": "Tema",
+    "legal": "Consentimiento de video",
+    "sampleData": "Ejemplo con datos de muestra"
+  },
+  "landing": {
+    "metaTitle": "KinesiApp · Análisis biomecánico del salto y la sentadilla",
+    "metaDescription": "Graba de perfil un salto o una sentadilla y mide los ángulos de rodilla y tronco, las repeticiones y el riesgo de lesión de rodilla, con un asistente que explica el resultado.",
+    "title": "Mide cómo se mueven tus rodillas en cada salto",
+    "lead": "Graba de perfil un salto o una sentadilla. KinesiApp sigue tus articulaciones cuadro a cuadro y te muestra ángulos, repeticiones y el riesgo de lesión de rodilla, con un asistente que te explica cada número.",
+    "signIn": "Ya tengo cuenta",
+    "createAccount": "Crear cuenta gratis",
+    "heroCaption": "Salto con contramovimiento: cada silueta es una fase y la curva es la trayectoria del centro de gravedad.",
+    "stepsTitle": "Del video a la lectura en tres pasos",
+    "steps": [
       {
-        "title": "Deportistas",
-        "body": "Registra tus movimientos y sigue la evolución de tu riesgo."
+        "title": "Elige el movimiento",
+        "body": "Salto vertical o sentadilla: cada uno se analiza con sus propias fases y umbrales."
       },
       {
-        "title": "Entrenadores",
-        "body": "Gestiona a tu equipo y revisa los análisis de cada deportista."
+        "title": "Graba de perfil",
+        "body": "Cámara fija, a unos tres metros y a la altura de la cadera. Hasta {seconds} segundos por video."
       },
       {
-        "title": "En cualquier dispositivo",
-        "body": "Funciona en el navegador: puedes acceder desde tu celular o desde tu computador."
+        "title": "Lee tu movimiento",
+        "body": "Ángulos, repeticiones y riesgo en una sola pantalla, y un chat que responde tus dudas sobre el resultado."
       }
-    ]
+    ],
+    "measuresTitle": "Lo que mide",
+    "measuresLead": "Cada señal tiene su color, y es el mismo en el esqueleto, en las gráficas y en los medidores.",
+    "measures": {
+      "knee": {
+        "name": "Flexión de rodilla",
+        "body": "Cuánto se dobla la rodilla en cada repetición y si llega a la zona objetivo."
+      },
+      "trunk": {
+        "name": "Inclinación del tronco",
+        "body": "Cuánto se adelanta el tronco: compensar con la espalda carga más la rodilla."
+      },
+      "center": {
+        "name": "Centro de gravedad",
+        "body": "Su trayectoria muestra si bajas y subes en línea o te desplazas."
+      },
+      "risk": {
+        "name": "Riesgo de lesión",
+        "body": "Una estimación de bajo, moderado o alto a partir del patrón de todas las repeticiones."
+      }
+    },
+    "rolesTitle": "Para quien entrena y para quien acompaña",
+    "roles": {
+      "athlete": {
+        "title": "Deportistas",
+        "body": "Graba tus movimientos, compara cada intento con los anteriores y descarga el informe en PDF."
+      },
+      "coach": {
+        "title": "Entrenadores",
+        "body": "Arma tus equipos, revisa los análisis de cada deportista y compáralos lado a lado."
+      }
+    },
+    "guidesTitle": "Antes de grabar",
+    "guidesLead": "Una guía corta por movimiento: dónde poner la cámara y cómo ejecutarlo para que la medición sea confiable."
+  },
+  "guide": {
+    "metaDescription": "Cómo ubicar la cámara y ejecutar {movement} para que KinesiApp mida bien tus ángulos articulares.",
+    "eyebrow": "Guía de grabación",
+    "setupTitle": "Prepara la cámara",
+    "setup": [
+      "De perfil: la cámara mira tu costado, no tu frente.",
+      "Fija, en un trípode o apoyada: nada de seguir el movimiento con la mano.",
+      "A unos tres metros y a la altura de la cadera, con todo el cuerpo en cuadro, de los pies a la cabeza.",
+      "Buena luz, fondo despejado y ropa que deje ver la rodilla y la cadera."
+    ],
+    "diagram": {
+      "label": "Esquema: la cámara a unos tres metros, de perfil y a la altura de la cadera.",
+      "distance": "≈ 3 m",
+      "height": "altura de cadera"
+    },
+    "limitsTitle": "Límites del video",
+    "limitDuration": "Hasta {seconds} segundos por video. La grabación se detiene sola al llegar.",
+    "limitSize": "Archivos de hasta {size} MB.",
+    "limitsNote": "Estos límites los fija el servidor y esta página se actualiza sola cuando cambian.",
+    "executionTitle": "Cómo ejecutarlo",
+    "mistakesTitle": "Lo que arruina la medición",
+    "phasesLabel": "Fases de {movement}, de izquierda a derecha, con la trayectoria del centro de gravedad.",
+    "start": "Grabar ahora",
+    "other": "Ver la guía de {movement}",
+    "back": "Volver al inicio",
+    "movements": {
+      "jump": {
+        "name": "el salto",
+        "title": "Cómo grabar tu salto",
+        "lead": "Un salto vertical con contramovimiento: bajas, te impulsas con los brazos y aterrizas en el mismo lugar.",
+        "execution": [
+          "Empieza de pie y quieto un segundo, de perfil a la cámara.",
+          "Baja rápido doblando rodillas y cadera, y lleva los brazos atrás.",
+          "Salta lo más alto que puedas llevando los brazos arriba.",
+          "Aterriza con las puntas primero y amortigua doblando las rodillas.",
+          "Puedes hacer varios saltos en el mismo video, con una pausa corta entre cada uno."
+        ],
+        "mistakes": [
+          "Salir del cuadro en el vuelo: deja espacio arriba de la cabeza.",
+          "Girar el cuerpo hacia la cámara al aterrizar.",
+          "Grabar en cámara lenta o con un filtro que recorte el video."
+        ]
+      },
+      "squat": {
+        "name": "la sentadilla",
+        "title": "Cómo grabar tu sentadilla",
+        "lead": "Una sentadilla libre, sin peso: bajas con control hasta tu profundidad cómoda y vuelves a subir.",
+        "execution": [
+          "Pies al ancho de la cadera y brazos al frente para equilibrarte.",
+          "Baja empujando la cadera atrás, con el pecho arriba.",
+          "Llega hasta donde puedas sin despegar los talones.",
+          "Sube sin rebotar y repite a un ritmo constante."
+        ],
+        "mistakes": [
+          "Ponerte de frente: de frente no se ve cuánto se dobla la rodilla.",
+          "Que otra persona cruce el cuadro durante la serie.",
+          "Cortar el video antes de la última subida."
+        ]
+      }
+    }
   },
   "authShell": {
     "tagline": "Tu movimiento, medido con precisión.",

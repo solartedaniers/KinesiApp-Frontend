@@ -6,7 +6,7 @@ import { getLocale, getT } from "@/lib/i18n/server";
 import { getTheme } from "@/lib/preferences";
 import { browserThemeColors, themeAttribute } from "@/lib/theme";
 
-import "./globals.css";
+import "../globals.css";
 
 // Dos familias: Archivo (ancho expandido) para títulos y cifras, IBM Plex Sans para la interfaz y las tablas
 const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });

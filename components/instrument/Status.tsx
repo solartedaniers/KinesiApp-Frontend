@@ -16,10 +16,11 @@ const NOTICE: Record<Tone, { glyph: GlyphName; tint: string; text: string }> = {
   warning: { glyph: "alert", tint: "var(--kin-risk-moderate)", text: "text-risk-moderate" },
 };
 
-export function Notice({ tone, children }: { tone: Tone; children: ReactNode }) {
+/** Aviso con su ícono. `live` lo anuncia al aparecer; un aviso fijo de la página no lo necesita. */
+export function Notice({ tone, live = true, children }: { tone: Tone; live?: boolean; children: ReactNode }) {
   const { glyph, tint, text } = NOTICE[tone];
   return (
-    <p className="kin-card kin-tinted flex items-start gap-3 p-3.5 text-sm text-ink" style={cssVars({ "--tint": tint })} role="status">
+    <p className="kin-card kin-tinted flex items-start gap-3 p-3.5 text-sm text-ink" style={cssVars({ "--tint": tint })} role={live ? "status" : undefined}>
       <Glyph name={glyph} size={20} className={`mt-px flex-none ${text}`} />
       <span>{children}</span>
     </p>

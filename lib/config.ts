@@ -31,5 +31,10 @@ export const APP_TIME_ZONE = process.env.APP_TIME_ZONE ?? "America/Bogota";
 
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
+// Origen público para las URLs absolutas del sitemap. Vercel da el dominio de cada despliegue; SITE_ORIGIN
+// lo fija a mano y, sin nada, uso el del servidor local
+const vercelHost = process.env.VERCEL_ENV === "production" ? process.env.VERCEL_PROJECT_PRODUCTION_URL : process.env.VERCEL_BRANCH_URL;
+export const SITE_ORIGIN = process.env.SITE_ORIGIN ?? (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
+
 // Tope de duración de los videos: la cámara se detiene sola y un archivo más largo se rechaza
 export const VIDEO_MAX_SECONDS = 40;
