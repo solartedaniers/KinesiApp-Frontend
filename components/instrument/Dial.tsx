@@ -22,6 +22,8 @@ type DialProps = {
   peak?: number;
   /** Escala numerada cada 30: sólo en los medidores grandes. */
   labels?: boolean;
+  /** Marcas de la escala; en los medidores miniatura sobran y tapan la aguja. */
+  ticks?: boolean;
   /** Barrido con rebote al cargar; la lectura en vivo lo apaga porque la mueve requestAnimationFrame. */
   sweep?: boolean;
   delayMs?: number;
@@ -33,8 +35,8 @@ type DialProps = {
  * Medidor de 240° con bisel, esfera hundida, zonas del rango objetivo, arco del valor y aguja.
  * Sin estado: lo usan tanto las fichas del servidor como la lectura en vivo del cliente.
  */
-export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, peak, labels = false, sweep = true, delayMs = 0, className = "", children }: DialProps) {
-  const ticks = Array.from({ length: max / 10 + 1 }, (_, i) => i * 10);
+export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, peak, labels = false, ticks: showTicks = true, sweep = true, delayMs = 0, className = "", children }: DialProps) {
+  const ticks = showTicks ? Array.from({ length: max / 10 + 1 }, (_, i) => i * 10) : [];
   const tone = SIGNAL_CLASS[signal];
   const motion = cssVars({ "--angle": `${r(dialAngle(value, max))}deg`, "--fill": r((Math.min(value, max) / max) * 100), "--delay": `${delayMs}ms` });
   const peakA = peak === undefined ? null : dialPoint(C, VALUE_R - 9, peak, max);
@@ -74,7 +76,7 @@ export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, pe
           <circle cx="100" cy="100" r="7.5" className="fill-raised stroke-line-strong" strokeWidth="1.2" />
           <circle cx="100" cy="100" r="2.6" className={tone.fill} />
         </svg>
-        {children && <div className="absolute inset-x-0 bottom-[13%] grid justify-items-center text-center">{children}</div>}
+        {children && <div className="absolute inset-x-0 bottom-[11%] grid justify-items-center gap-1 text-center">{children}</div>}
       </div>
     </div>
   );
