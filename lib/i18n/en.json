@@ -582,59 +582,198 @@
     }
   },
   "styleGuide": {
-    "metaTitle": "Visual directions",
-    "title": "Three directions for KinesiApp",
-    "lead": "Each page shows the app header, an analysis result card, the angle chart and the direction's own animation. Switch between light and dark mode from the header.",
-    "sampleNote": "All figures are generated sample data for comparing the directions.",
-    "switcher": "Visual directions",
-    "directionLabel": "Direction {id}",
-    "open": "View direction {id}",
-    "directions": {
-      "a": {
-        "name": "Trail",
-        "phrase": "Movement as a long-exposure photograph: every joint leaves a trail of light, and the data reads like the trace the jump left behind.",
-        "animationTitle": "Long exposure of a jump",
-        "animationCaption": "Countermovement jump. The head, wrist, knee and foot leave their trails; the dot traveling with the body is the center of mass."
-      },
-      "b": {
-        "name": "Rhythm",
-        "phrase": "Sport as rhythm: every repetition is a beat, and the curves of the data itself become the shapes that give the interface its energy.",
-        "animationTitle": "Every repetition is a beat",
-        "animationCaption": "The ring pulses at the bottom of the squat and the counter marks the repetition. The bands below are the knee, trunk and center-of-mass curves."
-      },
-      "c": {
-        "name": "Instrument",
-        "phrase": "The clarity of a modern measuring instrument: soft layers, live readings and color only where there is a measurement to read.",
-        "animationTitle": "Live reading",
-        "animationCaption": "The needle follows the knee flexion of the first repetition and the marker holds the peak. The light blue band is the target range."
-      }
+    "metaTitle": "Style guide",
+    "metaDescription": "Living instrument: KinesiApp's visual identity, with its palette, type, components, charts and sample screens.",
+    "eyebrow": "Style guide",
+    "title": "Living instrument",
+    "lead": "KinesiApp reads like a measuring instrument that breathes: every joint has its color, every range its zone, and every figure reaches its value with the inertia of a real needle.",
+    "sampleNote": "Figures are sample data from a 40-second squat set.",
+    "index": "In this guide",
+    "home": "Go to the top of the guide",
+    "sections": {
+      "color": "Color",
+      "type": "Typography",
+      "glyphs": "Icons",
+      "components": "Components",
+      "charts": "Charts",
+      "progress": "Analysis progress",
+      "screens": "Screens"
     },
-    "header": {
-      "aiReady": "AI ready"
-    },
-    "result": {
-      "title": "Latest analysis",
-      "athlete": "Valentina Ríos",
-      "peakKnee": "Peak knee flexion",
-      "repetitions": "Repetitions",
-      "risk": "Risk",
-      "score": "Score",
-      "riskSteps": "Level {step} of 3",
-      "depths": "Depth of each repetition",
-      "open": "View the chart"
-    },
-    "chart": {
-      "title": "Angles across the set",
-      "label": "Knee flexion and trunk inclination over the 40 seconds of the set",
-      "seconds": "s",
-      "target": "Target range",
-      "peaks": "Peak of each repetition",
-      "repetition": "Repetition {index}"
-    },
-    "live": {
+    "hero": {
       "reading": "Knee flexion",
       "peak": "Peak",
-      "skeleton": "Side-view skeleton doing a squat"
+      "target": "Target",
+      "skeleton": "Side-view skeleton doing a squat, with the knee, trunk, hip and center of gravity in their colors",
+      "dial": "Knee flexion gauge: {value}, peak {peak}, target {low} to {high}"
+    },
+    "color": {
+      "lead": "Color never decorates: it says what is being measured. The same four signals paint the skeleton, the lines and the needles; zones tell whether a measure fell short, hit the target or went past it, and risk has its own scale with a word and steps.",
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "signals": "Signals",
+      "signalsLead": "One per joint or measure, the same in every view.",
+      "zones": "Range zones",
+      "zonesLead": "Relative to the knee flexion target ({low}–{high}).",
+      "risk": "Risk scale",
+      "riskLead": "Always shown with the word and one to three steps: it never depends on color alone.",
+      "surfaces": "Surfaces and ink",
+      "contrast": "Contrast {ratio}:1",
+      "contrastOn": "Contrast {ratio}:1 on {surface}",
+      "shared": "Cobalt is both the knee and the main action: the knee is the app's leading measure, and buttons never appear inside a chart, so they don't get mixed up.",
+      "names": {
+        "knee": "Knee",
+        "trunk": "Trunk",
+        "hip": "Hip",
+        "center": "Center of gravity",
+        "under": "Below",
+        "target": "On target",
+        "over": "Above",
+        "canvas": "Background",
+        "panel": "Panel",
+        "sunken": "Well",
+        "ink": "Ink",
+        "inkMuted": "Secondary ink",
+        "accent": "Action"
+      }
+    },
+    "type": {
+      "lead": "A narrow, technical display face for figures and headings, and a warm, legible sans for everything else. Figures are tabular so they don't jump while counting.",
+      "display": "Saira",
+      "displayUse": "Display and figures: headings, gauge readings and metrics.",
+      "sans": "Golos Text",
+      "sansUse": "Text: paragraphs, controls, labels and notices.",
+      "sampleTitle": "Your knee reached 108°",
+      "sampleBody": "On the fifth repetition your trunk leaned more than usual; check the chart to see at which second it happened.",
+      "scale": "Scale",
+      "figures": "Tabular figures"
+    },
+    "glyphs": {
+      "lead": "The same thin-stroke, round-cap set from the first design. They go with the text, never replace it."
+    },
+    "components": {
+      "lead": "Controls with relief: they sink when pressed, glow in their action's color when focused and answer with a short bounce.",
+      "buttons": "Buttons",
+      "primary": "Analyze video",
+      "secondary": "View history",
+      "quiet": "Cancel",
+      "pending": "Analyzing…",
+      "fields": "Fields",
+      "email": "Email",
+      "emailHint": "The one you sign in to KinesiApp with.",
+      "emailInvalid": "name@mail",
+      "emailError": "Enter a valid email, like name@domain.com.",
+      "checkbox": "I agree that KinesiApp stores and analyzes my videos.",
+      "switch": "Weekly reminder to record",
+      "movement": "Movement picker",
+      "movementLegend": "Which movement are you recording?",
+      "jumpHint": "Countermovement vertical jump",
+      "squatHint": "Bodyweight squat, side view",
+      "notices": "Notices",
+      "info": "Keep the camera still and side-on, about three meters away.",
+      "success": "Video ready. The analysis has started.",
+      "warning": "The video is longer than 40 seconds; trim it before uploading.",
+      "ai": "AI status",
+      "aiWaking": "AI waking up",
+      "aiReady": "AI ready",
+      "aiUnavailable": "AI unavailable",
+      "aiWakingHint": "It takes a few seconds the first time.",
+      "aiUnavailableHint": "Your videos are saved; the analysis starts when it's back.",
+      "navigation": "Navigation",
+      "navigationLead": "A top bar on desktop and a bottom bar on phones, with the active tab lit up.",
+      "states": "Empty, loading and error",
+      "emptyTitle": "No analyses yet",
+      "emptyBody": "Record your first squat or jump and you'll see how your joints move here.",
+      "emptyAction": "Record the first one",
+      "loading": "Loading your analyses",
+      "errorTitle": "We couldn't load your analyses",
+      "errorBody": "Check your connection and try again.",
+      "errorAction": "Try again",
+      "dialog": "Dialog",
+      "dialogOpen": "Delete analysis",
+      "dialogTitle": "Delete this analysis?",
+      "dialogBody": "The video, the metrics and the AI conversation are deleted. This can't be undone.",
+      "dialogConfirm": "Delete",
+      "dialogCancel": "Keep it"
+    },
+    "charts": {
+      "lead": "Lines draw themselves with a gradient that follows the zone, and repetitions light up one after another.",
+      "timeline": "Synchronized timeline",
+      "timelineLead": "The video, the skeleton and the chart share the same playhead. Tap a repetition to jump to it.",
+      "timelineLabel": "Knee flexion and trunk inclination during the 40 seconds of the set",
+      "stage": "Video frame at the current second",
+      "play": "Play",
+      "pause": "Pause",
+      "playhead": "Position in the video",
+      "repetitions": "Repetitions",
+      "repetition": "Repetition {index}: {risk}, peak {peak}",
+      "seconds": "s",
+      "trend": "Risk trend",
+      "trendLead": "Risk score per session over the three level bands.",
+      "trendLabel": "Risk score of the last eight sessions, from {first} to {last}",
+      "trendLast": "Latest: {score}",
+      "comparison": "Athlete comparison",
+      "comparisonLead": "Range and median of each athlete's peak flexion on the same scale.",
+      "median": "Median"
+    },
+    "progress": {
+      "lead": "While the AI works, the skeleton assembles point by point and the ring advances through stages in each one's color.",
+      "label": "Analysis progress",
+      "stage": "Stage {index} of {total}: {name}",
+      "replay": "Replay the animation",
+      "stages": {
+        "queued": "Queued",
+        "downloading": "Downloading the video",
+        "pose": "Detecting the skeleton",
+        "repetitions": "Counting repetitions",
+        "risk": "Calculating risk"
+      },
+      "done": "Analysis ready"
+    },
+    "screens": {
+      "lead": "Three complete screens with the system applied. They switch with a view transition.",
+      "open": "Open the screen",
+      "back": "Back to the guide",
+      "label": "Sample screen",
+      "home": {
+        "name": "Athlete home",
+        "summary": "Greeting, AI status, latest analysis and trend.",
+        "greeting": "Hi, {name}",
+        "lead": "Your last squat set stayed within the target range in 7 of 10 repetitions.",
+        "last": "Latest analysis",
+        "recent": "Recent recordings",
+        "newAnalysis": "New analysis",
+        "openAnalysis": "View the analysis",
+        "trend": "Your risk over time"
+      },
+      "analysis": {
+        "name": "Analysis result",
+        "summary": "Gauges, synchronized timeline and repetitions.",
+        "title": "Squat on {date}",
+        "peakKnee": "Peak knee flexion",
+        "peakTrunk": "Peak trunk inclination",
+        "repetitions": "Repetitions",
+        "inTarget": "{count} of {total} on target",
+        "risk": "Set risk",
+        "riskSteps": "Level {step} of 3",
+        "chat": "Ask the AI",
+        "delete": "Delete"
+      },
+      "capture": {
+        "name": "Video capture",
+        "summary": "Movement picker, framing guide and recording capped at 40 s.",
+        "title": "New analysis",
+        "lead": "Pick the movement, frame yourself side-on and record. Recording stops by itself at {seconds} seconds.",
+        "frame": "Camera preview",
+        "frameHint": "Your whole body should be visible, from feet to head",
+        "record": "Record",
+        "stop": "Stop",
+        "recording": "Recording",
+        "limit": "Up to {seconds} s",
+        "autoStopped": "Recording stopped by itself at {seconds} seconds.",
+        "again": "Record again",
+        "upload": "Upload and analyze",
+        "simulated": "In the guide the camera is simulated: no permission is requested and nothing is recorded."
+      }
     }
   }
 }

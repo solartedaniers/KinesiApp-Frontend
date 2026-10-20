@@ -582,59 +582,198 @@
     }
   },
   "styleGuide": {
-    "metaTitle": "Direcciones visuales",
-    "title": "Tres direcciones para KinesiApp",
-    "lead": "Cada página muestra el encabezado de la app, una ficha de resultado, la gráfica de ángulos y la animación propia de la dirección. El modo claro y el oscuro se cambian desde el encabezado.",
-    "sampleNote": "Las cifras son datos de ejemplo generados para comparar las direcciones.",
-    "switcher": "Direcciones visuales",
-    "directionLabel": "Dirección {id}",
-    "open": "Ver la dirección {id}",
-    "directions": {
-      "a": {
-        "name": "Estela",
-        "phrase": "El movimiento como una fotografía de larga exposición: cada articulación deja una estela de luz y los datos se leen como el rastro que dejó el salto.",
-        "animationTitle": "Larga exposición de un salto",
-        "animationCaption": "Salto con contramovimiento. La cabeza, la muñeca, la rodilla y el pie dejan su estela; el punto que viaja con el cuerpo es el centro de gravedad."
-      },
-      "b": {
-        "name": "Ritmo",
-        "phrase": "El deporte como ritmo: cada repetición es un pulso, y las curvas de los propios datos se vuelven las formas que le dan energía a la interfaz.",
-        "animationTitle": "Cada repetición es un pulso",
-        "animationCaption": "El anillo late en la parte más baja de la sentadilla y el contador marca la repetición. Las bandas de abajo son la curva de la rodilla, del tronco y del centro de gravedad."
-      },
-      "c": {
-        "name": "Instrumento",
-        "phrase": "La claridad de un instrumento de medición moderno: capas suaves, lecturas en vivo y color sólo donde hay una medida que leer.",
-        "animationTitle": "Lectura en vivo",
-        "animationCaption": "La aguja sigue la flexión de rodilla de la primera repetición y la marca guarda el pico. La franja azul clara es el rango objetivo."
-      }
+    "metaTitle": "Guía de estilo",
+    "metaDescription": "Instrumento vivo: la identidad visual de KinesiApp, con su paleta, tipografía, componentes, gráficas y pantallas de ejemplo.",
+    "eyebrow": "Guía de estilo",
+    "title": "Instrumento vivo",
+    "lead": "KinesiApp se lee como un instrumento de medición que respira: cada articulación tiene su color, cada rango su zona y cada cifra llega a su valor con la inercia de una aguja real.",
+    "sampleNote": "Las cifras son datos de ejemplo de una sentadilla de 40 segundos.",
+    "index": "En esta guía",
+    "home": "Ir al inicio de la guía",
+    "sections": {
+      "color": "Color",
+      "type": "Tipografía",
+      "glyphs": "Íconos",
+      "components": "Componentes",
+      "charts": "Gráficas",
+      "progress": "Progreso del análisis",
+      "screens": "Pantallas"
     },
-    "header": {
-      "aiReady": "IA activada"
-    },
-    "result": {
-      "title": "Último análisis",
-      "athlete": "Valentina Ríos",
-      "peakKnee": "Flexión máxima de rodilla",
-      "repetitions": "Repeticiones",
-      "risk": "Riesgo",
-      "score": "Puntaje",
-      "riskSteps": "Nivel {step} de 3",
-      "depths": "Profundidad de cada repetición",
-      "open": "Ver la gráfica"
-    },
-    "chart": {
-      "title": "Ángulos durante la serie",
-      "label": "Flexión de rodilla e inclinación del tronco durante los 40 segundos de la serie",
-      "seconds": "s",
-      "target": "Rango objetivo",
-      "peaks": "Pico de cada repetición",
-      "repetition": "Repetición {index}"
-    },
-    "live": {
+    "hero": {
       "reading": "Flexión de rodilla",
       "peak": "Pico",
-      "skeleton": "Esqueleto de perfil haciendo una sentadilla"
+      "target": "Objetivo",
+      "skeleton": "Esqueleto de perfil haciendo una sentadilla, con la rodilla, el tronco, la cadera y el centro de gravedad en sus colores",
+      "dial": "Medidor de flexión de rodilla: {value}, pico {peak}, objetivo de {low} a {high}"
+    },
+    "color": {
+      "lead": "El color nunca decora: dice qué se mide. Las mismas cuatro señales pintan el esqueleto, las líneas y las agujas; las zonas dicen si una medida quedó corta, en el objetivo o se pasó, y el riesgo tiene su propia escala con palabra y escalones.",
+      "light": "Modo claro",
+      "dark": "Modo oscuro",
+      "signals": "Señales",
+      "signalsLead": "Una por articulación o medida, igual en todas las vistas.",
+      "zones": "Zonas del rango",
+      "zonesLead": "Relativas al objetivo de flexión de rodilla ({low}–{high}).",
+      "risk": "Escala de riesgo",
+      "riskLead": "Va siempre con la palabra y de uno a tres escalones: nunca depende sólo del color.",
+      "surfaces": "Superficies y tinta",
+      "contrast": "Contraste {ratio}:1",
+      "contrastOn": "Contraste {ratio}:1 sobre {surface}",
+      "shared": "El cobalto es a la vez la rodilla y la acción principal: la rodilla es la medida protagonista de la app, y los botones nunca aparecen dentro de una gráfica, así que no se confunden.",
+      "names": {
+        "knee": "Rodilla",
+        "trunk": "Tronco",
+        "hip": "Cadera",
+        "center": "Centro de gravedad",
+        "under": "Por debajo",
+        "target": "En el objetivo",
+        "over": "Por encima",
+        "canvas": "Fondo",
+        "panel": "Panel",
+        "sunken": "Pozo",
+        "ink": "Tinta",
+        "inkMuted": "Tinta secundaria",
+        "accent": "Acción"
+      }
+    },
+    "type": {
+      "lead": "Una display estrecha y técnica para cifras y títulos, y una sans cálida y legible para todo lo demás. Las cifras son tabulares para que no bailen al contar.",
+      "display": "Saira",
+      "displayUse": "Display y cifras: títulos, lecturas de medidores y métricas.",
+      "sans": "Golos Text",
+      "sansUse": "Texto: párrafos, controles, etiquetas y avisos.",
+      "sampleTitle": "La rodilla llegó a 108°",
+      "sampleBody": "En la quinta repetición el tronco se inclinó más de lo normal; revisa la gráfica para ver en qué segundo pasó.",
+      "scale": "Escala",
+      "figures": "Cifras tabulares"
+    },
+    "glyphs": {
+      "lead": "El mismo juego de trazo fino y extremos redondos del primer diseño. Acompañan al texto, nunca lo reemplazan."
+    },
+    "components": {
+      "lead": "Controles con relieve: se hunden al presionar, brillan con el color de su acción al enfocarlos y responden con un rebote corto.",
+      "buttons": "Botones",
+      "primary": "Analizar video",
+      "secondary": "Ver historial",
+      "quiet": "Cancelar",
+      "pending": "Analizando…",
+      "fields": "Campos",
+      "email": "Correo electrónico",
+      "emailHint": "Con el que entras a KinesiApp.",
+      "emailInvalid": "nombre@correo",
+      "emailError": "Escribe un correo válido, como nombre@dominio.com.",
+      "checkbox": "Acepto que KinesiApp guarde y analice mis videos.",
+      "switch": "Recordatorio semanal para grabar",
+      "movement": "Selector de movimiento",
+      "movementLegend": "¿Qué movimiento vas a grabar?",
+      "jumpHint": "Salto vertical con contramovimiento",
+      "squatHint": "Sentadilla libre, de perfil",
+      "notices": "Avisos",
+      "info": "La cámara debe quedar fija y de perfil, a unos tres metros.",
+      "success": "Video listo. El análisis empezó.",
+      "warning": "El video dura más de 40 segundos; recórtalo antes de subirlo.",
+      "ai": "Estado de la IA",
+      "aiWaking": "IA despertando",
+      "aiReady": "IA activada",
+      "aiUnavailable": "IA no disponible",
+      "aiWakingHint": "Tarda unos segundos la primera vez.",
+      "aiUnavailableHint": "Tus videos quedan guardados; el análisis empieza cuando vuelva.",
+      "navigation": "Navegación",
+      "navigationLead": "Barra superior en computador y barra inferior en el celular, con la pestaña activa iluminada.",
+      "states": "Vacío, carga y error",
+      "emptyTitle": "Todavía no hay análisis",
+      "emptyBody": "Graba tu primera sentadilla o tu primer salto y aquí verás cómo se mueven tus articulaciones.",
+      "emptyAction": "Grabar el primero",
+      "loading": "Cargando tus análisis",
+      "errorTitle": "No pudimos cargar tus análisis",
+      "errorBody": "Revisa tu conexión e inténtalo de nuevo.",
+      "errorAction": "Reintentar",
+      "dialog": "Diálogo",
+      "dialogOpen": "Eliminar análisis",
+      "dialogTitle": "¿Eliminar este análisis?",
+      "dialogBody": "Se borran el video, las métricas y la conversación con la IA. No se puede deshacer.",
+      "dialogConfirm": "Eliminar",
+      "dialogCancel": "Conservar"
+    },
+    "charts": {
+      "lead": "Las líneas se trazan solas con un degradado que sigue la zona, y las repeticiones se encienden una tras otra.",
+      "timeline": "Línea de tiempo sincronizada",
+      "timelineLead": "El video, el esqueleto y la gráfica comparten el mismo cabezal. Toca una repetición para saltar a ella.",
+      "timelineLabel": "Flexión de rodilla e inclinación del tronco durante los 40 segundos de la serie",
+      "stage": "Cuadro del video en el segundo actual",
+      "play": "Reproducir",
+      "pause": "Pausar",
+      "playhead": "Posición en el video",
+      "repetitions": "Repeticiones",
+      "repetition": "Repetición {index}: {risk}, pico {peak}",
+      "seconds": "s",
+      "trend": "Tendencia del riesgo",
+      "trendLead": "Puntaje de riesgo por sesión sobre las tres bandas de nivel.",
+      "trendLabel": "Puntaje de riesgo de las últimas ocho sesiones, de {first} a {last}",
+      "trendLast": "Última: {score}",
+      "comparison": "Comparación entre deportistas",
+      "comparisonLead": "Rango y mediana de la flexión máxima de cada deportista sobre la misma escala.",
+      "median": "Mediana"
+    },
+    "progress": {
+      "lead": "Mientras la IA trabaja, el esqueleto se arma punto por punto y el anillo avanza por etapas con el color de cada una.",
+      "label": "Progreso del análisis",
+      "stage": "Etapa {index} de {total}: {name}",
+      "replay": "Repetir la animación",
+      "stages": {
+        "queued": "En cola",
+        "downloading": "Descargando el video",
+        "pose": "Detectando el esqueleto",
+        "repetitions": "Contando repeticiones",
+        "risk": "Calculando el riesgo"
+      },
+      "done": "Análisis listo"
+    },
+    "screens": {
+      "lead": "Tres pantallas completas con el sistema aplicado. Cambian entre sí con una transición de vista.",
+      "open": "Abrir la pantalla",
+      "back": "Volver a la guía",
+      "label": "Pantalla de ejemplo",
+      "home": {
+        "name": "Inicio del deportista",
+        "summary": "Saludo, estado de la IA, último análisis y tendencia.",
+        "greeting": "Hola, {name}",
+        "lead": "Tu última sentadilla estuvo dentro del rango objetivo en 7 de 10 repeticiones.",
+        "last": "Último análisis",
+        "recent": "Grabaciones recientes",
+        "newAnalysis": "Nuevo análisis",
+        "openAnalysis": "Ver el análisis",
+        "trend": "Tu riesgo en el tiempo"
+      },
+      "analysis": {
+        "name": "Resultado de un análisis",
+        "summary": "Medidores, línea de tiempo sincronizada y repeticiones.",
+        "title": "Sentadilla del {date}",
+        "peakKnee": "Flexión máxima de rodilla",
+        "peakTrunk": "Inclinación máxima del tronco",
+        "repetitions": "Repeticiones",
+        "inTarget": "{count} de {total} en el objetivo",
+        "risk": "Riesgo de la serie",
+        "riskSteps": "Nivel {step} de 3",
+        "chat": "Preguntarle a la IA",
+        "delete": "Eliminar"
+      },
+      "capture": {
+        "name": "Captura de video",
+        "summary": "Selector de movimiento, guía de encuadre y grabación con tope de 40 s.",
+        "title": "Nuevo análisis",
+        "lead": "Elige el movimiento, encuadra de perfil y graba. La grabación se detiene sola a los {seconds} segundos.",
+        "frame": "Vista previa de la cámara",
+        "frameHint": "Que se vea el cuerpo entero, del pie a la cabeza",
+        "record": "Grabar",
+        "stop": "Detener",
+        "recording": "Grabando",
+        "limit": "Máximo {seconds} s",
+        "autoStopped": "La grabación se detuvo sola a los {seconds} segundos.",
+        "again": "Grabar otra vez",
+        "upload": "Subir y analizar",
+        "simulated": "En la guía la cámara es simulada: no se pide permiso ni se graba nada."
+      }
     }
   }
 }
