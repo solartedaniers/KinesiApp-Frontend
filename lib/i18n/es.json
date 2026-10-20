@@ -738,7 +738,7 @@
         "name": "Inicio del deportista",
         "summary": "Saludo, estado de la IA, último análisis y tendencia.",
         "greeting": "Hola, {name}",
-        "lead": "Tu última sentadilla estuvo dentro del rango objetivo en 7 de 10 repeticiones.",
+        "lead": "Tu última sentadilla estuvo dentro del rango objetivo en {count} de {total} repeticiones.",
         "last": "Último análisis",
         "recent": "Grabaciones recientes",
         "newAnalysis": "Nuevo análisis",

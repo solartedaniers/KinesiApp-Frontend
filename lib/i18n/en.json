@@ -738,7 +738,7 @@
         "name": "Athlete home",
         "summary": "Greeting, AI status, latest analysis and trend.",
         "greeting": "Hi, {name}",
-        "lead": "Your last squat set stayed within the target range in 7 of 10 repetitions.",
+        "lead": "Your last squat set stayed within the target range in {count} of {total} repetitions.",
         "last": "Latest analysis",
         "recent": "Recent recordings",
         "newAnalysis": "New analysis",
