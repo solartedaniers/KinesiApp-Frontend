@@ -49,11 +49,13 @@ export function LiveGauge({ samples }: { samples: AngleSample[] }) {
 
   return (
     <div className="grid items-center gap-5 sm:grid-cols-[minmax(0,1fr)_10rem]">
-      <Dial value={value} peak={peak} target={TARGET_KNEE} labels sweep={ms === null} label={label} className="mx-auto w-full max-w-[22rem]">
-        <span className="text-xs font-semibold text-ink-muted" aria-hidden>{t.hero.reading}</span>
-        <span className="font-display text-hero font-semibold text-knee [font-variant-numeric:tabular-nums]" aria-hidden>{f.degrees(value)}</span>
-        <ZoneChip zone={zoneOf(value)} label={t.color.names[zoneOf(value)]} />
-      </Dial>
+      <div className="grid gap-3">
+        <p className="flex items-center gap-2 text-sm font-semibold text-ink-muted"><span className="h-1 w-5 rounded-full bg-knee shadow-[0_0_8px_var(--kin-knee)]" aria-hidden />{t.hero.reading}</p>
+        <Dial value={value} peak={peak} target={TARGET_KNEE} labels sweep={ms === null} label={label} className="mx-auto w-full max-w-[22rem]">
+          <span className="font-display text-hero font-semibold text-knee [font-variant-numeric:tabular-nums]" aria-hidden>{f.degrees(value)}</span>
+          <ZoneChip zone={zoneOf(value)} label={t.color.names[zoneOf(value)]} />
+        </Dial>
+      </div>
       <div className="kin-well grid gap-3 p-3">
         <svg viewBox="-42 -108 92 116" className="mx-auto h-40 w-auto" role="img" aria-label={t.hero.skeleton}>
           <line x1="-42" x2="50" y1="0" y2="0" className="stroke-line-strong" strokeWidth="0.8" />
