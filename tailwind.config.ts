@@ -1,8 +1,7 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 
-import { DIRECTION_COLORS, DIRECTION_IDS, type DirectionId } from "./lib/design/directions.ts";
-import { LAB_COLORS } from "./lib/design/palette.ts";
+import { COLORS as INSTRUMENT_COLORS } from "./lib/design/palette.ts";
 
 /*
  * Tokens de diseño: único lugar con colores, tipografía, radios y medidas de layout.
@@ -47,61 +46,38 @@ function variables(mode: 0 | 1, palette: Palette = COLORS): Record<string, strin
   return Object.fromEntries(Object.entries(palette).map(([name, pair]) => [`--kin-${name}`, pair[mode]]));
 }
 
-// La paleta del laboratorio (lib/design/palette.ts) es un superconjunto de la actual
+// La paleta del instrumento (lib/design/palette.ts) suma sus señales y zonas a los nombres actuales
 const themeColors = Object.fromEntries(
-  Object.keys({ ...COLORS, ...LAB_COLORS, ...DIRECTION_COLORS.a }).map((name) => [name, `var(--kin-${name})`]),
+  Object.keys({ ...COLORS, ...INSTRUMENT_COLORS }).map((name) => [name, `var(--kin-${name})`]),
 );
 
-// Familias por variable: el rediseño cambia las tres sin tocar las clases font-*
+// Familias por variable: el rediseño cambia las tres sin tocar las clases font-*. Las cifras usan la
+// display con números tabulares; no hay monoespaciada
 const FONTS = {
   current: { "--kin-font-display": "var(--font-archivo)", "--kin-font-sans": "var(--font-plex)", "--kin-font-mono": "ui-monospace", "--kin-display-stretch": "112%" },
-  lab: { "--kin-font-display": "var(--font-lab-display)", "--kin-font-sans": "var(--font-lab-sans)", "--kin-font-mono": "var(--font-lab-mono)", "--kin-display-stretch": "normal" },
+  instrument: { "--kin-font-display": "var(--font-instrument-display)", "--kin-font-sans": "var(--font-instrument-sans)", "--kin-font-mono": "var(--font-instrument-display)", "--kin-display-stretch": "92%" },
 };
 
-// Cada dirección candidata trae su par de familias; las cifras usan la display con números tabulares
-const DIRECTION_FONTS: Record<DirectionId, { display: string; sans: string; stretch: string }> = {
-  a: { display: "var(--font-trail-display)", sans: "var(--font-trail-sans)", stretch: "118%" },
-  b: { display: "var(--font-rhythm-display)", sans: "var(--font-rhythm-sans)", stretch: "normal" },
-  c: { display: "var(--font-instrument-display)", sans: "var(--font-instrument-sans)", stretch: "92%" },
-};
-
-const directionSelector = (id: DirectionId) => `[data-design="${id}"]`;
-// Opacidad del halo de los trazos luminosos: de noche la luz se ve más que sobre blanco
-const DIRECTION_HALO = ["0.35", "0.85"];
-const directionMode = (id: DirectionId, mode: 0 | 1) => ({
-  colorScheme: mode ? "dark" : "light",
-  ...variables(mode, DIRECTION_COLORS[id]),
-  "--kin-halo": DIRECTION_HALO[mode],
-});
-const directionBase = (id: DirectionId) => {
-  const { display, sans, stretch } = DIRECTION_FONTS[id];
-  return {
-    ...directionMode(id, 0),
-    ...LAB_MOTION,
-    "--kin-font-display": display,
-    "--kin-font-sans": sans,
-    "--kin-font-mono": display,
-    "--kin-display-stretch": stretch,
-  };
-};
-// Las direcciones siguen el mismo tema que el resto de la app: data-theme en <html> o el sistema
-const directionRules = (mode: 0 | 1, prefix: string) =>
-  Object.fromEntries(DIRECTION_IDS.map((id) => [`${prefix} ${directionSelector(id)}`, directionMode(id, mode)]));
-
-// Mientras no se apruebe el rediseño, la paleta y las fuentes nuevas sólo rigen dentro de
-// data-design="lab" (la guía de estilo). Un data-theme anidado fuerza un modo para comparar ambos
-const LAB = '[data-design="lab"]';
-const lab = (mode: 0 | 1) => ({ colorScheme: mode ? "dark" : "light", ...variables(mode, LAB_COLORS) });
-
-// Tiempos del movimiento: los trazos se dibujan despacio porque son el contenido; la interfaz responde rápido
-const LAB_MOTION = {
+// Tiempos del movimiento: las medidas se toman su tiempo porque son el contenido; la interfaz responde rápido
+const MOTION = {
   "--kin-motion-press": "90ms",
-  "--kin-motion-hover": "160ms",
-  "--kin-motion-draw": "900ms",
-  "--kin-motion-measure": "1200ms",
-  "--kin-motion-stagger": "140ms",
+  "--kin-motion-hover": "180ms",
+  "--kin-motion-draw": "1400ms",
+  "--kin-motion-measure": "1500ms",
+  "--kin-motion-stagger": "90ms",
   "--kin-ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
 };
+
+// Mientras no se apruebe el rediseño, el instrumento sólo rige dentro de data-design="instrument"
+// (la guía y sus pantallas). Un data-theme anidado fuerza un modo, como el escenario del video
+const INSTRUMENT = '[data-design="instrument"]';
+// Cuánto color lleva el brillo de bordes y medidores: discreto sobre blanco, intenso en la cabina oscura
+const GLOW_MIX = ["24%", "60%"];
+const instrument = (mode: 0 | 1) => ({
+  colorScheme: mode ? "dark" : "light",
+  ...variables(mode, INSTRUMENT_COLORS),
+  "--kin-glow-mix": GLOW_MIX[mode],
+});
 
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
@@ -158,22 +134,18 @@ const config: Config = {
       addBase({
         ":root": { colorScheme: "light", ...variables(0), ...FONTS.current },
         ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
-        [LAB]: { ...lab(0), ...FONTS.lab, ...LAB_MOTION },
-        ...Object.fromEntries(DIRECTION_IDS.map((id) => [directionSelector(id), directionBase(id)])),
+        [INSTRUMENT]: { ...instrument(0), ...FONTS.instrument, ...MOTION },
         // Sin data-theme (preferencia "sistema") sigue al sistema operativo
         "@media (prefers-color-scheme: dark)": {
           ":root:not([data-theme])": { colorScheme: "dark", ...variables(1) },
-          [`:root:not([data-theme]) ${LAB}`]: lab(1),
-          ...directionRules(1, ":root:not([data-theme])"),
+          [`:root:not([data-theme]) ${INSTRUMENT}`]: instrument(1),
         },
-        ...directionRules(1, ':root[data-theme="dark"]'),
-        [`:root[data-theme="dark"] ${LAB}`]: lab(1),
-        [`${LAB} [data-theme="light"]`]: lab(0),
-        [`${LAB} [data-theme="dark"]`]: lab(1),
+        [`:root[data-theme="dark"] ${INSTRUMENT}`]: instrument(1),
+        [`${INSTRUMENT} [data-theme="light"]`]: instrument(0),
+        [`${INSTRUMENT} [data-theme="dark"]`]: instrument(1),
         "@media print": {
           ":root, :root[data-theme]": { colorScheme: "light", ...variables(0) },
-          [`${LAB}, ${LAB} [data-theme]`]: lab(0),
-          ...directionRules(0, ":root"),
+          [`${INSTRUMENT}, ${INSTRUMENT} [data-theme]`]: instrument(0),
         },
       });
     }),
