@@ -51,12 +51,9 @@ const themeColors = Object.fromEntries(
   Object.keys({ ...COLORS, ...INSTRUMENT_COLORS }).map((name) => [name, `var(--kin-${name})`]),
 );
 
-// Familias por variable: el rediseño cambia las tres sin tocar las clases font-*. Las cifras usan la
-// display con números tabulares; no hay monoespaciada
-const FONTS = {
-  current: { "--kin-font-display": "var(--font-archivo)", "--kin-font-sans": "var(--font-plex)", "--kin-font-mono": "ui-monospace", "--kin-display-stretch": "112%" },
-  instrument: { "--kin-font-display": "var(--font-instrument-display)", "--kin-font-sans": "var(--font-instrument-sans)", "--kin-font-mono": "var(--font-instrument-display)", "--kin-display-stretch": "92%" },
-};
+// Familias por variable: las clases font-* leen estas variables. Las cifras usan la display con números
+// tabulares; no hay monoespaciada
+const INSTRUMENT_FONTS = { "--kin-font-display": "var(--font-instrument-display)", "--kin-font-sans": "var(--font-instrument-sans)", "--kin-font-mono": "var(--font-instrument-display)", "--kin-display-stretch": "92%" };
 
 // Radios por función, no uno igual para todo; como variables para que el CSS del instrumento los use
 const RADIUS = { tag: "0.25rem", control: "0.375rem", panel: "0.625rem", stage: "0.875rem" };
@@ -73,8 +70,8 @@ const MOTION = {
   "--kin-ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
 };
 
-// Mientras no se apruebe el rediseño, el instrumento sólo rige dentro de data-design="instrument"
-// (la guía y sus pantallas). Un data-theme anidado fuerza un modo, como el escenario del video
+// El instrumento rige dentro de data-design="instrument", que los layouts raíz ponen en <body>.
+// Un data-theme anidado fuerza un modo, como la cabina oscura o el escenario del video
 const INSTRUMENT = '[data-design="instrument"]';
 // Cuánto color lleva el brillo de bordes y medidores: discreto sobre blanco, intenso en la cabina oscura
 const GLOW_MIX = ["42%", "62%"];
@@ -131,9 +128,9 @@ const config: Config = {
   plugins: [
     plugin(({ addBase }) => {
       addBase({
-        ":root": { colorScheme: "light", ...variables(0), ...FONTS.current, ...RADIUS_VARS },
+        ":root": { colorScheme: "light", ...variables(0), ...RADIUS_VARS },
         ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
-        [INSTRUMENT]: { ...instrument(0), ...FONTS.instrument, ...MOTION },
+        [INSTRUMENT]: { ...instrument(0), ...INSTRUMENT_FONTS, ...MOTION },
         // Sin data-theme (preferencia "sistema") sigue al sistema operativo
         "@media (prefers-color-scheme: dark)": {
           ":root:not([data-theme])": { colorScheme: "dark", ...variables(1) },

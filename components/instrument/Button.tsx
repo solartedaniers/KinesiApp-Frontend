@@ -14,12 +14,12 @@ const VARIANT: Record<Variant, string> = {
   quiet: "kin-btn-quiet text-accent hover:bg-accent-soft",
 };
 
-const classes = (variant: Variant, block = false, extra = "") =>
+export const buttonClasses = (variant: Variant, block = false, extra = "") =>
   `kin-btn ${VARIANT[variant]} inline-flex min-h-11 items-center justify-center gap-2 rounded-panel px-5 text-sm font-semibold ` +
   `disabled:cursor-not-allowed disabled:not-aria-busy:opacity-60 ${block ? "w-full" : ""} ${extra}`;
 
 /** Aguja que oscila mientras la acción espera: el mismo lenguaje del medidor en miniatura. */
-function PendingNeedle() {
+export function PendingNeedle() {
   return (
     <svg viewBox="0 0 20 20" className="size-5" aria-hidden>
       <path d="M3.5 14a6.5 6.5 0 0 1 13 0" className="fill-none stroke-current opacity-40" strokeWidth="1.6" strokeLinecap="round" />
@@ -42,7 +42,7 @@ function Content({ glyph, pending, children }: { glyph?: GlyphName; pending?: bo
 
 export function Button({ variant = "primary", glyph, block, pending = false, className, children, ...props }: Look & { pending?: boolean } & ComponentProps<"button">) {
   return (
-    <button type="button" className={classes(variant, block, className)} aria-busy={pending || undefined} disabled={pending || props.disabled} {...props}>
+    <button type="button" className={buttonClasses(variant, block, className)} aria-busy={pending || undefined} disabled={pending || props.disabled} {...props}>
       <Content glyph={glyph} pending={pending}>{children}</Content>
     </button>
   );
@@ -50,7 +50,7 @@ export function Button({ variant = "primary", glyph, block, pending = false, cla
 
 export function ButtonLink({ variant = "primary", glyph, block, className, children, ...props }: Look & ComponentProps<typeof Link>) {
   return (
-    <Link className={classes(variant, block, className)} {...props}>
+    <Link className={buttonClasses(variant, block, className)} {...props}>
       <Content glyph={glyph}>{children}</Content>
     </Link>
   );

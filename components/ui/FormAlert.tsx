@@ -1,27 +1,27 @@
 import type { ReactNode } from "react";
 
-import { Icon, type IconName } from "./Icon";
+import { Glyph } from "@/components/instrument/Glyph";
+import { cssVars } from "@/lib/design/css";
+import type { GlyphName } from "@/lib/design/icons";
 
 type Tone = "error" | "success" | "info";
 
-const ICON_BY_TONE: Record<Tone, IconName> = { error: "alert", success: "check", info: "info" };
-
-// Sin verde/ámbar/rojo: esos colores son del riesgo. El error se distingue por el borde fuerte y el ícono
-const TONE_CLASSES: Record<Tone, string> = {
-  error: "border-ink bg-panel text-ink [&>span]:text-ink",
-  success: "border-accent bg-accent-soft text-ink [&>span]:text-accent",
-  info: "border-line-strong bg-sunken text-ink [&>span]:text-ink-muted",
+// Sin rojo: es del riesgo. El error se distingue por el brillo de tinta y el ícono, como el campo inválido
+const TONE: Record<Tone, { glyph: GlyphName; tint: string; text: string }> = {
+  error: { glyph: "alert", tint: "var(--kin-ink)", text: "text-ink" },
+  success: { glyph: "check", tint: "var(--kin-zone-target)", text: "text-zone-target" },
+  info: { glyph: "info", tint: "var(--kin-accent)", text: "text-accent" },
 };
 
 export function FormAlert({ tone, children }: { tone: Tone; children: ReactNode }) {
+  const { glyph, tint, text } = TONE[tone];
   return (
     <div
-      className={`flex items-start gap-3 rounded-control border border-l-4 px-4 py-3 text-sm ${TONE_CLASSES[tone]}`}
+      className="kin-card kin-tinted flex items-start gap-3 p-3.5 text-sm text-ink"
+      style={cssVars({ "--tint": tint })}
       role={tone === "error" ? "alert" : "status"}
     >
-      <span className="mt-px flex-none">
-        <Icon name={ICON_BY_TONE[tone]} size={18} />
-      </span>
+      <Glyph name={glyph} size={20} className={`mt-px flex-none ${text}`} />
       <div className="grid gap-1 [&_strong]:font-semibold">{children}</div>
     </div>
   );

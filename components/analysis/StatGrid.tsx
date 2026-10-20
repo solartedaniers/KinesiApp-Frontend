@@ -10,7 +10,7 @@ export function StatGrid({ tiles }: { tiles: StatTile[] }) {
       {tiles.map((tile) => (
         <div key={tile.label} className="grid content-start gap-1 bg-panel px-4 py-4 sm:px-5">
           <dt className="text-sm text-ink-muted">{tile.label}</dt>
-          <dd className="font-display text-2xl font-semibold tabular-nums text-ink [font-stretch:112%]">{tile.value}</dd>
+          <dd className="font-display text-2xl font-semibold tabular-nums text-ink">{tile.value}</dd>
         </div>
       ))}
     </dl>

@@ -31,7 +31,7 @@ export function TextField({
       <label className={styles.label} htmlFor={id}>
         {label}
       </label>
-      <div className="relative">
+      <div className={styles.box}>
         <input
           id={id}
           name={name}

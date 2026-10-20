@@ -1,16 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, IBM_Plex_Sans } from "next/font/google";
 
+import { RevealRoot } from "@/components/instrument/RevealRoot";
+import { INSTRUMENT_FONT_VARIABLES } from "@/lib/design/fonts";
 import { I18nProvider } from "@/lib/i18n/client";
 import { getLocale, getT } from "@/lib/i18n/server";
 import { getTheme } from "@/lib/preferences";
 import { browserThemeColors, themeAttribute } from "@/lib/theme";
 
 import "../globals.css";
+import "../instrument.css";
 
-// Dos familias: Archivo (ancho expandido) para títulos y cifras, IBM Plex Sans para la interfaz y las tablas
-const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
-const plex = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-plex", display: "swap" });
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
@@ -29,9 +28,10 @@ export async function generateViewport(): Promise<Viewport> {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const [locale, theme] = await Promise.all([getLocale(), getTheme()]);
   return (
-    <html lang={locale} data-theme={themeAttribute(theme)} className={`${archivo.variable} ${plex.variable}`}>
-      <body>
+    <html lang={locale} data-theme={themeAttribute(theme)} className={INSTRUMENT_FONT_VARIABLES}>
+      <body data-design="instrument">
         <I18nProvider locale={locale}>{children}</I18nProvider>
+        <RevealRoot />
       </body>
     </html>
   );

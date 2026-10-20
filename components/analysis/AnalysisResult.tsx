@@ -20,7 +20,7 @@ export async function AnalysisResult({ analysis }: { analysis: JumpAnalysis }) {
       {score !== null && (
         <div className="grid gap-3">
           <p className="text-sm text-ink-muted">{t.analysisDetail.riskScore}</p>
-          <p className={`font-display text-score font-semibold tabular-nums [font-stretch:112%] ${RISK_TEXT[riskLevel(score)]}`}>
+          <p className={`font-display text-score font-semibold tabular-nums ${RISK_TEXT[riskLevel(score)]}`}>
             {fmt.percent(score)}
           </p>
           <span>

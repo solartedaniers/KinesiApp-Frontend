@@ -11,8 +11,8 @@ const styles = {
   compact: "flex gap-1.5",
   group: "min-w-0",
   visuallyHidden: "visually-hidden",
-  options: "flex items-center gap-0.5 rounded-control border border-line bg-sunken p-0.5",
-  option: "grid h-8 min-w-8 pointer-coarse:h-11 pointer-coarse:min-w-11 place-items-center rounded-[0.25rem] px-1.5 text-xs font-semibold text-ink-muted hover:text-ink aria-pressed:bg-panel aria-pressed:text-accent aria-pressed:ring-1 aria-pressed:ring-line",
+  options: "kin-well flex items-center gap-0.5 rounded-full p-0.5",
+  option: "grid h-8 min-w-8 pointer-coarse:h-11 pointer-coarse:min-w-11 place-items-center rounded-full px-2 text-xs font-semibold text-ink-muted hover:text-ink aria-pressed:bg-panel aria-pressed:text-accent aria-pressed:shadow-[0_1px_2px_var(--kin-shade)]",
 };
 
 const THEME_ICONS: Record<Theme, IconName> = { system: "monitor", light: "sun", dark: "moon" };

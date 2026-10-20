@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/Button";
+import { CheckboxField } from "@/components/ui/CheckboxField";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { FullNameField } from "@/components/ui/FullNameField";
 import { NewPasswordField } from "@/components/ui/NewPasswordField";
@@ -20,11 +21,6 @@ import { PASSWORD_MIN_LENGTH } from "@/lib/validation";
 import { formStyles as styles } from "@/components/app/page-classes";
 
 const INITIAL_STATE: FormState<RegisterField> = {};
-
-const consentStyles = {
-  checkbox: "flex cursor-pointer items-start gap-3 text-sm [&_input]:mt-0.5 [&_input]:size-5 [&_input]:flex-none [&_input]:accent-accent",
-  error: "text-sm font-medium text-ink",
-};
 
 export function RegisterForm() {
   const t = useT();
@@ -76,26 +72,12 @@ export function RegisterForm() {
         error={state.fieldErrors?.confirm_password}
       />
       {/* Obligatorio: Register exige la versión vigente del consentimiento de video */}
-      <label className={consentStyles.checkbox}>
-        <input
-          type="checkbox"
-          name="video_consent"
-          required
-          aria-invalid={state.fieldErrors?.video_consent ? true : undefined}
-          aria-describedby={state.fieldErrors?.video_consent ? "video-consent-error" : undefined}
-        />
-        <span>
-          {t.register.videoConsent}{" "}
-          <Link href={ROUTES.legalVideoConsent} target="_blank">
-            {t.register.videoConsentLink}
-          </Link>
-        </span>
-      </label>
-      {state.fieldErrors?.video_consent && (
-        <p id="video-consent-error" className={consentStyles.error}>
-          {state.fieldErrors.video_consent}
-        </p>
-      )}
+      <CheckboxField name="video_consent" required error={state.fieldErrors?.video_consent}>
+        {t.register.videoConsent}{" "}
+        <Link href={ROUTES.legalVideoConsent} target="_blank">
+          {t.register.videoConsentLink}
+        </Link>
+      </CheckboxField>
       <Button type="submit" block pending={pending} pendingLabel={t.register.pending} className={styles.submit}>
         {t.register.submit}
       </Button>

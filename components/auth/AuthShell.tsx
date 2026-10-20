@@ -1,14 +1,17 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { PreferencesControls } from "@/components/app/PreferencesControls";
-import { Logo } from "@/components/brand/Logo";
-import { MotionFigure } from "@/components/brand/MotionFigure";
-import { getT } from "@/lib/i18n/server";
-import { ROUTES } from "@/lib/routes";
+import { Chronophotograph } from "@/components/instrument/Chronophotograph";
+import { Glyph } from "@/components/instrument/Glyph";
+import { Wordmark } from "@/components/instrument/Wordmark";
+import { cssVars } from "@/lib/design/css";
+import { getLocale, getT } from "@/lib/i18n/server";
+import { localizedPath, ROUTES } from "@/lib/routes";
 
 /**
- * Marco de las pantallas de acceso: en escritorio, panel con el esqueleto de captura y lo que hace la
- * app; en celular, sólo el logo y el formulario, que es lo que se vino a hacer.
+ * Marco de las pantallas de cuenta: en escritorio, una cabina oscura con la placa del salto y lo que
+ * hace la app; en el celular, solo la marca y el formulario, que es lo que se vino a hacer.
  */
 export async function AuthShell({
   title,
@@ -21,18 +24,21 @@ export async function AuthShell({
   footer?: ReactNode;
   children: ReactNode;
 }) {
-  const t = await getT();
+  const [t, locale] = await Promise.all([getT(), getLocale()]);
+  const home = localizedPath(locale, ROUTES.landing);
   return (
-    <div className="grid min-h-dvh lg:grid-cols-[minmax(22rem,40%)_1fr]">
-      <aside className="hidden flex-col justify-between gap-8 border-r border-line bg-panel px-10 py-9 lg:flex">
-        <Logo href={ROUTES.landing} />
-        <MotionFigure className="mx-auto w-full max-w-64" />
+    <div className="kin-ambient grid min-h-dvh lg:grid-cols-[minmax(24rem,42%)_1fr]">
+      <aside data-theme="dark" className="kin-tinted hidden flex-col justify-between gap-10 px-10 py-9 lg:flex" style={cssVars({ "--tint": "var(--kin-center)" })}>
+        <Link href={home} aria-label={t.site.home} className="inline-flex min-h-11 w-fit items-center rounded-panel no-underline hover:no-underline">
+          <Wordmark name={t.app.name} />
+        </Link>
+        <Chronophotograph movement="jump" className="w-full" />
         <div className="grid gap-5">
-          <p className="font-display text-2xl font-semibold text-ink [font-stretch:112%]">{t.authShell.tagline}</p>
-          <ul className="grid gap-2.5 text-ink-muted">
+          <p className="font-display text-3xl font-bold tracking-tight text-ink">{t.authShell.tagline}</p>
+          <ul className="grid gap-3 text-ink-muted">
             {t.authShell.points.map((point) => (
               <li key={point} className="flex items-start gap-3">
-                <span className="mt-2.5 h-0.5 w-3 flex-none bg-accent" aria-hidden />
+                <Glyph name="check" size={20} className="mt-0.5 flex-none text-center" />
                 {point}
               </li>
             ))}
@@ -42,17 +48,14 @@ export async function AuthShell({
 
       <main className="flex flex-col px-4 py-4 sm:px-8">
         <div className="flex items-center justify-between gap-3">
-          <span className="lg:invisible">
-            <Logo href={ROUTES.landing} collapsible />
-          </span>
+          <Link href={home} aria-label={t.site.home} className="inline-flex min-h-11 min-w-11 items-center rounded-panel no-underline hover:no-underline lg:invisible">
+            <Wordmark name={t.app.name} />
+          </Link>
           <PreferencesControls compact />
         </div>
-        <section
-          className="mx-auto my-auto grid w-full max-w-[26rem] gap-6 py-10 [animation:screen-arrive_320ms_ease-out_both]"
-          aria-labelledby="auth-title"
-        >
+        <section className="kin-card mx-auto my-auto grid w-full max-w-[28rem] gap-6 p-6 sm:p-8 [animation:screen-arrive_320ms_ease-out_both]" aria-labelledby="auth-title">
           <header className="grid gap-2">
-            <h1 id="auth-title" className="text-3xl font-semibold text-ink">
+            <h1 id="auth-title" className="font-display text-3xl font-bold tracking-tight text-ink">
               {title}
             </h1>
             {subtitle && <p className="text-ink-muted">{subtitle}</p>}
@@ -60,7 +63,7 @@ export async function AuthShell({
           {children}
           {footer && (
             // Acción de pie que no es un enlace (cerrar sesión es un POST): se ve igual que uno
-            <div className="border-t border-line pt-5 text-center text-sm text-ink-muted [&_button]:cursor-pointer [&_button]:font-medium [&_button]:text-accent hover:[&_button]:underline">
+            <div className="border-t border-line pt-5 text-center text-sm text-ink-muted [&_button]:cursor-pointer [&_button]:font-semibold [&_button]:text-accent hover:[&_button]:underline">
               {footer}
             </div>
           )}

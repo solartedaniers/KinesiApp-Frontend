@@ -1,14 +1,4 @@
-import "@/app/instrument.css";
-
-import { RevealRoot } from "@/components/instrument/RevealRoot";
-import { INSTRUMENT_FONT_VARIABLES } from "@/lib/design/fonts";
-
-// Todo lo de aquí adentro ya usa la identidad del instrumento; el resto de la app sigue igual
+// La guía lleva la luz ambiental de fondo; la identidad del instrumento ya la pone el layout raíz
 export default function StyleGuideLayout({ children }: LayoutProps<"/style-guide">) {
-  return (
-    <div data-design="instrument" className={`${INSTRUMENT_FONT_VARIABLES} kin-ambient min-h-dvh`}>
-      {children}
-      <RevealRoot />
-    </div>
-  );
+  return <div className="kin-ambient min-h-dvh">{children}</div>;
 }
