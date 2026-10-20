@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useId } from "react";
 
 import { dialAngle, dialArc, dialPoint } from "@/lib/charts/dial";
 import { cssVars } from "@/lib/design/css";
@@ -41,6 +41,7 @@ export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, pe
   const motion = cssVars({ "--angle": `${r(dialAngle(value, max))}deg`, "--fill": r((Math.min(value, max) / max) * 100), "--delay": `${delayMs}ms` });
   const peakA = peak === undefined ? null : dialPoint(C, VALUE_R - 9, peak, max);
   const peakB = peak === undefined ? null : dialPoint(C, VALUE_R + 9, peak, max);
+  const screw = useId();
   return (
     <div className={`kin-bezel ${className}`} style={cssVars({ "--tint": `var(--kin-${signal})` })} role="img" aria-label={label}>
       <div className="kin-face relative aspect-square">
@@ -70,11 +71,22 @@ export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, pe
             );
           })}
           {peakA && peakB && <line x1={r(peakA.x)} y1={r(peakA.y)} x2={r(peakB.x)} y2={r(peakB.y)} className="stroke-ink" strokeWidth="2.6" strokeLinecap="round" />}
-          <g className={`kin-needle ${sweep ? "kin-needle-sweep" : ""} ${tone.text}`} style={motion}>
-            <path d="M100 112L97.6 100L100 26L102.4 100Z" className={`${tone.fill} kin-signal-glow`} />
+          <defs>
+            <radialGradient id={screw} cx="38%" cy="32%" r="75%">
+              <stop offset="0" style={{ stopColor: "var(--kin-highlight)" }} />
+              <stop offset="0.35" style={{ stopColor: "var(--kin-raised)" }} />
+              <stop offset="1" style={{ stopColor: "var(--kin-sunken)" }} />
+            </radialGradient>
+          </defs>
+          {/* La sombra va en un grupo sin girar para que siempre caiga hacia abajo, como con luz cenital */}
+          <g className="kin-needle-body">
+            <g className={`kin-needle ${sweep ? "kin-needle-sweep" : ""} ${tone.text}`} style={motion}>
+              <path d="M100 112L97.6 100L100 26L102.4 100Z" className={`${tone.fill} kin-signal-glow`} />
+            </g>
+            <circle cx="100" cy="100" r="8" fill={`url(#${screw})`} className="stroke-line-strong" strokeWidth="1" />
           </g>
-          <circle cx="100" cy="100" r="7.5" className="fill-raised stroke-line-strong" strokeWidth="1.2" />
-          <circle cx="100" cy="100" r="2.6" className={tone.fill} />
+          <circle cx="100" cy="100" r="3" className={tone.fill} />
+          <path d="M97.9 100H102.1" className="stroke-sunken" strokeWidth="1" strokeLinecap="round" />
         </svg>
         {children && <div className="absolute inset-x-0 bottom-[11%] grid justify-items-center gap-1 text-center">{children}</div>}
       </div>
