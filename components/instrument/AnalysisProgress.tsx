@@ -11,12 +11,12 @@ import { format } from "@/lib/i18n";
 export const ANALYSIS_STAGES = ["queued", "downloading", "pose", "repetitions", "risk"] as const;
 export type AnalysisStage = (typeof ANALYSIS_STAGES)[number];
 
-const STAGE_COLOR: Record<AnalysisStage, { stroke: string; tint: string }> = {
-  queued: { stroke: "stroke-ink-muted", tint: "var(--kin-ink-muted)" },
-  downloading: { stroke: "stroke-center", tint: "var(--kin-center)" },
-  pose: { stroke: "stroke-knee", tint: "var(--kin-knee)" },
-  repetitions: { stroke: "stroke-trunk", tint: "var(--kin-trunk)" },
-  risk: { stroke: "stroke-hip", tint: "var(--kin-hip)" },
+export const STAGE_COLOR: Record<AnalysisStage, { stroke: string; bg: string; tint: string }> = {
+  queued: { stroke: "stroke-ink-muted", bg: "bg-ink-muted", tint: "var(--kin-ink-muted)" },
+  downloading: { stroke: "stroke-center", bg: "bg-center", tint: "var(--kin-center)" },
+  pose: { stroke: "stroke-knee", bg: "bg-knee", tint: "var(--kin-knee)" },
+  repetitions: { stroke: "stroke-trunk", bg: "bg-trunk", tint: "var(--kin-trunk)" },
+  risk: { stroke: "stroke-hip", bg: "bg-hip", tint: "var(--kin-hip)" },
 };
 
 // Orden en que se encienden los puntos del esqueleto: de los pies a la cabeza, como los detecta la IA
@@ -90,11 +90,11 @@ export function AnalysisProgress({ stage, fraction, labels }: Props) {
               <line x1="26" x2="174" y1="100" y2="100" className="kin-scan stroke-knee" strokeWidth="1" />
             </g>
           )}
-          <g transform="translate(96 146) scale(0.86)">
+          <g transform="translate(96 158) scale(1.12)">
             <line x1="-46" x2="54" y1="0" y2="0" className="stroke-line-strong" strokeWidth="1" />
             {assembled && <PoseFigure keypoints={pose} kneeArc={stage === poseIndex + 1} center={stage > poseIndex + 1 || done} width={2.6} />}
             {!assembled && JOINTS.map((joint, i) => (
-              <circle key={joint} cx={r(STANDING[joint].x)} cy={r(STANDING[joint].y)} r={joint === "head" ? 5 : 2.6} className={i < lit ? "kin-signal-glow fill-knee text-knee" : "fill-line"} />
+              <circle key={joint} cx={r(STANDING[joint].x)} cy={r(STANDING[joint].y)} r={joint === "head" ? 5 : 3.4} className={i < lit ? "kin-signal-glow fill-knee text-knee" : "fill-line-strong opacity-40"} />
             ))}
           </g>
         </svg>

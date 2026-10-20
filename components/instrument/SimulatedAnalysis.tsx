@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { ANALYSIS_STAGES, AnalysisProgress } from "./AnalysisProgress";
+import { ANALYSIS_STAGES, AnalysisProgress, STAGE_COLOR } from "./AnalysisProgress";
 import { Button } from "./Button";
 import { Glyph } from "./Glyph";
 
@@ -52,8 +52,8 @@ export function SimulatedAnalysis({ replay = true, onDone }: { replay?: boolean;
             const status = i < state.stage ? "done" : i === state.stage ? "current" : "pending";
             return (
               <li key={name} className={`flex min-h-9 items-center gap-3 rounded-panel px-3 text-sm ${status === "current" ? "kin-well font-semibold text-ink" : status === "done" ? "text-ink" : "text-ink-muted"}`} aria-current={status === "current" ? "step" : undefined}>
-                <span className={`grid size-6 flex-none place-items-center rounded-full ${status === "done" ? "bg-zone-target-soft text-zone-target" : status === "current" ? "bg-accent-soft text-accent" : "bg-sunken"}`} aria-hidden>
-                  {status === "done" ? <Glyph name="check" size={14} /> : <span className={`size-1.5 rounded-full ${status === "current" ? "kin-waking bg-accent text-accent" : "bg-line-strong"}`} />}
+                <span className={`grid size-6 flex-none place-items-center rounded-full ${status === "done" ? "bg-zone-target-soft text-zone-target" : status === "current" ? "bg-panel" : "bg-sunken"}`} aria-hidden>
+                  {status === "done" ? <Glyph name="check" size={14} /> : <span className={`size-1.5 rounded-full ${status === "current" ? `kin-waking ${STAGE_COLOR[name].bg} text-ink` : "bg-line-strong"}`} />}
                 </span>
                 {t.stages[name]}
               </li>
