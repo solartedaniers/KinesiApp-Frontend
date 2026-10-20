@@ -16,7 +16,7 @@ const styles = {
   action: "mt-7 inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-5 font-semibold text-on-accent hover:bg-accent-hover hover:no-underline",
 };
 
-/** Arco decorativo detrás de la cifra: el mismo trazo de luz de la marca, en grande. */
+/** Arco decorativo en la esquina libre de la ficha: el mismo trazo de luz de la marca, en grande. */
 function Streak() {
   return (
     <svg className="absolute -right-10 bottom-0 -z-10 h-44 w-80" viewBox="0 0 320 176" fill="none" strokeLinecap="round" aria-hidden>
