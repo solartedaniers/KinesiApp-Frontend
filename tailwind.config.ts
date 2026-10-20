@@ -66,7 +66,13 @@ const DIRECTION_FONTS: Record<DirectionId, { display: string; sans: string; stre
 };
 
 const directionSelector = (id: DirectionId) => `[data-design="${id}"]`;
-const directionMode = (id: DirectionId, mode: 0 | 1) => ({ colorScheme: mode ? "dark" : "light", ...variables(mode, DIRECTION_COLORS[id]) });
+// Opacidad del halo de los trazos luminosos: de noche la luz se ve más que sobre blanco
+const DIRECTION_HALO = ["0.35", "0.85"];
+const directionMode = (id: DirectionId, mode: 0 | 1) => ({
+  colorScheme: mode ? "dark" : "light",
+  ...variables(mode, DIRECTION_COLORS[id]),
+  "--kin-halo": DIRECTION_HALO[mode],
+});
 const directionBase = (id: DirectionId) => {
   const { display, sans, stretch } = DIRECTION_FONTS[id];
   return {
