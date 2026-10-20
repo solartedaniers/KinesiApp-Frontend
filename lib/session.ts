@@ -3,7 +3,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-import { SESSION_COOKIE } from "./config";
+import { AI_WAKE_COOKIE, AI_WAKE_COOKIE_MAX_AGE_SECONDS, IS_PRODUCTION, SESSION_COOKIE } from "./config";
 import { accountGateway } from "./grpc/account-gateway";
 import { Code, rpcCode } from "./grpc/errors";
 import { SESSION_COOKIE_NAMES, sessionCookies } from "./session-cookies";
@@ -13,6 +13,14 @@ import type { TokenPair, User } from "./types";
 export async function storeSession(tokens: TokenPair): Promise<void> {
   const jar = await cookies();
   for (const cookie of sessionCookies(tokens)) jar.set(cookie.name, cookie.value, cookie.options);
+}
+
+/**
+ * Al abrir sesión dejo una cookie de un solo uso: la app la consume al entrar y despierta la IA. No es
+ * httpOnly porque la lee el navegador, y no lleva nada sensible.
+ */
+export async function requestAiWakeOnEntry(): Promise<void> {
+  (await cookies()).set(AI_WAKE_COOKIE, "1", { path: "/", sameSite: "lax", secure: IS_PRODUCTION, maxAge: AI_WAKE_COOKIE_MAX_AGE_SECONDS });
 }
 
 export async function clearSession(): Promise<void> {

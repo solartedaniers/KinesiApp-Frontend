@@ -31,14 +31,17 @@ export type AiState = "waking" | "ready" | "unavailable";
 
 const AI: Record<AiState, { dot: string; ring: string }> = {
   waking: { dot: "bg-trunk kin-waking text-trunk", ring: "shadow-[inset_0_0_0_1px_var(--kin-trunk)]" },
-  ready: { dot: "bg-zone-target text-zone-target", ring: "shadow-[inset_0_0_0_1px_var(--kin-zone-target)]" },
+  ready: { dot: "bg-zone-target kin-ignite text-zone-target", ring: "shadow-[inset_0_0_0_1px_var(--kin-zone-target)]" },
   unavailable: { dot: "bg-ink-muted text-ink-muted", ring: "shadow-[inset_0_0_0_1px_var(--kin-line-strong)]" },
 };
 
-/** Estado de la IA: el punto late mientras despierta. role="status" anuncia cada cambio. */
-export function AiStatus({ state, label, hint }: { state: AiState; label: string; hint?: string }) {
+/**
+ * Estado de la IA: el punto late mientras enciende y destella una vez al quedar activa. role="status"
+ * anuncia cada cambio; con `live={false}` lo anuncia una región viva que ya existe en la página.
+ */
+export function AiStatus({ state, label, hint, live = true }: { state: AiState; label: string; hint?: string; live?: boolean }) {
   return (
-    <p className="grid justify-items-start gap-1" role="status">
+    <p className="grid justify-items-start gap-1" role={live ? "status" : undefined}>
       <span className={`inline-flex min-h-9 items-center gap-2 rounded-full bg-panel px-3 text-sm font-semibold whitespace-nowrap text-ink ${AI[state].ring}`}>
         <span className={`size-2.5 flex-none rounded-full ${AI[state].dot}`} aria-hidden />
         <Glyph name="ai" size={16} className="text-ink-muted" />

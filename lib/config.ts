@@ -38,3 +38,20 @@ export const SITE_ORIGIN = process.env.SITE_ORIGIN ?? (vercelHost ? `https://${v
 
 // Tope de duración de los videos: la cámara se detiene sola y un archivo más largo se rechaza
 export const VIDEO_MAX_SECONDS = 40;
+
+// Estado de la IA compartido entre pestañas (Shared Worker o BroadcastChannel)
+export const AI_STATUS = {
+  // Tras un "IA activada" no repito WakeUpAi en este rato: queda por debajo de los 300 s que Azure
+  // espera antes de bajar la réplica
+  readyTtlMs: 4 * 60_000,
+  // Un "encendiendo" más viejo que esto lo doy por perdido (la pestaña que llamaba se cerró): por encima
+  // del AI_WAKE_UP_TIMEOUT_MS del servidor
+  wakeStaleMs: 90_000,
+  // Si la IA responde pero sigue cargando modelos, vuelvo a preguntar cada tanto, con un tope de intentos
+  warmingRetryMs: 3_000,
+  warmingAttempts: 20,
+} as const;
+
+// Cookie de un solo uso que deja el login para que la app despierte la IA al entrar
+export const AI_WAKE_COOKIE = "kin_ai_wake";
+export const AI_WAKE_COOKIE_MAX_AGE_SECONDS = 60;

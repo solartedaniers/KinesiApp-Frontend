@@ -279,7 +279,22 @@
     "deleteBody": "The video, the analysis and the conversation with the assistant will be deleted. This can't be undone.",
     "movement": "Movement",
     "recordedAt": "Date",
-    "status": "Status"
+    "status": "Status",
+    "progress": {
+      "label": "Analysis progress",
+      "stage": "Step {index} of {total}: {name}",
+      "done": "Analysis ready",
+      "stages": {
+        "queued": "Queued",
+        "downloading_video": "Downloading the video",
+        "extracting_pose": "Detecting the skeleton",
+        "detecting_repetitions": "Counting repetitions",
+        "scoring_risk": "Calculating risk"
+      },
+      "waking": "Starting the AI…",
+      "coldStart": "The AI was asleep. It takes a little longer to start the first time; then the analysis continues by itself.",
+      "frames": "{done} of {total} frames"
+    }
   },
   "joints": {
     "knee_flexion": "Knee flexion",
@@ -898,5 +913,13 @@
         "simulated": "In the guide the camera is simulated: no permission is requested and nothing is recorded."
       }
     }
+  },
+  "ai": {
+    "label": "AI status",
+    "waking": "AI starting…",
+    "ready": "AI active",
+    "unavailable": "AI unavailable",
+    "wakingHint": "It takes a few seconds the first time.",
+    "unavailableHint": "Your videos are saved; the analysis starts when it's back."
   }
 }

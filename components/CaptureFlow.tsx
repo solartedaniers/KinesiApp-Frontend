@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { confirmVideoUpload, startVideoUpload } from "@/lib/actions/analyses";
+import { useWakeAi } from "@/lib/ai-status/use-ai-status";
 import { codeMessage } from "@/lib/errors";
 import { format } from "@/lib/i18n";
 import { useT } from "@/lib/i18n/client";
@@ -47,6 +48,8 @@ type Phase = { kind: "idle" } | { kind: "uploading"; fraction: number } | { kind
  */
 export function CaptureFlow({ athleteId, maxBytes, maxSeconds }: { athleteId: string; maxBytes: number; maxSeconds: number }) {
   const t = useT();
+  // Despierto la IA ya: arranca mientras el deportista elige el movimiento y el video
+  useWakeAi();
   const movementOptions = MOVEMENT_TYPES.map((movement) => ({ value: movement, label: t.analysis.movement[movement] }));
   const router = useRouter();
   const [file, setFile] = useState<File | null>(null);

@@ -279,7 +279,22 @@
     "deleteBody": "Se borrarán el video, el análisis y la conversación con el asistente. Esta acción no se puede deshacer.",
     "movement": "Movimiento",
     "recordedAt": "Fecha",
-    "status": "Estado"
+    "status": "Estado",
+    "progress": {
+      "label": "Progreso del análisis",
+      "stage": "Etapa {index} de {total}: {name}",
+      "done": "Análisis listo",
+      "stages": {
+        "queued": "En cola",
+        "downloading_video": "Descargando el video",
+        "extracting_pose": "Detectando el esqueleto",
+        "detecting_repetitions": "Contando repeticiones",
+        "scoring_risk": "Calculando el riesgo"
+      },
+      "waking": "Encendiendo la IA…",
+      "coldStart": "La IA estaba en reposo. La primera vez tarda un poco más en arrancar; después el análisis sigue solo.",
+      "frames": "{done} de {total} cuadros"
+    }
   },
   "joints": {
     "knee_flexion": "Flexión de rodilla",
@@ -898,5 +913,13 @@
         "simulated": "En la guía la cámara es simulada: no se pide permiso ni se graba nada."
       }
     }
+  },
+  "ai": {
+    "label": "Estado de la IA",
+    "waking": "IA encendiendo…",
+    "ready": "IA activada",
+    "unavailable": "IA no disponible",
+    "wakingHint": "La primera vez tarda unos segundos.",
+    "unavailableHint": "Tus videos quedan guardados; el análisis empieza cuando vuelva."
   }
 }

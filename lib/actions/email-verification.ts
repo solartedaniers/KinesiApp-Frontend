@@ -7,7 +7,7 @@ import { FORM_INTENT, formText, type FormState } from "../form-state";
 import { authGateway } from "../grpc/auth-gateway";
 import { getT } from "../i18n/server";
 import { ROUTES } from "../routes";
-import { storeSession } from "../session";
+import { requestAiWakeOnEntry, storeSession } from "../session";
 import type { TokenPair } from "../types";
 import { collectErrors, validateEmail, validateOtp } from "../validation";
 
@@ -46,5 +46,6 @@ export async function verifyEmail(
 
   // Verificar el correo ya inicia sesión: el backend devuelve la sesión
   await storeSession(tokens);
+  await requestAiWakeOnEntry();
   redirect(ROUTES.home);
 }

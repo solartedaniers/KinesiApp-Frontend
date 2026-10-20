@@ -10,7 +10,7 @@ import { authGateway } from "../grpc/auth-gateway";
 import { ErrorReason, hasReason } from "../grpc/errors";
 import { getT } from "../i18n/server";
 import { NEXT_PARAM, ROUTES, safeNextPath, withEmail } from "../routes";
-import { storeSession } from "../session";
+import { requestAiWakeOnEntry, storeSession } from "../session";
 import { SIGNUP_ROLES, type SignupRole, type TokenPair } from "../types";
 import {
   collectErrors,
@@ -48,6 +48,7 @@ export async function login(_previous: FormState<LoginField>, formData: FormData
   }
 
   await storeSession(tokens);
+  await requestAiWakeOnEntry();
   redirect((await nextFromReferer()) ?? ROUTES.home);
 }
 

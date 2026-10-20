@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { AiStatusIndicator } from "@/components/ai/AiStatusIndicator";
 import { Logo } from "@/components/brand/Logo";
 import { homeFor } from "@/lib/access";
 import type { User } from "@/lib/types";
@@ -24,6 +25,9 @@ export function AppShell({ user, children }: { user: User; children: ReactNode }
           <Logo href={home} />
         </div>
         <NavigationPanel user={user} />
+        <div className="px-2">
+          <AiStatusIndicator withHint />
+        </div>
         <PreferencesControls />
       </aside>
 
@@ -32,7 +36,8 @@ export function AppShell({ user, children }: { user: User; children: ReactNode }
           <NavigationPanel user={user} />
         </MobileMenu>
         <Logo href={home} size={26} collapsible />
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-2">
+          <AiStatusIndicator />
           <PreferencesControls compact />
         </div>
       </header>
