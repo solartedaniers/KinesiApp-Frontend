@@ -58,10 +58,15 @@ const FONTS = {
   instrument: { "--kin-font-display": "var(--font-instrument-display)", "--kin-font-sans": "var(--font-instrument-sans)", "--kin-font-mono": "var(--font-instrument-display)", "--kin-display-stretch": "92%" },
 };
 
+// Radios por función, no uno igual para todo; como variables para que el CSS del instrumento los use
+const RADIUS = { tag: "0.25rem", control: "0.375rem", panel: "0.625rem", stage: "0.875rem" };
+const RADIUS_VARS = Object.fromEntries(Object.entries(RADIUS).map(([name, value]) => [`--kin-radius-${name}`, value]));
+
 // Tiempos del movimiento: las medidas se toman su tiempo porque son el contenido; la interfaz responde rápido
 const MOTION = {
   "--kin-motion-press": "90ms",
   "--kin-motion-hover": "180ms",
+  "--kin-motion-lift": "320ms",
   "--kin-motion-draw": "1400ms",
   "--kin-motion-measure": "1500ms",
   "--kin-motion-stagger": "90ms",
@@ -103,13 +108,7 @@ const config: Config = {
         score: ["clamp(3.25rem, 9vw, 4.75rem)", { lineHeight: "1" }],
         hero: ["clamp(2.25rem, 6vw, 3.75rem)", { lineHeight: "1.05" }],
       },
-      // Radios por función, no uno igual para todo
-      borderRadius: {
-        tag: "0.25rem",
-        control: "0.375rem",
-        panel: "0.625rem",
-        stage: "0.875rem",
-      },
+      borderRadius: Object.fromEntries(Object.keys(RADIUS).map((name) => [name, `var(--kin-radius-${name})`])),
       // Sombra sólo para lo que flota sobre la página (diálogos, menús); las tarjetas usan borde
       boxShadow: {
         overlay: "0 12px 32px -12px rgb(17 20 24 / 0.28), 0 2px 6px rgb(17 20 24 / 0.08)",
@@ -132,7 +131,7 @@ const config: Config = {
   plugins: [
     plugin(({ addBase }) => {
       addBase({
-        ":root": { colorScheme: "light", ...variables(0), ...FONTS.current },
+        ":root": { colorScheme: "light", ...variables(0), ...FONTS.current, ...RADIUS_VARS },
         ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
         [INSTRUMENT]: { ...instrument(0), ...FONTS.instrument, ...MOTION },
         // Sin data-theme (preferencia "sistema") sigue al sistema operativo
