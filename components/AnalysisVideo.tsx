@@ -6,13 +6,11 @@ import { RISK_FILL } from "@/components/analysis/risk-classes";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { anglesByJoint, type RiskLevel } from "@/lib/analysis-stats";
 import { angleAt, peakMoments, timelinePercent } from "@/lib/analysis-timeline";
-import { API_PATHS } from "@/lib/api-paths";
-import { publicApiBaseUrl, VIDEO_URL_RENEW_MARGIN_MS } from "@/lib/config";
+import { renewPlaybackUrl } from "@/lib/actions/analyses";
+import { VIDEO_URL_RENEW_MARGIN_MS } from "@/lib/config";
 import { format } from "@/lib/i18n";
 import { useFormat, useT } from "@/lib/i18n/client";
-import { proxyUrl } from "@/lib/proxy-allowlist";
-import type { JointAngleMeasurement } from "@/lib/types";
-import { videoSource, type VideoAccess, type VideoSource } from "@/lib/video";
+import type { JointAngleMeasurement, SignedUrl } from "@/lib/types";
 
 // Trazo de cada articulación en la línea de tiempo: mismo cian, distinto patrón (no otro color)
 const SERIES_DASH = [undefined, "4 4"];
@@ -22,9 +20,9 @@ const CHART_HEIGHT = 56;
  * Escenario del análisis: el <video> nativo con los ángulos medidos en el instante actual encima y,
  * debajo, la línea de tiempo con el pico de cada articulación (tocarlo lleva el video a ese instante).
  *
- * <video> nativo: el navegador pide Range solo y el servidor responde 206 (§6.1). La URL firmada
- * vence (10 min) y, si el usuario adelanta después, el 206 siguiente falla; entonces se pide otra
- * URL por /api/proxy y se retoma en el mismo segundo.
+ * <video> nativo: el navegador pide Range directo al bucket privado con la URL firmada. Esa URL vence
+ * y, si el usuario adelanta después, el 206 siguiente falla; entonces pido otra con GetVideoPlaybackUrl
+ * y retomo en el mismo segundo.
  */
 export function AnalysisVideo({
   analysisId,
@@ -32,8 +30,8 @@ export function AnalysisVideo({
   measurements = [],
   risk,
 }: {
-  analysisId: number;
-  initial: VideoSource;
+  analysisId: string;
+  initial: SignedUrl;
   measurements?: JointAngleMeasurement[];
   risk?: RiskLevel;
 }) {
@@ -48,18 +46,17 @@ export function AnalysisVideo({
   async function handleError() {
     const video = videoRef.current;
     // Si la URL sigue vigente, el problema es el archivo o el códec: no tiene sentido renovar
-    if (!video || Date.now() < source.expiresAt - VIDEO_URL_RENEW_MARGIN_MS) {
+    if (!video || Date.now() < Date.parse(source.expires_at) - VIDEO_URL_RENEW_MARGIN_MS) {
       setFailed(true);
       return;
     }
-    try {
-      const response = await fetch(proxyUrl(API_PATHS.analysisVideoAccess(analysisId)), { cache: "no-store" });
-      if (!response.ok) throw new Error(String(response.status));
-      resumeAt.current = video.currentTime;
-      setSource(videoSource(publicApiBaseUrl(), analysisId, (await response.json()) as VideoAccess));
-    } catch {
+    const renewed = await renewPlaybackUrl(analysisId).catch(() => null);
+    if (!renewed) {
       setFailed(true);
+      return;
     }
+    resumeAt.current = video.currentTime;
+    setSource(renewed);
   }
 
   function resume() {

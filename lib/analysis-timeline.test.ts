@@ -4,7 +4,7 @@ import { test } from "node:test";
 
 import { angleAt, peakMoments, timelinePercent } from "./analysis-timeline.ts";
 
-const point = (ms: number, degrees: number, id = ms) => ({ id, joint_name: "knee_flexion", angle_degrees: degrees, frame_timestamp_ms: ms });
+const point = (ms: number, degrees: number, id = ms) => ({ id, joint_name: "knee_flexion" as const, angle_degrees: degrees, frame_timestamp_ms: ms });
 const knee = [point(0, 10), point(100, 80), point(200, 110), point(300, 110), point(400, 40)];
 
 test("el pico de cada articulación es el primer instante con el ángulo máximo", () => {

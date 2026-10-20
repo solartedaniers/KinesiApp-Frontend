@@ -1,6 +1,6 @@
 // Métricas de una lista de análisis: lógica pura (sin React ni red), testeada en analysis-stats.test.ts.
 // Mismo cálculo que AnalysisStatistics del cliente Flutter.
-import type { JointAngleMeasurement, JumpAnalysis } from "./types";
+import type { JointAngleMeasurement, AnalysisSummary } from "./types";
 
 // Umbrales de nivel de riesgo sobre risk_score ∈ [0, 1]. "Alto" es el de Flutter; "moderado" es un
 // corte de presentación. Ninguno tiene validación clínica (video-analysis-pipeline.md §5)
@@ -24,13 +24,13 @@ export function riskLevel(score: number): RiskLevel {
   return score >= RISK_THRESHOLDS.moderate ? "moderate" : "low";
 }
 
-export function sortByRecordedDesc(analyses: JumpAnalysis[]): JumpAnalysis[] {
+export function sortByRecordedDesc(analyses: AnalysisSummary[]): AnalysisSummary[] {
   return [...analyses].sort((a, b) => Date.parse(b.recorded_at) - Date.parse(a.recorded_at));
 }
 
-export function computeStatistics(analyses: JumpAnalysis[]): AnalysisStatistics {
+export function computeStatistics(analyses: AnalysisSummary[]): AnalysisStatistics {
   const scores = analyses.flatMap((analysis) => (analysis.risk_score === null ? [] : [analysis.risk_score]));
-  const count = (status: JumpAnalysis["status"]) => analyses.filter((analysis) => analysis.status === status).length;
+  const count = (status: AnalysisSummary["status"]) => analyses.filter((analysis) => analysis.status === status).length;
   return {
     total: analyses.length,
     pending: count("pending"),
@@ -43,10 +43,10 @@ export function computeStatistics(analyses: JumpAnalysis[]): AnalysisStatistics 
   };
 }
 
-export type RiskPoint = { analysisId: number; recordedAt: string; score: number };
+export type RiskPoint = { analysisId: string; recordedAt: string; score: number };
 
 /** Serie temporal del gráfico: sólo análisis con puntaje, del más antiguo al más reciente. */
-export function riskTrend(analyses: JumpAnalysis[]): RiskPoint[] {
+export function riskTrend(analyses: AnalysisSummary[]): RiskPoint[] {
   return sortByRecordedDesc(analyses)
     .reverse()
     .flatMap((analysis) =>
@@ -70,11 +70,11 @@ export function anglesByJoint(measurements: JointAngleMeasurement[]): JointSerie
   });
 }
 
-export type AthleteSummary = { athleteId: number; stats: AnalysisStatistics; latestScore: number | null };
+export type AthleteSummary = { athleteId: string; stats: AnalysisStatistics; latestScore: number | null };
 
 /** Estadísticas por deportista (vista de equipo del coach); sólo deportistas con grabaciones. */
-export function statsByAthlete(analyses: JumpAnalysis[]): Map<number, AthleteSummary> {
-  const groups = new Map<number, JumpAnalysis[]>();
+export function statsByAthlete(analyses: AnalysisSummary[]): Map<string, AthleteSummary> {
+  const groups = new Map<string, AnalysisSummary[]>();
   for (const analysis of analyses) groups.set(analysis.athlete_id, [...(groups.get(analysis.athlete_id) ?? []), analysis]);
   return new Map(
     [...groups].map(([athleteId, own]) => [

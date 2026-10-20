@@ -22,7 +22,11 @@ import { getAnalysis } from "@/lib/data/analyses";
 import { listMyAthletes } from "@/lib/data/coach";
 import { requireRole } from "@/lib/guard";
 import { getFormat, getT } from "@/lib/i18n/server";
-import { reportPath } from "@/lib/routes";
+import { reportPath, parseId } from "@/lib/routes";
+
+// Las Server Actions de esta página sostienen los streams de WatchAnalysis y del chat (hasta
+// GRPC_STREAM_TIMEOUT_MS): les doy el máximo de Vercel para que la función no los corte antes
+export const maxDuration = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
@@ -30,16 +34,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * SSR + isla CSR de polling (§3): el servidor renderiza el estado actual; si está en proceso,
- * AnalysisPoller consulta hasta que cambie y pide un nuevo render. El video va en su propio
+ * SSR + isla CSR en vivo: el servidor renderiza el estado actual; si está en proceso, AnalysisPoller
+ * sigue WatchAnalysis hasta el resultado y pide un nuevo render. El video va en su propio
  * Suspense: la URL firmada no retrasa el resto de la página.
  */
 export default async function AnalysisPage({ params }: PageProps<"/analyses/[id]">) {
   const t = await getT();
   const fmt = await getFormat();
   const user = await requireRole(SECTION_ROLES.analysis);
-  const analysisId = Number((await params).id);
-  if (!Number.isInteger(analysisId) || analysisId <= 0) notFound();
+  const analysisId = parseId((await params).id);
+  if (!analysisId) notFound();
   const analysis = await getAnalysis(analysisId);
   // El coach ve grabaciones de varios deportistas: el subtítulo dice de quién es
   const coachAthlete =

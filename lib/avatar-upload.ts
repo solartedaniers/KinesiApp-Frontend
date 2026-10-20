@@ -1,6 +1,6 @@
 // Lado de la UI de la foto de perfil: la comprime en un Web Worker (para no congelar la pantalla
-// con fotos de 12 MP) y la deja lista para la Server Action.
-import { AVATAR_COMPRESSION, AVATAR_WORKER_URL, type AvatarPayload, canUploadOriginal } from "./avatar";
+// con fotos de 12 MP) y la deja lista para subirla directo al bucket.
+import { AVATAR_COMPRESSION, AVATAR_WORKER_URL, canUploadOriginal } from "./avatar";
 
 export class AvatarTooLargeError extends Error {}
 
@@ -23,21 +23,11 @@ function compressInWorker(file: File): Promise<Blob> {
 }
 
 /** Foto lista para enviar: comprimida en el worker o, sin soporte, la original si ya cumple. */
-export async function prepareAvatar(file: File): Promise<AvatarPayload> {
+export async function prepareAvatar(file: File): Promise<Blob> {
   if (typeof Worker !== "undefined" && typeof OffscreenCanvas !== "undefined") {
     const blob = await compressInWorker(file);
-    return { content_type: AVATAR_COMPRESSION.outputType, data_base64: await blobToBase64(blob) };
+    return blob.type ? blob : new Blob([blob], { type: AVATAR_COMPRESSION.outputType });
   }
   if (!canUploadOriginal(file)) throw new AvatarTooLargeError();
-  return { content_type: file.type, data_base64: await blobToBase64(file) };
-}
-
-/** Blob → base64 sin el prefijo "data:...;base64," (el backend recibe tipo y datos por separado). */
-function blobToBase64(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result).split(",", 2)[1] ?? "");
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(blob);
-  });
+  return file;
 }

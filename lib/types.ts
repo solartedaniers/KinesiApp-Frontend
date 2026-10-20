@@ -1,38 +1,40 @@
-// Contratos de la API (backend/app/schemas) que usa el cliente web.
+// Modelos de dominio del cliente web. Los gateways de lib/grpc los arman desde los mensajes del contrato:
+// la UI nunca ve tipos de Protobuf. Los ids son string porque el contrato los entrega con jstype JS_STRING.
 
 export const USER_ROLES = ["athlete", "coach", "admin"] as const;
 export type UserRole = (typeof USER_ROLES)[number];
 
-// El registro público no ofrece admin (PublicSignupRole en el backend)
+// El registro público no ofrece admin
 export const SIGNUP_ROLES = ["athlete", "coach"] as const satisfies readonly UserRole[];
 export type SignupRole = (typeof SIGNUP_ROLES)[number];
 
 export type TokenPair = {
   access_token: string;
   refresh_token: string;
-  token_type: string;
 };
 
+/** La cuenta de la sesión (AccountService.GetMyAccount). */
 export type User = {
-  id: number;
+  id: string;
   email: string;
   full_name: string;
   role: UserRole;
-  is_active: boolean;
-  is_verified: boolean;
   created_at: string;
   avatar_url: string | null;
   video_consent_version: number | null;
 };
 
+/** Una cuenta vista por el admin (UserAdminService), con su estado. */
+export type AdminUser = User & { is_active: boolean; is_verified: boolean };
+
 export const GENDERS = ["male", "female", "other"] as const;
 export type Gender = (typeof GENDERS)[number];
 
-/** AthleteProfileRead. `user_id` es null en deportistas gestionados por un coach (sin cuenta). */
+/** `user_id` es null en deportistas gestionados por un coach (sin cuenta). `birth_date` va como AAAA-MM-DD. */
 export type AthleteProfile = {
-  id: number;
-  user_id: number | null;
-  coach_id: number | null;
+  id: string;
+  user_id: string | null;
+  coach_id: string | null;
   coach_name: string | null;
   display_name: string;
   display_avatar: string | null;
@@ -43,33 +45,83 @@ export type AthleteProfile = {
   birth_date: string;
 };
 
-export type AnalysisStatus = "pending" | "processed" | "failed";
+export const ANALYSIS_STATUSES = ["pending", "processed", "failed"] as const;
+export type AnalysisStatus = (typeof ANALYSIS_STATUSES)[number];
 export const MOVEMENT_TYPES = ["jump", "squat"] as const;
 export type MovementType = (typeof MOVEMENT_TYPES)[number];
+export const RISK_LEVELS = ["low", "moderate", "high"] as const;
+export type RiskLevel = (typeof RISK_LEVELS)[number];
+export const JOINTS = ["knee_flexion", "trunk_inclination"] as const;
+export type Joint = (typeof JOINTS)[number];
 
 export type JointAngleMeasurement = {
+  /** Índice dentro de la serie: el contrato no da id por muestra y React necesita una clave estable. */
   id: number;
-  joint_name: string;
+  joint_name: Joint;
   angle_degrees: number;
   frame_timestamp_ms: number;
 };
 
-/** TeamRead: grupo de deportistas de un coach (o de un admin). */
-export type Team = { id: number; name: string; owner_id: number; athlete_ids: number[]; created_at: string };
-
-export type VideoUploadToken = { token: string; expires_at: string };
-export type VideoLimits = { max_size_bytes: number };
+export type Team = { id: string; name: string; owner_id: string; athlete_ids: string[]; created_at: string };
 
 export type ChatRole = "user" | "assistant";
-export type ChatMessage = { id: number; role: ChatRole; content: string; created_at: string };
+export type ChatMessage = { id: string; role: ChatRole; content: string; created_at: string };
 
-/** JumpAnalysisRead. `risk_score` está en [0, 1] y es null hasta que el análisis termina. */
-export type JumpAnalysis = {
-  id: number;
-  athlete_id: number;
+/** Lo que muestran los listados. `risk_score` está en [0, 1] y solo existe en PROCESSED. */
+export type AnalysisSummary = {
+  id: string;
+  athlete_id: string;
   movement_type: MovementType;
   status: AnalysisStatus;
-  risk_score: number | null;
   recorded_at: string;
-  angle_measurements: JointAngleMeasurement[];
+  risk_score: number | null;
+  risk_level: RiskLevel | null;
+  dominant_risk_pattern: string | null;
+  /** Motivo en minúsculas (clave de errors en i18n); solo en FAILED. */
+  failure_reason: string | null;
 };
+
+export type RepetitionScore = { code: string; score: number | null; measured_degrees: number | null };
+export type Repetition = {
+  start_ms: number;
+  end_ms: number;
+  pattern_scores: RepetitionScore[];
+  signal_scores: RepetitionScore[];
+};
+export type RiskPattern = { code: string; score: number | null; repetitions_triggered: number };
+export type RiskAssessment = {
+  risk_score: number;
+  risk_level: RiskLevel | null;
+  dominant_pattern: string | null;
+  patterns: RiskPattern[];
+  repetitions: Repetition[];
+};
+
+/** El análisis completo, con las series de ángulos y el detalle de riesgo cuando existe. */
+export type JumpAnalysis = AnalysisSummary & {
+  angle_measurements: JointAngleMeasurement[];
+  risk_assessment: RiskAssessment | null;
+};
+
+export const ANALYSIS_STAGES = ["queued", "downloading_video", "extracting_pose", "detecting_repetitions", "scoring_risk"] as const;
+export type AnalysisStage = (typeof ANALYSIS_STAGES)[number];
+export type AnalysisProgress = { stage: AnalysisStage; frames_processed: number; frames_total: number };
+
+/** URL firmada de vida corta (lectura) o de subida directa al bucket. */
+export type SignedUrl = { url: string; expires_at: string };
+export type UploadTarget = { upload_id: string; url: string; headers: Record<string, string>; expires_at: string };
+
+/** Reglas que el backend aplica y el cliente valida antes de enviar (SystemService.GetClientPolicy). */
+export type ClientPolicy = {
+  video_consent_version: number;
+  video_max_duration_seconds: number;
+  video_max_size_bytes: number;
+  max_avatar_size_bytes: number;
+  password_min_length: number;
+  password_max_length: number;
+  athlete_min_age_years: number;
+  athlete_max_age_years: number;
+  chat_message_max_chars: number;
+};
+
+export type AiState = "warming_up" | "ready";

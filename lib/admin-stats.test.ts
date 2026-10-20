@@ -3,13 +3,13 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { accountStatus, systemSummary, unassignedFirst } from "./admin-stats.ts";
-import type { AthleteProfile, User } from "./types.ts";
+import type { AdminUser, AthleteProfile } from "./types.ts";
 
-const user = (id: number, role: User["role"], is_verified: boolean, is_active: boolean): User => ({
-  id, email: `u${id}@k.app`, full_name: `U${id}`, role, is_active, is_verified, created_at: "2026-09-01T00:00:00Z", avatar_url: null, video_consent_version: null,
+const user = (id: number, role: AdminUser["role"], is_verified: boolean, is_active: boolean): AdminUser => ({
+  id: String(id), email: `u${id}@k.app`, full_name: `U${id}`, role, is_active, is_verified, created_at: "2026-09-01T00:00:00Z", avatar_url: null, video_consent_version: null,
 });
 const athlete = (id: number, name: string, coach_id: number | null): AthleteProfile => ({
-  id, user_id: null, coach_id, coach_name: null, display_name: name, display_avatar: null, is_managed: true, gender: "other", height_cm: 170, weight_kg: 60, birth_date: "2000-01-01",
+  id: String(id), user_id: null, coach_id: coach_id === null ? null : String(coach_id), coach_name: null, display_name: name, display_avatar: null, is_managed: true, gender: "other", height_cm: 170, weight_kg: 60, birth_date: "2000-01-01",
 });
 
 test("estado de la cuenta: sin verificar no es deshabilitada", () => {

@@ -1,11 +1,10 @@
-// Subida de un video del navegador directo a la API (no pasa por Vercel, que corta los cuerpos
-// grandes). Lo autoriza un token de subida de vida corta, acotado a un deportista: el token de
-// sesión nunca llega al navegador.
-import type { MovementType } from "./types.ts";
+// Subida de archivos del navegador directo al bucket privado con la URL firmada que entrega un RPC:
+// no pasa por Vercel (que corta los cuerpos grandes) y el token de sesión nunca llega al navegador.
+import type { UploadTarget } from "./types.ts";
 
 export type VideoFileError = "videoRequired" | "videoInvalidType" | "videoTooLarge";
 
-/** Mismas reglas que JumpVideoStorage del backend (tipo y tamaño); el backend vuelve a validar. */
+/** Mismas reglas que aplica CreateVideoUpload (tipo y tamaño); el backend vuelve a validar. */
 export function validateVideoFile(file: { type: string; size: number } | null, maxBytes: number): VideoFileError | null {
   if (!file || file.size === 0) return "videoRequired";
   if (!file.type.startsWith("video/")) return "videoInvalidType";
@@ -17,61 +16,52 @@ export function bytesToMegabytes(bytes: number): number {
   return Math.round(bytes / (1024 * 1024));
 }
 
-export type UploadOutcome = { ok: true; analysisId: number } | { ok: false; code: string };
+export type UploadOutcome = { ok: true } | { ok: false; code: string };
 
-export type VideoUpload = { done: Promise<UploadOutcome>; abort: () => void };
+export type BucketUpload = { done: Promise<UploadOutcome>; abort: () => void };
 
 /** Código del cliente para una subida cancelada por el usuario. */
 export const UPLOAD_ABORTED_CODE = "upload_aborted";
 
 /**
- * POST multipart con XMLHttpRequest: es la única API del navegador que informa el progreso de
- * subida (xhr.upload.onprogress). Nunca rechaza: un fallo es `{ ok: false, code }` con el `code`
- * estable del backend, o "network" / UPLOAD_ABORTED_CODE.
+ * PUT al bucket con XMLHttpRequest: es la única API del navegador que informa el progreso de subida
+ * (xhr.upload.onprogress). Los headers firmados van tal cual. Nunca rechaza: un fallo es
+ * `{ ok: false, code }` con "storage_unavailable", "network" o UPLOAD_ABORTED_CODE.
  */
-export function startVideoUpload({
-  url,
-  token,
-  athleteId,
-  movementType,
-  file,
-  onProgress,
-}: {
-  url: string;
-  token: string;
-  athleteId: number;
-  movementType: MovementType;
-  file: File;
-  onProgress: (fraction: number) => void;
-}): VideoUpload {
+export function uploadToBucket(target: UploadTarget, body: Blob, onProgress?: (fraction: number) => void): BucketUpload {
   const xhr = new XMLHttpRequest();
   const done = new Promise<UploadOutcome>((resolve) => {
     xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) onProgress(event.loaded / event.total);
+      if (event.lengthComputable) onProgress?.(event.loaded / event.total);
     };
-    xhr.onload = () => {
-      const body = parseJson(xhr.responseText);
-      if (xhr.status === 202 && typeof body?.id === "number") resolve({ ok: true, analysisId: body.id });
-      else resolve({ ok: false, code: typeof body?.code === "string" ? body.code : xhr.status === 422 ? "validation_error" : "generic" });
-    };
+    xhr.onload = () => resolve(xhr.status >= 200 && xhr.status < 300 ? { ok: true } : { ok: false, code: "storage_unavailable" });
     xhr.onerror = () => resolve({ ok: false, code: "network" });
     xhr.onabort = () => resolve({ ok: false, code: UPLOAD_ABORTED_CODE });
   });
 
-  const form = new FormData();
-  form.set("athlete_id", String(athleteId));
-  form.set("movement_type", movementType);
-  form.set("video", file);
-  xhr.open("POST", url);
-  xhr.setRequestHeader("Authorization", `Bearer ${token}`);
-  xhr.send(form);
+  xhr.open("PUT", target.url);
+  for (const [name, value] of Object.entries(target.headers)) xhr.setRequestHeader(name, value);
+  xhr.send(body);
   return { done, abort: () => xhr.abort() };
 }
 
-function parseJson(text: string): Record<string, unknown> | null {
-  try {
-    return JSON.parse(text) as Record<string, unknown>;
-  } catch {
-    return null;
-  }
+/**
+ * Duración del video con los metadatos que lee el propio navegador (<video preload="metadata">).
+ * CreateVideoUpload la exige para rechazar de entrada lo que pase de 40 s.
+ */
+export function readVideoDurationMs(file: Blob): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const video = document.createElement("video");
+    const finish = (settle: () => void) => {
+      URL.revokeObjectURL(url);
+      video.removeAttribute("src");
+      settle();
+    };
+    video.preload = "metadata";
+    video.onloadedmetadata = () =>
+      finish(() => (Number.isFinite(video.duration) ? resolve(Math.round(video.duration * 1000)) : reject(new Error("unknown duration"))));
+    video.onerror = () => finish(() => reject(new Error("unreadable video")));
+    video.src = url;
+  });
 }

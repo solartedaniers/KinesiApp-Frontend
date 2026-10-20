@@ -1,13 +1,13 @@
 // Estadísticas por equipo: lógica pura (sin React ni red), testeada en team-stats.test.ts.
 import { computeStatistics, type AnalysisStatistics } from "./analysis-stats.ts";
-import type { AthleteProfile, JumpAnalysis, Team } from "./types.ts";
+import type { AthleteProfile, AnalysisSummary, Team } from "./types.ts";
 
 /** Deportistas y grabaciones de un equipo; sin equipo, todo lo del coach. */
 export function scopeToTeam(
   athletes: AthleteProfile[],
-  analyses: JumpAnalysis[],
+  analyses: AnalysisSummary[],
   team: Team | undefined,
-): { athletes: AthleteProfile[]; analyses: JumpAnalysis[] } {
+): { athletes: AthleteProfile[]; analyses: AnalysisSummary[] } {
   if (!team) return { athletes, analyses };
   const members = new Set(team.athlete_ids);
   return {
@@ -19,7 +19,7 @@ export function scopeToTeam(
 export type TeamSummary = { team: Team; athletes: number; stats: AnalysisStatistics };
 
 /** Una fila por equipo para compararlos (un deportista en dos equipos cuenta en ambos). */
-export function statsByTeam(teams: Team[], analyses: JumpAnalysis[]): TeamSummary[] {
+export function statsByTeam(teams: Team[], analyses: AnalysisSummary[]): TeamSummary[] {
   return teams.map((team) => {
     const members = new Set(team.athlete_ids);
     return {
@@ -32,6 +32,6 @@ export function statsByTeam(teams: Team[], analyses: JumpAnalysis[]): TeamSummar
 
 /** `?team=` de la URL → el equipo, sólo si es uno de los del usuario. */
 export function findTeam(teams: Team[], param: string | string[] | undefined): Team | undefined {
-  const teamId = Number(Array.isArray(param) ? param[0] : param);
+  const teamId = Array.isArray(param) ? param[0] : param;
   return teams.find((team) => team.id === teamId);
 }

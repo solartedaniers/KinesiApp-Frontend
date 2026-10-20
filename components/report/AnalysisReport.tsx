@@ -1,12 +1,10 @@
 import { AnalysisResult } from "@/components/analysis/AnalysisResult";
 import { AngleCharts } from "@/components/analysis/AngleCharts";
 import { LogoMark } from "@/components/brand/LogoMark";
-import type { ChatOpening } from "@/lib/data/analyses";
-import { codeMessage } from "@/lib/errors";
 import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
 import { openingExplanation } from "@/lib/report";
-import type { AthleteProfile, JumpAnalysis } from "@/lib/types";
+import type { AthleteProfile, ChatMessage, JumpAnalysis } from "@/lib/types";
 
 // En papel: gráficas sin cortarse, tablas largas a dos columnas y sin el rótulo "Ver como tabla"
 const styles = {
@@ -31,14 +29,14 @@ const styles = {
 export async function AnalysisReport({
   analysis,
   athlete,
-  opening,
+  messages,
 }: {
   analysis: JumpAnalysis;
   athlete: AthleteProfile;
-  opening: ChatOpening;
+  messages: ChatMessage[];
 }) {
   const [t, fmt] = await Promise.all([getT(), getFormat()]);
-  const explanation = openingExplanation(opening.messages);
+  const explanation = openingExplanation(messages);
 
   return (
     <article className={styles.report}>
@@ -86,7 +84,7 @@ export async function AnalysisReport({
         {explanation ? (
           <p className={styles.explanation}>{explanation}</p>
         ) : (
-          <p className={styles.note}>{opening.errorCode ? codeMessage(t, opening.errorCode) : t.report.noExplanation}</p>
+          <p className={styles.note}>{t.report.noExplanation}</p>
         )}
       </section>
 

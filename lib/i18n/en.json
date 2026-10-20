@@ -77,7 +77,9 @@
     "pending": "Creating account…",
     "hasAccount": "Already have an account?",
     "signIn": "Sign in",
-    "verifyNow": "Go verify my email"
+    "verifyNow": "Go verify my email",
+    "videoConsent": "I accept the handling of my videos for movement analysis.",
+    "videoConsentLink": "Read the consent"
   },
   "session": {
     "logout": "Sign out"
@@ -199,7 +201,9 @@
     "errors": {
       "videoRequired": "Choose a video to continue.",
       "videoInvalidType": "The selected file isn't a video.",
-      "videoTooLarge": "The video exceeds the {max} MB limit."
+      "videoTooLarge": "The video exceeds the {max} MB limit.",
+      "videoTooLong": "The video is {seconds} seconds long. Please select or trim a clip of at most {max} seconds to continue.",
+      "videoUnreadable": "We couldn't read this video's duration. Try another file."
     }
   },
   "consent": {
@@ -535,7 +539,16 @@
     "invalid_team_member": "That athlete can't be in this team.",
     "cannot_modify_own_account": "You can't change the role or status of your own account.",
     "coach_has_athletes": "This coach still has athletes. Reassign them before changing the role.",
-    "invalid_role_assignment": "That user doesn't have the role required for this assignment."
+    "invalid_role_assignment": "That user doesn't have the role required for this assignment.",
+    "unauthorized": "Your session expired. Please sign in again.",
+    "video_too_long": "The video exceeds the maximum allowed duration.",
+    "upload_not_found": "We couldn't find the uploaded file. Please upload it again.",
+    "invalid_image": "The image is invalid or exceeds the maximum size.",
+    "video_unreadable": "We couldn't read the video. Try another recording.",
+    "no_movement_detected": "We didn't detect the movement in the video. Record from the side with your whole body in view.",
+    "ai_unavailable": "The AI didn't respond in time. Try again in a few minutes.",
+    "ai_busy": "The AI is busy with another analysis. We'll retry shortly.",
+    "profile_already_exists": "You already completed your athlete profile."
   },
   "preferences": {
     "language": "Language",

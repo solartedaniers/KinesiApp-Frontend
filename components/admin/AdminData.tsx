@@ -73,7 +73,7 @@ export async function AdminOverview() {
 
 /** Todas las cuentas, con cambio de rol y activación. La propia cuenta no tiene acciones (el backend
  * tampoco las permite): así ningún admin se deja al sistema sin administradores. */
-export async function UsersTable({ currentUserId }: { currentUserId: number }) {
+export async function UsersTable({ currentUserId }: { currentUserId: string }) {
   const t = await getT();
   const roleOptions = USER_ROLES.map((role) => ({ value: role, label: t.roles[role] }));
   const fmt = await getFormat();

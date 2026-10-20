@@ -6,10 +6,12 @@ import { Avatar } from "@/components/app/Avatar";
 import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { Icon } from "@/components/ui/Icon";
-import type { AvatarResult } from "@/lib/actions/profile";
-import { type AvatarPayload, isImageFile } from "@/lib/avatar";
+import type { AvatarResult, AvatarUploadStart } from "@/lib/actions/profile";
+import { isImageFile } from "@/lib/avatar";
 import { AvatarTooLargeError, prepareAvatar } from "@/lib/avatar-upload";
+import { codeMessage } from "@/lib/errors";
 import { useT } from "@/lib/i18n/client";
+import { uploadToBucket } from "@/lib/video-upload";
 
 const styles = {
   editor: "flex flex-wrap items-center gap-4",
@@ -19,18 +21,20 @@ const styles = {
 };
 
 /**
- * Foto de perfil: elegir (o tomar con la cámara) → comprimir en un Web Worker → subir por Server
- * Action. La usan la cuenta propia y los deportistas gestionados, cada uno con sus acciones.
+ * Foto de perfil: elegir (o tomar con la cámara) → comprimir en un Web Worker → URL firmada → PUT directo
+ * al bucket → confirmar. La usan la cuenta propia y los deportistas gestionados, cada uno con sus acciones.
  */
 export function AvatarEditor({
   name,
   imageUrl,
-  upload,
+  start,
+  confirm,
   remove,
 }: {
   name: string;
   imageUrl: string | null;
-  upload: (payload: AvatarPayload) => Promise<AvatarResult>;
+  start: (type: string, size: number) => Promise<AvatarUploadStart>;
+  confirm: (uploadId: string) => Promise<AvatarResult>;
   remove: () => Promise<AvatarResult>;
 }) {
   const t = useT();
@@ -52,11 +56,16 @@ export function AvatarEditor({
       return;
     }
     run(async () => {
+      let image: Blob;
       try {
-        return upload(await prepareAvatar(file));
+        image = await prepareAvatar(file);
       } catch (failure) {
         return { error: failure instanceof AvatarTooLargeError ? t.avatar.tooLarge : t.avatar.unreadable };
       }
+      const started = await start(image.type, image.size);
+      if ("error" in started) return started;
+      const outcome = await uploadToBucket(started.target, image).done;
+      return outcome.ok ? confirm(started.target.upload_id) : { error: codeMessage(t, outcome.code) };
     });
   }
 

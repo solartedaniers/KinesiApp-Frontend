@@ -102,7 +102,7 @@ export async function TeamStats({ teamParam }: { teamParam?: string | string[] }
 }
 
 /** Cifras, evolución y grabaciones de un deportista del coach (la ficha ya se validó en la página). */
-export async function CoachAthleteRecordings({ athleteId }: { athleteId: number }) {
+export async function CoachAthleteRecordings({ athleteId }: { athleteId: string }) {
   const fmt = await getFormat();
   const t = await getT();
   const analyses = await listAnalysesByAthlete(athleteId);

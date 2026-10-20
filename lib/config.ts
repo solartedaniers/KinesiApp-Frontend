@@ -1,29 +1,10 @@
 // Configuración que no es texto de UI ni estilo: entorno, nombres de cookies y márgenes de sesión.
 
-export function apiBaseUrl(): string {
-  const value = process.env.API_BASE_URL;
-  if (!value) {
-    throw new Error("API_BASE_URL is not set (see frontend/.env.example)");
-  }
-  return value.replace(/\/$/, "");
-}
-
-/** Base de la API vista desde el navegador: sólo para el `src` del <video> (§6). Se incrusta en el build. */
-export function publicApiBaseUrl(): string {
-  const value = process.env.NEXT_PUBLIC_API_BASE_URL;
-  if (!value) throw new Error("NEXT_PUBLIC_API_BASE_URL is not set (see frontend/.env.example)");
-  return value.replace(/\/$/, "");
-}
-
-// Consulta del estado de un análisis en proceso: backoff exponencial con techo y un límite de
-// intentos para no sondear para siempre (video-analysis-pipeline.md §7)
-export const ANALYSIS_POLLING = { initialDelayMs: 2_000, maxDelayMs: 30_000, maxAttempts: 20 } as const;
-
 // Antes de que venza la URL firmada del video se pide otra: margen para no reproducir con una vencida
 export const VIDEO_URL_RENEW_MARGIN_MS = 5_000;
 
-// Tamaño de página de los listados de admin (GET /users, GET /athletes usan skip/limit)
-export const ADMIN_PAGE_SIZE = 100;
+// Página de los listados por cursor; el backend nunca entrega más de 50 por página
+export const LIST_PAGE_SIZE = 50;
 
 export const SESSION_COOKIE = {
   access: "kin_at",

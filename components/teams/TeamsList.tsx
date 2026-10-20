@@ -24,7 +24,7 @@ export async function TeamsList({
 }: {
   teams: Team[];
   section: "coach" | "admin";
-  ownerNames?: Map<number, string>;
+  ownerNames?: Map<string, string>;
 }) {
   const t = await getT();
   if (teams.length === 0) return <EmptyState icon="folder" title={t.teams.empty} body={t.teams.emptyHint} />;

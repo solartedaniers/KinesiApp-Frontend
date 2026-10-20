@@ -1,22 +1,12 @@
-import { FormAlert } from "@/components/ui/FormAlert";
-import { sendChatMessage } from "@/lib/actions/chat";
-import { openChat } from "@/lib/data/analyses";
-import { codeMessage } from "@/lib/errors";
-import { getT } from "@/lib/i18n/server";
+import { listChatMessages } from "@/lib/data/analyses";
 
 import { ChatPanel } from "./ChatPanel";
 
 /**
- * Chat del análisis ya abierto en la ficha del resultado, con la explicación inicial de la IA. La
- * página lo envuelve en <Suspense>: el resultado y las gráficas salen primero y la explicación llega
- * en otro chunk del mismo stream, sin que el usuario tenga que pedirla.
+ * Chat del análisis en la ficha del resultado. La página lo envuelve en <Suspense>: el resultado y las
+ * gráficas salen primero y el hilo llega en otro chunk del mismo stream. Si todavía no hay explicación,
+ * ChatPanel la pide con StartConversation y la muestra mientras se genera.
  */
-export async function AnalysisChatCard({ analysisId }: { analysisId: number }) {
-  const [t, { messages, errorCode }] = await Promise.all([getT(), openChat(analysisId)]);
-  return (
-    <>
-      {errorCode && <FormAlert tone="info">{codeMessage(t, errorCode)}</FormAlert>}
-      <ChatPanel messages={messages} action={sendChatMessage.bind(null, analysisId)} />
-    </>
-  );
+export async function AnalysisChatCard({ analysisId }: { analysisId: string }) {
+  return <ChatPanel analysisId={analysisId} messages={await listChatMessages(analysisId)} />;
 }

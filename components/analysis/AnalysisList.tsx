@@ -5,7 +5,7 @@ import { Icon } from "@/components/ui/Icon";
 import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
 import { analysisPath } from "@/lib/routes";
-import type { JumpAnalysis } from "@/lib/types";
+import type { AnalysisSummary } from "@/lib/types";
 
 import { RiskBadge } from "./RiskBadge";
 import { StatusBadge } from "./StatusBadge";
@@ -28,8 +28,8 @@ export async function AnalysisList({
   analyses,
   subtitleFor,
 }: {
-  analyses: JumpAnalysis[];
-  subtitleFor?: (analysis: JumpAnalysis) => string | undefined;
+  analyses: AnalysisSummary[];
+  subtitleFor?: (analysis: AnalysisSummary) => string | undefined;
 }) {
   const t = await getT();
   const fmt = await getFormat();

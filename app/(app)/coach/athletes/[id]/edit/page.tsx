@@ -9,12 +9,12 @@ import { ManagedAthleteForm } from "@/components/coach/ManagedAthleteForm";
 import { Icon } from "@/components/ui/Icon";
 import { SECTION_ROLES } from "@/lib/access";
 import { updateManagedAthlete } from "@/lib/actions/managed-athletes";
-import { removeManagedAvatar, uploadManagedAvatar } from "@/lib/actions/profile";
+import { confirmManagedAvatarUpload, removeManagedAvatar, startManagedAvatarUpload } from "@/lib/actions/profile";
 import { getMyAthlete } from "@/lib/data/coach";
 import { todayInAppTimeZone } from "@/lib/format";
 import { requireRole } from "@/lib/guard";
 import { getT } from "@/lib/i18n/server";
-import { coachAthletePath } from "@/lib/routes";
+import { coachAthletePath, parseId } from "@/lib/routes";
 import { isoDate } from "@/lib/validation";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -26,8 +26,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function EditManagedAthletePage({ params }: PageProps<"/coach/athletes/[id]/edit">) {
   const t = await getT();
   await requireRole(SECTION_ROLES.coach);
-  const athleteId = Number((await params).id);
-  if (!Number.isInteger(athleteId) || athleteId <= 0) notFound();
+  const athleteId = parseId((await params).id);
+  if (!athleteId) notFound();
   const athlete = await getMyAthlete(athleteId);
   if (!athlete.is_managed) notFound();
 
@@ -42,7 +42,8 @@ export default async function EditManagedAthletePage({ params }: PageProps<"/coa
         <AvatarEditor
           name={athlete.display_name}
           imageUrl={athlete.display_avatar}
-          upload={uploadManagedAvatar.bind(null, athlete.id)}
+          start={startManagedAvatarUpload.bind(null, athlete.id)}
+          confirm={confirmManagedAvatarUpload.bind(null, athlete.id)}
           remove={removeManagedAvatar.bind(null, athlete.id)}
         />
       </section>

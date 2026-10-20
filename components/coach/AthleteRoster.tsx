@@ -17,7 +17,7 @@ import type { AthleteProfile } from "@/lib/types";
 const COLUMNS = "md:grid-cols-[minmax(0,2.2fr)_5rem_7.5rem_7.5rem_9rem_1.25rem]";
 
 /** Lista de los deportistas del coach con su último riesgo y cantidad de grabaciones. */
-export async function AthleteRoster({ athletes, summaries }: { athletes: AthleteProfile[]; summaries: Map<number, AthleteSummary> }) {
+export async function AthleteRoster({ athletes, summaries }: { athletes: AthleteProfile[]; summaries: Map<string, AthleteSummary> }) {
   const t = await getT();
   if (athletes.length === 0) {
     return (

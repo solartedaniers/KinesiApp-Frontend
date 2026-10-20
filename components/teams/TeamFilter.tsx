@@ -15,7 +15,7 @@ const styles = {
  * Filtro por equipo como formulario GET (`?team=`): la página se renderiza en el servidor ya
  * filtrada y el enlace se puede compartir. Con JS se aplica al elegir; sin JS, con el botón.
  */
-export function TeamFilter({ teams, selectedId }: { teams: Team[]; selectedId?: number }) {
+export function TeamFilter({ teams, selectedId }: { teams: Team[]; selectedId?: string }) {
   const t = useT();
   return (
     <form method="get" className={styles.filter}>

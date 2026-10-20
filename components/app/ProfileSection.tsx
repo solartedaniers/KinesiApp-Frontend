@@ -1,5 +1,5 @@
 import { AvatarEditor } from "@/components/AvatarEditor";
-import { removeMyAvatar, uploadMyAvatar } from "@/lib/actions/profile";
+import { confirmMyAvatarUpload, removeMyAvatar, startMyAvatarUpload } from "@/lib/actions/profile";
 import { getT } from "@/lib/i18n/server";
 import type { User } from "@/lib/types";
 
@@ -14,7 +14,7 @@ export async function ProfileSection({ user }: { user: User }) {
       <h2 id="profile-section" className={styles.sectionTitle}>
         {t.profile.title}
       </h2>
-      <AvatarEditor name={user.full_name} imageUrl={user.avatar_url} upload={uploadMyAvatar} remove={removeMyAvatar} />
+      <AvatarEditor name={user.full_name} imageUrl={user.avatar_url} start={startMyAvatarUpload} confirm={confirmMyAvatarUpload} remove={removeMyAvatar} />
       <ProfileNameForm fullName={user.full_name} />
     </section>
   );

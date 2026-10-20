@@ -3,16 +3,18 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import { ageOn, anglesByJoint, computeStatistics, riskLevel, riskTrend, sortByRecordedDesc, statsByAthlete } from "./analysis-stats.ts";
-import type { JumpAnalysis } from "./types.ts";
+import type { AnalysisSummary, Joint } from "./types.ts";
 
-const analysis = (id: number, day: number, status: JumpAnalysis["status"], risk: number | null): JumpAnalysis => ({
-  id,
-  athlete_id: 1,
+const analysis = (id: number, day: number, status: AnalysisSummary["status"], risk: number | null): AnalysisSummary => ({
+  id: String(id),
+  athlete_id: "1",
   movement_type: "jump",
   status,
   risk_score: risk,
   recorded_at: `2026-09-${String(day).padStart(2, "0")}T10:00:00Z`,
-  angle_measurements: [],
+  risk_level: null,
+  dominant_risk_pattern: null,
+  failure_reason: null,
 });
 
 const sample = [
@@ -41,27 +43,27 @@ test("estadísticas de una lista vacía no inventan valores", () => {
 });
 
 test("orden por fecha, tendencia y nivel de riesgo", () => {
-  assert.deepEqual(sortByRecordedDesc(sample).map((a) => a.id), [4, 2, 3, 5, 1]);
-  assert.deepEqual(riskTrend(sample).map((p) => p.analysisId), [1, 5, 2]);
+  assert.deepEqual(sortByRecordedDesc(sample).map((a) => a.id), ["4", "2", "3", "5", "1"]);
+  assert.deepEqual(riskTrend(sample).map((p) => p.analysisId), ["1", "5", "2"]);
   assert.deepEqual([riskLevel(0.1), riskLevel(0.33), riskLevel(0.66)], ["low", "moderate", "high"]);
 });
 
 test("ángulos agrupados por articulación, en orden temporal y con su pico", () => {
-  const m = (id: number, joint: string, ms: number, deg: number) => ({ id, joint_name: joint, frame_timestamp_ms: ms, angle_degrees: deg });
-  const series = anglesByJoint([m(1, "knee", 400, 48), m(2, "hip", 0, 10), m(3, "knee", 0, 12), m(4, "knee", 200, 35)]);
-  assert.deepEqual(series.map((s) => s.joint), ["knee", "hip"]);
+  const m = (id: number, joint: Joint, ms: number, deg: number) => ({ id, joint_name: joint, frame_timestamp_ms: ms, angle_degrees: deg });
+  const series = anglesByJoint([m(1, "knee_flexion", 400, 48), m(2, "trunk_inclination", 0, 10), m(3, "knee_flexion", 0, 12), m(4, "knee_flexion", 200, 35)]);
+  assert.deepEqual(series.map((s) => s.joint), ["knee_flexion", "trunk_inclination"]);
   assert.deepEqual(series[0].points.map((p) => p.frame_timestamp_ms), [0, 200, 400]);
   assert.equal(series[0].peak, 48);
   assert.deepEqual(anglesByJoint([]), []);
 });
 
 test("estadísticas por deportista y último puntaje", () => {
-  const team = [{ ...analysis(10, 1, "processed", 0.5), athlete_id: 2 }, { ...analysis(11, 9, "processed", 0.7), athlete_id: 2 }, ...sample];
+  const team = [{ ...analysis(10, 1, "processed", 0.5), athlete_id: "2" }, { ...analysis(11, 9, "processed", 0.7), athlete_id: "2" }, ...sample];
   const byAthlete = statsByAthlete(team);
-  assert.deepEqual([...byAthlete.keys()].sort(), [1, 2]);
-  assert.equal(byAthlete.get(2)?.stats.total, 2);
-  assert.equal(byAthlete.get(2)?.latestScore, 0.7);
-  assert.equal(byAthlete.get(1)?.latestScore, 0.8); // la más reciente con puntaje (la del día 12 está en proceso)
+  assert.deepEqual([...byAthlete.keys()].sort(), ["1", "2"]);
+  assert.equal(byAthlete.get("2")?.stats.total, 2);
+  assert.equal(byAthlete.get("2")?.latestScore, 0.7);
+  assert.equal(byAthlete.get("1")?.latestScore, 0.8); // la más reciente con puntaje (la del día 12 está en proceso)
 });
 
 test("edad cumplida respeta si ya pasó el cumpleaños", () => {

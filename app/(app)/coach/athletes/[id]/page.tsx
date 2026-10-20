@@ -17,7 +17,7 @@ import { getMyAthlete } from "@/lib/data/coach";
 import { requireRole } from "@/lib/guard";
 import { format } from "@/lib/i18n";
 import { getT } from "@/lib/i18n/server";
-import { coachAthleteEditPath, newAnalysisPath, ROUTES } from "@/lib/routes";
+import { coachAthleteEditPath, newAnalysisPath, ROUTES, parseId } from "@/lib/routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
@@ -29,8 +29,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CoachAthletePage({ params }: PageProps<"/coach/athletes/[id]">) {
   const t = await getT();
   await requireRole(SECTION_ROLES.coach);
-  const athleteId = Number((await params).id);
-  if (!Number.isInteger(athleteId) || athleteId <= 0) notFound();
+  const athleteId = parseId((await params).id);
+  if (!athleteId) notFound();
   const athlete = await getMyAthlete(athleteId);
 
   return (

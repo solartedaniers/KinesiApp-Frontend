@@ -11,7 +11,7 @@ import { listAnalysesByAthlete } from "@/lib/data/analyses";
 import { getMyAthleteProfile } from "@/lib/data/athletes";
 import { getFormat, getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
-import type { JumpAnalysis } from "@/lib/types";
+import type { AnalysisSummary } from "@/lib/types";
 
 // Async Server Components que cada página envuelve en <Suspense>: el encabezado sale de inmediato
 // y estos bloques llegan después, en otro chunk del mismo stream HTTP (SSR streaming, §10.2)
@@ -20,7 +20,7 @@ const RECENT_COUNT = 3;
 const analysesHref = NAV_BY_ROLE.athlete.find((item) => item.key === "analyses")?.href;
 
 /** Ficha del deportista → sus análisis. El layout ya exige la ficha: sin ella, al alta obligatoria. */
-async function myAnalyses(): Promise<JumpAnalysis[]> {
+async function myAnalyses(): Promise<AnalysisSummary[]> {
   const profile = await getMyAthleteProfile();
   if (!profile) redirect(ROUTES.onboarding);
   return listAnalysesByAthlete(profile.id);

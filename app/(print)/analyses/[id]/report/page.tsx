@@ -6,13 +6,13 @@ import { AnalysisReport } from "@/components/report/AnalysisReport";
 import { PrintButton } from "@/components/report/PrintButton";
 import { Icon } from "@/components/ui/Icon";
 import { SECTION_ROLES } from "@/lib/access";
-import { getAnalysis, openChat } from "@/lib/data/analyses";
+import { getAnalysis, listChatMessages } from "@/lib/data/analyses";
 import { getMyAthleteProfile } from "@/lib/data/athletes";
 import { listMyAthletes } from "@/lib/data/coach";
 import { requireOnboarded, requireRole } from "@/lib/guard";
 import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
-import { analysisPath } from "@/lib/routes";
+import { analysisPath, parseId } from "@/lib/routes";
 import type { AthleteProfile, JumpAnalysis, User } from "@/lib/types";
 
 // En papel sólo va el informe
@@ -29,16 +29,16 @@ async function reportAthlete(user: User, analysis: JumpAnalysis): Promise<Athlet
   return (await listMyAthletes()).find((athlete) => athlete.id === analysis.athlete_id);
 }
 
-function parseId(raw: string): number {
-  const id = Number(raw);
-  if (!Number.isInteger(id) || id <= 0) notFound();
+function analysisIdOrNotFound(raw: string): string {
+  const id = parseId(raw);
+  if (!id) notFound();
   return id;
 }
 
 export async function generateMetadata({ params }: PageProps<"/analyses/[id]/report">): Promise<Metadata> {
   // El título de la pestaña es el nombre que propone el navegador al guardar el PDF
   const [t, fmt] = await Promise.all([getT(), getFormat()]);
-  const analysis = await getAnalysis(parseId((await params).id));
+  const analysis = await getAnalysis(analysisIdOrNotFound((await params).id));
   return { title: format(t.report.fileTitle, { date: fmt.shortDate(analysis.recorded_at) }) };
 }
 
@@ -48,12 +48,12 @@ export default async function AnalysisReportPage({ params }: PageProps<"/analyse
   const t = await getT();
   const user = await requireRole(SECTION_ROLES.analysis);
   await requireOnboarded(user);
-  const analysis = await getAnalysis(parseId((await params).id));
+  const analysis = await getAnalysis(analysisIdOrNotFound((await params).id));
   // Sólo análisis terminados: un informe sin resultado no tiene sentido
   if (analysis.status !== "processed") notFound();
   const athlete = await reportAthlete(user, analysis);
   if (!athlete || athlete.id !== analysis.athlete_id) notFound();
-  const opening = await openChat(analysis.id);
+  const messages = await listChatMessages(analysis.id);
 
   return (
     <main className={styles.page}>
@@ -65,7 +65,7 @@ export default async function AnalysisReportPage({ params }: PageProps<"/analyse
         <PrintButton />
       </div>
       <p className={styles.hint}>{t.report.printHint}</p>
-      <AnalysisReport analysis={analysis} athlete={athlete} opening={opening} />
+      <AnalysisReport analysis={analysis} athlete={athlete} messages={messages} />
     </main>
   );
 }

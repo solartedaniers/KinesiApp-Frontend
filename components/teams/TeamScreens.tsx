@@ -19,7 +19,7 @@ import { TeamsList } from "./TeamsList";
 type TeamSection = "coach" | "admin";
 
 /** Lista de equipos + alta, la misma para el coach (sus equipos) y el admin (todos). */
-export async function TeamsScreen({ section, teams, ownerNames }: { section: TeamSection; teams: Team[]; ownerNames?: Map<number, string> }) {
+export async function TeamsScreen({ section, teams, ownerNames }: { section: TeamSection; teams: Team[]; ownerNames?: Map<string, string> }) {
   const t = await getT();
   return (
     <div className={pageStyles.page}>

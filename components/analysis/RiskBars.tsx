@@ -6,7 +6,7 @@ import { getFormat, getT } from "@/lib/i18n/server";
 import { ChartFigure, ChartNote } from "./LineChart";
 import { RISK_FILL } from "./risk-classes";
 
-export type RiskBar = { key: number; label: string; value: number; href: string };
+export type RiskBar = { key: string; label: string; value: number; href: string };
 
 /**
  * Comparar una magnitud entre categorías → barras horizontales de una sola serie, ordenadas de

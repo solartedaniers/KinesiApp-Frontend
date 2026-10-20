@@ -77,7 +77,9 @@
     "pending": "Creando cuenta…",
     "hasAccount": "¿Ya tienes una cuenta?",
     "signIn": "Inicia sesión",
-    "verifyNow": "Ir a verificar mi correo"
+    "verifyNow": "Ir a verificar mi correo",
+    "videoConsent": "Acepto el manejo de mis videos para el análisis de movimiento.",
+    "videoConsentLink": "Leer el consentimiento"
   },
   "session": {
     "logout": "Cerrar sesión"
@@ -199,7 +201,9 @@
     "errors": {
       "videoRequired": "Elige un video para continuar.",
       "videoInvalidType": "El archivo elegido no es un video.",
-      "videoTooLarge": "El video supera el máximo de {max} MB."
+      "videoTooLarge": "El video supera el máximo de {max} MB.",
+      "videoTooLong": "El video dura {seconds} segundos. Por favor, selecciona o recorta un clip de máximo {max} segundos para continuar.",
+      "videoUnreadable": "No pudimos leer la duración de este video. Prueba con otro archivo."
     }
   },
   "consent": {
@@ -535,7 +539,16 @@
     "invalid_team_member": "Ese deportista no puede estar en este equipo.",
     "cannot_modify_own_account": "No puedes cambiar el rol ni el estado de tu propia cuenta.",
     "coach_has_athletes": "Este entrenador todavía tiene deportistas. Reasígnalos antes de cambiarle el rol.",
-    "invalid_role_assignment": "Ese usuario no tiene el rol necesario para esta asignación."
+    "invalid_role_assignment": "Ese usuario no tiene el rol necesario para esta asignación.",
+    "unauthorized": "Tu sesión expiró. Inicia sesión de nuevo.",
+    "video_too_long": "El video supera la duración máxima permitida.",
+    "upload_not_found": "No encontramos el archivo subido. Intenta subirlo de nuevo.",
+    "invalid_image": "La imagen no es válida o supera el tamaño máximo.",
+    "video_unreadable": "No pudimos leer el video. Prueba con otra grabación.",
+    "no_movement_detected": "No detectamos el movimiento en el video. Graba de perfil y con el cuerpo completo a la vista.",
+    "ai_unavailable": "La IA no respondió a tiempo. Inténtalo de nuevo en unos minutos.",
+    "ai_busy": "La IA está ocupada con otro análisis. Reintentaremos en breve.",
+    "profile_already_exists": "Ya completaste tu ficha de deportista."
   },
   "preferences": {
     "language": "Idioma",

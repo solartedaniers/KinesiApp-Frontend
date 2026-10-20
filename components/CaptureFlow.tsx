@@ -7,21 +7,20 @@ import { formStyles } from "@/components/app/page-classes";
 import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
-import { requestUploadToken } from "@/lib/actions/analyses";
-import { API_PATHS } from "@/lib/api-paths";
-import { publicApiBaseUrl } from "@/lib/config";
+import { confirmVideoUpload, startVideoUpload } from "@/lib/actions/analyses";
 import { codeMessage } from "@/lib/errors";
 import { format } from "@/lib/i18n";
 import { useT } from "@/lib/i18n/client";
 import { analysisPath } from "@/lib/routes";
 import { MOVEMENT_TYPES, type MovementType } from "@/lib/types";
 import {
+  type BucketUpload,
   bytesToMegabytes,
-  startVideoUpload,
+  readVideoDurationMs,
   UPLOAD_ABORTED_CODE,
+  uploadToBucket,
   validateVideoFile,
   type VideoFileError,
-  type VideoUpload,
 } from "@/lib/video-upload";
 
 import { UploadProgress } from "./UploadProgress";
@@ -41,11 +40,12 @@ const styles = {
 type Phase = { kind: "idle" } | { kind: "uploading"; fraction: number } | { kind: "done" };
 
 /**
- * Elegir movimiento y video → revisar → subir con progreso → al detalle, que hace polling. El input
+ * Elegir movimiento y video → revisar → URL firmada → PUT directo al bucket con progreso → confirmar →
+ * al detalle, que sigue el análisis en vivo. El input
  * con `capture` abre la cámara nativa en el celular (graba mejor que MediaRecorder y funciona dentro
  * de WebViews); en el computador abre el selector de archivos.
  */
-export function CaptureFlow({ athleteId, maxBytes }: { athleteId: number; maxBytes: number }) {
+export function CaptureFlow({ athleteId, maxBytes, maxSeconds }: { athleteId: string; maxBytes: number; maxSeconds: number }) {
   const t = useT();
   const movementOptions = MOVEMENT_TYPES.map((movement) => ({ value: movement, label: t.analysis.movement[movement] }));
   const router = useRouter();
@@ -53,7 +53,7 @@ export function CaptureFlow({ athleteId, maxBytes }: { athleteId: number; maxByt
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
-  const uploadRef = useRef<VideoUpload | null>(null);
+  const uploadRef = useRef<BucketUpload | null>(null);
 
   // La URL del blob retiene el archivo en memoria: se libera al cambiarlo o al salir
   useEffect(
@@ -84,32 +84,47 @@ export function CaptureFlow({ athleteId, maxBytes }: { athleteId: number; maxByt
     setError(null);
     setPhase({ kind: "uploading", fraction: 0 });
 
-    const tokenResult = await requestUploadToken(athleteId);
-    if ("error" in tokenResult) {
+    const durationMs = await readVideoDurationMs(file).catch(() => null);
+    if (durationMs === null || durationMs > maxSeconds * 1000) {
       setPhase({ kind: "idle" });
-      setError(tokenResult.error);
+      setError(
+        durationMs === null
+          ? t.capture.errors.videoUnreadable
+          : format(t.capture.errors.videoTooLong, { seconds: Math.ceil(durationMs / 1000), max: maxSeconds }),
+      );
       return;
     }
     const movement = formData.get("movement_type");
-    const upload = startVideoUpload({
-      url: `${publicApiBaseUrl()}${API_PATHS.uploadAnalysis}`,
-      token: tokenResult.token,
+    const started = await startVideoUpload({
       athleteId,
       movementType: MOVEMENT_TYPES.includes(movement as MovementType) ? (movement as MovementType) : MOVEMENT_TYPES[0],
-      file,
-      onProgress: (fraction) => setPhase({ kind: "uploading", fraction }),
+      contentType: file.type,
+      size: file.size,
+      durationMs,
     });
+    if ("error" in started) {
+      setPhase({ kind: "idle" });
+      setError(started.error);
+      return;
+    }
+    const upload = uploadToBucket(started.target, file, (fraction) => setPhase({ kind: "uploading", fraction }));
     uploadRef.current = upload;
     const outcome = await upload.done;
     uploadRef.current = null;
-
-    if (outcome.ok) {
-      setPhase({ kind: "done" });
-      router.push(analysisPath(outcome.analysisId));
+    if (!outcome.ok) {
+      setPhase({ kind: "idle" });
+      if (outcome.code !== UPLOAD_ABORTED_CODE) setError(codeMessage(t, outcome.code));
       return;
     }
-    setPhase({ kind: "idle" });
-    if (outcome.code !== UPLOAD_ABORTED_CODE) setError(codeMessage(t, outcome.code));
+
+    const confirmed = await confirmVideoUpload(started.target.upload_id);
+    if ("error" in confirmed) {
+      setPhase({ kind: "idle" });
+      setError(confirmed.error);
+      return;
+    }
+    setPhase({ kind: "done" });
+    router.push(analysisPath(confirmed.analysisId));
   }
 
   const busy = phase.kind !== "idle";

@@ -15,12 +15,6 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  experimental: {
-    serverActions: {
-      // Avatar en base64 (<= ~1.34 MB) por Server Action (§7.1); por debajo de los 4.5 MB de Vercel
-      bodySizeLimit: "2mb",
-    },
-  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
