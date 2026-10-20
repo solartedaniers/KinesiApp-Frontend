@@ -37,11 +37,13 @@ const AI: Record<AiState, { dot: string; ring: string }> = {
 /** Estado de la IA: el punto late mientras despierta. role="status" anuncia cada cambio. */
 export function AiStatus({ state, label, hint }: { state: AiState; label: string; hint?: string }) {
   return (
-    <p className={`inline-flex min-h-9 items-center gap-2 rounded-full bg-panel px-3 text-sm font-semibold text-ink ${AI[state].ring}`} role="status">
-      <span className={`size-2.5 flex-none rounded-full ${AI[state].dot}`} aria-hidden />
-      <Glyph name="ai" size={16} className="text-ink-muted" />
-      <span>{label}</span>
-      {hint && <span className="font-normal text-ink-muted max-sm:visually-hidden">{hint}</span>}
+    <p className="grid justify-items-start gap-1" role="status">
+      <span className={`inline-flex min-h-9 items-center gap-2 rounded-full bg-panel px-3 text-sm font-semibold whitespace-nowrap text-ink ${AI[state].ring}`}>
+        <span className={`size-2.5 flex-none rounded-full ${AI[state].dot}`} aria-hidden />
+        <Glyph name="ai" size={16} className="text-ink-muted" />
+        {label}
+      </span>
+      {hint && <span className="px-1 text-sm text-ink-muted">{hint}</span>}
     </p>
   );
 }
