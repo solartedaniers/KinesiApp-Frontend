@@ -19,7 +19,7 @@ const styles = {
 /** Arco decorativo en la esquina libre de la ficha: el mismo trazo de luz de la marca, en grande. */
 function Streak() {
   return (
-    <svg className="absolute -right-10 bottom-0 -z-10 h-44 w-80" viewBox="0 0 320 176" fill="none" strokeLinecap="round" aria-hidden>
+    <svg className="absolute -right-10 bottom-0 -z-10 h-44 w-80 max-sm:hidden" viewBox="0 0 320 176" fill="none" strokeLinecap="round" aria-hidden>
       <defs>
         <linearGradient id="trail-card-fade" x1="0" x2="1" y1="0" y2="0">
           <stop offset="0" stopColor="white" stopOpacity="0" />
