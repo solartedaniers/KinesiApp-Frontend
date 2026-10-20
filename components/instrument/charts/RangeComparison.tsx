@@ -25,9 +25,9 @@ export function RangeComparison({ rows, domain, ticks, format, medianLabel }: { 
               <span className="truncate text-sm font-semibold text-ink">{row.label}</span>
               <span className="relative h-7" aria-hidden>
                 {spans.map((s) => (
-                  <span key={s.zone} className={`absolute inset-y-2.5 ${ZONE_CLASS[s.zone].soft}`} style={{ left: `${x(s.from)}%`, width: `${x(s.to) - x(s.from)}%` }} />
+                  <span key={s.zone} className={`absolute inset-y-2.5 opacity-30 ${ZONE_CLASS[s.zone].bg}`} style={{ left: `${x(s.from)}%`, width: `${x(s.to) - x(s.from)}%` }} />
                 ))}
-                <span className="absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-knee opacity-35" style={{ left: `${x(row.min)}%`, width: `${x(row.max) - x(row.min)}%` }} />
+                <span className="absolute top-1/2 h-2.5 -translate-y-1/2 rounded-full bg-knee opacity-70 shadow-[0_0_10px_var(--kin-knee)]" style={{ left: `${x(row.min)}%`, width: `${x(row.max) - x(row.min)}%` }} />
                 <span className={`kin-signal-glow absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full shadow-[0_0_0_3px_var(--kin-panel)] ${ZONE_CLASS[zone].bg} ${ZONE_CLASS[zone].text}`} style={{ left: `${x(row.median)}%` }} />
               </span>
               <span className="text-right">
