@@ -12,7 +12,7 @@ const BANDS: Record<RiskLevel, [number, number]> = { low: [0, 0.34], moderate: [
 const BAND_FILL: Record<RiskLevel, string> = { low: "fill-risk-low-soft", moderate: "fill-risk-moderate-soft", high: "fill-risk-high-soft" };
 
 /** Puntaje de riesgo por sesión sobre las bandas de nivel, rotuladas con su palabra; la última cifra va escrita. */
-export function RiskTrend({ points, yTicks, xTicks, label, lastLabel, bandLabels }: { points: TrendPoint[]; yTicks: Tick[]; xTicks: Tick[]; label: string; lastLabel: string; bandLabels: Record<RiskLevel, string> }) {
+export function RiskTrend({ points, yTicks, xTicks, label, lastLabel, bandLabels, height = "h-52 sm:h-60" }: { points: TrendPoint[]; yTicks: Tick[]; xTicks: Tick[]; label: string; lastLabel: string; bandLabels: Record<RiskLevel, string>; height?: string }) {
   const area = useId();
   const plot = makePlot([points[0].x, points.at(-1)!.x], [0, 1]);
   const last = points.at(-1)!;
@@ -22,12 +22,12 @@ export function RiskTrend({ points, yTicks, xTicks, label, lastLabel, bandLabels
       plot={plot}
       yTicks={yTicks}
       xTicks={xTicks}
-      height="h-52 sm:h-60"
+      height={height}
       label={label}
       overlay={
         <>
           {RISK_LEVELS.map((level) => (
-            <span key={level} className={`absolute right-2 -translate-y-1/2 text-xs font-semibold ${RISK_TEXT[level]}`} style={{ top: percentY(plot, (BANDS[level][0] + BANDS[level][1]) / 2) }} aria-hidden>
+            <span key={level} className={`absolute left-2 -translate-y-1/2 text-xs font-semibold ${RISK_TEXT[level]}`} style={{ top: percentY(plot, (BANDS[level][0] + BANDS[level][1]) / 2) }} aria-hidden>
               {bandLabels[level]}
             </span>
           ))}
@@ -39,7 +39,7 @@ export function RiskTrend({ points, yTicks, xTicks, label, lastLabel, bandLabels
               title={point.label}
             />
           ))}
-          <span className="absolute -translate-x-full -translate-y-[170%] rounded-control bg-panel px-1.5 font-display text-sm font-semibold text-ink [font-variant-numeric:tabular-nums]" style={{ left: percentX(plot, last.x), top: percentY(plot, last.score) }}>
+          <span className="absolute -translate-x-full -translate-y-[170%] rounded-control bg-panel px-1.5 whitespace-nowrap font-display text-sm font-semibold text-ink [font-variant-numeric:tabular-nums]" style={{ left: percentX(plot, last.x), top: percentY(plot, last.score) }}>
             {lastLabel}
           </span>
         </>
