@@ -4,9 +4,9 @@ import { test } from "node:test";
 
 import { isPrivateRoute, ROUTES } from "./routes.ts";
 
-test("la guía de estilo y sus direcciones se ven sin cuenta", () => {
+test("la guía de estilo y sus pantallas de ejemplo se ven sin cuenta", () => {
   assert.equal(isPrivateRoute(ROUTES.styleGuide), false);
-  assert.equal(isPrivateRoute(ROUTES.styleGuideDirection("a")), false);
+  assert.equal(isPrivateRoute(ROUTES.styleGuideScreen("capture")), false);
 });
 
 test("lo que no está declarado como público exige sesión", () => {

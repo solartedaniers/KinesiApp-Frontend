@@ -21,7 +21,7 @@ export const ROUTES = {
   systemPing: "/system/ping",
   // Guía de estilo del rediseño: pública para revisarla en el preview sin cuenta
   styleGuide: "/style-guide",
-  styleGuideDirection: (id: string) => `/style-guide/${id}`,
+  styleGuideScreen: (screen: "home" | "analysis" | "capture") => `/style-guide/screens/${screen}`,
 } as const;
 
 // Pantallas de acceso: con sesión iniciada no tienen sentido y redirigen a /home
