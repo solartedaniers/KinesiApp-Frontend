@@ -1,6 +1,9 @@
 // Escalas de las gráficas SVG: dominio a píxeles y marcas en valores redondos. Lógica pura (testeada
 // en scale.test.ts). No uso d3-scale porque sólo necesito lineal y marcas, unas líneas.
 
+/** Marca de un eje: el valor y su texto ya formateado. */
+export type Tick = { value: number; label: string };
+
 export type Linear = ((value: number) => number) & { domain: [number, number] };
 
 export function linear([d0, d1]: [number, number], [r0, r1]: [number, number]): Linear {

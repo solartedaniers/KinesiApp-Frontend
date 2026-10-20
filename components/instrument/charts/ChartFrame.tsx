@@ -1,13 +1,14 @@
 import type { ReactNode } from "react";
 
-import { linear, type Linear } from "@/lib/charts/scale";
+import { linear, type Linear, type Tick } from "@/lib/charts/scale";
+
+export type { Tick };
 
 // Las marcas viven en un lienzo de 1000×1000 que se estira al contenedor (preserveAspectRatio="none")
 // con trazos que no se deforman; las etiquetas son HTML ubicado en %. Así la misma gráfica se lee
 // a 360 px y a 1200 px sin medir el contenedor con JavaScript.
 export const CANVAS = 1000;
 
-export type Tick = { value: number; label: string };
 export type Plot = { x: Linear; y: Linear };
 
 export function makePlot(xDomain: [number, number], yDomain: [number, number]): Plot {
