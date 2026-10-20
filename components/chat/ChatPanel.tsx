@@ -38,7 +38,7 @@ export function ChatPanel({ analysisId, messages: initial }: { analysisId: strin
         if (event.kind === "failed") setError(codeMessage(t, event.reason));
       }
     } catch {
-      setError(t.errors.network);
+      setError(t.errors.NETWORK);
     } finally {
       setDraft(null);
     }

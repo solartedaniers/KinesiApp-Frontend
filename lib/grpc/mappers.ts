@@ -170,7 +170,7 @@ export function toTeam(team: TeamMessage | undefined): Team {
 }
 
 function reasonCode(reason: ErrorReason): string | null {
-  return reason === ErrorReason.UNSPECIFIED ? null : (ErrorReason[reason]?.toLowerCase() ?? "generic");
+  return reason === ErrorReason.UNSPECIFIED ? null : (ErrorReason[reason] ?? "GENERIC");
 }
 
 export function toAnalysisSummary(summary: AnalysisSummaryMessage | undefined): AnalysisSummary {

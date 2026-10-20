@@ -6,11 +6,11 @@ import { VALIDATION_PARAMS, type ValidationError } from "./validation";
 
 /** Mensaje traducido de un motivo estable del backend (o del cliente); el genérico si no se conoce. */
 export function codeMessage(t: Dictionary, code: string): string {
-  return code in t.errors ? t.errors[code as keyof typeof t.errors] : t.errors.generic;
+  return code in t.errors ? t.errors[code as keyof typeof t.errors] : t.errors.GENERIC;
 }
 
 export function errorMessage(t: Dictionary, error: unknown): string {
-  return codeMessage(t, error ? rpcReason(error) : "generic");
+  return codeMessage(t, error ? rpcReason(error) : "GENERIC");
 }
 
 export function validationMessage(t: Dictionary, error: ValidationError): string {

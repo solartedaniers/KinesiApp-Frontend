@@ -21,12 +21,12 @@ export type UploadOutcome = { ok: true } | { ok: false; code: string };
 export type BucketUpload = { done: Promise<UploadOutcome>; abort: () => void };
 
 /** Código del cliente para una subida cancelada por el usuario. */
-export const UPLOAD_ABORTED_CODE = "upload_aborted";
+export const UPLOAD_ABORTED_CODE = "UPLOAD_ABORTED";
 
 /**
  * PUT al bucket con XMLHttpRequest: es la única API del navegador que informa el progreso de subida
  * (xhr.upload.onprogress). Los headers firmados van tal cual. Nunca rechaza: un fallo es
- * `{ ok: false, code }` con "storage_unavailable", "network" o UPLOAD_ABORTED_CODE.
+ * `{ ok: false, code }` con "STORAGE_UNAVAILABLE", "NETWORK" o UPLOAD_ABORTED_CODE.
  */
 export function uploadToBucket(target: UploadTarget, body: Blob, onProgress?: (fraction: number) => void): BucketUpload {
   const xhr = new XMLHttpRequest();
@@ -34,8 +34,8 @@ export function uploadToBucket(target: UploadTarget, body: Blob, onProgress?: (f
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) onProgress?.(event.loaded / event.total);
     };
-    xhr.onload = () => resolve(xhr.status >= 200 && xhr.status < 300 ? { ok: true } : { ok: false, code: "storage_unavailable" });
-    xhr.onerror = () => resolve({ ok: false, code: "network" });
+    xhr.onload = () => resolve(xhr.status >= 200 && xhr.status < 300 ? { ok: true } : { ok: false, code: "STORAGE_UNAVAILABLE" });
+    xhr.onerror = () => resolve({ ok: false, code: "NETWORK" });
     xhr.onabort = () => resolve({ ok: false, code: UPLOAD_ABORTED_CODE });
   });
 

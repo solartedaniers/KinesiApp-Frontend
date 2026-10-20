@@ -11,14 +11,14 @@ function errorInfo(reason: string): Uint8Array {
   return new BinaryWriter().tag(2, WireType.LengthDelimited).string("kinesiapp").tag(1, WireType.LengthDelimited).string(reason).finish();
 }
 
-test("rpcReason lee el motivo del ErrorInfo en minúsculas", () => {
+test("rpcReason lee el motivo del ErrorInfo tal como llega", () => {
   const error = new ConnectError("blocked", Code.PermissionDenied);
   error.details.push({ type: "google.rpc.ErrorInfo", value: errorInfo("EMAIL_NOT_VERIFIED") });
-  assert.equal(rpcReason(error), "email_not_verified");
+  assert.equal(rpcReason(error), "EMAIL_NOT_VERIFIED");
 });
 
 test("rpcReason cae al status code cuando no hay ErrorInfo", () => {
-  assert.equal(rpcReason(new ConnectError("down", Code.Unavailable)), "network");
-  assert.equal(rpcReason(new ConnectError("bad", Code.InvalidArgument)), "validation_error");
-  assert.equal(rpcReason(new Error("boom")), "generic");
+  assert.equal(rpcReason(new ConnectError("down", Code.Unavailable)), "NETWORK");
+  assert.equal(rpcReason(new ConnectError("bad", Code.InvalidArgument)), "BAD_REQUEST");
+  assert.equal(rpcReason(new Error("boom")), "GENERIC");
 });

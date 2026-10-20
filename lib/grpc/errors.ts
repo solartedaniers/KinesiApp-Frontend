@@ -15,12 +15,12 @@ const ERROR_INFO_REASON_FIELD = 1;
 
 // Motivo que uso cuando el backend no manda ErrorInfo: depende solo del status code
 const FALLBACK_REASON_BY_CODE: Partial<Record<Code, string>> = {
-  [Code.Unavailable]: "network",
-  [Code.DeadlineExceeded]: "network",
-  [Code.InvalidArgument]: "validation_error",
-  [Code.Unauthenticated]: "unauthorized",
-  [Code.PermissionDenied]: "forbidden",
-  [Code.NotFound]: "not_found",
+  [Code.Unavailable]: "NETWORK",
+  [Code.DeadlineExceeded]: "NETWORK",
+  [Code.InvalidArgument]: "BAD_REQUEST",
+  [Code.Unauthenticated]: "UNAUTHORIZED",
+  [Code.PermissionDenied]: "FORBIDDEN",
+  [Code.NotFound]: "NOT_FOUND",
 };
 
 /** Único punto donde un status code de gRPC se convierte en el tipo de error que muestra la UI. */
@@ -33,7 +33,7 @@ export function rpcCode(error: unknown): Code {
 }
 
 /**
- * Motivo estable del error en minúsculas ("email_not_verified"), que es la clave de errors en i18n.
+ * Motivo estable del error tal como llega en ErrorInfo ("EMAIL_NOT_VERIFIED"), que es la clave de errors en i18n.
  * Lo saco del google.rpc.ErrorInfo de los detalles; sin él, del status code.
  */
 export function rpcReason(error: unknown): string {
@@ -41,10 +41,10 @@ export function rpcReason(error: unknown): string {
   for (const detail of connectError.details) {
     if ("type" in detail && detail.type === ERROR_INFO_TYPE) {
       const reason = errorInfoReason(detail.value);
-      if (reason) return reason.toLowerCase();
+      if (reason) return reason;
     }
   }
-  return FALLBACK_REASON_BY_CODE[connectError.code] ?? "generic";
+  return FALLBACK_REASON_BY_CODE[connectError.code] ?? "GENERIC";
 }
 
 // Leo solo el campo reason a mano: no vale la pena generar todo googleapis para un string

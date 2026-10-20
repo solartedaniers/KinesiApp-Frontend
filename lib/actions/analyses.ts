@@ -32,7 +32,7 @@ export type VideoUploadConfirmation = { analysisId: string } | { error: string }
  */
 export async function startVideoUpload(request: VideoUploadRequest): Promise<VideoUploadStart> {
   const t = await getT();
-  if (!(MOVEMENT_TYPES as readonly string[]).includes(request.movementType)) return { error: t.errors.generic };
+  if (!(MOVEMENT_TYPES as readonly string[]).includes(request.movementType)) return { error: t.errors.GENERIC };
   try {
     return { target: await authedMutation(() => analysisGateway().createVideoUpload(request)) };
   } catch (error) {
