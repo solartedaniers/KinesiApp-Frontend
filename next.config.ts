@@ -20,7 +20,18 @@ const nextConfig: NextConfig = {
   // Hay dos layouts raíz (el sitio público estático y la app): no existe uno común para el 404
   experimental: { globalNotFound: true },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // El Service Worker siempre se revalida: si quedara en caché, un despliegue no lo actualizaría
+      {
+        source: "/sw.js",
+        headers: [
+          { key: "Content-Type", value: "application/javascript; charset=utf-8" },
+          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
+          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self'" },
+        ],
+      },
+    ];
   },
   // Rutas renombradas: los enlaces viejos (marcadores, correos, historial) siguen funcionando
   async redirects() {
@@ -38,6 +49,7 @@ const nextConfig: NextConfig = {
       beforeFiles: [
         { source: "/", destination: `/${DEFAULT_LOCALE}` },
         { source: "/guide/:movement", destination: `/${DEFAULT_LOCALE}/guide/:movement` },
+        { source: "/offline", destination: `/${DEFAULT_LOCALE}/offline` },
       ],
     };
   },

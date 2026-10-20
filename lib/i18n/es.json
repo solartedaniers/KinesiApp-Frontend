@@ -133,6 +133,13 @@
       }
     }
   },
+  "offline": {
+    "metaTitle": "Sin conexión",
+    "title": "Sin conexión",
+    "body": "No pudimos cargar esta página porque no hay internet. Tus grabaciones y análisis están guardados en el servidor; no se pierde nada.",
+    "retry": "Reintentar",
+    "available": "Mientras tanto puedes leer las guías de grabación que ya visitaste."
+  },
   "authShell": {
     "tagline": "Tu movimiento, medido con precisión.",
     "points": [

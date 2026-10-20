@@ -60,10 +60,10 @@ function applySession(response: NextResponse, refreshed: TokenPair | null, revok
 export const config = {
   matcher: [
     {
-      // Todo salvo archivos estáticos (incluido el Web Worker de public/workers). Los prefetch del
+      // Todo salvo archivos estáticos (incluidos los workers de public/workers y el Service Worker). Los prefetch del
       // router se excluyen: nunca renuevan tokens, porque varios en paralelo gastarían el mismo
       // refresh token rotado (§4.4)
-      source: "/((?!_next/static|_next/image|icon.svg|workers/).*)",
+      source: "/((?!_next/static|_next/image|icon.svg|sw.js|workers/).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },

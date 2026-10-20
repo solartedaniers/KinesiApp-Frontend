@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
 import { RevealRoot } from "@/components/instrument/RevealRoot";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { INSTRUMENT_FONT_VARIABLES } from "@/lib/design/fonts";
 import { I18nProvider } from "@/lib/i18n/client";
 import { getLocale, getT } from "@/lib/i18n/server";
@@ -32,6 +33,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body data-design="instrument">
         <I18nProvider locale={locale}>{children}</I18nProvider>
         <RevealRoot />
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );

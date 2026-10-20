@@ -133,6 +133,13 @@
       }
     }
   },
+  "offline": {
+    "metaTitle": "Offline",
+    "title": "You're offline",
+    "body": "We couldn't load this page because there's no internet. Your recordings and analyses are stored on the server; nothing is lost.",
+    "retry": "Try again",
+    "available": "Meanwhile you can read the recording guides you already visited."
+  },
   "authShell": {
     "tagline": "Your movement, measured precisely.",
     "points": [

@@ -4,6 +4,7 @@ import "../../instrument.css";
 import type { Metadata, Viewport } from "next";
 
 import { RevealRoot } from "@/components/instrument/RevealRoot";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { PREFERENCE_COOKIE, SITE_ORIGIN } from "@/lib/config";
 import { INSTRUMENT_FONT_VARIABLES } from "@/lib/design/fonts";
 import { DICTIONARIES, LOCALES } from "@/lib/i18n";
@@ -40,6 +41,7 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[lo
       <body data-design="instrument" className="kin-ambient">
         <I18nProvider locale={locale}>{children}</I18nProvider>
         <RevealRoot />
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );
