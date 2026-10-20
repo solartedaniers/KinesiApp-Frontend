@@ -23,11 +23,11 @@ export const COLORS = {
 
   knee: ["#2443EA", "#8297FF"],
   "knee-soft": ["#E3E8FF", "#151F4A"],
-  trunk: ["#996500", "#FFD34D"],
+  trunk: ["#855800", "#FFD34D"],
   "trunk-soft": ["#FFF1C9", "#2D2307"],
   hip: ["#C2135A", "#FF6EA8"],
   "hip-soft": ["#FDE3EE", "#3A0F24"],
-  center: ["#007A6A", "#2EE0C8"],
+  center: ["#006B5D", "#2EE0C8"],
   "center-soft": ["#D6F6F0", "#052B27"],
 
   "zone-under": ["#0369A1", "#4CC3F7"],
@@ -39,7 +39,7 @@ export const COLORS = {
 
   "risk-low": ["#1F6B45", "#5CCB97"],
   "risk-low-soft": ["#DDF1E6", "#0F2A1E"],
-  "risk-moderate": ["#835500", "#E8B54E"],
+  "risk-moderate": ["#6E4700", "#E8B54E"],
   "risk-moderate-soft": ["#F8EBCB", "#2C220E"],
   "risk-high": ["#AD2318", "#FF8073"],
   "risk-high-soft": ["#FBE1DD", "#34150F"],
@@ -61,11 +61,12 @@ export const ZONE_COLORS = ["zone-under", "zone-target", "zone-over"] as const;
 const SURFACES = ["canvas", "panel", "raised", "sunken"] as const;
 const SOFTS = ["accent-soft", "knee-soft", "trunk-soft", "hip-soft", "center-soft", "zone-under-soft", "zone-target-soft", "zone-over-soft"] as const;
 
-// Texto normal: 4.5:1 sobre todas las superficies. Trazos de datos y bordes de control: 3:1
+// Texto normal: 4.5:1 sobre todas las superficies; las señales también, porque nombran su articulación
+// en texto. Trazos de zona y bordes de control: 3:1
 export const CONTRAST_REQUIREMENTS: { fg: PaletteColor; bg: PaletteColor; min: number; modes?: (0 | 1)[] }[] = [
-  ...(["ink", "ink-muted", "accent", "accent-hover", "risk-low", "risk-moderate", "risk-high"] as const)
+  ...(["ink", "ink-muted", "accent", "accent-hover", "risk-low", "risk-moderate", "risk-high", ...SIGNAL_COLORS] as const)
     .flatMap((fg) => SURFACES.map((bg) => ({ fg, bg, min: 4.5 }))),
-  ...([...SIGNAL_COLORS, ...ZONE_COLORS, "line-strong"] as const).flatMap((fg) => SURFACES.map((bg) => ({ fg, bg, min: 3 }))),
+  ...([...ZONE_COLORS, "line-strong"] as const).flatMap((fg) => SURFACES.map((bg) => ({ fg, bg, min: 3 }))),
   // Sobre un tinte suave va texto en tinta; sobre el de su zona, el texto de su propio color
   ...SOFTS.map((bg) => ({ fg: "ink" as const, bg, min: 4.5 })),
   ...ZONE_COLORS.map((fg) => ({ fg, bg: `${fg}-soft` as PaletteColor, min: 4.5 })),
