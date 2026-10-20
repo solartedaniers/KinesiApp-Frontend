@@ -42,7 +42,7 @@ export async function ScreenShell({ active, children }: { active: ScreenId; chil
   return (
     <div className="min-h-dvh pb-24 md:pb-10">
       <p className="bg-stage text-on-stage" data-theme="dark">
-        <Link href={ROUTES.styleGuide} className="mx-auto flex min-h-10 max-w-content items-center gap-2 px-4 text-sm font-semibold sm:px-6 hover:underline">
+        <Link href={ROUTES.styleGuide} className="mx-auto flex min-h-11 max-w-content items-center gap-2 px-4 text-sm font-semibold sm:px-6 hover:underline">
           <Glyph name="chevronLeft" size={16} />
           {s.back}
           <span className="ml-auto font-normal opacity-80 max-sm:hidden">{s.label}</span>

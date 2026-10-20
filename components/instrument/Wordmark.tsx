@@ -1,4 +1,5 @@
-/** Marca: una esfera mínima con la aguja en el objetivo, más el nombre en la display. */
+/** Marca: una esfera mínima con la aguja en el objetivo, más el nombre en la display. En el celular
+ * queda sólo la esfera: el nombre no cabe junto a las preferencias. */
 export function Wordmark({ name }: { name: string }) {
   return (
     <span className="inline-flex items-center gap-2 font-display text-lg font-bold tracking-tight text-ink">
@@ -10,7 +11,7 @@ export function Wordmark({ name }: { name: string }) {
         <path d="M16 16L22.4 9.6" className="stroke-ink" strokeWidth="2" strokeLinecap="round" />
         <circle cx="16" cy="16" r="2.2" className="fill-ink" />
       </svg>
-      {name}
+      <span className="max-sm:sr-only">{name}</span>
     </span>
   );
 }
