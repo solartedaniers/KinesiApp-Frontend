@@ -16,14 +16,14 @@ export function RangeComparison({ rows, domain, ticks, format, medianLabel }: { 
   const x = linear(domain, [0, 100]);
   const spans = zoneSpans(domain[1], TARGET_KNEE).filter((s) => s.to > domain[0]).map((s) => ({ ...s, from: Math.max(s.from, domain[0]) }));
   return (
-    <div className="grid gap-1">
+    <div className="kin-instrument grid gap-1">
       <ul className="grid gap-1">
         {rows.map((row, i) => {
           const zone = zoneOf(row.median);
           return (
             <li key={row.label} className={`${COLUMNS} kin-rise py-2`} style={cssVars({ "--i": i })}>
               <span className="truncate text-sm font-semibold text-ink">{row.label}</span>
-              <span className="relative h-7" aria-hidden>
+              <span className="kin-screen h-7" aria-hidden>
                 {spans.map((s) => (
                   <span key={s.zone} className={`absolute inset-y-2.5 opacity-30 ${ZONE_CLASS[s.zone].bg}`} style={{ left: `${x(s.from)}%`, width: `${x(s.to) - x(s.from)}%` }} />
                 ))}

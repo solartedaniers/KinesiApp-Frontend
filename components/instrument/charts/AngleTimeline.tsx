@@ -131,7 +131,7 @@ export function AngleTimeline({ knee, trunk, repetitions, durationMs }: Props) {
         </g>
       </ChartFrame>
 
-      <div className="grid grid-cols-[2.75rem_1fr]">
+      <div className="grid grid-cols-[2.75rem_1fr] px-2 sm:px-3.5">
         <span />
         <div className="grid grid-cols-5 gap-1 sm:grid-cols-10" role="group" aria-label={c.repetitions}>
           {repetitions.map((rep, i) => {

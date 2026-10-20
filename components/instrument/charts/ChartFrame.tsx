@@ -25,10 +25,10 @@ export const percentX = (plot: Plot, value: number) => `${(plot.x(value) / CANVA
 export const percentY = (plot: Plot, value: number) => `${(plot.y(value) / CANVAS) * 100}%`;
 
 const styles = {
-  frame: "grid grid-cols-[2.75rem_1fr] grid-rows-[1fr_1.75rem]",
+  frame: "kin-instrument grid grid-cols-[2.75rem_1fr] grid-rows-[1fr_1.75rem]",
   yAxis: "relative",
   yLabel: "absolute right-2 -translate-y-1/2 text-xs text-ink-muted [font-variant-numeric:tabular-nums]",
-  plot: "relative",
+  plot: "kin-screen",
   svg: "absolute inset-0 size-full overflow-visible",
   grid: "stroke-line [stroke-width:1] [vector-effect:non-scaling-stroke]",
   baseline: "stroke-line-strong [stroke-width:1.5] [vector-effect:non-scaling-stroke]",
