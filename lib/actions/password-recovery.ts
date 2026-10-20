@@ -3,7 +3,7 @@
 import { errorMessage, validationMessages } from "../errors";
 import { FORM_INTENT, formText, type FormState } from "../form-state";
 import { authGateway } from "../grpc/auth-gateway";
-import { rpcReason } from "../grpc/errors";
+import { ErrorReason, hasReason } from "../grpc/errors";
 import type { Dictionary } from "../i18n";
 import { getT } from "../i18n/server";
 import {
@@ -86,7 +86,7 @@ async function confirmNewPassword(
     await authGateway().confirmPasswordReset(email, code, password);
   } catch (error) {
     // El código venció o se agotaron los intentos entre el paso 2 y el 3: hay que pedir otro
-    return rpcReason(error) === "invalid_otp"
+    return hasReason(error, ErrorReason.INVALID_OTP)
       ? { step: "code", email, error: errorMessage(t, error) }
       : { step: "password", email, code, error: errorMessage(t, error) };
   }

@@ -7,7 +7,7 @@ import { getClientPolicy } from "../data/public";
 import { errorMessage, validationMessages } from "../errors";
 import { formText, type FormState } from "../form-state";
 import { authGateway } from "../grpc/auth-gateway";
-import { rpcReason } from "../grpc/errors";
+import { ErrorReason, hasReason } from "../grpc/errors";
 import { getT } from "../i18n/server";
 import { NEXT_PARAM, ROUTES, safeNextPath, withEmail } from "../routes";
 import { storeSession } from "../session";
@@ -39,12 +39,11 @@ export async function login(_previous: FormState<LoginField>, formData: FormData
   try {
     tokens = await authGateway().login(email, password);
   } catch (error) {
-    const reason = rpcReason(error);
     return {
       error: errorMessage(t, error),
       values,
-      unverifiedEmail: reason === "email_not_verified" ? email : undefined,
-      emailNotRegistered: reason === "email_not_registered",
+      unverifiedEmail: hasReason(error, ErrorReason.EMAIL_NOT_VERIFIED) ? email : undefined,
+      emailNotRegistered: hasReason(error, ErrorReason.EMAIL_NOT_REGISTERED),
     };
   }
 
@@ -95,11 +94,10 @@ export async function register(
       acceptedVideoConsentVersion: video_consent_version,
     });
   } catch (error) {
-    const reason = rpcReason(error);
     // Dominio sin correo: el error va junto al campo, para que se corrija ahí
-    if (reason === "email_domain_undeliverable") return { fieldErrors: { email: errorMessage(t, error) }, values };
+    if (hasReason(error, ErrorReason.EMAIL_DOMAIN_UNDELIVERABLE)) return { fieldErrors: { email: errorMessage(t, error) }, values };
     // La cuenta sí quedó creada aunque el correo no salió: se puede pedir otro código al verificar
-    const accountCreated = reason === "email_delivery_failed";
+    const accountCreated = hasReason(error, ErrorReason.EMAIL_DELIVERY_FAILED);
     return { error: errorMessage(t, error), values, unverifiedEmail: accountCreated ? email : undefined };
   }
 

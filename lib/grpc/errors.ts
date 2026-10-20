@@ -1,7 +1,9 @@
 import { Code, ConnectError } from "@connectrpc/connect";
 import { BinaryReader } from "@bufbuild/protobuf/wire";
 
-export { Code };
+import { ErrorReason } from "../gen/kinesiapp/common/v1/errors_pb.ts";
+
+export { Code, ErrorReason };
 
 export type RpcErrorKind = "unavailable" | "timeout" | "generic";
 
@@ -45,6 +47,11 @@ export function rpcReason(error: unknown): string {
     }
   }
   return FALLBACK_REASON_BY_CODE[connectError.code] ?? "GENERIC";
+}
+
+/** ¿El error trae este motivo? Comparo contra el enum del contrato, nunca contra un string suelto. */
+export function hasReason(error: unknown, reason: ErrorReason): boolean {
+  return rpcReason(error) === ErrorReason[reason];
 }
 
 // Leo solo el campo reason a mano: no vale la pena generar todo googleapis para un string

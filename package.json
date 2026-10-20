@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test \"lib/**/*.test.ts\""
+    "test": "node --test --experimental-transform-types --no-warnings=ExperimentalWarning \"lib/**/*.test.ts\""
   },
   "dependencies": {
     "@bufbuild/protobuf": "2.16.0",

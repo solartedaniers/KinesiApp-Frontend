@@ -4,7 +4,7 @@ import test from "node:test";
 import { BinaryWriter, WireType } from "@bufbuild/protobuf/wire";
 import { Code, ConnectError } from "@connectrpc/connect";
 
-import { rpcReason } from "./errors.ts";
+import { ErrorReason, hasReason, rpcReason } from "./errors.ts";
 
 function errorInfo(reason: string): Uint8Array {
   // Pongo domain antes que reason para comprobar que salto los campos que no me interesan
@@ -15,6 +15,8 @@ test("rpcReason lee el motivo del ErrorInfo tal como llega", () => {
   const error = new ConnectError("blocked", Code.PermissionDenied);
   error.details.push({ type: "google.rpc.ErrorInfo", value: errorInfo("EMAIL_NOT_VERIFIED") });
   assert.equal(rpcReason(error), "EMAIL_NOT_VERIFIED");
+  assert.equal(hasReason(error, ErrorReason.EMAIL_NOT_VERIFIED), true);
+  assert.equal(hasReason(error, ErrorReason.EMAIL_NOT_REGISTERED), false);
 });
 
 test("rpcReason cae al status code cuando no hay ErrorInfo", () => {
