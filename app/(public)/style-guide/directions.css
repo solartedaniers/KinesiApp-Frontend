@@ -78,3 +78,41 @@
 @keyframes trail-streak {
   to { background-position: -200% 0; }
 }
+
+/* ---- Ritmo ---- */
+
+.rhythm-card,
+.rhythm-float {
+  box-shadow: 0 24px 48px -36px var(--kin-glow);
+}
+
+.rhythm-body path {
+  fill: none;
+  stroke: var(--kin-ink);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rhythm-body circle {
+  fill: var(--kin-ink);
+}
+
+.rhythm-count {
+  fill: var(--kin-ink);
+  font-family: var(--kin-font-display);
+  font-size: 46px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rhythm-beat {
+    animation: rhythm-beat 2.4s var(--kin-ease-out) infinite;
+  }
+}
+
+@keyframes rhythm-beat {
+  0%, 40% { box-shadow: 0 0 0 0 var(--kin-hue-2); }
+  70%, 100% { box-shadow: 0 0 0 7px transparent; }
+}
