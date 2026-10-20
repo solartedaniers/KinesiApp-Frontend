@@ -1,10 +1,10 @@
-// Registro de íconos del laboratorio: trazos de 1.5 en una cuadrícula de 24 y keypoints como puntos,
+// Registro de íconos de KinesiApp: trazos de 1.5 en una cuadrícula de 24 y keypoints como puntos,
 // el mismo lenguaje que los esqueletos. Cada ícono es un trazo (`d`) más sus articulaciones (`dots`).
 // Los dibujé para este dominio: protractor, rodilla, centro de gravedad, cronofotografía.
 
 export type IconDefinition = { d: string; dots?: readonly (readonly [number, number])[] };
 
-export const LAB_ICONS = {
+export const GLYPHS = {
   // Navegación
   overview: { d: "M3.5 18h17 M4.5 18a7.5 7.5 0 0 1 15 0 M12 18l4-5.5", dots: [[12, 18], [16, 12.5]] },
   capture: { d: "M3 7h12v10H3z M15 10.5l6-3v9l-6-3", dots: [[9, 12]] },
@@ -51,4 +51,4 @@ export const LAB_ICONS = {
   globe: { d: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z M3 12h18 M12 3a14 14 0 0 1 0 18 M12 3a14 14 0 0 0 0 18", dots: [] },
 } as const satisfies Record<string, IconDefinition>;
 
-export type LabIconName = keyof typeof LAB_ICONS;
+export type GlyphName = keyof typeof GLYPHS;
