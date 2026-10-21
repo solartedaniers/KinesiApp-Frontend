@@ -1,4 +1,4 @@
-// Web Worker de la foto de perfil (§7.1): decodificar y escalar una foto de varios megapíxeles no
+// Web Worker de la foto de perfil: decodificar y escalar una foto de varios megapíxeles no
 // bloquea el hilo principal. Es un módulo servido tal cual desde public/: el bundler de Next
 // (Turbopack) no empaqueta workers declarados con new Worker(new URL(...)).
 // Sin valores fijos: el tamaño, el peso máximo y las calidades llegan en cada mensaje desde

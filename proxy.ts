@@ -9,7 +9,7 @@ import { refreshSession } from "@/lib/session-refresh";
 import type { TokenPair } from "@/lib/types";
 
 /**
- * Corre antes de renderizar (§4.4 y §9.2 del diseño):
+ * Corre antes de renderizar:
  * 1. Renueva el access token si falta o vence en menos de ACCESS_REFRESH_LEEWAY_SECONDS.
  * 2. Sólo decide anónimo vs. autenticado; el rol lo valida el layout de cada rol.
  */
@@ -63,7 +63,7 @@ export const config = {
     {
       // Todo salvo archivos estáticos (incluidos los workers de public/workers y el Service Worker). Los prefetch del
       // router se excluyen: nunca renuevan tokens, porque varios en paralelo gastarían el mismo
-      // refresh token rotado (§4.4)
+      // refresh token rotado
       source: "/((?!_next/static|_next/image|icon.svg|sw.js|workers/).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },

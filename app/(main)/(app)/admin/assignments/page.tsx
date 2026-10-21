@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.nav.assignments };
 }
 
-// SSR (§3): entrenador de cada deportista, con la asignación en la misma fila
+// SSR: entrenador de cada deportista, con la asignación en la misma fila
 export default async function Page() {
   const t = await getT();
   await requireRole(SECTION_ROLES.admin);

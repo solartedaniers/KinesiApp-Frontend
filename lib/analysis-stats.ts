@@ -1,9 +1,8 @@
-// Métricas de una lista de análisis: lógica pura (sin React ni red), testeada en analysis-stats.test.ts.
-// Mismo cálculo que AnalysisStatistics del cliente Flutter.
+// Métricas de una lista de análisis: lógica pura (sin React ni red) para poder probarla sola.
 import type { AnalysisSummary } from "./types";
 
-// Umbrales de nivel de riesgo sobre risk_score ∈ [0, 1]. "Alto" es el de Flutter; "moderado" es un
-// corte de presentación. Ninguno tiene validación clínica (video-analysis-pipeline.md §5)
+// Umbrales de nivel de riesgo sobre risk_score ∈ [0, 1], los mismos RISK_LEVEL_* del backend y la IA.
+// Ninguno tiene validación clínica
 export const RISK_THRESHOLDS = { moderate: 0.33, high: 0.66 } as const;
 
 export type RiskLevel = "low" | "moderate" | "high";

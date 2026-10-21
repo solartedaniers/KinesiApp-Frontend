@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.verifyEmail.metaTitle };
 }
 
-// Isla CSR (§3): el correo llega por `?email=` y se lee en el cliente. El fallback es el mismo
+// Isla CSR: el correo llega por `?email=` y se lee en el cliente. El fallback es el mismo
 // formulario sin correo precargado, así el HTML del servidor ya es usable sin JavaScript
 export default async function VerifyEmailPage() {
   const t = await getT();

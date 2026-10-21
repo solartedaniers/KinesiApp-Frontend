@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.recovery.metaTitle };
 }
 
-// CSR: los 3 pasos viven en el estado del cliente; el código nunca queda en la URL (§3)
+// CSR: los 3 pasos viven en el estado del cliente; el código nunca queda en la URL
 export default async function PasswordRecoveryPage() {
   const t = await getT();
   return (

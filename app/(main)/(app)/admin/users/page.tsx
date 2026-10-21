@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.nav.users };
 }
 
-// SSR (§3): todas las cuentas, con cambio de rol y activación por fila
+// SSR: todas las cuentas, con cambio de rol y activación por fila
 export default async function Page() {
   const t = await getT();
   const admin = await requireRole(SECTION_ROLES.admin);

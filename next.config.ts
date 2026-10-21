@@ -7,7 +7,7 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   // Nadie puede incrustar la app en un iframe (clickjacking)
   { key: "X-Frame-Options", value: "DENY" },
-  // Cámara sólo para la propia app (grabación, §5.1); la grabación no usa audio
+  // Cámara sólo para la propia app (grabación); la grabación no usa audio
   {
     key: "Permissions-Policy",
     value: "camera=(self), microphone=(), geolocation=()",

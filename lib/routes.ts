@@ -22,7 +22,7 @@ export const ROUTES = {
   // Route Handlers de sesión: navegación completa (no del router) para descartar su caché
   logout: "/api/session/logout",
   sessionExpired: "/api/session/expired",
-  // Comprobación del transporte gRPC-Web: la dejo pública para poder probarla sin el backend REST
+  // Comprobación del transporte gRPC-Web: la dejo pública para probarla sin iniciar sesión
   systemPing: "/system/ping",
   // Guía de estilo del rediseño: pública para revisarla en el preview sin cuenta
   styleGuide: "/style-guide",

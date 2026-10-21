@@ -17,7 +17,7 @@ import { ResendCodeButton } from "./ResendCodeButton";
 
 const INITIAL_STATE: FormState<VerifyEmailField> = {};
 
-/** Versión con el correo de `?email=`. La página la envuelve en Suspense (isla CSR, §3). */
+/** Versión con el correo de `?email=`. La página la envuelve en Suspense (isla CSR). */
 export function VerifyEmailFromQuery() {
   return <VerifyEmailForm defaultEmail={useSearchParams().get(EMAIL_PARAM) ?? ""} />;
 }

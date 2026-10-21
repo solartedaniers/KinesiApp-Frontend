@@ -1,5 +1,4 @@
-// Qué ve cada rol: el equivalente de RouteAccessPolicy + RoleHomeResolver del cliente Flutter (§9.2).
-// Es UX, no seguridad: el backend vuelve a autorizar cada request (require_roles, _authorize_athlete_access).
+// Qué ve cada rol. Es UX, no seguridad: el backend vuelve a autorizar cada RPC.
 import type { GlyphName } from "@/lib/design/icons";
 
 import { ROUTES } from "./routes";
@@ -45,8 +44,7 @@ export const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
   ],
 };
 
-// Roles que pueden abrir cada sección; cada layout de sección la consulta. El flujo de análisis
-// es de deportista y coach (_analysisRoutes en Flutter)
+// Roles que pueden abrir cada sección; cada layout de sección la consulta
 export const SECTION_ROLES = {
   athlete: ["athlete"],
   coach: ["coach"],

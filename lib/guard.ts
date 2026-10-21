@@ -9,7 +9,7 @@ import { getCurrentUser } from "./session";
 import type { User, UserRole } from "./types";
 
 /**
- * Guarda de rol de los layouts (§9.2). Sin sesión válida → cierra la sesión (las cookies sólo
+ * Guarda de rol de los layouts. Sin sesión válida → cierra la sesión (las cookies sólo
  * se pueden borrar en un Route Handler). Rol sin acceso → a la home de su propio rol.
  */
 export async function requireRole(allowed: readonly UserRole[]): Promise<User> {
