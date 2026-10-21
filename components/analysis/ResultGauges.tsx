@@ -8,20 +8,28 @@ import { riskLevel } from "@/lib/analysis-stats";
 import { getRiskCuts } from "@/lib/data/public";
 import { cssVars } from "@/lib/design/css";
 import { RISK_FILL, RISK_STEP, RISK_TEXT } from "@/lib/design/risk";
-import { ZONE_CLASS, zoneOf } from "@/lib/design/signals";
+import { SIGNAL_CLASS, ZONE_CLASS, zoneOf } from "@/lib/design/signals";
 import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
+import { valgusSummary } from "@/lib/risk-focus";
 import type { JumpAnalysis } from "@/lib/types";
 
 // La inclinación del tronco rara vez pasa de 60°; con 90 la aguja usa bien la esfera
 const TRUNK_DIAL_MAX = 90;
+// El valgo que preocupa está entre 10° y 25°: con 40 la aguja se lee; lo que se abre hacia afuera queda en 0
+const VALGUS_DIAL_MAX = 40;
+const VALGUS_LABEL_STEP = 20;
 
-/** Las tres tarjetas del resultado como en la guía: rodilla, tronco y repeticiones con el riesgo. */
+/**
+ * Las tres tarjetas del resultado como en la guía: rodilla, tronco y repeticiones con el riesgo. Vista de
+ * frente, las dos primeras son el valgo de cada rodilla.
+ */
 export async function ResultGauges({ analysis }: { analysis: JumpAnalysis }) {
   const [t, f, cuts] = await Promise.all([getT(), getFormat(), getRiskCuts()]);
   const d = t.analysisDetail;
   const knee = analysis.knee_median_peak_degrees;
-  const target = analysis.knee_target;
+  const front = analysis.risk_assessment?.camera_view === "front";
+  const target = front ? null : analysis.knee_target;
   const trunk = analysis.angle_measurements.filter((m) => m.joint_name === "trunk_inclination").map((m) => m.angle_degrees);
   const trunkPeak = trunk.length ? Math.max(...trunk) : null;
   const peaks = analysis.risk_assessment ? repetitionKneePeaks(analysis.risk_assessment) : [];
@@ -37,8 +45,36 @@ export async function ResultGauges({ analysis }: { analysis: JumpAnalysis }) {
     return { bg: RISK_FILL[level], text: RISK_TEXT[level] };
   };
 
+  const valgus = front ? valgusSummary(analysis.angle_measurements, analysis.risk_assessment?.repetitions ?? []) : null;
+  const valgusCard = (side: "left" | "right", signal: "knee" | "center", delayMs: number) => {
+    const value = valgus?.[side] ?? null;
+    const title = t.analysis.valgus[side];
+    return (
+      <article className="kin-card kin-tinted grid content-start gap-3 p-5" style={cssVars({ "--tint": `var(--kin-${signal})` })} aria-labelledby={`result-valgus-${side}`}>
+        <h2 id={`result-valgus-${side}`} className="text-sm font-semibold text-ink-muted">{title}</h2>
+        {value === null ? (
+          <p className="text-sm text-ink-muted">{t.analysis.noKnee}</p>
+        ) : (
+          <Dial value={Math.max(0, value)} signal={signal} max={VALGUS_DIAL_MAX} labelStep={VALGUS_LABEL_STEP} labels delayMs={delayMs} label={`${title}: ${f.degrees(value)}`} className="mx-auto w-full max-w-[15rem]">
+            <CountUp value={value} text={f.degrees(value)} delayMs={delayMs} className={`font-display text-3xl font-bold ${SIGNAL_CLASS[signal].text}`} />
+          </Dial>
+        )}
+        {side === "right" && valgus?.asymmetry != null && (
+          <p className="text-sm text-ink">{t.analysis.valgusAsymmetry}: <span className="font-semibold [font-variant-numeric:tabular-nums]">{f.degrees(valgus.asymmetry)}</span></p>
+        )}
+      </article>
+    );
+  };
+
   return (
     <div className="grid gap-4 md:grid-cols-3">
+      {front ? (
+        <>
+          {valgusCard("left", "knee", 0)}
+          {valgusCard("right", "center", 150)}
+        </>
+      ) : (
+      <>
       <article className="kin-card kin-tinted grid content-start gap-3 p-5" aria-labelledby="result-knee">
         <h2 id="result-knee" className="text-sm font-semibold text-ink-muted">{t.analysis.kneeMedian}</h2>
         {knee !== null ? (
@@ -59,6 +95,8 @@ export async function ResultGauges({ analysis }: { analysis: JumpAnalysis }) {
           </Dial>
         )}
       </article>
+      </>
+      )}
       <article className="kin-card kin-tinted grid content-start gap-4 p-5" style={cssVars({ "--tint": "var(--kin-zone-target)" })} aria-labelledby="result-reps">
         <h2 id="result-reps" className="text-sm font-semibold text-ink-muted">{t.analysis.repetitions}</h2>
         <p className="font-display text-score font-bold text-ink"><CountUp value={peaks.length} text={String(peaks.length)} delayMs={300} /></p>
@@ -78,6 +116,7 @@ export async function ResultGauges({ analysis }: { analysis: JumpAnalysis }) {
           </div>
         )}
       </article>
+      {front && <p className="text-sm text-ink-muted md:col-span-3">{t.analysis.valgusNote}</p>}
     </div>
   );
 }

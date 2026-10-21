@@ -12,6 +12,7 @@ import { ButtonLink } from "@/components/instrument/Button";
 import { ConfirmDialog } from "@/components/instrument/Dialog";
 import { Glyph } from "@/components/instrument/Glyph";
 import { ErrorState, LoadingState } from "@/components/instrument/States";
+import { Notice } from "@/components/instrument/Status";
 import { analysesListHref, SECTION_ROLES } from "@/lib/access";
 import { deleteAnalysis } from "@/lib/actions/analyses";
 import { getAnalysis } from "@/lib/data/analyses";
@@ -49,6 +50,7 @@ export default async function AnalysisPage({ params }: PageProps<"/analyses/[id]
   // Borra el dueño; el coach sólo las de sus deportistas gestionados (las de uno con cuenta son suyas)
   const canDelete = user.role === "athlete" || coachAthlete?.is_managed === true;
   const processed = analysis.status === "processed";
+  const view = analysis.risk_assessment?.camera_view ?? null;
 
   return (
     <>
@@ -81,6 +83,11 @@ export default async function AnalysisPage({ params }: PageProps<"/analyses/[id]
 
       {processed && (
         <>
+          {view && (
+            <Notice tone={view === "inconclusive" ? "warning" : "info"} live={false}>
+              <strong className="font-semibold">{format(t.analysis.viewStatus, { view: t.analysis.view[view] })}</strong> {t.analysis.viewLead[view]}
+            </Notice>
+          )}
           <ResultGauges analysis={analysis} />
           <section aria-labelledby="analysis-timeline" className="kin-card grid gap-5 p-5 sm:p-6" style={cssVars({ "--tint": "var(--kin-center)" })}>
             <div className="grid gap-1">
@@ -90,7 +97,7 @@ export default async function AnalysisPage({ params }: PageProps<"/analyses/[id]
             <Suspense fallback={<LoadingState label={d.preparing} />}>
               <AnalysisVideoPanel analysis={analysis} />
             </Suspense>
-            {analysis.knee_target && <p className="text-sm text-ink-muted">{t.analysis.rangesNote}</p>}
+            {analysis.knee_target && view !== "front" && <p className="text-sm text-ink-muted">{t.analysis.rangesNote}</p>}
           </section>
           <section id="chat" aria-labelledby="analysis-chat" className="grid scroll-mt-24 gap-3">
             <h2 id="analysis-chat" className="font-display text-xl font-semibold text-ink">{t.chat.title}</h2>
