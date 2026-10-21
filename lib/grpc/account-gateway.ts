@@ -10,7 +10,7 @@ import { toUser } from "./mappers";
 import { authedTransport } from "./transport";
 
 /** Adaptador de kinesiapp.account.v1.AccountService: la cuenta de quien llama. */
-export class AccountGateway {
+class AccountGateway {
   constructor(private readonly client: Client<typeof AccountService>) {}
 
   async me(): Promise<User> {

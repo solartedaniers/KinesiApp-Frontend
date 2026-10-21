@@ -22,7 +22,7 @@ function toBiometrics(payload: BiometricsPayload) {
 }
 
 /** Adaptador de kinesiapp.athlete.v1.AthleteProfileService: fichas de deportistas con cuenta. */
-export class AthleteGateway {
+class AthleteGateway {
   constructor(private readonly client: Client<typeof AthleteProfileService>) {}
 
   async mine(): Promise<AthleteProfile> {
@@ -58,7 +58,7 @@ export class AthleteGateway {
 }
 
 /** Adaptador de kinesiapp.athlete.v1.ManagedAthleteService: los deportistas sin cuenta de un coach. */
-export class ManagedAthleteGateway {
+class ManagedAthleteGateway {
   constructor(private readonly client: Client<typeof ManagedAthleteService>) {}
 
   async list(): Promise<AthleteProfile[]> {

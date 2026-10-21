@@ -11,7 +11,7 @@ export type SampleJoint = "knee" | "trunk";
 export type SampleRepetition = { startMs: number; endMs: number; score: number; level: RiskLevel; peakKnee: number };
 export type SampleSession = { date: string; score: number; level: RiskLevel };
 
-export const SAMPLE_FPS = 30;
+const SAMPLE_FPS = 30;
 export const SAMPLE_DURATION_MS = VIDEO_MAX_SECONDS * 1000;
 const REPETITIONS = 10;
 

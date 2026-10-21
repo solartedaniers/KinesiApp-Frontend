@@ -1,6 +1,6 @@
 import type { ReportModel } from "./report";
 
-export const REPORT_WORKER_URL = "/workers/report-worker.js";
+const REPORT_WORKER_URL = "/workers/report-worker.js";
 
 /** Bytes del PDF dibujado en el worker; null si falló. */
 export function renderReportInWorker(model: ReportModel): Promise<Uint8Array | null> {

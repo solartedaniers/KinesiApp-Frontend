@@ -5,7 +5,7 @@ function channel(value: number): number {
   return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
 }
 
-export function luminance(hex: string): number {
+function luminance(hex: string): number {
   const match = /^#([0-9a-f]{6})$/i.exec(hex);
   if (!match) throw new Error(`Not a #rrggbb color: ${hex}`);
   const n = parseInt(match[1], 16);

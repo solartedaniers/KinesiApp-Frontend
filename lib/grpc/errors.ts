@@ -55,7 +55,7 @@ export function hasReason(error: unknown, reason: ErrorReason): boolean {
 }
 
 // Leo solo el campo reason a mano: no vale la pena generar todo googleapis para un string
-export function errorInfoReason(bytes: Uint8Array): string | undefined {
+function errorInfoReason(bytes: Uint8Array): string | undefined {
   const reader = new BinaryReader(bytes);
   while (reader.pos < reader.len) {
     const [field, wireType] = reader.tag();

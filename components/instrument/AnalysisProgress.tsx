@@ -12,7 +12,7 @@ import { format } from "@/lib/i18n";
 export const ANALYSIS_STAGES = ["queued", "downloading", "pose", "repetitions", "risk"] as const;
 export type AnalysisStage = (typeof ANALYSIS_STAGES)[number];
 
-export const STAGE_COLOR: Record<AnalysisStage, { stroke: string; bg: string; tint: string }> = {
+const STAGE_COLOR: Record<AnalysisStage, { stroke: string; bg: string; tint: string }> = {
   queued: { stroke: "stroke-ink-muted", bg: "bg-ink-muted", tint: "var(--kin-ink-muted)" },
   downloading: { stroke: "stroke-center", bg: "bg-center", tint: "var(--kin-center)" },
   pose: { stroke: "stroke-knee", bg: "bg-knee", tint: "var(--kin-knee)" },

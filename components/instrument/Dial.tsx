@@ -5,7 +5,7 @@ import { cssVars } from "@/lib/design/css";
 import { type KneeTarget, type Signal, SIGNAL_CLASS, ZONE_CLASS, zoneSpans } from "@/lib/design/signals";
 
 // Escala de la flexión de rodilla en la esfera; pasa del máximo que la IA registra en una sentadilla
-export const DIAL_MAX = 150;
+const DIAL_MAX = 150;
 
 const C = { x: 100, y: 100 };
 const VALUE_R = 84;

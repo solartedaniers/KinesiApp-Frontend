@@ -28,7 +28,7 @@ export async function clearSession(): Promise<void> {
   for (const name of SESSION_COOKIE_NAMES) jar.delete(name);
 }
 
-export async function readAccessToken(): Promise<string | null> {
+async function readAccessToken(): Promise<string | null> {
   return (await cookies()).get(SESSION_COOKIE.access)?.value ?? null;
 }
 

@@ -8,7 +8,7 @@ const styles = {
   title: "h-12 w-72 max-w-full",
 };
 
-export function TilesSkeleton({ count = 4 }: { count?: number }) {
+function TilesSkeleton({ count = 4 }: { count?: number }) {
   return (
     <div className={styles.tiles} aria-hidden>
       {Array.from({ length: count }, (_, index) => (
@@ -28,7 +28,7 @@ export function ListSkeleton({ rows = 3 }: { rows?: number }) {
   );
 }
 
-export function TitleSkeleton() {
+function TitleSkeleton() {
   return <div className={`${styles.block} ${styles.title}`} aria-hidden />;
 }
 

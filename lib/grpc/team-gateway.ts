@@ -10,7 +10,7 @@ import { authedTransport } from "./transport";
 import { IMAGE_TYPE, type ImageType, toUploadTarget } from "./uploads";
 
 /** Adaptador de kinesiapp.team.v1.TeamService. */
-export class TeamGateway {
+class TeamGateway {
   constructor(private readonly client: Client<typeof TeamService>) {}
 
   async list(): Promise<Team[]> {

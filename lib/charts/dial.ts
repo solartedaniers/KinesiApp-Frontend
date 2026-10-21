@@ -2,7 +2,7 @@
 // 0 queda abajo a la izquierda y `max` abajo a la derecha. Ángulos en grados desde las 12, horario.
 import type { Point } from "@/lib/design/pose";
 
-export const DIAL_SWEEP = 240;
+const DIAL_SWEEP = 240;
 
 /** Ángulo de la aguja para un valor; lo uso también para rotarla con CSS. */
 export function dialAngle(value: number, max: number, sweep = DIAL_SWEEP): number {

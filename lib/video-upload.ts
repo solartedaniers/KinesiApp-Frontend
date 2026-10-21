@@ -47,7 +47,7 @@ export function uploadToBucket(target: UploadTarget, body: Blob, onProgress?: (f
 
 export type VideoMetadata = { durationMs: number; width: number; height: number; container: string | null };
 
-export const VIDEO_METADATA_WORKER_URL = "/workers/video-metadata-worker.js";
+const VIDEO_METADATA_WORKER_URL = "/workers/video-metadata-worker.js";
 
 type WorkerReading = { durationMs: number | null; width: number; height: number; container: string } | null;
 

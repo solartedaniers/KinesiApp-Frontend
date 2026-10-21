@@ -17,7 +17,7 @@ export type Registration = {
 };
 
 /** Adaptador de kinesiapp.auth.v1.AuthService. Todo es público salvo el cambio de contraseña. */
-export class AuthGateway {
+class AuthGateway {
   constructor(
     private readonly anonymous: Client<typeof AuthService>,
     private readonly authenticated: Client<typeof AuthService>,

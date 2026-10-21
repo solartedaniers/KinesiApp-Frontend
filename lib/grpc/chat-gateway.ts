@@ -11,7 +11,7 @@ import { toChatMessage } from "./mappers";
 import { authedTransport } from "./transport";
 
 /** Adaptador de kinesiapp.chat.v1.ChatService: el texto llega por fragmentos mientras el modelo lo genera. */
-export class ChatGateway {
+class ChatGateway {
   constructor(
     private readonly client: Client<typeof ChatService>,
     private readonly streamTimeoutMs: number,

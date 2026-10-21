@@ -21,7 +21,7 @@ export type VideoUpload = {
 };
 
 /** Adaptador de kinesiapp.analysis.v1.AnalysisService. */
-export class AnalysisGateway {
+class AnalysisGateway {
   constructor(
     private readonly client: Client<typeof AnalysisService>,
     private readonly streamTimeoutMs: number,

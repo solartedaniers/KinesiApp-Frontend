@@ -120,7 +120,7 @@ export function toTokenPair(session: Session | undefined): TokenPair {
   return { access_token: session.accessToken, refresh_token: session.refreshToken };
 }
 
-export function toRole(role: UserRoleEnum): UserRole {
+function toRole(role: UserRoleEnum): UserRole {
   return required(inverse(ROLE, role), "role");
 }
 

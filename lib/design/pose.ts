@@ -98,12 +98,6 @@ export function flexionArc(ankle: Point, knee: Point, hip: Point, radius: number
   return `M${round(knee.x)} ${round(knee.y)}L${round(start.x)} ${round(start.y)}A${radius} ${radius} 0 0 ${sweep} ${round(end.x)} ${round(end.y)}Z`;
 }
 
-/** Huesos del esqueleto, como pares de keypoints. */
-export const BONES: [Joint, Joint][] = [
-  ["heel", "toe"], ["ankle", "knee"], ["knee", "hip"], ["hip", "shoulder"], ["shoulder", "neck"],
-  ["shoulder", "elbow"], ["elbow", "wrist"],
-];
-
 /** Una postura y cuánto se despega el tobillo del suelo. */
 export type Phase = { angles: PoseAngles; lift: number };
 

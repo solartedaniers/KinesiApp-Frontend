@@ -14,7 +14,7 @@ export function linear([d0, d1]: [number, number], [r0, r1]: [number, number]): 
 }
 
 /** Paso redondo (1, 2, 2.5 o 5 por potencia de 10) para unas `count` marcas entre min y max. */
-export function niceStep(min: number, max: number, count: number): number {
+function niceStep(min: number, max: number, count: number): number {
   const raw = Math.abs(max - min) / Math.max(1, count);
   if (raw === 0) return 1;
   const power = 10 ** Math.floor(Math.log10(raw));

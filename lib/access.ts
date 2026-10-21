@@ -14,7 +14,7 @@ export type NavItem = {
   alsoActiveFor?: string[];
 };
 
-export const HOME_BY_ROLE: Record<UserRole, string> = {
+const HOME_BY_ROLE: Record<UserRole, string> = {
   athlete: "/athlete",
   coach: "/coach",
   admin: "/admin",

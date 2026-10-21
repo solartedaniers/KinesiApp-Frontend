@@ -36,7 +36,7 @@ abstract class ObservableChannel {
 }
 
 /** El worker guarda el estado y concede el turno; esta pestaña hace la llamada si se lo dan. */
-export class SharedWorkerChannel extends ObservableChannel implements AiStatusChannel {
+class SharedWorkerChannel extends ObservableChannel implements AiStatusChannel {
   private wantsWake = false;
   private synced = false;
 
@@ -79,7 +79,7 @@ export class SharedWorkerChannel extends ObservableChannel implements AiStatusCh
 }
 
 /** Respaldo: cada pestaña guarda su copia, la difunde por BroadcastChannel y un Web Lock elige quién llama. */
-export class BroadcastAiStatusChannel extends ObservableChannel implements AiStatusChannel {
+class BroadcastAiStatusChannel extends ObservableChannel implements AiStatusChannel {
   private readonly channel = new BroadcastChannel(CHANNEL_NAME);
 
   constructor(

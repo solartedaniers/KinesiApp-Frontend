@@ -12,7 +12,7 @@ import { authedTransport, grpcTransport } from "./transport";
 export type PingResult = { message: string; serverTime: Date | null; roundTripMs: number };
 
 /** Adaptador de kinesiapp.system.v1.SystemService: el resto de la app no ve tipos de Protobuf. */
-export class SystemGateway {
+class SystemGateway {
   constructor(
     private readonly anonymous: Client<typeof SystemService>,
     private readonly authenticated: Client<typeof SystemService>,

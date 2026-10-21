@@ -12,7 +12,7 @@ import { authedTransport } from "./transport";
 export type NewUser = { email: string; password: string; fullName: string; role: UserRole };
 
 /** Adaptador de kinesiapp.admin.v1.UserAdminService. */
-export class UserAdminGateway {
+class UserAdminGateway {
   constructor(private readonly client: Client<typeof UserAdminService>) {}
 
   async all(pageSize: number): Promise<AdminUser[]> {

@@ -55,8 +55,8 @@ export const COLORS = {
 
 export type PaletteColor = keyof typeof COLORS;
 
-export const SIGNAL_COLORS = ["knee", "trunk", "hip", "center"] as const;
-export const ZONE_COLORS = ["zone-under", "zone-target", "zone-over"] as const;
+const SIGNAL_COLORS = ["knee", "trunk", "hip", "center"] as const;
+const ZONE_COLORS = ["zone-under", "zone-target", "zone-over"] as const;
 
 const SURFACES = ["canvas", "panel", "raised", "sunken"] as const;
 const SOFTS = ["accent-soft", "knee-soft", "trunk-soft", "hip-soft", "center-soft", "zone-under-soft", "zone-target-soft", "zone-over-soft"] as const;
