@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Código generado de los contratos (npm run generate)
     "lib/gen/**",
+    // pdf-lib copiado tal cual para el worker del informe (npm run vendor)
+    "public/vendor/**",
   ]),
 ]);
 
