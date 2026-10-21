@@ -171,7 +171,14 @@ export function toAthlete(athlete: AthleteMessage | undefined): AthleteProfile {
 
 export function toTeam(team: TeamMessage | undefined): Team {
   if (!team) throw new Error("The backend did not return a team");
-  return { id: team.id, name: team.name, owner_id: team.ownerId, athlete_ids: team.athleteIds, created_at: iso(team.createdAt) };
+  return {
+    id: team.id,
+    name: team.name,
+    owner_id: team.ownerId,
+    athlete_ids: team.athleteIds,
+    created_at: iso(team.createdAt),
+    logo_url: team.logo?.url ?? null,
+  };
 }
 
 function reasonCode(reason: ErrorReason): string | null {

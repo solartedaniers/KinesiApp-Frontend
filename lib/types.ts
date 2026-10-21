@@ -64,7 +64,8 @@ export type JointAngleMeasurement = {
   frame_timestamp_ms: number;
 };
 
-export type Team = { id: string; name: string; owner_id: string; athlete_ids: string[]; created_at: string };
+/** `logo_url` es una URL firmada de vida corta; null si el equipo usa su emblema con iniciales. */
+export type Team = { id: string; name: string; owner_id: string; athlete_ids: string[]; created_at: string; logo_url: string | null };
 
 export type ChatRole = "user" | "assistant";
 export type ChatMessage = { id: string; role: ChatRole; content: string; created_at: string };

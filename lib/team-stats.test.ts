@@ -13,7 +13,7 @@ const analysis = (id: number, athleteId: number, score: number | null): Analysis
   id: String(id), athlete_id: String(athleteId), movement_type: "jump", status: score === null ? "pending" : "processed",
   risk_score: score, recorded_at: `2026-09-0${id}T10:00:00Z`, risk_level: null, dominant_risk_pattern: null, failure_reason: null, knee_median_peak_degrees: null, knee_target: null,
 });
-const team = (id: number, athleteIds: number[]): Team => ({ id: String(id), name: `T${id}`, owner_id: "1", athlete_ids: athleteIds.map(String), created_at: "2026-09-01T00:00:00Z" });
+const team = (id: number, athleteIds: number[]): Team => ({ id: String(id), name: `T${id}`, owner_id: "1", athlete_ids: athleteIds.map(String), created_at: "2026-09-01T00:00:00Z", logo_url: null });
 
 const ATHLETES = [athlete(1), athlete(2), athlete(3)];
 const ANALYSES = [analysis(1, 1, 0.2), analysis(2, 2, 0.8), analysis(3, 3, null), analysis(4, 1, 0.4)];

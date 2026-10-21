@@ -11,6 +11,7 @@ import { getT } from "../i18n/server";
 import { teamPath, teamsPath } from "../routes";
 import type { Team } from "../types";
 import { validateTeamName } from "../validation";
+import { type ImageResult, type ImageUploadStart, mutateImage, startImageUpload } from "./image-uploads";
 import { authedMutation, failureMessage } from "./request";
 
 export type TeamField = "name";
@@ -59,4 +60,17 @@ export async function deleteTeam(section: TeamSection, teamId: string): Promise<
 export async function setTeamMember(teamId: string, athleteId: string, member: boolean): Promise<void> {
   await authedMutation(() => (member ? teamGateway().addMember(teamId, athleteId) : teamGateway().removeMember(teamId, athleteId)));
   refresh();
+}
+
+/** Logo del equipo con el mismo flujo de dos pasos que el avatar (ligadas con `.bind(null, teamId)`). */
+export async function startTeamLogoUpload(teamId: string, type: string, size: number): Promise<ImageUploadStart> {
+  return startImageUpload(type, (imageType) => teamGateway().createLogoUpload(teamId, imageType, size));
+}
+
+export async function confirmTeamLogoUpload(teamId: string, uploadId: string): Promise<ImageResult> {
+  return mutateImage(() => teamGateway().confirmLogoUpload(teamId, uploadId));
+}
+
+export async function removeTeamLogo(teamId: string): Promise<ImageResult> {
+  return mutateImage(() => teamGateway().deleteLogo(teamId));
 }
