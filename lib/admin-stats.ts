@@ -11,19 +11,25 @@ export function accountStatus(user: Pick<AdminUser, "is_active" | "is_verified">
 
 export type SystemSummary = {
   users: number;
+  admins: number;
   coaches: number;
+  athleteAccounts: number;
   athletes: number;
   unassigned: number;
   pendingVerification: number;
+  disabled: number;
 };
 
 export function systemSummary(users: AdminUser[], athletes: AthleteProfile[]): SystemSummary {
   return {
     users: users.length,
+    admins: users.filter((user) => user.role === "admin").length,
     coaches: users.filter((user) => user.role === "coach").length,
+    athleteAccounts: users.filter((user) => user.role === "athlete").length,
     athletes: athletes.length,
     unassigned: athletes.filter((athlete) => athlete.coach_id === null).length,
     pendingVerification: users.filter((user) => accountStatus(user) === "unverified").length,
+    disabled: users.filter((user) => accountStatus(user) === "disabled").length,
   };
 }
 

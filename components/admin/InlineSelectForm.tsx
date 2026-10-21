@@ -2,14 +2,13 @@
 
 import { useActionState, useId } from "react";
 
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/instrument/Button";
 import type { InlineResult } from "@/lib/actions/admin";
 import { useT } from "@/lib/i18n/client";
 
 const styles = {
   form: "flex flex-wrap items-center gap-2",
-  select: "min-h-10 rounded-control border border-line-strong bg-panel px-3 text-sm text-ink focus:border-accent focus:outline-none focus:ring-3 focus:ring-accent/20",
-  button: "min-h-10 px-3 text-sm",
+  select: "kin-field min-h-11 px-3 text-sm text-ink outline-none",
   error: "basis-full text-xs font-medium text-ink",
 };
 
@@ -51,7 +50,7 @@ export function InlineSelectForm({
           </option>
         ))}
       </select>
-      <Button type="submit" variant="secondary" pending={pending} pendingLabel={t.common.saving} className={styles.button}>
+      <Button type="submit" variant="secondary" pending={pending}>
         {t.admin.apply}
       </Button>
       {state.error && (

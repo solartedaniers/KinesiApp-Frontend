@@ -661,7 +661,8 @@
     "noCoach": "No coach",
     "usersEmpty": "There are no registered users.",
     "athletesEmpty": "There are no athlete profiles.",
-    "unassignedFirst": "Athletes without a coach are listed first."
+    "unassignedFirst": "Athletes without a coach are listed first.",
+    "since": "Joined: {date}"
   },
   "profile": {
     "title": "Profile",
@@ -1083,5 +1084,29 @@
     "noTeams": "Group your athletes into teams to compare their risk.",
     "recent": "Latest recordings",
     "seeAllAnalyses": "See all recordings"
+  },
+  "adminHome": {
+    "lead": {
+      "pending": "There are {users} accounts and {count} athletes are waiting for a coach.",
+      "clear": "There are {users} accounts and every athlete has a coach."
+    },
+    "loading": "Loading accounts…",
+    "coverage": "Coach coverage",
+    "coverageLead": "Athletes who already have a coach assigned.",
+    "coverageLabel": "Coach coverage: {value}, {covered} of {total} athletes",
+    "coverageCount": "{covered} of {total}",
+    "roles": "Accounts by role",
+    "roleCount": {
+      "athlete": "Athletes",
+      "coach": "Coaches",
+      "admin": "Admins"
+    },
+    "status": "Account status",
+    "pendingTitle": "Waiting for a coach",
+    "pendingEmpty": "Everyone has a coach",
+    "pendingEmptyBody": "Athletes without a coach will show up here.",
+    "unverifiedTitle": "Email not verified",
+    "unverifiedEmpty": "No unverified accounts",
+    "unverifiedEmptyBody": "New accounts show up here until they confirm their email."
   }
 }

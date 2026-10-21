@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { pageStyles as styles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
-import { TilesSkeleton } from "@/components/app/Skeleton";
-import { AdminOverview } from "@/components/admin/AdminData";
+import { AdminLead, AdminOverview } from "@/components/admin/AdminData";
+import { PageIntro } from "@/components/app/PageIntro";
+import { LoadingState } from "@/components/instrument/States";
 import { SECTION_ROLES } from "@/lib/access";
 import { firstName } from "@/lib/format";
 import { requireRole } from "@/lib/guard";
@@ -16,16 +15,23 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.nav.home };
 }
 
-// SSR streaming (§3): saludo inmediato; el resumen del sistema llega en un chunk posterior
+// SSR con streaming: el saludo sale con el primer chunk; la frase y los medidores del sistema después
 export default async function AdminHomePage() {
   const t = await getT();
   const user = await requireRole(SECTION_ROLES.admin);
   return (
-    <div className={styles.page}>
-      <PageHeader title={format(t.home.greeting, { name: firstName(user.full_name) })} subtitle={t.home.admin} />
-      <Suspense fallback={<TilesSkeleton count={5} />}>
+    <>
+      <PageIntro
+        title={format(t.home.greeting, { name: firstName(user.full_name) })}
+        lead={
+          <Suspense fallback={<p className="max-w-prose text-lg text-ink-muted">{t.home.admin}</p>}>
+            <AdminLead />
+          </Suspense>
+        }
+      />
+      <Suspense fallback={<LoadingState label={t.adminHome.loading} />}>
         <AdminOverview />
       </Suspense>
-    </div>
+    </>
   );
 }

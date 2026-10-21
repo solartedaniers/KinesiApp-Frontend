@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { pageStyles as styles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
-import { ListSkeleton } from "@/components/app/Skeleton";
 import { UsersTable } from "@/components/admin/AdminData";
+import { PageIntro } from "@/components/app/PageIntro";
+import { LoadingState } from "@/components/instrument/States";
 import { SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";
 import { getT } from "@/lib/i18n/server";
@@ -19,11 +18,11 @@ export default async function Page() {
   const t = await getT();
   const admin = await requireRole(SECTION_ROLES.admin);
   return (
-    <div className={styles.page}>
-      <PageHeader title={t.nav.users} subtitle={t.admin.usersSubtitle} />
-      <Suspense fallback={<ListSkeleton rows={6} />}>
+    <>
+      <PageIntro title={t.nav.users} lead={t.admin.usersSubtitle} />
+      <Suspense fallback={<LoadingState label={t.adminHome.loading} />}>
         <UsersTable currentUserId={admin.id} />
       </Suspense>
-    </div>
+    </>
   );
 }

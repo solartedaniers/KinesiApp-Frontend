@@ -21,7 +21,7 @@ test("estado de la cuenta: sin verificar no es deshabilitada", () => {
 test("resumen del sistema", () => {
   const users = [user(1, "admin", true, true), user(2, "coach", true, true), user(3, "coach", false, false), user(4, "athlete", true, true)];
   const athletes = [athlete(1, "Bea", 2), athlete(2, "Ana", null), athlete(3, "Ciro", null)];
-  assert.deepEqual(systemSummary(users, athletes), { users: 4, coaches: 2, athletes: 3, unassigned: 2, pendingVerification: 1 });
+  assert.deepEqual(systemSummary(users, athletes), { users: 4, admins: 1, coaches: 2, athleteAccounts: 1, athletes: 3, unassigned: 2, pendingVerification: 1, disabled: 0 });
 });
 
 test("sin entrenador primero y luego por nombre", () => {

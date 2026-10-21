@@ -661,7 +661,8 @@
     "noCoach": "Sin entrenador",
     "usersEmpty": "No hay usuarios registrados.",
     "athletesEmpty": "No hay perfiles de deportista.",
-    "unassignedFirst": "Los deportistas sin entrenador aparecen primero."
+    "unassignedFirst": "Los deportistas sin entrenador aparecen primero.",
+    "since": "Alta: {date}"
   },
   "profile": {
     "title": "Perfil",
@@ -1083,5 +1084,29 @@
     "noTeams": "Agrupa a tus deportistas en equipos para comparar su riesgo.",
     "recent": "Lo último que se grabó",
     "seeAllAnalyses": "Ver todas las grabaciones"
+  },
+  "adminHome": {
+    "lead": {
+      "pending": "Hay {users} cuentas y {count} deportistas esperan entrenador.",
+      "clear": "Hay {users} cuentas y todos los deportistas tienen entrenador."
+    },
+    "loading": "Cargando las cuentas…",
+    "coverage": "Cobertura de entrenador",
+    "coverageLead": "Deportistas que ya tienen un entrenador asignado.",
+    "coverageLabel": "Cobertura de entrenador: {value}, {covered} de {total} deportistas",
+    "coverageCount": "{covered} de {total}",
+    "roles": "Cuentas por rol",
+    "roleCount": {
+      "athlete": "Deportistas",
+      "coach": "Entrenadores",
+      "admin": "Administradores"
+    },
+    "status": "Estado de las cuentas",
+    "pendingTitle": "Esperan entrenador",
+    "pendingEmpty": "Todos tienen entrenador",
+    "pendingEmptyBody": "Cuando un deportista quede sin entrenador aparecerá aquí.",
+    "unverifiedTitle": "Sin verificar el correo",
+    "unverifiedEmpty": "No hay cuentas sin verificar",
+    "unverifiedEmptyBody": "Las cuentas nuevas aparecen aquí hasta que confirman su correo."
   }
 }
