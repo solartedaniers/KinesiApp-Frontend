@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "generate": "buf generate",
-    "predev": "npm run generate",
+    "vendor": "node -e \"require('node:fs').cpSync('node_modules/pdf-lib/dist/pdf-lib.esm.min.js', 'public/vendor/pdf-lib.esm.min.js')\"",
+    "predev": "npm run generate && npm run vendor",
     "dev": "next dev",
-    "prebuild": "npm run generate",
+    "prebuild": "npm run generate && npm run vendor",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "pretest": "npm run vendor",
     "test": "node --test --experimental-transform-types --no-warnings=ExperimentalWarning \"lib/**/*.test.ts\""
   },
   "dependencies": {
@@ -17,6 +19,7 @@
     "@connectrpc/connect": "2.2.0",
     "@connectrpc/connect-node": "2.2.0",
     "next": "16.3.8",
+    "pdf-lib": "1.17.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "server-only": "^0.0.1",

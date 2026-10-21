@@ -5,6 +5,7 @@ import { Suspense } from "react";
 
 import { AnalysisPoller } from "@/components/AnalysisPoller";
 import { AnalysisVideoPanel } from "@/components/analysis/AnalysisVideoPanel";
+import { ReportButton } from "@/components/analysis/ReportButton";
 import { ResultGauges } from "@/components/analysis/ResultGauges";
 import { AnalysisChatCard } from "@/components/chat/AnalysisChatCard";
 import { ButtonLink } from "@/components/instrument/Button";
@@ -19,7 +20,7 @@ import { cssVars } from "@/lib/design/css";
 import { requireRole } from "@/lib/guard";
 import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
-import { parseId, reportPath } from "@/lib/routes";
+import { parseId } from "@/lib/routes";
 
 // Las Server Actions de esta página sostienen los streams de WatchAnalysis y del chat (hasta
 // GRPC_STREAM_TIMEOUT_MS): les doy el máximo de Vercel para que la función no los corte antes
@@ -64,7 +65,7 @@ export default async function AnalysisPage({ params }: PageProps<"/analyses/[id]
         </div>
         <div className="flex flex-wrap gap-2">
           {processed && <ButtonLink href="#chat" glyph="chat">{d.chat}</ButtonLink>}
-          {processed && <ButtonLink href={reportPath(analysis.id)} variant="secondary" glyph="download">{t.report.download}</ButtonLink>}
+          {processed && <ReportButton analysisId={analysis.id} />}
           {canDelete && (
             <ConfirmDialog
               labels={{ open: t.common.delete, title: d.deleteTitle, body: d.deleteBody, confirm: t.common.delete, cancel: t.common.cancel }}

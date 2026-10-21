@@ -778,21 +778,27 @@
     }
   },
   "report": {
-    "export": "Export to PDF",
     "download": "Download PDF",
-    "back": "Back to the analysis",
-    "printHint": "In the dialog that opens, choose \"Save as PDF\" as the destination.",
     "fileTitle": "Analysis report {date}",
     "title": "Movement analysis report",
     "subtitle": "{movement}, {date}",
     "coach": "Responsible coach",
     "noCoach": "No coach assigned",
     "athlete": "Athlete",
-    "charts": "Joint angle charts and data",
+    "charts": "Knee and trunk across the video",
     "explanation": "Assistant's explanation",
     "noExplanation": "The assistant hasn't generated an explanation for this analysis yet.",
     "disclaimerTitle": "Important",
-    "disclaimer": "This report is an automatic estimate based on a video, with thresholds that have no clinical validation. It is not a diagnosis and does not replace an assessment by a health professional."
+    "disclaimer": "This report is an automatic estimate based on a video, with thresholds that have no clinical validation. It is not a diagnosis and does not replace an assessment by a health professional.",
+    "target": "Knee target range",
+    "repetition": "Repetition",
+    "kneePeak": "Knee peak",
+    "zone": "Zone",
+    "empty": "—",
+    "page": "Page {page} of {total}",
+    "generating": "Generating the PDF…",
+    "failed": "The PDF could not be generated. Please try again.",
+    "risk": "Risk"
   },
   "systemPing": {
     "title": "Backend connection test",

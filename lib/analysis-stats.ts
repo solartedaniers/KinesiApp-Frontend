@@ -1,6 +1,6 @@
 // Métricas de una lista de análisis: lógica pura (sin React ni red), testeada en analysis-stats.test.ts.
 // Mismo cálculo que AnalysisStatistics del cliente Flutter.
-import type { JointAngleMeasurement, AnalysisSummary } from "./types";
+import type { AnalysisSummary } from "./types";
 
 // Umbrales de nivel de riesgo sobre risk_score ∈ [0, 1]. "Alto" es el de Flutter; "moderado" es un
 // corte de presentación. Ninguno tiene validación clínica (video-analysis-pipeline.md §5)
@@ -54,20 +54,6 @@ export function riskTrend(analyses: AnalysisSummary[]): RiskPoint[] {
         ? []
         : [{ analysisId: analysis.id, recordedAt: analysis.recorded_at, score: analysis.risk_score }],
     );
-}
-
-export type JointSeries = { joint: string; points: JointAngleMeasurement[]; peak: number };
-
-/** Mediciones agrupadas por articulación, cada serie en orden temporal: un gráfico por articulación. */
-export function anglesByJoint(measurements: JointAngleMeasurement[]): JointSeries[] {
-  const groups = new Map<string, JointAngleMeasurement[]>();
-  for (const measurement of measurements) {
-    groups.set(measurement.joint_name, [...(groups.get(measurement.joint_name) ?? []), measurement]);
-  }
-  return [...groups].map(([joint, points]) => {
-    const sorted = [...points].sort((a, b) => a.frame_timestamp_ms - b.frame_timestamp_ms);
-    return { joint, points: sorted, peak: Math.max(...sorted.map((point) => point.angle_degrees)) };
-  });
 }
 
 export type AthleteSummary = { athleteId: string; stats: AnalysisStatistics; latestScore: number | null };

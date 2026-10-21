@@ -111,11 +111,6 @@ export function teamStatsPath(teamId: string): string {
   return `/coach/stats?${new URLSearchParams({ [TEAM_PARAM]: String(teamId) })}`;
 }
 
-/** Informe imprimible (Guardar como PDF) de un análisis concreto. */
-export function reportPath(analysisId: string): string {
-  return `${analysisPath(analysisId)}/report`;
-}
-
 export function withNext(path: string, next: string): string {
   return `${path}?${new URLSearchParams({ [NEXT_PARAM]: next })}`;
 }

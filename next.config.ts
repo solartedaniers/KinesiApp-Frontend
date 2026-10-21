@@ -37,7 +37,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/analysis/:path*", destination: "/analyses/:path*", permanent: true },
-      { source: "/report/:id", destination: "/analyses/:id/report", permanent: true },
+      { source: "/report/:id", destination: "/analyses/:id", permanent: true },
+      // El informe ahora se genera en PDF desde la pantalla del análisis
+      { source: "/analyses/:id/report", destination: "/analyses/:id", permanent: true },
       // El español va sin prefijo: /es duplicaría las mismas páginas
       { source: `/${DEFAULT_LOCALE}`, destination: "/", permanent: true },
       { source: `/${DEFAULT_LOCALE}/:path*`, destination: "/:path*", permanent: true },

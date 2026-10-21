@@ -778,21 +778,27 @@
     }
   },
   "report": {
-    "export": "Exportar a PDF",
     "download": "Descargar PDF",
-    "back": "Volver al análisis",
-    "printHint": "En el diálogo que se abre, elige «Guardar como PDF» como destino.",
     "fileTitle": "Informe de análisis {date}",
     "title": "Informe del análisis de movimiento",
     "subtitle": "{movement}, {date}",
     "coach": "Entrenador responsable",
     "noCoach": "Sin entrenador asignado",
     "athlete": "Deportista",
-    "charts": "Gráficas y datos de los ángulos articulares",
+    "charts": "Rodilla y tronco a lo largo del video",
     "explanation": "Explicación del asistente",
     "noExplanation": "El asistente todavía no generó una explicación para este análisis.",
     "disclaimerTitle": "Importante",
-    "disclaimer": "Este informe es una estimación automática a partir de un video, con umbrales sin validación clínica. No es un diagnóstico y no reemplaza la evaluación de un profesional de la salud."
+    "disclaimer": "Este informe es una estimación automática a partir de un video, con umbrales sin validación clínica. No es un diagnóstico y no reemplaza la evaluación de un profesional de la salud.",
+    "target": "Rango objetivo de la rodilla",
+    "repetition": "Repetición",
+    "kneePeak": "Pico de rodilla",
+    "zone": "Zona",
+    "empty": "—",
+    "page": "Página {page} de {total}",
+    "generating": "Generando el PDF…",
+    "failed": "No se pudo generar el PDF. Inténtalo de nuevo.",
+    "risk": "Riesgo"
   },
   "systemPing": {
     "title": "Prueba de conexión con el backend",

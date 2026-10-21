@@ -2,8 +2,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { ageOn, anglesByJoint, computeStatistics, riskLevel, riskTrend, sortByRecordedDesc, statsByAthlete } from "./analysis-stats.ts";
-import type { AnalysisSummary, Joint } from "./types.ts";
+import { ageOn, computeStatistics, riskLevel, riskTrend, sortByRecordedDesc, statsByAthlete } from "./analysis-stats.ts";
+import type { AnalysisSummary } from "./types.ts";
 
 const analysis = (id: number, day: number, status: AnalysisSummary["status"], risk: number | null): AnalysisSummary => ({
   id: String(id),
@@ -48,15 +48,6 @@ test("orden por fecha, tendencia y nivel de riesgo", () => {
   assert.deepEqual(sortByRecordedDesc(sample).map((a) => a.id), ["4", "2", "3", "5", "1"]);
   assert.deepEqual(riskTrend(sample).map((p) => p.analysisId), ["1", "5", "2"]);
   assert.deepEqual([riskLevel(0.1), riskLevel(0.33), riskLevel(0.66)], ["low", "moderate", "high"]);
-});
-
-test("ángulos agrupados por articulación, en orden temporal y con su pico", () => {
-  const m = (id: number, joint: Joint, ms: number, deg: number) => ({ id, joint_name: joint, frame_timestamp_ms: ms, angle_degrees: deg });
-  const series = anglesByJoint([m(1, "knee_flexion", 400, 48), m(2, "trunk_inclination", 0, 10), m(3, "knee_flexion", 0, 12), m(4, "knee_flexion", 200, 35)]);
-  assert.deepEqual(series.map((s) => s.joint), ["knee_flexion", "trunk_inclination"]);
-  assert.deepEqual(series[0].points.map((p) => p.frame_timestamp_ms), [0, 200, 400]);
-  assert.equal(series[0].peak, 48);
-  assert.deepEqual(anglesByJoint([]), []);
 });
 
 test("estadísticas por deportista y último puntaje", () => {

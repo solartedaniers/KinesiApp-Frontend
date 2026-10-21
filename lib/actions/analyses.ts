@@ -4,6 +4,9 @@ import { redirect, unstable_rethrow } from "next/navigation";
 
 import { analysesListHref } from "../access";
 import type { AnalysisEvent } from "../analysis-events";
+import { getAnalysis, listChatMessages } from "../data/analyses";
+import { getMyAthleteProfile } from "../data/athletes";
+import { listMyAthletes } from "../data/coach";
 import { getClientPolicy } from "../data/public";
 import { validationMessages } from "../errors";
 import { formText, type FormState } from "../form-state";
@@ -11,6 +14,7 @@ import { analysisGateway } from "../grpc/analysis-gateway";
 import { accountGateway } from "../grpc/account-gateway";
 import { rpcReason } from "../grpc/errors";
 import { getT } from "../i18n/server";
+import { openingExplanation, type ReportSource } from "../report";
 import { ROUTES, safeNextPath } from "../routes";
 import { getCurrentUser } from "../session";
 import { MOVEMENT_TYPES, type MovementType, type SignedUrl, type UploadTarget } from "../types";
@@ -71,6 +75,26 @@ export async function renewPlaybackUrl(analysisId: string): Promise<SignedUrl | 
   } catch (error) {
     unstable_rethrow(error);
     return null;
+  }
+}
+
+export type ReportSourceResult = { source: ReportSource } | { error: string };
+
+/**
+ * Datos del informe en PDF al pedirlo: el análisis con sus series, de quién es y la explicación
+ * inicial de la IA. Los permisos los aplica el backend en cada lectura, igual que en la pantalla.
+ */
+export async function getReportSource(analysisId: string): Promise<ReportSourceResult> {
+  const t = await getT();
+  try {
+    const user = await getCurrentUser();
+    const [analysis, messages] = await Promise.all([getAnalysis(analysisId), listChatMessages(analysisId)]);
+    const athlete = user?.role === "coach" ? (await listMyAthletes()).find((candidate) => candidate.id === analysis.athlete_id) : await getMyAthleteProfile();
+    return {
+      source: { analysis, athleteName: athlete?.display_name ?? t.report.empty, coachName: athlete?.coach_name ?? null, explanation: openingExplanation(messages) },
+    };
+  } catch (error) {
+    return { error: failureMessage(t, error) };
   }
 }
 
