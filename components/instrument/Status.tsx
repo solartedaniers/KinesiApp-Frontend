@@ -52,18 +52,19 @@ export function AiStatus({ state, label, hint, live = true }: { state: AiState; 
   );
 }
 
-/** Nivel de riesgo con su palabra y de uno a tres escalones: el color nunca va solo. */
-export function RiskScale({ level, label, steps, value }: { level: RiskLevel; label: string; steps: string; value?: string }) {
+/** Nivel de riesgo con su palabra y de uno a tres escalones: el color nunca va solo. `compact` es para las filas. */
+export function RiskScale({ level, label, steps, value, compact = false }: { level: RiskLevel; label: string; steps: string; value?: string; compact?: boolean }) {
   const step = RISK_STEP[level];
+  const text = compact ? "text-sm" : "text-lg";
   return (
-    <div className={`inline-flex items-center gap-3 rounded-panel px-3 py-2 ${RISK_SOFT[level]}`}>
+    <div className={`inline-flex items-center rounded-panel ${compact ? "gap-2 px-2.5 py-1" : "gap-3 px-3 py-2"} ${RISK_SOFT[level]}`}>
       <span className="flex items-end gap-1" role="img" aria-label={steps}>
         {[1, 2, 3].map((n) => (
-          <span key={n} className={`w-2 rounded-full ${n <= step ? RISK_FILL[level] : "bg-line-strong opacity-40"}`} style={{ height: `${0.375 + n * 0.3125}rem` }} />
+          <span key={n} className={`rounded-full ${compact ? "w-1.5" : "w-2"} ${n <= step ? RISK_FILL[level] : "bg-line-strong opacity-40"}`} style={{ height: `${(compact ? 0.25 : 0.375) + n * (compact ? 0.22 : 0.3125)}rem` }} />
         ))}
       </span>
-      <span className={`font-display text-lg font-semibold ${RISK_TEXT[level]}`}>{label}</span>
-      {value && <span className="font-display text-lg font-semibold text-ink [font-variant-numeric:tabular-nums]">{value}</span>}
+      <span className={`font-display font-semibold whitespace-nowrap ${text} ${RISK_TEXT[level]}`}>{label}</span>
+      {value && <span className={`font-display font-semibold text-ink [font-variant-numeric:tabular-nums] ${text}`}>{value}</span>}
     </div>
   );
 }

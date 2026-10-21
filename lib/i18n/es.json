@@ -271,7 +271,11 @@
         "over": "Por encima"
       }
     },
-    "rangesNote": "Rangos orientativos de la IA; no sustituyen la evaluación de un profesional."
+    "rangesNote": "Rangos orientativos de la IA; no sustituyen la evaluación de un profesional.",
+    "kneeMedian": "Mediana de los picos de rodilla",
+    "repetitions": "Repeticiones",
+    "noKnee": "Sin medida de rodilla",
+    "riskSteps": "Nivel {step} de 3"
   },
   "analysisDetail": {
     "metaTitle": "Grabación",
@@ -413,7 +417,8 @@
   "athleteHome": {
     "summary": "Resumen",
     "recent": "Grabaciones recientes",
-    "seeAll": "Ver todas las grabaciones"
+    "seeAll": "Ver todas las grabaciones",
+    "loading": "Cargando tus análisis…"
   },
   "onboarding": {
     "metaTitle": "Completa tu ficha",

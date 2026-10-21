@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { pageStyles as styles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
-import { ListSkeleton } from "@/components/app/Skeleton";
 import { AthleteAnalyses } from "@/components/athlete/AthleteData";
-import { ButtonLink } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
+import { ButtonLink } from "@/components/instrument/Button";
+import { LoadingState } from "@/components/instrument/States";
 import { SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";
 import { getT } from "@/lib/i18n/server";
@@ -17,26 +14,19 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.nav.analyses };
 }
 
-// SSR streaming (§3): la lista llega detrás del encabezado
+// SSR con streaming: la lista llega detrás del encabezado
 export default async function Page() {
   const t = await getT();
   await requireRole(SECTION_ROLES.athlete);
   return (
-    <div className={styles.page}>
-      <div className={styles.headerRow}>
-        <PageHeader title={t.nav.analyses} />
-        <ButtonLink href={ROUTES.newAnalysis}>
-          <Icon name="upload" size={18} />
-          {t.capture.newRecording}
-        </ButtonLink>
-      </div>
-      <Suspense
-        fallback={
-          <ListSkeleton rows={5} />
-        }
-      >
+    <>
+      <section aria-labelledby="analyses-title" className="flex flex-wrap items-end justify-between gap-4">
+        <h1 id="analyses-title" className="font-display text-hero font-bold tracking-tight text-ink">{t.nav.analyses}</h1>
+        <ButtonLink href={ROUTES.newAnalysis} glyph="capture" className="max-sm:w-full">{t.capture.newRecording}</ButtonLink>
+      </section>
+      <Suspense fallback={<LoadingState label={t.athleteHome.loading} />}>
         <AthleteAnalyses />
       </Suspense>
-    </div>
+    </>
   );
 }
