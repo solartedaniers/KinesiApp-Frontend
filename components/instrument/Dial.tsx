@@ -55,14 +55,15 @@ export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, ba
       <div className="kin-face relative aspect-square">
         <svg viewBox="0 0 200 200" className="absolute inset-0 size-full" aria-hidden>
           <path d={dialArc(C, VALUE_R, 0, max, max)} className="fill-none stroke-sunken" strokeWidth="11" strokeLinecap="round" />
-          <path
+          {/* En cero no pinto el arco: su remate redondo quedaba como un punto suelto en el otro extremo */}
+          {value > 0 && <path
             d={dialArc(C, VALUE_R, 0, max, max)}
             pathLength={100}
             className={`kin-fill ${sweep ? "kin-fill-sweep" : ""} kin-signal-glow fill-none ${tone.stroke} ${tone.text}`}
             strokeWidth="11"
             strokeLinecap="round"
             style={motion}
-          />
+          />}
           {arcs.map(({ key, from, to, stroke }) => (
             <path key={key} d={dialArc(C, ZONE_R, from, to, max)} className={`fill-none ${stroke}`} strokeWidth="4" />
           ))}
@@ -74,7 +75,8 @@ export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, ba
             return (
               <g key={tick}>
                 <line x1={r(a.x)} y1={r(a.y)} x2={r(b.x)} y2={r(b.y)} className={major ? "stroke-ink-muted" : "stroke-line-strong"} strokeWidth={major ? 1.6 : 0.9} strokeLinecap="round" />
-                {labels && major && <text x={r(text.x)} y={r(text.y)} className="kin-dial-label" textAnchor="middle" dominantBaseline="central">{tick}</text>}
+                {/* Los extremos van sin número: quedan a la altura de la lectura y se montaban sobre ella */}
+                {labels && major && tick !== 0 && tick !== max && <text x={r(text.x)} y={r(text.y)} className="kin-dial-label" textAnchor="middle" dominantBaseline="central">{tick}</text>}
               </g>
             );
           })}
