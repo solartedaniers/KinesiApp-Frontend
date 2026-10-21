@@ -5,6 +5,7 @@ import { ButtonLink } from "@/components/instrument/Button";
 import { Chronophotograph } from "@/components/instrument/Chronophotograph";
 import { Glyph } from "@/components/instrument/Glyph";
 import { LiveGauge } from "@/components/instrument/LiveGauge";
+import { VideoPrivacy } from "@/components/instrument/VideoPrivacy";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { VIDEO_MAX_SECONDS } from "@/lib/config";
@@ -127,7 +128,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
             <h2 id="landing-guides" className="font-display text-3xl font-bold tracking-tight text-ink">{l.guidesTitle}</h2>
             <p className="max-w-prose text-lg text-ink-muted">{l.guidesLead}</p>
           </div>
-          <ul className="grid gap-4 md:grid-cols-2">
+          <ul className="grid gap-4 md:grid-cols-3">
             {MOVEMENT_TYPES.map((movement) => (
               <li key={movement}>
                 <Link href={guidePath(movement, locale)} className="kin-card kin-lift grid gap-3 p-4 text-ink no-underline hover:no-underline sm:p-5" style={cssVars({ "--tint": movement === "jump" ? "var(--kin-knee)" : "var(--kin-trunk)" })}>
@@ -139,6 +140,15 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link href={ROUTES.legalVideoConsent} className="kin-card kin-lift grid gap-3 p-4 text-ink no-underline hover:no-underline sm:p-5" style={cssVars({ "--tint": "var(--kin-hip)" })}>
+                <VideoPrivacy className="kin-well h-28 w-full p-2" />
+                <span className="flex items-center justify-between gap-3 font-display text-lg font-semibold">
+                  {t.site.legal}
+                  <Glyph name="chevronRight" size={20} className="text-accent" />
+                </span>
+              </Link>
+            </li>
           </ul>
         </section>
       </main>
