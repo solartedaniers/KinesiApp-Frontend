@@ -28,15 +28,27 @@ Navegador ──HTML/RSC/Server Actions──▶ Next.js (runtime Node, Vercel f
   3. otro RPC confirma la subida.
 
   Para reproducir un video, pido una URL firmada de vida corta.
-- **Validación en las fronteras.** Las variables de entorno, los formularios y las respuestas externas pasan por un esquema en runtime (Zod en `lib/grpc/env.ts`, validadores en `lib/validation.ts`). Los límites no se repiten aquí: llegan del backend por `GetClientPolicy`. Son la duración y el tamaño del video, la contraseña, la edad, la estatura, el peso y el largo del chat. El backend vuelve a validar todo.
+- **Validación en las fronteras.** Todo dato que entra se parsea en runtime antes de usarse; la sección [Por qué las respuestas gRPC no pasan por Zod](#por-qué-las-respuestas-grpc-no-pasan-por-zod) explica con qué. Los límites no se repiten aquí: llegan del backend por `GetClientPolicy`. Son la duración y el tamaño del video, la contraseña, la edad, la estatura, el peso y el largo del chat. El backend vuelve a validar todo.
 - **Estado de la IA.** Al iniciar sesión disparo `WakeUpAi` y muestro "IA despertando" o "IA activada". Si la IA no responde, el backend devuelve `UNAVAILABLE` y la interfaz lo comunica sin romperse.
+
+## Por qué las respuestas gRPC no pasan por Zod
+
+Sigo la idea de "parsear, no validar": cada dato que cruza una frontera se convierte en un tipo confiable una sola vez, en el borde, y de ahí en adelante el código trabaja con ese tipo.
+
+- **Las respuestas gRPC ya se parsean contra un esquema.** El código que genera `protoc-gen-es` a partir del contrato decodifica el binario de Protobuf campo por campo. Un tipo que no coincide falla al decodificar, los campos desconocidos se descartan y los que faltan toman el valor por defecto del contrato. Es un parseo en runtime contra el esquema del `.proto`, que es la única fuente de verdad. Pasar el resultado por Zod sería repetir el contrato a mano, con el riesgo de que las dos copias se desincronicen.
+- **Lo que el contrato no puede saber lo reviso en el adaptador.** `lib/grpc/mappers.ts` convierte los mensajes en tipos de la app y resuelve los casos que Protobuf no distingue, como un enum en `UNSPECIFIED` o un mensaje opcional ausente.
+- **Zod va en los bordes sin contrato,** donde no hay nada generado que parsee por mí: las variables de entorno (`lib/grpc/env.ts`, `lib/server-config.ts`, `lib/config.ts` y `lib/demo-login.ts`).
+- **Los demás bordes sin contrato:**
+  - Los formularios pasan por los validadores de `lib/validation.ts`, con los límites de `GetClientPolicy`.
+  - Las cookies de idioma y tema pasan por guardas de tipo (`isLocale`, `isTheme`) que caen al valor por defecto.
+  - Los mensajes de los workers vienen de scripts propios del mismo origen; los trato como un contrato interno y el backend vuelve a validar lo que importa, como la duración del video.
 
 ## Patrón de rendering por ruta
 
 | Ruta | Patrón | Por qué |
 |---|---|---|
 | `/`, `/en` (landing) | **SSG** (`generateStaticParams` por idioma) | Es igual para todos y no depende de la sesión. Sale como HTML del build, con su metadata, `hreflang` y un solo `h1`, así es lo más rápido de servir y de indexar. |
-| `/guide/jump`, `/guide/squat` y sus versiones `/en` | **ISR** (`revalidate = 3600`) | Son estáticas, pero muestran la duración y el tamaño máximos del video, que vienen de `GetClientPolicy`. Next las regenera cada hora en segundo plano. Si el backend está dormido durante el build, salen con los valores del cliente. |
+| `/guide/jump`, `/guide/squat` y sus versiones `/en` | **ISR** (`revalidate = 3600`) | Son estáticas, pero muestran la duración y el tamaño máximos del video, que vienen de `GetClientPolicy`. Next las regenera cada hora en segundo plano. Si el backend no responde durante el build, salen sin la sección de límites: no guardo una copia local, y la siguiente regeneración la completa. |
 | `/offline`, `/en/offline` | **SSG** | El Service Worker la guarda al instalarse y la muestra cuando no hay red. |
 | `/manifest.webmanifest`, `/robots.txt`, `/sitemap.xml`, `/icon.svg` | **Estáticas** | Son metadatos del sitio y no cambian. |
 | `/login`, `/register`, `/verify-email`, `/password-recovery` | **SSR** + Server Actions | Si ya hay sesión, redirigen a `/home`. Los formularios funcionan sin JavaScript (`<form action>`), y la validación en vivo, como los requisitos de la contraseña, es una isla de cliente. |
@@ -46,7 +58,7 @@ Navegador ──HTML/RSC/Server Actions──▶ Next.js (runtime Node, Vercel f
 | `/analyses/[id]` | **Streaming SSR** + islas CSR | El resultado y las gráficas salen del servidor. El progreso en vivo (`WatchAnalysis`), el chat con respuesta en streaming y la línea de tiempo del video son islas de cliente. |
 | `/analyses/new` | **SSR** + isla **CSR** | El servidor decide para quién se graba, si falta aceptar el consentimiento y qué límites aplican. La cámara, `MediaRecorder`, la lectura de metadatos y la subida directa al bucket solo existen en el navegador. |
 | `/athlete/profile`, `/coach/athletes/new`, `/coach/athletes/[id]/edit`, `/onboarding`, `/account/password` | **SSR** + Server Actions | Son formularios con validación en los dos lados. Los rangos de la ficha física llegan de `GetClientPolicy`. |
-| `/style-guide` y `/style-guide/screens/*` | **SSR** | Es la guía del rediseño con datos de muestra. Es pública para poder revisarla en el preview sin cuenta. |
+| `/style-guide` y `/style-guide/screens/*` | **SSR** | Es la guía del rediseño con datos de muestra. Es pública para poder revisarla en el preview sin cuenta. La captura simulada toma su tope de `GetClientPolicy`. |
 | `/system/ping` | **SSR con Streaming** | Comprueba que el transporte gRPC-Web hasta el backend funciona. |
 
 `proxy.ts` decide qué rutas exigen sesión. Las rutas son privadas por defecto: lo que no está en la lista pública pide sesión.
@@ -57,7 +69,7 @@ Solo los uso donde hay trabajo real que sacar del hilo principal o algo que comp
 
 ### Web Workers
 
-- **`video-metadata-worker.js`: validar el video antes de subirlo.** Lee la duración, la resolución y el contenedor recorriendo las cajas de MP4/MOV (`moov → mvhd, tkhd`) o los elementos EBML de WebM, por pedazos y sin decodificar. Con esto rechazo en el cliente un video de más de 40 s. Lo hago en un worker porque un archivo de 100 MB se lee por partes y la página no debe trabarse. Si el worker no entiende el archivo, recurro a `<video preload="metadata">`.
+- **`video-metadata-worker.js`: validar el video antes de subirlo.** Lee la duración, la resolución y el contenedor recorriendo las cajas de MP4/MOV (`moov → mvhd, tkhd`) o los elementos EBML de WebM, por pedazos y sin decodificar. Con esto rechazo en el cliente un video más largo que el tope de `GetClientPolicy` (hoy 40 s). Lo hago en un worker porque un archivo de 100 MB se lee por partes y la página no debe trabarse. Si el worker no entiende el archivo, recurro a `<video preload="metadata">`.
 - **`avatar-worker.js`: reducir la foto de perfil.** Decodifica la foto, que puede tener varios megapíxeles, la escala con `OffscreenCanvas` y prueba calidades JPEG hasta que quepa en el tope. Si el navegador no tiene `OffscreenCanvas`, subo la original solo si ya cumple el tamaño (`lib/avatar-upload.ts`).
 - **`report-worker.js`: generar el informe en PDF.** Dibuja las curvas y pagina la explicación con `pdf-lib`. Componer el PDF tarda, y en el hilo principal congelaría el botón y la animación.
 
