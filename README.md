@@ -121,7 +121,8 @@ Si están las dos, `/login` sale prellenado con esa cuenta y un aviso pequeño (
 - Las lee solo la página de login, en el servidor (`lib/demo-login.ts`, validadas con Zod). No llegan al bundle del cliente ni a otras rutas.
 - Un correo mal escrito hace fallar la página en vez de prellenar algo inválido.
 - Nada de la cuenta está escrito en el código: vive solo en las variables de Vercel.
-- **Se quitan cuando termine la evaluación.** Al borrarlas (o dejarlas vacías) y redesplegar, el login vuelve a su forma normal. Conviene además cambiar la contraseña de esa cuenta.
+- **La contraseña sí llega al navegador.** Prellenar un formulario implica mandar el valor en el HTML de `/login`, así que cualquiera que abra esa página puede verla. No hay forma de prellenar sin exponerla. Lo acepté a propósito para la evaluación: lo pidió el profesor y es una cuenta solo de la app, sin relación con ningún otro servicio.
+- **Se quitan cuando termine la evaluación.** Al borrarlas (o dejarlas vacías) y redesplegar, el login vuelve a su forma normal y el riesgo desaparece. Después se cambia la contraseña de esa cuenta, porque ya estuvo expuesta.
 
 ## Pruebas
 
