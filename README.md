@@ -109,6 +109,20 @@ git -C contracts fetch --tags && git -C contracts checkout v0.9.0
 npm run generate
 ```
 
+## Cuenta de demostración (solo para la evaluación)
+
+El profesor pidió entrar rápido sin escribir credenciales. Para eso hay dos variables opcionales:
+
+- `DEMO_LOGIN_EMAIL`
+- `DEMO_LOGIN_PASSWORD`
+
+Si están las dos, `/login` sale prellenado con esa cuenta y un aviso pequeño ("Cuenta de demostración precargada"). La persona solo da clic en **Iniciar sesión**, o puede borrar los campos y escribir otra cuenta. Si falta alguna o están vacías, el login sale vacío como siempre.
+
+- Las lee solo la página de login, en el servidor (`lib/demo-login.ts`, validadas con Zod). No llegan al bundle del cliente ni a otras rutas.
+- Un correo mal escrito hace fallar la página en vez de prellenar algo inválido.
+- Nada de la cuenta está escrito en el código: vive solo en las variables de Vercel.
+- **Se quitan cuando termine la evaluación.** Al borrarlas (o dejarlas vacías) y redesplegar, el login vuelve a su forma normal. Conviene además cambiar la contraseña de esa cuenta.
+
 ## Pruebas
 
 ```bash
