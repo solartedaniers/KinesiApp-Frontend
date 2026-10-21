@@ -449,7 +449,14 @@
     "kneeTitle": "Your knee peaks by movement",
     "kneeLead": "Minimum, median and maximum of your sessions over the risk-free range of the latest analysis of each movement.",
     "loading": "Loading your statistics…",
-    "emptyBody": "Once you have processed analyses you will see your gauges and progress here."
+    "emptyBody": "Once you have processed analyses you will see your gauges and progress here.",
+    "group": {
+      "emptyBody": "Once there are processed analyses you'll see the gauges and the risk trend here.",
+      "trendLabel": "Risk score of the last {count} sessions, from {first} to {last}",
+      "trendEmptyBody": "With two processed analyses you'll see how the risk changes.",
+      "kneeTitle": "Knee peaks by movement",
+      "kneeLead": "Minimum, median and maximum of the sessions over the risk-free range of each movement's latest analysis."
+    }
   },
   "riskChart": {
     "title": "Risk over time",

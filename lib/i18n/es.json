@@ -449,7 +449,14 @@
     "kneeTitle": "Tus picos de rodilla por movimiento",
     "kneeLead": "Mínimo, mediana y máximo de tus sesiones sobre el rango sin riesgo del último análisis de cada movimiento.",
     "loading": "Cargando tus estadísticas…",
-    "emptyBody": "Cuando tengas análisis procesados verás aquí tus medidores y tu evolución."
+    "emptyBody": "Cuando tengas análisis procesados verás aquí tus medidores y tu evolución.",
+    "group": {
+      "emptyBody": "Cuando haya análisis procesados verás aquí los medidores y la evolución del riesgo.",
+      "trendLabel": "Puntaje de riesgo de las últimas {count} sesiones, de {first} a {last}",
+      "trendEmptyBody": "Con dos análisis procesados verás cómo cambia el riesgo.",
+      "kneeTitle": "Picos de rodilla por movimiento",
+      "kneeLead": "Mínimo, mediana y máximo de las sesiones sobre el rango sin riesgo del último análisis de cada movimiento."
+    }
   },
   "riskChart": {
     "title": "Evolución del riesgo",

@@ -6,8 +6,7 @@ import { RiskTrend } from "@/components/instrument/charts/RiskTrend";
 import { EmptyState } from "@/components/instrument/States";
 import { NAV_BY_ROLE } from "@/lib/access";
 import { countInTarget, repetitionKneePeaks } from "@/lib/analysis-reading";
-import { riskLevel, sortByRecordedDesc } from "@/lib/analysis-stats";
-import { type RiskSession, riskTrendData } from "@/lib/charts/trend";
+import { riskSessions, riskTrendData } from "@/lib/charts/trend";
 import { cssVars } from "@/lib/design/css";
 import { getAnalysis, listAnalysesByAthlete } from "@/lib/data/analyses";
 import { getMyAthleteProfile } from "@/lib/data/athletes";
@@ -29,13 +28,6 @@ export async function myAnalyses(): Promise<AnalysisSummary[]> {
   const profile = await getMyAthleteProfile();
   if (!profile) redirect(ROUTES.onboarding);
   return listAnalysesByAthlete(profile.id);
-}
-
-/** Sesiones procesadas en orden cronológico, para la tendencia del riesgo. */
-export function riskSessions(analyses: AnalysisSummary[]): RiskSession[] {
-  return sortByRecordedDesc(analyses)
-    .reverse()
-    .flatMap((a) => (a.risk_score === null ? [] : [{ date: a.recorded_at, score: a.risk_score, level: a.risk_level ?? riskLevel(a.risk_score) }]));
 }
 
 const lastProcessed = (analyses: AnalysisSummary[]) => analyses.find((a) => a.status === "processed");

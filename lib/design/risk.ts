@@ -1,3 +1,5 @@
+import { RISK_THRESHOLDS } from "../analysis-stats.ts";
+
 // Niveles de riesgo que calcula el backend (RiskLevel del contrato), en el orden de la escala.
 export const RISK_LEVELS = ["low", "moderate", "high"] as const;
 export type RiskLevel = (typeof RISK_LEVELS)[number];
@@ -15,3 +17,11 @@ export const RISK_TONE: Record<RiskLevel, { stroke: string; fill: string; text: 
   high: { stroke: "stroke-risk-high", fill: "fill-risk-high", text: "text-risk-high", tint: "var(--kin-risk-high)" },
 };
 export const RISK_SOFT: Record<RiskLevel, string> = { low: "bg-risk-low-soft", moderate: "bg-risk-moderate-soft", high: "bg-risk-high-soft" };
+
+// El medidor de riesgo va de 0 a 100 % con las tres bandas de nivel pintadas en la esfera
+export const RISK_DIAL_MAX = 100;
+export const RISK_DIAL_BANDS = [
+  { key: "low", from: 0, to: RISK_THRESHOLDS.moderate * RISK_DIAL_MAX, stroke: "stroke-risk-low" },
+  { key: "moderate", from: RISK_THRESHOLDS.moderate * RISK_DIAL_MAX, to: RISK_THRESHOLDS.high * RISK_DIAL_MAX, stroke: "stroke-risk-moderate" },
+  { key: "high", from: RISK_THRESHOLDS.high * RISK_DIAL_MAX, to: RISK_DIAL_MAX, stroke: "stroke-risk-high" },
+];
