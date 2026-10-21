@@ -40,6 +40,10 @@ export class SystemGateway {
       athlete_min_age_years: policy.athleteMinAgeYears,
       athlete_max_age_years: policy.athleteMaxAgeYears,
       chat_message_max_chars: policy.chatMessageMaxChars,
+      min_height_cm: policy.biometrics?.minHeightCm ?? 0,
+      max_height_cm: policy.biometrics?.maxHeightCm ?? 0,
+      min_weight_kg: policy.biometrics?.minWeightKg ?? 0,
+      max_weight_kg: policy.biometrics?.maxWeightKg ?? 0,
     };
   }
 

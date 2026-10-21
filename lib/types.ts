@@ -139,6 +139,10 @@ export type ClientPolicy = {
   athlete_min_age_years: number;
   athlete_max_age_years: number;
   chat_message_max_chars: number;
+  min_height_cm: number;
+  max_height_cm: number;
+  min_weight_kg: number;
+  max_weight_kg: number;
 };
 
 export type AiState = "warming_up" | "ready";
