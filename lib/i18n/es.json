@@ -323,7 +323,16 @@
       "waking": "Encendiendo la IA…",
       "coldStart": "La IA estaba en reposo. La primera vez tarda un poco más en arrancar; después el análisis sigue solo.",
       "frames": "{done} de {total} cuadros"
-    }
+    },
+    "title": "{movement} del {date}",
+    "preparing": "Preparando la línea de tiempo…",
+    "peakTrunk": "Inclinación máxima del tronco",
+    "inTarget": "{count} de {total} en el rango sin riesgo",
+    "risk": "Riesgo de la serie",
+    "chat": "Preguntarle a la IA",
+    "timelineTitle": "Línea de tiempo sincronizada",
+    "timelineLead": "El video, las lecturas y la gráfica comparten el mismo cabezal. Toca una repetición para saltar a ella.",
+    "retry": "Reintentar"
   },
   "joints": {
     "knee_flexion": "Flexión de rodilla",

@@ -2,10 +2,12 @@
 // datos reales (flexión de rodilla e inclinación del tronco por frame, repeticiones con su puntaje).
 // Es determinista (semilla fija) para que el render del servidor y el del cliente coincidan.
 import { VIDEO_MAX_SECONDS } from "../config.ts";
+import type { AngleSample } from "../analysis-timeline.ts";
 import type { RiskLevel } from "./risk";
 
+export type { AngleSample };
+
 export type SampleJoint = "knee" | "trunk";
-export type AngleSample = { ms: number; degrees: number };
 export type SampleRepetition = { startMs: number; endMs: number; score: number; level: RiskLevel; peakKnee: number };
 export type SampleSession = { date: string; score: number; level: RiskLevel };
 
@@ -61,16 +63,3 @@ export const SAMPLE_SESSIONS: SampleSession[] = [0.71, 0.64, 0.58, 0.61, 0.47, 0
   score,
   level: levelFor(score),
 }));
-
-/** Valor de una serie en un instante: la muestra más cercana anterior (búsqueda binaria). */
-export function valueAt(samples: readonly AngleSample[], ms: number): number | null {
-  if (samples.length === 0 || ms < samples[0].ms) return null;
-  let low = 0;
-  let high = samples.length - 1;
-  while (low < high) {
-    const middle = (low + high + 1) >> 1;
-    if (samples[middle].ms <= ms) low = middle;
-    else high = middle - 1;
-  }
-  return samples[low].degrees;
-}

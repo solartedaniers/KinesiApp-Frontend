@@ -323,7 +323,16 @@
       "waking": "Starting the AI…",
       "coldStart": "The AI was asleep. It takes a little longer to start the first time; then the analysis continues by itself.",
       "frames": "{done} of {total} frames"
-    }
+    },
+    "title": "{movement} on {date}",
+    "preparing": "Preparing the timeline…",
+    "peakTrunk": "Peak trunk lean",
+    "inTarget": "{count} of {total} in the risk-free range",
+    "risk": "Risk of the set",
+    "chat": "Ask the AI",
+    "timelineTitle": "Synchronized timeline",
+    "timelineLead": "The video, the readings and the chart share the same playhead. Tap a repetition to jump to it.",
+    "retry": "Try again"
   },
   "joints": {
     "knee_flexion": "Knee flexion",

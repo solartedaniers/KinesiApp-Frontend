@@ -1,5 +1,6 @@
 import { useId } from "react";
 
+import { Glyph } from "./Glyph";
 import { PoseFigure } from "./PoseFigure";
 
 import { dialArc } from "@/lib/charts/dial";
@@ -100,5 +101,24 @@ export function AnalysisProgress({ stage, fraction, labels }: Props) {
         </svg>
       </div>
     </div>
+  );
+}
+
+/** Lista de etapas junto al anillo: hechas con su marca, la actual en un pozo con el punto que late. */
+export function StageList({ stage, names }: { stage: number; names: Record<AnalysisStage, string> }) {
+  return (
+    <ol className="grid gap-1.5">
+      {ANALYSIS_STAGES.map((name, i) => {
+        const status = i < stage ? "done" : i === stage ? "current" : "pending";
+        return (
+          <li key={name} className={`flex min-h-9 items-center gap-3 rounded-panel px-3 text-sm ${status === "current" ? "kin-well font-semibold text-ink" : status === "done" ? "text-ink" : "text-ink-muted"}`} aria-current={status === "current" ? "step" : undefined}>
+            <span className={`grid size-6 flex-none place-items-center rounded-full ${status === "done" ? "bg-zone-target-soft text-zone-target" : status === "current" ? "bg-panel" : "bg-sunken"}`} aria-hidden>
+              {status === "done" ? <Glyph name="check" size={14} /> : <span className={`size-1.5 rounded-full ${status === "current" ? `kin-waking ${STAGE_COLOR[name].bg} text-ink` : "bg-line-strong"}`} />}
+            </span>
+            {names[name]}
+          </li>
+        );
+      })}
+    </ol>
   );
 }

@@ -1,0 +1,81 @@
+import { ViewTransition } from "react";
+
+import { CountUp } from "@/components/instrument/CountUp";
+import { Dial } from "@/components/instrument/Dial";
+import { RiskScale } from "@/components/instrument/Status";
+import { countInTarget, repetitionKneePeaks } from "@/lib/analysis-reading";
+import { riskLevel } from "@/lib/analysis-stats";
+import { cssVars } from "@/lib/design/css";
+import { RISK_FILL, RISK_STEP, RISK_TEXT } from "@/lib/design/risk";
+import { ZONE_CLASS, zoneOf } from "@/lib/design/signals";
+import { format } from "@/lib/i18n";
+import { getFormat, getT } from "@/lib/i18n/server";
+import type { JumpAnalysis } from "@/lib/types";
+
+// La inclinación del tronco rara vez pasa de 60°; con 90 la aguja usa bien la esfera
+const TRUNK_DIAL_MAX = 90;
+
+/** Las tres tarjetas del resultado como en la guía: rodilla, tronco y repeticiones con el riesgo. */
+export async function ResultGauges({ analysis }: { analysis: JumpAnalysis }) {
+  const [t, f] = await Promise.all([getT(), getFormat()]);
+  const d = t.analysisDetail;
+  const knee = analysis.knee_median_peak_degrees;
+  const target = analysis.knee_target;
+  const trunk = analysis.angle_measurements.filter((m) => m.joint_name === "trunk_inclination").map((m) => m.angle_degrees);
+  const trunkPeak = trunk.length ? Math.max(...trunk) : null;
+  const peaks = analysis.risk_assessment ? repetitionKneePeaks(analysis.risk_assessment) : [];
+  const measured = peaks.filter((peak) => peak !== null);
+  const inTarget = target ? countInTarget(peaks, target) : null;
+  const level = analysis.risk_level ?? (analysis.risk_score === null ? null : riskLevel(analysis.risk_score));
+  // Sin rango, cada repetición se pinta con su riesgo: el patrón que más puntuó en ella
+  const repColor = (i: number) => {
+    const peak = peaks[i];
+    if (target && peak !== null) return ZONE_CLASS[zoneOf(peak, target)];
+    const worst = Math.max(0, ...(analysis.risk_assessment?.repetitions[i].pattern_scores.map((s) => s.score ?? 0) ?? []));
+    return { bg: RISK_FILL[riskLevel(worst)], text: RISK_TEXT[riskLevel(worst)] };
+  };
+
+  return (
+    <div className="grid gap-4 md:grid-cols-3">
+      <article className="kin-card kin-tinted grid content-start gap-3 p-5" aria-labelledby="result-knee">
+        <h2 id="result-knee" className="text-sm font-semibold text-ink-muted">{t.analysis.kneeMedian}</h2>
+        {knee !== null ? (
+          <ViewTransition name="kin-last-analysis" share="kin-morph" default="none">
+            <Dial value={knee} peak={measured.length ? Math.max(...measured) : undefined} target={target} labels label={`${t.analysis.kneeMedian}: ${f.degrees(knee)}`} className="mx-auto w-full max-w-[15rem]">
+              <CountUp value={knee} text={f.degrees(knee)} className="font-display text-3xl font-bold text-knee" />
+            </Dial>
+          </ViewTransition>
+        ) : (
+          <p className="text-sm text-ink-muted">{t.analysis.noKnee}</p>
+        )}
+      </article>
+      <article className="kin-card kin-tinted grid content-start gap-3 p-5" style={cssVars({ "--tint": "var(--kin-trunk)" })} aria-labelledby="result-trunk">
+        <h2 id="result-trunk" className="text-sm font-semibold text-ink-muted">{d.peakTrunk}</h2>
+        {trunkPeak !== null && (
+          <Dial value={trunkPeak} peak={trunkPeak} signal="trunk" max={TRUNK_DIAL_MAX} labels delayMs={150} label={`${d.peakTrunk}: ${f.degrees(trunkPeak)}`} className="mx-auto w-full max-w-[15rem]">
+            <CountUp value={trunkPeak} text={f.degrees(trunkPeak)} delayMs={150} className="font-display text-3xl font-bold text-trunk" />
+          </Dial>
+        )}
+      </article>
+      <article className="kin-card kin-tinted grid content-start gap-4 p-5" style={cssVars({ "--tint": "var(--kin-zone-target)" })} aria-labelledby="result-reps">
+        <h2 id="result-reps" className="text-sm font-semibold text-ink-muted">{t.analysis.repetitions}</h2>
+        <p className="font-display text-score font-bold text-ink"><CountUp value={peaks.length} text={String(peaks.length)} delayMs={300} /></p>
+        {peaks.length > 0 && (
+          <ol className="flex gap-1.5" aria-label={inTarget === null ? t.analysis.repetitions : format(d.inTarget, { count: inTarget, total: peaks.length })}>
+            {peaks.map((_, i) => (
+              <li key={i} className={`kin-light h-8 flex-1 rounded-full ${repColor(i).bg} ${repColor(i).text}`} style={cssVars({ "--i": i })} />
+            ))}
+          </ol>
+        )}
+        {inTarget !== null && <p className="text-sm text-ink">{format(d.inTarget, { count: inTarget, total: peaks.length })}</p>}
+        {level && analysis.risk_score !== null && (
+          <div className="grid gap-1.5">
+            <span className="text-xs text-ink-muted">{d.risk}</span>
+            <RiskScale level={level} label={t.analysis.risk[level]} steps={format(t.analysis.riskSteps, { step: RISK_STEP[level] })} value={f.percent(analysis.risk_score)} />
+            <p className="text-sm text-ink-muted">{d.riskExplanation[level]}</p>
+          </div>
+        )}
+      </article>
+    </div>
+  );
+}

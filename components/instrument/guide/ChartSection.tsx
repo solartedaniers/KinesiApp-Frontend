@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { GuideSection, Specimen } from "./GuideSection";
-import { AngleTimeline } from "../charts/AngleTimeline";
+import { SimulatedTimeline } from "../charts/SimulatedTimeline";
 import { RangeComparison } from "../charts/RangeComparison";
 import { RiskTrend } from "../charts/RiskTrend";
 import { Glyph } from "../Glyph";
@@ -26,7 +26,7 @@ export async function ChartSection() {
   return (
     <GuideSection id="charts" title={t.styleGuide.sections.charts} lead={c.lead} tint="var(--kin-center)">
       <Specimen title={c.timeline} lead={c.timelineLead} className={card}>
-        <AngleTimeline knee={GUIDE_SAMPLE.knee} trunk={GUIDE_SAMPLE.trunk} repetitions={GUIDE_SAMPLE.timeline} durationMs={GUIDE_SAMPLE.durationMs} target={GUIDE_SAMPLE.kneeTarget} zoneNames={t.analysis.kneeZones[GUIDE_SAMPLE.movement]} />
+        <SimulatedTimeline knee={GUIDE_SAMPLE.knee} trunk={GUIDE_SAMPLE.trunk} repetitions={GUIDE_SAMPLE.timeline} durationMs={GUIDE_SAMPLE.durationMs} target={GUIDE_SAMPLE.kneeTarget} zoneNames={t.analysis.kneeZones[GUIDE_SAMPLE.movement]} />
       </Specimen>
       <div className="grid gap-5 lg:grid-cols-2">
         <Specimen title={c.trend} lead={c.trendLead} className={card}>

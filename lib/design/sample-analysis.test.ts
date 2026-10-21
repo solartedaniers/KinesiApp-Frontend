@@ -2,7 +2,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { SAMPLE_ANALYSIS, SAMPLE_DURATION_MS, valueAt } from "./sample-analysis.ts";
+import { valueAt } from "../analysis-timeline.ts";
+import { SAMPLE_ANALYSIS, SAMPLE_DURATION_MS } from "./sample-analysis.ts";
 
 test("cubre 40 s a 30 fps con las dos articulaciones y diez repeticiones", () => {
   assert.equal(SAMPLE_ANALYSIS.knee.length, 1200);

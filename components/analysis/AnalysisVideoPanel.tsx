@@ -1,17 +1,18 @@
-import { AnalysisVideo } from "@/components/AnalysisVideo";
-import { riskLevel } from "@/lib/analysis-stats";
 import { getPlaybackUrl } from "@/lib/data/analyses";
 import type { JumpAnalysis } from "@/lib/types";
 
-/** Pide la URL firmada en el servidor (GetVideoPlaybackUrl) y entrega el <video> ya listo. */
+import { VideoTimeline } from "./VideoTimeline";
+
+/** Pide la URL firmada en el servidor (GetVideoPlaybackUrl) y entrega la línea de tiempo con el video. */
 export async function AnalysisVideoPanel({ analysis }: { analysis: JumpAnalysis }) {
-  const video = await getPlaybackUrl(analysis.id);
   return (
-    <AnalysisVideo
+    <VideoTimeline
       analysisId={analysis.id}
-      initial={video}
+      initial={await getPlaybackUrl(analysis.id)}
       measurements={analysis.angle_measurements}
-      risk={analysis.risk_score === null ? undefined : riskLevel(analysis.risk_score)}
+      assessment={analysis.risk_assessment}
+      target={analysis.knee_target}
+      movement={analysis.movement_type}
     />
   );
 }

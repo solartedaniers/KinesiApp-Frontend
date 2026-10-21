@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ViewTransition } from "react";
 
 import { Button } from "@/components/instrument/Button";
-import { AngleTimeline } from "@/components/instrument/charts/AngleTimeline";
+import { SimulatedTimeline } from "@/components/instrument/charts/SimulatedTimeline";
 import { CountUp } from "@/components/instrument/CountUp";
 import { Dial } from "@/components/instrument/Dial";
 import { ConfirmDialog } from "@/components/instrument/Dialog";
@@ -79,7 +79,7 @@ export default async function AnalysisScreen() {
           <h2 id="analysis-timeline" className="font-display text-xl font-semibold text-ink">{t.styleGuide.charts.timeline}</h2>
           <p className="text-sm text-ink-muted">{t.styleGuide.charts.timelineLead}</p>
         </div>
-        <AngleTimeline knee={sample.knee} trunk={sample.trunk} repetitions={sample.timeline} durationMs={sample.durationMs} target={target} zoneNames={t.analysis.kneeZones[sample.movement]} />
+        <SimulatedTimeline knee={sample.knee} trunk={sample.trunk} repetitions={sample.timeline} durationMs={sample.durationMs} target={target} zoneNames={t.analysis.kneeZones[sample.movement]} />
         <p className="text-sm text-ink-muted">{t.analysis.rangesNote}</p>
       </section>
     </ScreenShell>

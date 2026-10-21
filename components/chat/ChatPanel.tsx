@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { LogoMark } from "@/components/brand/LogoMark";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/instrument/Button";
+import { Glyph } from "@/components/instrument/Glyph";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { sendChatMessage, startConversation } from "@/lib/actions/chat";
 import type { ChatEvent } from "@/lib/analysis-events";
@@ -75,7 +75,7 @@ export function ChatPanel({ analysisId, messages: initial }: { analysisId: strin
             <li key={message.id} className={styles[message.role]}>
               {message.role === "assistant" && (
                 <span className={styles.author} aria-hidden>
-                  <LogoMark size={18} />
+                  <Glyph name="ai" size={18} />
                   {t.chat.roles.assistant}
                 </span>
               )}
@@ -104,7 +104,7 @@ export function ChatPanel({ analysisId, messages: initial }: { analysisId: strin
             onChange={(event) => setContent(event.target.value)}
             required
           />
-          <Button type="submit" pending={busy} pendingLabel={t.chat.sending} className={styles.send}>
+          <Button type="submit" glyph="chat" pending={busy} className={styles.send}>
             {t.chat.send}
           </Button>
         </div>

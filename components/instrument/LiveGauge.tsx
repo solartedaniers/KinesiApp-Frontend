@@ -7,7 +7,7 @@ import { PoseFigure } from "./PoseFigure";
 import { ZoneChip } from "./Status";
 
 import { squatPoseAt } from "@/lib/design/pose";
-import { type AngleSample, valueAt } from "@/lib/design/sample-analysis";
+import { type AngleSample, valueAt } from "@/lib/analysis-timeline";
 import { type KneeTarget, targetText, zoneOf } from "@/lib/design/signals";
 import { format } from "@/lib/i18n";
 import { useFormat, useT } from "@/lib/i18n/client";

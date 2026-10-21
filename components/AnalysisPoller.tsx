@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { type AnalysisStage as RingStage, AnalysisProgress as ProgressRing } from "@/components/instrument/AnalysisProgress";
+import { type AnalysisStage as RingStage, AnalysisProgress as ProgressRing, StageList } from "@/components/instrument/AnalysisProgress";
 import { Notice } from "@/components/instrument/Status";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/instrument/Button";
 import { watchAnalysis } from "@/lib/actions/analyses";
 import { useAiStatus, useWakeAi } from "@/lib/ai-status/use-ai-status";
 import { format } from "@/lib/i18n";
@@ -58,6 +58,7 @@ export function AnalysisPoller({ analysisId }: { analysisId: string }) {
         <p className="text-sm text-ink">{t.analysisDetail.pendingStalled}</p>
         <Button
           variant="secondary"
+          glyph="play"
           onClick={() => {
             setStalled(false);
             setSubscription((current) => current + 1);
@@ -78,12 +79,13 @@ export function AnalysisPoller({ analysisId }: { analysisId: string }) {
   ) as Record<RingStage, string>;
 
   return (
-    <section className="kin-card grid items-center gap-6 p-5 sm:grid-cols-[minmax(0,13rem)_1fr] sm:p-6" aria-labelledby="analysis-pending-title">
+    <section data-theme="dark" className="kin-card kin-tinted grid items-center gap-6 p-5 sm:p-8 md:grid-cols-[minmax(0,20rem)_1fr]" aria-labelledby="analysis-pending-title">
       <ProgressRing stage={index} fraction={fraction} labels={{ title: p.label, stage: p.stage, stageNames, done: p.done }} />
-      <div className="grid content-start gap-3">
+      <div className="grid content-start gap-4">
         <h2 id="analysis-pending-title" className="font-display text-xl font-semibold text-ink">{t.analysisDetail.pendingTitle}</h2>
         {/* Solo el nombre de la etapa va en la región viva: el conteo de cuadros cambia demasiado seguido */}
-        <p className="font-display text-2xl font-bold text-accent" role="status">{stageNames[RING_STAGE[stage]]}</p>
+        <p className="visually-hidden" role="status">{stageNames[RING_STAGE[stage]]}</p>
+        <StageList stage={index} names={stageNames} />
         {stage === "extracting_pose" && progress?.frames_total ? (
           <p className="text-sm text-ink-muted [font-variant-numeric:tabular-nums]">{format(p.frames, { done: progress.frames_processed, total: progress.frames_total })}</p>
         ) : null}

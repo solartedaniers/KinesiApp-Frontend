@@ -4,25 +4,22 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { AnalysisPoller } from "@/components/AnalysisPoller";
-import { AnalysisResult } from "@/components/analysis/AnalysisResult";
 import { AnalysisVideoPanel } from "@/components/analysis/AnalysisVideoPanel";
-import { AngleCharts } from "@/components/analysis/AngleCharts";
-import { pageStyles } from "@/components/app/page-classes";
-import { Section } from "@/components/app/Section";
-import { ChartSkeleton } from "@/components/app/Skeleton";
+import { ResultGauges } from "@/components/analysis/ResultGauges";
 import { AnalysisChatCard } from "@/components/chat/AnalysisChatCard";
-import { ChatCardSkeleton } from "@/components/chat/ChatCardSkeleton";
-import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { ButtonLink } from "@/components/ui/Button";
-import { FormAlert } from "@/components/ui/FormAlert";
-import { Icon } from "@/components/ui/Icon";
+import { ButtonLink } from "@/components/instrument/Button";
+import { ConfirmDialog } from "@/components/instrument/Dialog";
+import { Glyph } from "@/components/instrument/Glyph";
+import { ErrorState, LoadingState } from "@/components/instrument/States";
 import { analysesListHref, SECTION_ROLES } from "@/lib/access";
 import { deleteAnalysis } from "@/lib/actions/analyses";
 import { getAnalysis } from "@/lib/data/analyses";
 import { listMyAthletes } from "@/lib/data/coach";
+import { cssVars } from "@/lib/design/css";
 import { requireRole } from "@/lib/guard";
+import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
-import { reportPath, parseId } from "@/lib/routes";
+import { parseId, reportPath } from "@/lib/routes";
 
 // Las Server Actions de esta página sostienen los streams de WatchAnalysis y del chat (hasta
 // GRPC_STREAM_TIMEOUT_MS): les doy el máximo de Vercel para que la función no los corte antes
@@ -34,92 +31,75 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * SSR + isla CSR en vivo: el servidor renderiza el estado actual; si está en proceso, AnalysisPoller
- * sigue WatchAnalysis hasta el resultado y pide un nuevo render. El video va en su propio
- * Suspense: la URL firmada no retrasa el resto de la página.
+ * SSR con streaming más islas de cliente: el servidor renderiza los medidores; si el análisis sigue
+ * en proceso, AnalysisPoller escucha WatchAnalysis y pide otro render al terminar. El video y el chat
+ * van cada uno en su Suspense: la URL firmada y el hilo no retrasan el resto.
  */
 export default async function AnalysisPage({ params }: PageProps<"/analyses/[id]">) {
-  const t = await getT();
-  const fmt = await getFormat();
+  const [t, f] = await Promise.all([getT(), getFormat()]);
+  const d = t.analysisDetail;
   const user = await requireRole(SECTION_ROLES.analysis);
   const analysisId = parseId((await params).id);
   if (!analysisId) notFound();
   const analysis = await getAnalysis(analysisId);
-  // El coach ve grabaciones de varios deportistas: el subtítulo dice de quién es
-  const coachAthlete =
-    user.role === "coach" ? (await listMyAthletes()).find((athlete) => athlete.id === analysis.athlete_id) : undefined;
-  const athleteName = coachAthlete?.display_name;
+  // El coach ve grabaciones de varios deportistas: el encabezado dice de quién es
+  const coachAthlete = user.role === "coach" ? (await listMyAthletes()).find((athlete) => athlete.id === analysis.athlete_id) : undefined;
   // Borra el dueño; el coach sólo las de sus deportistas gestionados (las de uno con cuenta son suyas)
   const canDelete = user.role === "athlete" || coachAthlete?.is_managed === true;
-  const recordedAt = fmt.dateTime(analysis.recorded_at);
+  const processed = analysis.status === "processed";
 
   return (
-    <div className={pageStyles.page}>
-      <Link href={analysesListHref(user.role)} className={pageStyles.backLink}>
-        <Icon name="chevronRight" size={16} />
-        {t.analysisDetail.back}
+    <>
+      <Link href={analysesListHref(user.role)} className="inline-flex w-fit items-center gap-1 text-sm font-semibold">
+        <Glyph name="chevronLeft" size={16} />
+        {d.back}
       </Link>
-      <div className={pageStyles.headerRow}>
-        <header className={pageStyles.header}>
-          <h1 className={pageStyles.title}>{t.analysis.movement[analysis.movement_type]}</h1>
-          <p className="flex flex-wrap gap-x-3 text-ink-muted">
-            {athleteName && <span className="font-medium text-ink">{athleteName}</span>}
-            <span>{recordedAt}</span>
-          </p>
-        </header>
-        <div className={pageStyles.actions}>
-          {analysis.status === "processed" && (
-            <ButtonLink href={reportPath(analysis.id)} variant="secondary">
-              <Icon name="upload" size={18} />
-              {t.report.export}
-            </ButtonLink>
-          )}
+      <section aria-labelledby="analysis-title" className="flex flex-wrap items-end justify-between gap-4">
+        <div className="grid gap-1">
+          {coachAthlete && <p className="text-sm font-semibold text-ink-muted">{coachAthlete.display_name}</p>}
+          <h1 id="analysis-title" className="font-display text-3xl font-bold tracking-tight text-ink sm:text-hero">
+            {format(d.title, { movement: t.analysis.movement[analysis.movement_type], date: f.shortDate(analysis.recorded_at) })}
+          </h1>
+          <p className="text-sm text-ink-muted">{f.dateTime(analysis.recorded_at)}</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {processed && <ButtonLink href="#chat" glyph="chat">{d.chat}</ButtonLink>}
+          {processed && <ButtonLink href={reportPath(analysis.id)} variant="secondary" glyph="download">{t.report.download}</ButtonLink>}
           {canDelete && (
             <ConfirmDialog
-              triggerLabel={t.analysisDetail.delete}
-              title={t.analysisDetail.deleteTitle}
-              body={t.analysisDetail.deleteBody}
-              confirmLabel={t.common.delete}
+              labels={{ open: t.common.delete, title: d.deleteTitle, body: d.deleteBody, confirm: t.common.delete, cancel: t.common.cancel }}
               action={deleteAnalysis.bind(null, analysis.id)}
             />
           )}
         </div>
-      </div>
+      </section>
 
       {analysis.status === "pending" && <AnalysisPoller analysisId={analysis.id} />}
-      {analysis.status === "failed" && (
-        <FormAlert tone="error">
-          <strong>{t.analysisDetail.failedTitle}</strong>
-          <p>{t.analysisDetail.failedBody}</p>
-        </FormAlert>
-      )}
+      {analysis.status === "failed" && <ErrorState title={d.failedTitle} body={d.failedBody} />}
 
-      {/* El video con la línea de tiempo es el protagonista: ocupa el ancho; el resultado va al costado */}
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_19rem] xl:grid-cols-[minmax(0,1fr)_21rem]">
-        <section aria-label={t.analysisDetail.video}>
-          <Suspense fallback={<ChartSkeleton />}>
-            <AnalysisVideoPanel analysis={analysis} />
-          </Suspense>
-        </section>
-        <AnalysisResult analysis={analysis} />
-      </div>
-
-      {/* La explicación de la IA llega sola apenas el resultado está listo; se puede seguir preguntando */}
-      {analysis.status === "processed" && (
-        <Section title={t.chat.title}>
-          <Suspense fallback={<ChatCardSkeleton />}>
-            <AnalysisChatCard analysisId={analysis.id} />
-          </Suspense>
-        </Section>
-      )}
-
-      {analysis.status === "processed" && (
-        <Section title={t.analysisDetail.angles}>
-          <AngleCharts measurements={analysis.angle_measurements} />
-        </Section>
+      {processed && (
+        <>
+          <ResultGauges analysis={analysis} />
+          <section aria-labelledby="analysis-timeline" className="kin-card grid gap-5 p-5 sm:p-6" style={cssVars({ "--tint": "var(--kin-center)" })}>
+            <div className="grid gap-1">
+              <h2 id="analysis-timeline" className="font-display text-xl font-semibold text-ink">{d.timelineTitle}</h2>
+              <p className="text-sm text-ink-muted">{d.timelineLead}</p>
+            </div>
+            <Suspense fallback={<LoadingState label={d.preparing} />}>
+              <AnalysisVideoPanel analysis={analysis} />
+            </Suspense>
+            {analysis.knee_target && <p className="text-sm text-ink-muted">{t.analysis.rangesNote}</p>}
+          </section>
+          <section id="chat" aria-labelledby="analysis-chat" className="grid scroll-mt-24 gap-3">
+            <h2 id="analysis-chat" className="font-display text-xl font-semibold text-ink">{t.chat.title}</h2>
+            <Suspense fallback={<LoadingState label={t.chat.preparing} />}>
+              <AnalysisChatCard analysisId={analysis.id} />
+            </Suspense>
+          </section>
+        </>
       )}
 
       <p className="text-sm text-ink-muted">{t.app.disclaimer}</p>
-    </div>
+    </>
   );
 }

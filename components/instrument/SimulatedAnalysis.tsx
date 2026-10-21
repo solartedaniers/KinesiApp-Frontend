@@ -2,9 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { ANALYSIS_STAGES, AnalysisProgress, STAGE_COLOR } from "./AnalysisProgress";
+import { ANALYSIS_STAGES, AnalysisProgress, StageList } from "./AnalysisProgress";
 import { Button } from "./Button";
-import { Glyph } from "./Glyph";
 
 import { useT } from "@/lib/i18n/client";
 
@@ -47,19 +46,7 @@ export function SimulatedAnalysis({ replay = true, onDone }: { replay?: boolean;
     <div ref={root} className="grid items-center gap-6 md:grid-cols-[minmax(0,20rem)_1fr]">
       <AnalysisProgress stage={state.stage} fraction={state.fraction} labels={labels} />
       <div className="grid gap-4">
-        <ol className="grid gap-1.5">
-          {ANALYSIS_STAGES.map((name, i) => {
-            const status = i < state.stage ? "done" : i === state.stage ? "current" : "pending";
-            return (
-              <li key={name} className={`flex min-h-9 items-center gap-3 rounded-panel px-3 text-sm ${status === "current" ? "kin-well font-semibold text-ink" : status === "done" ? "text-ink" : "text-ink-muted"}`} aria-current={status === "current" ? "step" : undefined}>
-                <span className={`grid size-6 flex-none place-items-center rounded-full ${status === "done" ? "bg-zone-target-soft text-zone-target" : status === "current" ? "bg-panel" : "bg-sunken"}`} aria-hidden>
-                  {status === "done" ? <Glyph name="check" size={14} /> : <span className={`size-1.5 rounded-full ${status === "current" ? `kin-waking ${STAGE_COLOR[name].bg} text-ink` : "bg-line-strong"}`} />}
-                </span>
-                {t.stages[name]}
-              </li>
-            );
-          })}
-        </ol>
+        <StageList stage={state.stage} names={t.stages} />
         {state.stage >= ANALYSIS_STAGES.length && <p className="font-display text-xl font-semibold text-zone-target" role="status">{t.done}</p>}
         {replay && (
           <Button variant="secondary" glyph="play" className="justify-self-start" onClick={() => setRun((n) => n + 1)}>{t.replay}</Button>
