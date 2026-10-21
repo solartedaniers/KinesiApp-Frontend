@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "eslint",
     "pretest": "npm run vendor",
-    "test": "node --test --experimental-transform-types --no-warnings=ExperimentalWarning \"lib/**/*.test.ts\""
+    "test": "node --test --experimental-transform-types --no-warnings=ExperimentalWarning \"lib/**/*.test.ts\"",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@bufbuild/protobuf": "2.16.0",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@bufbuild/buf": "1.74.0",
     "@bufbuild/protoc-gen-es": "2.16.0",
+    "@playwright/test": "1.64.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^20",
     "@types/react": "^19",
