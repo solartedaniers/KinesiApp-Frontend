@@ -2,6 +2,8 @@ import { rpcReason } from "./grpc/errors";
 import { type Dictionary, format } from "./i18n";
 import { VALIDATION_PARAMS, type ValidationError } from "./validation";
 
+type ValidationParams = Partial<Record<ValidationError, Record<string, number>>>;
+
 // Todas reciben el diccionario activo: en el servidor sale de getT(), en el cliente de useT()
 
 /** Mensaje traducido de un motivo estable del backend (o del cliente); el genérico si no se conoce. */
@@ -13,15 +15,17 @@ export function errorMessage(t: Dictionary, error: unknown): string {
   return codeMessage(t, error ? rpcReason(error) : "GENERIC");
 }
 
-export function validationMessage(t: Dictionary, error: ValidationError): string {
-  return format(t.validation[error], VALIDATION_PARAMS[error] ?? {});
+/** `params` trae los valores que no son constantes del cliente, como los rangos de la ficha física. */
+export function validationMessage(t: Dictionary, error: ValidationError, params: ValidationParams = {}): string {
+  return format(t.validation[error], params[error] ?? VALIDATION_PARAMS[error] ?? {});
 }
 
 export function validationMessages<K extends string>(
   t: Dictionary,
   errors: Partial<Record<K, ValidationError>>,
+  params: ValidationParams = {},
 ): Partial<Record<K, string>> {
   return Object.fromEntries(
-    Object.entries(errors).map(([field, error]) => [field, validationMessage(t, error as ValidationError)]),
+    Object.entries(errors).map(([field, error]) => [field, validationMessage(t, error as ValidationError, params)]),
   ) as Partial<Record<K, string>>;
 }

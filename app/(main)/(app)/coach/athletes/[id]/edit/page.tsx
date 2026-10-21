@@ -10,6 +10,8 @@ import { SECTION_ROLES } from "@/lib/access";
 import { updateManagedAthlete } from "@/lib/actions/managed-athletes";
 import { confirmManagedAvatarUpload, removeManagedAvatar, startManagedAvatarUpload } from "@/lib/actions/profile";
 import { getMyAthlete } from "@/lib/data/coach";
+import { biometricsRules } from "@/lib/biometrics";
+import { getClientPolicy } from "@/lib/data/public";
 import { todayInAppTimeZone } from "@/lib/format";
 import { requireRole } from "@/lib/guard";
 import { getT } from "@/lib/i18n/server";
@@ -57,6 +59,7 @@ export default async function EditManagedAthletePage({ params }: PageProps<"/coa
             weight_kg: String(athlete.weight_kg),
           }}
           today={isoDate(todayInAppTimeZone())}
+          rules={biometricsRules(await getClientPolicy())}
           submitLabel={t.common.save}
           pendingLabel={t.common.saving}
         />

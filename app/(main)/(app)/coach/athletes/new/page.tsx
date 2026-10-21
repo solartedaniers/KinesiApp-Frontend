@@ -6,6 +6,8 @@ import { ManagedAthleteForm } from "@/components/coach/ManagedAthleteForm";
 import { Glyph } from "@/components/instrument/Glyph";
 import { SECTION_ROLES } from "@/lib/access";
 import { createManagedAthlete } from "@/lib/actions/managed-athletes";
+import { biometricsRules } from "@/lib/biometrics";
+import { getClientPolicy } from "@/lib/data/public";
 import { todayInAppTimeZone } from "@/lib/format";
 import { requireRole } from "@/lib/guard";
 import { getT } from "@/lib/i18n/server";
@@ -31,6 +33,7 @@ export default async function NewManagedAthletePage() {
         <ManagedAthleteForm
           action={createManagedAthlete}
           today={isoDate(todayInAppTimeZone())}
+          rules={biometricsRules(await getClientPolicy())}
           submitLabel={t.coach.createAthlete}
           pendingLabel={t.coach.creatingAthlete}
         />

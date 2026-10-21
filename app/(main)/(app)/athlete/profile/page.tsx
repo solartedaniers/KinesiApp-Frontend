@@ -9,6 +9,8 @@ import { BiometricsForm } from "@/components/athlete/BiometricsForm";
 import { SECTION_ROLES } from "@/lib/access";
 import { updateMyProfile } from "@/lib/actions/athletes";
 import { getMyAthleteProfile } from "@/lib/data/athletes";
+import { biometricsRules } from "@/lib/biometrics";
+import { getClientPolicy } from "@/lib/data/public";
 import { todayInAppTimeZone } from "@/lib/format";
 import { requireRole } from "@/lib/guard";
 import { getT } from "@/lib/i18n/server";
@@ -44,6 +46,7 @@ export default async function AthleteProfilePage() {
             weight_kg: String(profile.weight_kg),
           }}
           today={isoDate(todayInAppTimeZone())}
+          rules={biometricsRules(await getClientPolicy())}
           submitLabel={t.biometrics.submit}
           pendingLabel={t.biometrics.pending}
         />

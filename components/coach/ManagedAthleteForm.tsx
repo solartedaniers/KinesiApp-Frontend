@@ -9,6 +9,7 @@ import { FormAlert } from "@/components/ui/FormAlert";
 import { FullNameField } from "@/components/ui/FullNameField";
 import type { ManagedAthleteField } from "@/lib/actions/managed-athletes";
 import type { FormState } from "@/lib/form-state";
+import type { BiometricsRules } from "@/lib/validation";
 
 type ManagedAthleteAction = (
   previous: FormState<ManagedAthleteField>,
@@ -20,12 +21,14 @@ export function ManagedAthleteForm({
   action,
   initial,
   today,
+  rules,
   submitLabel,
   pendingLabel,
 }: {
   action: ManagedAthleteAction;
   initial?: Partial<Record<ManagedAthleteField, string>>;
   today: string;
+  rules: BiometricsRules;
   submitLabel: string;
   pendingLabel: string;
 }) {
@@ -36,7 +39,7 @@ export function ManagedAthleteForm({
     <form action={formAction} className={styles.form} noValidate>
       {state.error && <FormAlert tone="error">{state.error}</FormAlert>}
       <FullNameField defaultValue={values?.full_name} error={state.fieldErrors?.full_name} autoComplete="off" />
-      <BiometricsFields values={values} errors={state.fieldErrors} today={today} />
+      <BiometricsFields values={values} errors={state.fieldErrors} today={today} rules={rules} />
       <Button type="submit" block pending={pending} pendingLabel={pendingLabel} className={styles.submit}>
         {submitLabel}
       </Button>

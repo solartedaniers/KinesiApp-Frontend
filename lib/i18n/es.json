@@ -502,6 +502,8 @@
     "birthDateHint": "Tu edad se calcula sola a partir de esta fecha.",
     "heightCm": "Estatura (cm)",
     "weightKg": "Peso (kg)",
+    "heightHint": "En centímetros, entre {min} y {max} (ej.: 175).",
+    "weightHint": "En kilogramos, entre {min} y {max} (ej.: 72,5).",
     "submit": "Guardar ficha",
     "pending": "Guardando…",
     "saved": "Tu ficha se actualizó."
@@ -738,8 +740,8 @@
     "birthDateInFuture": "La fecha de nacimiento debe ser anterior a hoy.",
     "ageOutOfRange": "La edad debe estar entre {min} y {max} años.",
     "invalidNumber": "Ingresa un número, por ejemplo 72,5.",
-    "heightOutOfRange": "Ingresa una estatura entre 1 y {max} cm.",
-    "weightOutOfRange": "Ingresa un peso entre 1 y {max} kg."
+    "heightOutOfRange": "La estatura va en centímetros, entre {min} y {max} (ej.: 175).",
+    "weightOutOfRange": "El peso va en kilogramos, entre {min} y {max} (ej.: 72,5)."
   },
   "errors": {
     "GENERIC": "Ocurrió un error. Intenta de nuevo.",

@@ -7,6 +7,8 @@ import { LogoutButton } from "@/components/auth/LogoutButton";
 import { SECTION_ROLES } from "@/lib/access";
 import { createMyProfile } from "@/lib/actions/athletes";
 import { getMyAthleteProfile } from "@/lib/data/athletes";
+import { biometricsRules } from "@/lib/biometrics";
+import { getClientPolicy } from "@/lib/data/public";
 import { todayInAppTimeZone } from "@/lib/format";
 import { requireRole } from "@/lib/guard";
 import { getT } from "@/lib/i18n/server";
@@ -37,6 +39,7 @@ export default async function OnboardingPage() {
       <BiometricsForm
         action={createMyProfile}
         today={isoDate(todayInAppTimeZone())}
+        rules={biometricsRules(await getClientPolicy())}
         submitLabel={t.onboarding.submit}
         pendingLabel={t.onboarding.pending}
       />

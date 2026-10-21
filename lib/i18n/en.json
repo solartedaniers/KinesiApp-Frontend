@@ -502,6 +502,8 @@
     "birthDateHint": "Your age is calculated automatically from this date.",
     "heightCm": "Height (cm)",
     "weightKg": "Weight (kg)",
+    "heightHint": "In centimeters, between {min} and {max} (e.g. 175).",
+    "weightHint": "In kilograms, between {min} and {max} (e.g. 72.5).",
     "submit": "Save profile",
     "pending": "Saving…",
     "saved": "Your profile was updated."
@@ -738,8 +740,8 @@
     "birthDateInFuture": "The date of birth must be before today.",
     "ageOutOfRange": "The age must be between {min} and {max} years.",
     "invalidNumber": "Enter a number, for example 72.5.",
-    "heightOutOfRange": "Enter a height between 1 and {max} cm.",
-    "weightOutOfRange": "Enter a weight between 1 and {max} kg."
+    "heightOutOfRange": "Height goes in centimeters, between {min} and {max} (e.g. 175).",
+    "weightOutOfRange": "Weight goes in kilograms, between {min} and {max} (e.g. 72.5)."
   },
   "errors": {
     "GENERIC": "Something went wrong. Try again.",
