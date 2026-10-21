@@ -5,7 +5,6 @@ import { CountUp } from "@/components/instrument/CountUp";
 import { Dial } from "@/components/instrument/Dial";
 import { RiskScale, ZoneChip } from "@/components/instrument/Status";
 import { repetitionKneePeaks } from "@/lib/analysis-reading";
-import { riskLevel } from "@/lib/analysis-stats";
 import { RISK_STEP } from "@/lib/design/risk";
 import { zoneOf } from "@/lib/design/signals";
 import { format } from "@/lib/i18n";
@@ -22,7 +21,7 @@ export async function LastAnalysisCard({ analysis }: { analysis: JumpAnalysis })
   const peaks = analysis.risk_assessment ? repetitionKneePeaks(analysis.risk_assessment) : [];
   const measured = peaks.filter((peak) => peak !== null);
   const zone = knee !== null && target ? zoneOf(knee, target) : null;
-  const level = analysis.risk_level ?? (analysis.risk_score === null ? null : riskLevel(analysis.risk_score));
+  const level = analysis.risk_level;
   return (
     <section aria-labelledby="home-last" className="kin-card kin-tinted grid content-start gap-5 p-5 sm:p-6">
       <div className="flex items-center justify-between gap-3">

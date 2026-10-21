@@ -5,6 +5,7 @@ import { Dial } from "@/components/instrument/Dial";
 import { RiskScale } from "@/components/instrument/Status";
 import { countInTarget, repetitionKneePeaks } from "@/lib/analysis-reading";
 import { riskLevel } from "@/lib/analysis-stats";
+import { getRiskCuts } from "@/lib/data/public";
 import { cssVars } from "@/lib/design/css";
 import { RISK_FILL, RISK_STEP, RISK_TEXT } from "@/lib/design/risk";
 import { ZONE_CLASS, zoneOf } from "@/lib/design/signals";
@@ -17,7 +18,7 @@ const TRUNK_DIAL_MAX = 90;
 
 /** Las tres tarjetas del resultado como en la guía: rodilla, tronco y repeticiones con el riesgo. */
 export async function ResultGauges({ analysis }: { analysis: JumpAnalysis }) {
-  const [t, f] = await Promise.all([getT(), getFormat()]);
+  const [t, f, cuts] = await Promise.all([getT(), getFormat(), getRiskCuts()]);
   const d = t.analysisDetail;
   const knee = analysis.knee_median_peak_degrees;
   const target = analysis.knee_target;
@@ -26,13 +27,14 @@ export async function ResultGauges({ analysis }: { analysis: JumpAnalysis }) {
   const peaks = analysis.risk_assessment ? repetitionKneePeaks(analysis.risk_assessment) : [];
   const measured = peaks.filter((peak) => peak !== null);
   const inTarget = target ? countInTarget(peaks, target) : null;
-  const level = analysis.risk_level ?? (analysis.risk_score === null ? null : riskLevel(analysis.risk_score));
+  const level = analysis.risk_level;
   // Sin rango, cada repetición se pinta con su riesgo: el patrón que más puntuó en ella
   const repColor = (i: number) => {
     const peak = peaks[i];
     if (target && peak !== null) return ZONE_CLASS[zoneOf(peak, target)];
     const worst = Math.max(0, ...(analysis.risk_assessment?.repetitions[i].pattern_scores.map((s) => s.score ?? 0) ?? []));
-    return { bg: RISK_FILL[riskLevel(worst)], text: RISK_TEXT[riskLevel(worst)] };
+    const level = riskLevel(worst, cuts);
+    return { bg: RISK_FILL[level], text: RISK_TEXT[level] };
   };
 
   return (

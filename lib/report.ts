@@ -1,6 +1,5 @@
 // Contenido del informe en PDF: lógica pura (testeada en report.test.ts). El dibujo lo hace el worker.
 import { countInTarget, repetitionKneePeaks } from "./analysis-reading.ts";
-import { riskLevel } from "./analysis-stats.ts";
 import type { AngleSample, Timeline } from "./analysis-timeline.ts";
 import { COLORS, type PaletteColor } from "./design/palette.ts";
 import { targetText, type Zone, zoneOf, zoneSpans } from "./design/signals.ts";
@@ -121,7 +120,7 @@ export function buildReportModel({ source, timeline, t, f }: { source: ReportSou
   const knee = analysis.knee_median_peak_degrees;
   const peaks = analysis.risk_assessment ? repetitionKneePeaks(analysis.risk_assessment) : [];
   const trunkPeak = timeline.trunk.length ? Math.max(...timeline.trunk.map((s) => s.degrees)) : null;
-  const level = analysis.risk_level ?? (analysis.risk_score === null ? null : riskLevel(analysis.risk_score));
+  const level = analysis.risk_level;
   const zones = t.analysis.kneeZones[analysis.movement_type];
   const ink = paper("ink");
 

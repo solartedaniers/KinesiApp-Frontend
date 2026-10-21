@@ -11,6 +11,7 @@ import { Glyph } from "@/components/instrument/Glyph";
 import { EmptyState } from "@/components/instrument/States";
 import { createTeam, confirmTeamLogoUpload, deleteTeam, removeTeamLogo, renameTeam, setTeamMember, startTeamLogoUpload } from "@/lib/actions/teams";
 import { statsByAthlete } from "@/lib/analysis-stats";
+import { getRiskCuts } from "@/lib/data/public";
 import { cssVars } from "@/lib/design/css";
 import { listTeamAnalyses } from "@/lib/data/coach";
 import { format, plural } from "@/lib/i18n";
@@ -32,8 +33,8 @@ const sectionTitle = "font-display text-xl font-semibold text-ink";
 
 /** Lista de equipos + alta, la misma para el coach (sus equipos, con su riesgo) y el admin (todos, con su dueño). */
 export async function TeamsScreen({ section, teams, analyses, ownerNames }: { section: TeamSection; teams: Team[]; analyses?: AnalysisSummary[]; ownerNames?: Map<string, string> }) {
-  const t = await getT();
-  const stats = analyses && new Map(statsByTeam(teams, analyses).map(({ team, stats: teamStats }) => [team.id, teamStats]));
+  const [t, cuts] = await Promise.all([getT(), getRiskCuts()]);
+  const stats = analyses && new Map(statsByTeam(teams, analyses, cuts).map(({ team, stats: teamStats }) => [team.id, teamStats]));
   return (
     <>
       <section aria-labelledby="teams-title" className="grid gap-2">
@@ -104,11 +105,11 @@ async function MemberButton({ team, athlete, member }: { team: Team; athlete: At
  * video sólo para sus gestionados: a los que tienen cuenta propia les toca grabar desde su cuenta.
  */
 export async function TeamMembers({ section, team, candidates, analyses }: { section: TeamSection; team: Team; candidates: AthleteProfile[]; analyses?: AnalysisSummary[] }) {
-  const t = await getT();
+  const [t, cuts] = await Promise.all([getT(), getRiskCuts()]);
   const ids = new Set(team.athlete_ids);
   const members = candidates.filter((athlete) => ids.has(athlete.id));
   const others = candidates.filter((athlete) => !ids.has(athlete.id));
-  const summaries = analyses && statsByAthlete(analyses);
+  const summaries = analyses && statsByAthlete(analyses, cuts);
   // En el equipo, los de riesgo más alto primero: son los que el coach tiene que mirar
   if (summaries) members.sort((a, b) => (summaries.get(b.id)?.latestScore ?? -1) - (summaries.get(a.id)?.latestScore ?? -1));
 

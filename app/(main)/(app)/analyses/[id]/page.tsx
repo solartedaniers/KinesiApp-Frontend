@@ -16,6 +16,7 @@ import { analysesListHref, SECTION_ROLES } from "@/lib/access";
 import { deleteAnalysis } from "@/lib/actions/analyses";
 import { getAnalysis } from "@/lib/data/analyses";
 import { listMyAthletes } from "@/lib/data/coach";
+import { getRiskCuts } from "@/lib/data/public";
 import { cssVars } from "@/lib/design/css";
 import { requireRole } from "@/lib/guard";
 import { format } from "@/lib/i18n";
@@ -65,7 +66,7 @@ export default async function AnalysisPage({ params }: PageProps<"/analyses/[id]
         </div>
         <div className="flex flex-wrap gap-2">
           {processed && <ButtonLink href="#chat" glyph="chat">{d.chat}</ButtonLink>}
-          {processed && <ReportButton analysisId={analysis.id} />}
+          {processed && <ReportButton analysisId={analysis.id} cuts={await getRiskCuts()} />}
           {canDelete && (
             <ConfirmDialog
               labels={{ open: t.common.delete, title: d.deleteTitle, body: d.deleteBody, confirm: t.common.delete, cancel: t.common.cancel }}

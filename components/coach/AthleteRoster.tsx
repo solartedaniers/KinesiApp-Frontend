@@ -5,6 +5,7 @@ import { RiskDial } from "@/components/analysis/RiskDial";
 import { Avatar } from "@/components/app/Avatar";
 import { RiskScale } from "@/components/instrument/Status";
 import { ageOn, type AthleteSummary, riskLevel } from "@/lib/analysis-stats";
+import { getRiskCuts } from "@/lib/data/public";
 import { cssVars } from "@/lib/design/css";
 import { RISK_STEP, RISK_TEXT } from "@/lib/design/risk";
 import { todayInAppTimeZone } from "@/lib/format";
@@ -40,7 +41,7 @@ export async function AthleteRoster({
   /** Botones propios de la fila (p. ej. grabar o quitar del equipo). */
   actions?: (athlete: AthleteProfile) => ReactNode;
 }) {
-  const [t, f] = await Promise.all([getT(), getFormat()]);
+  const [t, f, cuts] = await Promise.all([getT(), getFormat(), getRiskCuts()]);
   if (athletes.length === 0) return empty;
   const today = todayInAppTimeZone();
 
@@ -49,7 +50,7 @@ export async function AthleteRoster({
       {athletes.map((athlete, i) => {
         const summary = summaries?.get(athlete.id);
         const score = summary?.latestScore ?? null;
-        const level = score === null ? null : riskLevel(score);
+        const level = score === null ? null : riskLevel(score, cuts);
         const delay = Math.min(i, 8);
         return (
           <li key={athlete.id} className={`kin-rise ${styles.row} ${actions ? styles.withActions : styles.withScale}`} style={cssVars({ "--i": delay })}>
@@ -59,6 +60,7 @@ export async function AthleteRoster({
             <RiskDial
               mini
               score={score}
+              cuts={cuts}
               delayMs={delay * 120 + 300}
               label={score === null ? format(t.coach.noRiskLabel, { name: athlete.display_name }) : format(t.coach.latestRiskLabel, { name: athlete.display_name, value: f.percent(score) })}
               className="w-14"

@@ -128,6 +128,9 @@ export type AnalysisProgress = { stage: AnalysisStage; frames_processed: number;
 export type SignedUrl = { url: string; expires_at: string };
 export type UploadTarget = { upload_id: string; url: string; headers: Record<string, string>; expires_at: string };
 
+/** Desde qué risk_score empieza cada nivel; los decide el backend (RISK_LEVEL_*). */
+export type RiskCuts = { moderate: number; high: number };
+
 /** Reglas que el backend aplica y el cliente valida antes de enviar (SystemService.GetClientPolicy). */
 export type ClientPolicy = {
   video_consent_version: number;
@@ -143,6 +146,7 @@ export type ClientPolicy = {
   max_height_cm: number;
   min_weight_kg: number;
   max_weight_kg: number;
+  risk_scale: RiskCuts;
 };
 
 export type AiState = "warming_up" | "ready";

@@ -4,7 +4,6 @@ import { Dial } from "@/components/instrument/Dial";
 import { Glyph } from "@/components/instrument/Glyph";
 import { EmptyState } from "@/components/instrument/States";
 import { RiskScale, ZoneChip } from "@/components/instrument/Status";
-import { riskLevel } from "@/lib/analysis-stats";
 import { cssVars } from "@/lib/design/css";
 import { RISK_STEP, RISK_TEXT } from "@/lib/design/risk";
 import { zoneOf } from "@/lib/design/signals";
@@ -33,7 +32,7 @@ export async function AnalysisList({ analyses, subtitleFor }: { analyses: Analys
         const knee = analysis.knee_median_peak_degrees;
         const target = analysis.knee_target;
         const zone = knee !== null && target ? zoneOf(knee, target) : null;
-        const level = analysis.risk_level ?? (analysis.risk_score === null ? null : riskLevel(analysis.risk_score));
+        const level = analysis.risk_level;
         const subtitle = subtitleFor?.(analysis);
         return (
           <li key={analysis.id} className="kin-rise" style={cssVars({ "--i": Math.min(i, 8) })}>

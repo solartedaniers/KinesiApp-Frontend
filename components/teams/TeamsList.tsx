@@ -4,6 +4,7 @@ import { Glyph } from "@/components/instrument/Glyph";
 import { EmptyState } from "@/components/instrument/States";
 import { RiskScale } from "@/components/instrument/Status";
 import { type AnalysisStatistics, riskLevel } from "@/lib/analysis-stats";
+import { getRiskCuts } from "@/lib/data/public";
 import { cssVars } from "@/lib/design/css";
 import { RISK_STEP, RISK_TEXT } from "@/lib/design/risk";
 import { format, plural } from "@/lib/i18n";
@@ -34,14 +35,14 @@ export async function TeamsList({
   stats?: Map<string, AnalysisStatistics>;
   ownerNames?: Map<string, string>;
 }) {
-  const [t, f] = await Promise.all([getT(), getFormat()]);
+  const [t, f, cuts] = await Promise.all([getT(), getFormat(), getRiskCuts()]);
   if (teams.length === 0) return <EmptyState title={t.teams.empty} body={t.teams.emptyHint} />;
 
   return (
     <ul className={styles.list}>
       {teams.map((team, i) => {
         const average = stats?.get(team.id)?.averageRisk ?? null;
-        const level = average === null ? null : riskLevel(average);
+        const level = average === null ? null : riskLevel(average, cuts);
         return (
           <li key={team.id} className="kin-rise" style={cssVars({ "--i": Math.min(i, 8) })}>
             <Link href={teamPath(section, team.id)} className={styles.link}>

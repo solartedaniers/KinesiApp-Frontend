@@ -4,7 +4,7 @@ import { lttb } from "./charts/lttb.ts";
 import { riskLevel } from "./analysis-stats.ts";
 import { repetitionKneePeaks } from "./analysis-reading.ts";
 import type { RiskLevel } from "./design/risk.ts";
-import type { JointAngleMeasurement, RiskAssessment } from "./types.ts";
+import type { JointAngleMeasurement, RiskAssessment, RiskCuts } from "./types.ts";
 
 export type AngleSample = { ms: number; degrees: number };
 export type TimelineRepetition = { startMs: number; endMs: number; level: RiskLevel; peak: AngleSample };
@@ -65,6 +65,7 @@ export function valueAt(samples: readonly AngleSample[], ms: number): number | n
 export async function buildTimeline(
   measurements: readonly JointAngleMeasurement[],
   assessment: RiskAssessment | null,
+  cuts: RiskCuts,
   pause: () => Promise<void> = yieldToMain,
 ): Promise<Timeline & { fullKnee: AngleSample[]; fullTrunk: AngleSample[] }> {
   const fullKnee: AngleSample[] = [];
@@ -80,7 +81,7 @@ export async function buildTimeline(
     for (const sample of fullKnee) if (sample.ms >= rep.start_ms && sample.ms < rep.end_ms && sample.degrees > top.degrees) top = sample;
     const worst = Math.max(0, ...rep.pattern_scores.map((score) => score.score ?? 0));
     // El ángulo es el que midió la IA; la muestra solo ubica el instante en la gráfica
-    return { startMs: rep.start_ms, endMs: rep.end_ms, level: riskLevel(worst), peak: { ms: top.ms, degrees: peaks[i] ?? top.degrees } };
+    return { startMs: rep.start_ms, endMs: rep.end_ms, level: riskLevel(worst, cuts), peak: { ms: top.ms, degrees: peaks[i] ?? top.degrees } };
   });
   await pause();
 

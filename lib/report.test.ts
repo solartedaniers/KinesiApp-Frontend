@@ -37,7 +37,7 @@ const analysis: JumpAnalysis = {
   },
 };
 const source = { analysis, athleteName: "Ana Pérez", coachName: null, explanation: "## Resumen\n**Buen** aterrizaje.\n\n- Rodilla estable\n- Tronco 🙂 erguido" };
-const model = async (explanation = source.explanation) => buildReportModel({ source: { ...source, explanation }, timeline: await buildTimeline(measurements, analysis.risk_assessment, async () => {}), t, f });
+const model = async (explanation = source.explanation) => buildReportModel({ source: { ...source, explanation }, timeline: await buildTimeline(measurements, analysis.risk_assessment, { moderate: 0.33, high: 0.66 }, async () => {}), t, f });
 
 test("el informe lleva la explicación inicial de la IA, no las preguntas posteriores", () => {
   const thread = [message(1, "assistant", "Explicación inicial"), message(2, "user", "¿Y el tronco?"), message(3, "assistant", "Respuesta")];

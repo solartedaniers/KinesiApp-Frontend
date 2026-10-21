@@ -1,6 +1,6 @@
 // Estadísticas por equipo: lógica pura (sin React ni red), testeada en team-stats.test.ts.
 import { computeStatistics, type AnalysisStatistics } from "./analysis-stats.ts";
-import type { AthleteProfile, AnalysisSummary, Team } from "./types.ts";
+import type { AthleteProfile, AnalysisSummary, RiskCuts, Team } from "./types.ts";
 
 /** Deportistas y grabaciones de un equipo; sin equipo, todo lo del coach. */
 export function scopeToTeam(
@@ -19,13 +19,13 @@ export function scopeToTeam(
 export type TeamSummary = { team: Team; athletes: number; stats: AnalysisStatistics };
 
 /** Una fila por equipo para compararlos (un deportista en dos equipos cuenta en ambos). */
-export function statsByTeam(teams: Team[], analyses: AnalysisSummary[]): TeamSummary[] {
+export function statsByTeam(teams: Team[], analyses: AnalysisSummary[], cuts: RiskCuts): TeamSummary[] {
   return teams.map((team) => {
     const members = new Set(team.athlete_ids);
     return {
       team,
       athletes: team.athlete_ids.length,
-      stats: computeStatistics(analyses.filter((analysis) => members.has(analysis.athlete_id))),
+      stats: computeStatistics(analyses.filter((analysis) => members.has(analysis.athlete_id)), cuts),
     };
   });
 }

@@ -1,5 +1,5 @@
 // Puntos y ejes de la tendencia del riesgo por sesión: los usa la guía con su ejemplo y la app con datos reales.
-import { riskLevel, sortByRecordedDesc } from "@/lib/analysis-stats";
+import { sortByRecordedDesc } from "@/lib/analysis-stats";
 import type { Formatters } from "@/lib/format";
 import { format } from "@/lib/i18n";
 import type { RiskLevel } from "@/lib/design/risk";
@@ -11,7 +11,7 @@ export type RiskSession = { date: string; score: number; level: RiskLevel };
 export function riskSessions(analyses: AnalysisSummary[]): RiskSession[] {
   return sortByRecordedDesc(analyses)
     .reverse()
-    .flatMap((a) => (a.risk_score === null ? [] : [{ date: a.recorded_at, score: a.risk_score, level: a.risk_level ?? riskLevel(a.risk_score) }]));
+    .flatMap((a) => (a.risk_score === null || a.risk_level === null ? [] : [{ date: a.recorded_at, score: a.risk_score, level: a.risk_level }]));
 }
 
 // Más de cuatro fechas no caben debajo de la gráfica en el celular

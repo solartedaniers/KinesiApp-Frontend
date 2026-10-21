@@ -9,12 +9,13 @@ import { format } from "@/lib/i18n";
 import { useFormat, useT } from "@/lib/i18n/client";
 import { buildReportModel } from "@/lib/report";
 import { renderReportInWorker, saveFile } from "@/lib/report-download";
+import type { RiskCuts } from "@/lib/types";
 
 /**
  * Informe en PDF al pedirlo: trae los datos por RPC, arma la línea de tiempo por tasks y deja el
  * dibujo al worker, así la página sigue respondiendo mientras se genera.
  */
-export function ReportButton({ analysisId }: { analysisId: string }) {
+export function ReportButton({ analysisId, cuts }: { analysisId: string; cuts: RiskCuts }) {
   const t = useT();
   const f = useFormat();
   const [pending, startTransition] = useTransition();
@@ -26,7 +27,7 @@ export function ReportButton({ analysisId }: { analysisId: string }) {
       const result = await getReportSource(analysisId);
       if ("error" in result) return setError(result.error);
       const { analysis } = result.source;
-      const timeline = await buildTimeline(analysis.angle_measurements, analysis.risk_assessment);
+      const timeline = await buildTimeline(analysis.angle_measurements, analysis.risk_assessment, cuts);
       const bytes = await renderReportInWorker(buildReportModel({ source: result.source, timeline, t, f }));
       if (!bytes) return setError(t.report.failed);
       saveFile(bytes, `${format(t.report.fileTitle, { date: f.shortDate(analysis.recorded_at) })}.pdf`, "application/pdf");

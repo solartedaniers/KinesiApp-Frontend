@@ -1,9 +1,5 @@
 // Métricas de una lista de análisis: lógica pura (sin React ni red) para poder probarla sola.
-import type { AnalysisSummary } from "./types";
-
-// Umbrales de nivel de riesgo sobre risk_score ∈ [0, 1], los mismos RISK_LEVEL_* del backend y la IA.
-// Ninguno tiene validación clínica
-export const RISK_THRESHOLDS = { moderate: 0.33, high: 0.66 } as const;
+import type { AnalysisSummary, RiskCuts } from "./types";
 
 export type RiskLevel = "low" | "moderate" | "high";
 
@@ -18,16 +14,17 @@ export type AnalysisStatistics = {
   lastRecordedAt: string | null;
 };
 
-export function riskLevel(score: number): RiskLevel {
-  if (score >= RISK_THRESHOLDS.high) return "high";
-  return score >= RISK_THRESHOLDS.moderate ? "moderate" : "low";
+/** Nivel de un puntaje que calculo aquí (un promedio, la peor repetición). Un análisis ya trae el suyo. */
+export function riskLevel(score: number, cuts: RiskCuts): RiskLevel {
+  if (score >= cuts.high) return "high";
+  return score >= cuts.moderate ? "moderate" : "low";
 }
 
 export function sortByRecordedDesc(analyses: AnalysisSummary[]): AnalysisSummary[] {
   return [...analyses].sort((a, b) => Date.parse(b.recorded_at) - Date.parse(a.recorded_at));
 }
 
-export function computeStatistics(analyses: AnalysisSummary[]): AnalysisStatistics {
+export function computeStatistics(analyses: AnalysisSummary[], cuts: RiskCuts): AnalysisStatistics {
   const scores = analyses.flatMap((analysis) => (analysis.risk_score === null ? [] : [analysis.risk_score]));
   const count = (status: AnalysisSummary["status"]) => analyses.filter((analysis) => analysis.status === status).length;
   return {
@@ -37,7 +34,7 @@ export function computeStatistics(analyses: AnalysisSummary[]): AnalysisStatisti
     failed: count("failed"),
     averageRisk: scores.length ? scores.reduce((sum, score) => sum + score, 0) / scores.length : null,
     highestRisk: scores.length ? Math.max(...scores) : null,
-    highRiskCount: scores.filter((score) => score >= RISK_THRESHOLDS.high).length,
+    highRiskCount: scores.filter((score) => score >= cuts.high).length,
     lastRecordedAt: sortByRecordedDesc(analyses)[0]?.recorded_at ?? null,
   };
 }
@@ -45,7 +42,7 @@ export function computeStatistics(analyses: AnalysisSummary[]): AnalysisStatisti
 export type AthleteSummary = { athleteId: string; stats: AnalysisStatistics; latestScore: number | null };
 
 /** Estadísticas por deportista (vista de equipo del coach); sólo deportistas con grabaciones. */
-export function statsByAthlete(analyses: AnalysisSummary[]): Map<string, AthleteSummary> {
+export function statsByAthlete(analyses: AnalysisSummary[], cuts: RiskCuts): Map<string, AthleteSummary> {
   const groups = new Map<string, AnalysisSummary[]>();
   for (const analysis of analyses) groups.set(analysis.athlete_id, [...(groups.get(analysis.athlete_id) ?? []), analysis]);
   return new Map(
@@ -53,7 +50,7 @@ export function statsByAthlete(analyses: AnalysisSummary[]): Map<string, Athlete
       athleteId,
       {
         athleteId,
-        stats: computeStatistics(own),
+        stats: computeStatistics(own, cuts),
         latestScore: sortByRecordedDesc(own).find((analysis) => analysis.risk_score !== null)?.risk_score ?? null,
       },
     ]),

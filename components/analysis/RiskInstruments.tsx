@@ -3,6 +3,7 @@ import { RiskTrend } from "@/components/instrument/charts/RiskTrend";
 import { CountUp } from "@/components/instrument/CountUp";
 import { EmptyState } from "@/components/instrument/States";
 import { computeStatistics, riskLevel } from "@/lib/analysis-stats";
+import { getRiskCuts } from "@/lib/data/public";
 import { niceTicks } from "@/lib/charts/scale";
 import { riskSessions, riskTrendData } from "@/lib/charts/trend";
 import { cssVars } from "@/lib/design/css";
@@ -23,12 +24,12 @@ type Count = { label: string; value: number };
  * un deportista o un equipo desde el coach. `leading` agrega contadores al principio (p. ej. deportistas).
  */
 export async function RiskInstruments({ analyses, voice, leading = [] }: { analyses: AnalysisSummary[]; voice: "self" | "group"; leading?: Count[] }) {
-  const [t, f] = await Promise.all([getT(), getFormat()]);
+  const [t, f, cuts] = await Promise.all([getT(), getFormat(), getRiskCuts()]);
   const s = t.stats;
   const copy = voice === "self"
     ? { emptyBody: s.emptyBody, trendLabel: t.athleteHome.trendLabel, trendEmptyBody: t.athleteHome.trendEmptyBody, kneeTitle: s.kneeTitle, kneeLead: s.kneeLead }
     : s.group;
-  const stats = computeStatistics(analyses);
+  const stats = computeStatistics(analyses, cuts);
   const sessions = riskSessions(analyses);
   if (stats.averageRisk === null || stats.highestRisk === null) return <EmptyState title={t.athleteHome.emptyTitle} body={copy.emptyBody} />;
 
@@ -57,12 +58,13 @@ export async function RiskInstruments({ analyses, voice, leading = [] }: { analy
     <>
       <div className="grid gap-6 md:grid-cols-2">
         {gauges.map((gauge, i) => {
-          const level = riskLevel(gauge.score);
+          const level = riskLevel(gauge.score, cuts);
           return (
             <section key={gauge.id} aria-labelledby={`stats-${gauge.id}`} className={`${card} kin-tinted`} style={cssVars({ "--tint": RISK_TONE[level].tint })}>
               <h2 id={`stats-${gauge.id}`} className="font-display text-xl font-semibold text-ink">{gauge.label}</h2>
               <RiskDial
                 score={gauge.score}
+                cuts={cuts}
                 delayMs={i * 150}
                 label={`${gauge.label}: ${f.percent(gauge.score)}, ${t.analysis.risk[level]}`}
                 className="mx-auto w-full max-w-[17rem]"

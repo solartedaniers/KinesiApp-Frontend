@@ -27,8 +27,11 @@ const sample = [
   analysis(5, 5, "processed", 0.66),
 ];
 
+// Los cortes llegan del backend por GetClientPolicy; en las pruebas uso los de su configuración por defecto
+const CUTS = { moderate: 0.33, high: 0.66 };
+
 test("estadísticas: conteos, promedio, máximo y riesgo alto (>= 0.66)", () => {
-  const stats = computeStatistics(sample);
+  const stats = computeStatistics(sample, CUTS);
   assert.equal(stats.total, 5);
   assert.deepEqual([stats.processed, stats.pending, stats.failed], [3, 1, 1]);
   assert.ok(Math.abs((stats.averageRisk ?? 0) - (0.2 + 0.8 + 0.66) / 3) < 1e-9);
@@ -38,7 +41,7 @@ test("estadísticas: conteos, promedio, máximo y riesgo alto (>= 0.66)", () => 
 });
 
 test("estadísticas de una lista vacía no inventan valores", () => {
-  const stats = computeStatistics([]);
+  const stats = computeStatistics([], CUTS);
   assert.equal(stats.averageRisk, null);
   assert.equal(stats.highestRisk, null);
   assert.equal(stats.lastRecordedAt, null);
@@ -46,12 +49,19 @@ test("estadísticas de una lista vacía no inventan valores", () => {
 
 test("orden por fecha y nivel de riesgo", () => {
   assert.deepEqual(sortByRecordedDesc(sample).map((a) => a.id), ["4", "2", "3", "5", "1"]);
-  assert.deepEqual([riskLevel(0.1), riskLevel(0.33), riskLevel(0.66)], ["low", "moderate", "high"]);
+  assert.deepEqual([riskLevel(0.1, CUTS), riskLevel(0.33, CUTS), riskLevel(0.66, CUTS)], ["low", "moderate", "high"]);
+});
+
+test("el nivel y el conteo de riesgo alto siguen los cortes que mande el backend", () => {
+  const stricter = { moderate: 0.1, high: 0.5 };
+  assert.deepEqual([riskLevel(0.1, stricter), riskLevel(0.5, stricter)], ["moderate", "high"]);
+  assert.equal(computeStatistics(sample, stricter).highRiskCount, 2);
+  assert.equal(computeStatistics(sample, { moderate: 0.5, high: 0.9 }).highRiskCount, 0);
 });
 
 test("estadísticas por deportista y último puntaje", () => {
   const team = [{ ...analysis(10, 1, "processed", 0.5), athlete_id: "2" }, { ...analysis(11, 9, "processed", 0.7), athlete_id: "2" }, ...sample];
-  const byAthlete = statsByAthlete(team);
+  const byAthlete = statsByAthlete(team, CUTS);
   assert.deepEqual([...byAthlete.keys()].sort(), ["1", "2"]);
   assert.equal(byAthlete.get("2")?.stats.total, 2);
   assert.equal(byAthlete.get("2")?.latestScore, 0.7);

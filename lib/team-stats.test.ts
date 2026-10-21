@@ -26,7 +26,7 @@ test("filtrar por equipo deja sólo a sus miembros y sus grabaciones", () => {
 });
 
 test("cada equipo resume sus propias grabaciones; un deportista puede contar en dos", () => {
-  const [first, second, empty] = statsByTeam([team(1, [1]), team(2, [1, 2]), team(3, [])], ANALYSES);
+  const [first, second, empty] = statsByTeam([team(1, [1]), team(2, [1, 2]), team(3, [])], ANALYSES, { moderate: 0.33, high: 0.66 });
   assert.equal(first.stats.total, 2);
   assert.ok(Math.abs((first.stats.averageRisk ?? 0) - 0.3) < 1e-9);
   assert.equal(second.stats.total, 3);

@@ -9,13 +9,14 @@ import { buildTimeline } from "@/lib/analysis-timeline";
 import { VIDEO_URL_RENEW_MARGIN_MS } from "@/lib/config";
 import type { KneeTarget } from "@/lib/design/signals";
 import { useT } from "@/lib/i18n/client";
-import type { JointAngleMeasurement, MovementType, RiskAssessment, SignedUrl } from "@/lib/types";
+import type { JointAngleMeasurement, MovementType, RiskAssessment, RiskCuts, SignedUrl } from "@/lib/types";
 
 type Props = {
   analysisId: string;
   initial: SignedUrl;
   measurements: JointAngleMeasurement[];
   assessment: RiskAssessment | null;
+  cuts: RiskCuts;
   target: KneeTarget | null;
   movement: MovementType;
 };
@@ -28,7 +29,7 @@ type Props = {
  * El navegador pide Range directo al bucket privado con la URL firmada. Si vence y el usuario adelanta,
  * el 206 siguiente falla: pido otra con GetVideoPlaybackUrl y retomo en el mismo segundo.
  */
-export function VideoTimeline({ analysisId, initial, measurements, assessment, target, movement }: Props) {
+export function VideoTimeline({ analysisId, initial, measurements, assessment, cuts, target, movement }: Props) {
   const t = useT();
   const video = useRef<HTMLVideoElement>(null);
   const resumeAt = useRef(0);
@@ -41,11 +42,11 @@ export function VideoTimeline({ analysisId, initial, measurements, assessment, t
 
   useEffect(() => {
     let active = true;
-    void buildTimeline(measurements, assessment).then((built) => active && setTimeline(built));
+    void buildTimeline(measurements, assessment, cuts).then((built) => active && setTimeline(built));
     return () => {
       active = false;
     };
-  }, [measurements, assessment]);
+  }, [measurements, assessment, cuts]);
 
   // timeupdate llega unas cuatro veces por segundo: mientras reproduce, leo el reloj en cada cuadro
   useEffect(() => {

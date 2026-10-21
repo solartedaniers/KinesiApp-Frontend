@@ -31,7 +31,7 @@ test("separa por articulación, ordena, reduce lo dibujado y ubica el pico de ca
     patterns: [{ code: "rigid_landing", score: 0.5, repetitions_triggered: 1, signals: [{ code: "knee_rigid", joint: "knee_flexion", direction: "lower_is_riskier", onset_degrees: 60, saturation_degrees: 30, measured: null, score_median: null }] }],
     repetitions: [{ start_ms: 0, end_ms: 3300, pattern_scores: [{ code: "rigid_landing", score: 0.8, measured_degrees: null }], signal_scores: [{ code: "knee_rigid", score: 0.8, measured_degrees: 138 }] }],
   };
-  const timeline = await buildTimeline([...knee, ...trunk], assessment, async () => undefined);
+  const timeline = await buildTimeline([...knee, ...trunk], assessment, { moderate: 0.33, high: 0.66 }, async () => undefined);
   assert.equal(timeline.fullKnee.length, 1000);
   assert.ok(timeline.fullKnee.every((s, i, all) => i === 0 || all[i - 1].ms <= s.ms));
   assert.equal(timeline.knee.length, DRAWN_POINTS);

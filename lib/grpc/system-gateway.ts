@@ -30,6 +30,8 @@ class SystemGateway {
 
   async clientPolicy(): Promise<ClientPolicy> {
     const policy = await this.anonymous.getClientPolicy({});
+    // Sin cortes no hay forma honesta de pintar un nivel: prefiero fallar a inventar unos
+    if (!policy.riskScale) throw new Error("GetClientPolicy came without risk_scale");
     return {
       video_consent_version: policy.videoConsentVersion,
       video_max_duration_seconds: policy.video?.maxDurationSeconds ?? 0,
@@ -44,6 +46,7 @@ class SystemGateway {
       max_height_cm: policy.biometrics?.maxHeightCm ?? 0,
       min_weight_kg: policy.biometrics?.minWeightKg ?? 0,
       max_weight_kg: policy.biometrics?.maxWeightKg ?? 0,
+      risk_scale: { moderate: policy.riskScale.moderateFrom, high: policy.riskScale.highFrom },
     };
   }
 
