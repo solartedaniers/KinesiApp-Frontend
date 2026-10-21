@@ -24,9 +24,27 @@ async function compress(file, { maxDimension, maxBytes, qualities, outputType })
   return null;
 }
 
-// En Node (tests) no hay `self`: sólo se exporta scaledSize
+const positive = (value) => typeof value === "number" && Number.isFinite(value) && value > 0;
+
+/** La foto y la configuración de compresión que manda lib/avatar.ts; lo demás se descarta. */
+export function isCompressRequest(data) {
+  const config = data?.config;
+  return (
+    data?.file instanceof Blob &&
+    positive(config?.maxDimension) &&
+    positive(config?.maxBytes) &&
+    Array.isArray(config.qualities) &&
+    config.qualities.length > 0 &&
+    config.qualities.every((quality) => positive(quality) && quality <= 1) &&
+    typeof config.outputType === "string" &&
+    config.outputType.startsWith("image/")
+  );
+}
+
+// En Node (tests) no hay `self`: sólo se exportan scaledSize e isCompressRequest
 if (typeof self !== "undefined") {
   self.onmessage = async (event) => {
+    if (!isCompressRequest(event.data)) return self.postMessage({ ok: false, tooLarge: false });
     try {
       const blob = await compress(event.data.file, event.data.config);
       self.postMessage(blob ? { ok: true, blob } : { ok: false, tooLarge: true });

@@ -5,7 +5,7 @@ import { test } from "node:test";
 
 // El mismo código que corre en el navegador (allowJs); pdf-lib lo deja ahí `npm run vendor`
 import { PDFDocument } from "../public/vendor/pdf-lib.esm.min.js";
-import { renderReport } from "../public/workers/report-worker.js";
+import { isReportModel, renderReport } from "../public/workers/report-worker.js";
 import { buildTimeline } from "./analysis-timeline.ts";
 import { COLORS } from "./design/palette.ts";
 import type { Dictionary } from "./i18n/index.ts";
@@ -57,6 +57,14 @@ test("cada repetición se lee con la zona del rango que puntuó la IA", async ()
   assert.equal(report.chart?.bands.length, 3);
   assert.equal(report.people[1].value, t.report.noCoach);
   assert.deepEqual(report.notes, [t.analysis.rangesNote]);
+});
+
+test("el worker acepta el modelo que arma la app y descarta uno incompleto", async () => {
+  const built = await model();
+  assert.equal(isReportModel(built), true);
+  assert.equal(isReportModel({ ...built, notes: "una nota" }), false);
+  assert.equal(isReportModel({ ...built, colors: { ...built.colors, accent: 7 } }), false);
+  assert.equal(isReportModel(null), false);
 });
 
 test("el worker dibuja un PDF válido y pagina una explicación larga aunque traiga emojis", async () => {

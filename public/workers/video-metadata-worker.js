@@ -134,11 +134,16 @@ export async function readVideoMetadata(file) {
   return null;
 }
 
-// En Node (tests) no hay `self`: sólo se exporta readVideoMetadata
+/** Solo acepto el archivo; cualquier otro mensaje se responde como un video que no entiendo. */
+export function isVideoFile(data) {
+  return data instanceof Blob;
+}
+
+// En Node (tests) no hay `self`: sólo se exportan readVideoMetadata e isVideoFile
 if (typeof self !== "undefined") {
   self.onmessage = async (event) => {
     try {
-      self.postMessage(await readVideoMetadata(event.data));
+      self.postMessage(isVideoFile(event.data) ? await readVideoMetadata(event.data) : null);
     } catch {
       self.postMessage(null);
     }

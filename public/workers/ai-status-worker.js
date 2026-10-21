@@ -3,6 +3,14 @@
 // llamar a WakeUpAi con una comparación de versión, para que dos pestañas no despierten la IA a la vez.
 let state = { status: "idle", at: 0, version: 0 };
 const ports = new Set();
+const STATUSES = ["idle", "waking", "ready", "unavailable"];
+
+// Solo atiendo los tres mensajes del protocolo; cualquier otro se descarta sin tocar el estado
+function isTabMessage(data) {
+  if (data?.type === "claim") return Number.isInteger(data.version) && data.version >= 0;
+  if (data?.type === "result") return STATUSES.includes(data.status);
+  return data?.type === "bye";
+}
 
 function publish() {
   for (const port of ports) port.postMessage({ type: "state", state });
@@ -17,6 +25,7 @@ self.onconnect = (event) => {
   const port = event.ports[0];
   ports.add(port);
   port.onmessage = ({ data }) => {
+    if (!isTabMessage(data)) return;
     if (data.type === "claim" && data.version === state.version) {
       change("waking");
       port.postMessage({ type: "perform" });

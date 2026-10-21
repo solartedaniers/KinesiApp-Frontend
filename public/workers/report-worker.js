@@ -216,9 +216,32 @@ export async function renderReport(model) {
   return doc.save();
 }
 
-// En Node (tests) no hay `self`: sólo se exporta renderReport
+const isText = (value) => typeof value === "string";
+const isTextList = (value) => Array.isArray(value) && value.every(isText);
+const isPairList = (value) => Array.isArray(value) && value.every((pair) => isText(pair?.label) && isText(pair?.value));
+
+/** Reviso la forma de ReportModel que dibujo; un modelo incompleto se descarta en vez de romper a medio PDF. */
+export function isReportModel(model) {
+  const colors = model?.colors;
+  return (
+    [model?.brand, model?.title, model?.subtitle, model?.pageLabel].every(isText) &&
+    isPairList(model.people) &&
+    isPairList(model.figures) &&
+    isTextList(model.notes) &&
+    isText(model.explanation?.title) &&
+    isTextList(model.explanation.paragraphs) &&
+    isText(model.disclaimer?.title) &&
+    isText(model.disclaimer.body) &&
+    ["ink", "muted", "line", "accent", "panel"].every((key) => isText(colors?.[key])) &&
+    (model.chart === null || typeof model.chart === "object") &&
+    (model.repetitions === null || (isTextList(model.repetitions?.headers) && Array.isArray(model.repetitions.rows)))
+  );
+}
+
+// En Node (tests) no hay `self`: sólo se exportan renderReport e isReportModel
 if (typeof self !== "undefined") {
   self.onmessage = async (event) => {
+    if (!isReportModel(event.data)) return self.postMessage(null);
     try {
       const bytes = await renderReport(event.data);
       self.postMessage(bytes, [bytes.buffer]);

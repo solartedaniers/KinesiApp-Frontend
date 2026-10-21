@@ -1,6 +1,7 @@
 // Strategy del canal entre pestañas: Shared Worker donde existe y BroadcastChannel + Web Locks donde no
 // (Chrome en Android no tiene Shared Worker). Las dos exponen lo mismo y la app no sabe cuál usa.
-import { type AiStatus, type AiStatusState, type AiStatusTimings, type FromCoordinator, IDLE, isFresh, type ToCoordinator } from "./protocol.ts";
+import { broadcastSchema, fromCoordinatorSchema } from "../worker-messages.ts";
+import { type AiStatus, type AiStatusState, type AiStatusTimings, IDLE, isFresh, type ToCoordinator } from "./protocol.ts";
 
 export interface AiStatusChannel {
   /** Estado actual, compartido entre pestañas. */
@@ -46,7 +47,10 @@ class SharedWorkerChannel extends ObservableChannel implements AiStatusChannel {
     private readonly timings: AiStatusTimings,
   ) {
     super();
-    port.onmessage = ({ data }: MessageEvent<FromCoordinator>) => {
+    port.onmessage = (event: MessageEvent<unknown>) => {
+      const message = fromCoordinatorSchema.safeParse(event.data);
+      if (!message.success) return;
+      const data = message.data;
       if (data.type === "perform") return void this.run();
       this.synced = true;
       this.adopt(data.state);
@@ -87,7 +91,10 @@ class BroadcastAiStatusChannel extends ObservableChannel implements AiStatusChan
     private readonly timings: AiStatusTimings,
   ) {
     super();
-    this.channel.onmessage = ({ data }: MessageEvent<{ type: "state"; state: AiStatusState } | { type: "query" }>) => {
+    this.channel.onmessage = (event: MessageEvent<unknown>) => {
+      const message = broadcastSchema.safeParse(event.data);
+      if (!message.success) return;
+      const data = message.data;
       if (data.type === "query") {
         if (this.state.status !== "idle") this.channel.postMessage({ type: "state", state: this.state });
       } else if (data.state.at > this.state.at) {

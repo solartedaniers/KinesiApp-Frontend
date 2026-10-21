@@ -37,11 +37,13 @@ Sigo la idea de "parsear, no validar": cada dato que cruza una frontera se convi
 
 - **Las respuestas gRPC ya se parsean contra un esquema.** El código que genera `protoc-gen-es` a partir del contrato decodifica el binario de Protobuf campo por campo. Un tipo que no coincide falla al decodificar, los campos desconocidos se descartan y los que faltan toman el valor por defecto del contrato. Es un parseo en runtime contra el esquema del `.proto`, que es la única fuente de verdad. Pasar el resultado por Zod sería repetir el contrato a mano, con el riesgo de que las dos copias se desincronicen.
 - **Lo que el contrato no puede saber lo reviso en el adaptador.** `lib/grpc/mappers.ts` convierte los mensajes en tipos de la app y resuelve los casos que Protobuf no distingue, como un enum en `UNSPECIFIED` o un mensaje opcional ausente.
-- **Zod va en los bordes sin contrato,** donde no hay nada generado que parsee por mí: las variables de entorno (`lib/grpc/env.ts`, `lib/server-config.ts`, `lib/config.ts` y `lib/demo-login.ts`).
+- **Zod va en los bordes sin contrato,** donde no hay nada generado que parsee por mí:
+  - las variables de entorno (`lib/grpc/env.ts`, `lib/server-config.ts`, `lib/config.ts` y `lib/demo-login.ts`);
+  - lo que llega de los workers y de las otras pestañas (`lib/worker-messages.ts`), aunque los scripts sean propios. Un mensaje que no cumple se descarta: en los workers de una sola respuesta cuenta como falla y uso el respaldo; en el estado de la IA entre pestañas, simplemente lo ignoro.
 - **Los demás bordes sin contrato:**
   - Los formularios pasan por los validadores de `lib/validation.ts`, con los límites de `GetClientPolicy`.
   - Las cookies de idioma y tema pasan por guardas de tipo (`isLocale`, `isTheme`) que caen al valor por defecto.
-  - Los mensajes de los workers vienen de scripts propios del mismo origen; los trato como un contrato interno y el backend vuelve a validar lo que importa, como la duración del video.
+  - Los workers revisan lo que reciben con guardas de tipo, porque son JavaScript servido tal cual, sin bundler ni Zod: `isVideoFile`, `isCompressRequest`, `isReportModel` y el protocolo del Shared Worker. Un mensaje inválido recibe la respuesta de falla o se ignora, nunca se procesa a medias.
 
 ## Patrón de rendering por ruta
 
@@ -65,7 +67,7 @@ Sigo la idea de "parsear, no validar": cada dato que cruza una frontera se convi
 
 ## Workers: cuáles uso y por qué
 
-Solo los uso donde hay trabajo real que sacar del hilo principal o algo que compartir entre pestañas. Todos se sirven tal cual desde `public/`, porque Turbopack no empaqueta los workers declarados con `new Worker(new URL(...))`.
+Solo los uso donde hay trabajo real que sacar del hilo principal o algo que compartir entre pestañas. Todos se sirven tal cual desde `public/`, porque Turbopack no empaqueta los workers declarados con `new Worker(new URL(...))`. Los mensajes se validan en los dos sentidos: la app parsea con Zod lo que responde cada worker, y cada worker revisa con guardas de tipo lo que recibe (ver [Por qué las respuestas gRPC no pasan por Zod](#por-qué-las-respuestas-grpc-no-pasan-por-zod)). Las pruebas están en `lib/worker-messages.test.ts`; el Shared Worker, que es un script clásico, se prueba corriéndolo en `node:vm` con un puerto falso.
 
 ### Web Workers
 

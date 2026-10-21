@@ -1,4 +1,5 @@
 import type { ReportModel } from "./report";
+import { reportReplySchema } from "./worker-messages";
 
 const REPORT_WORKER_URL = "/workers/report-worker.js";
 
@@ -10,7 +11,10 @@ export function renderReportInWorker(model: ReportModel): Promise<Uint8Array | n
       worker.terminate();
       resolve(bytes);
     };
-    worker.onmessage = (event: MessageEvent<Uint8Array | null>) => finish(event.data);
+    worker.onmessage = (event: MessageEvent<unknown>) => {
+      const bytes = reportReplySchema.safeParse(event.data);
+      finish(bytes.success ? bytes.data : null);
+    };
     worker.onerror = () => finish(null);
     worker.postMessage(model);
   });

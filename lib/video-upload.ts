@@ -1,6 +1,7 @@
 // Subida de archivos del navegador directo al bucket privado con la URL firmada que entrega un RPC:
 // no pasa por Vercel (que corta los cuerpos grandes) y el token de sesión nunca llega al navegador.
 import type { UploadTarget } from "./types.ts";
+import { type VideoReading, videoReadingSchema } from "./worker-messages.ts";
 
 export type VideoFileError = "videoRequired" | "videoInvalidType" | "videoTooLarge";
 
@@ -49,16 +50,17 @@ export type VideoMetadata = { durationMs: number; width: number; height: number;
 
 const VIDEO_METADATA_WORKER_URL = "/workers/video-metadata-worker.js";
 
-type WorkerReading = { durationMs: number | null; width: number; height: number; container: string } | null;
-
-function readInWorker(file: Blob): Promise<WorkerReading> {
+function readInWorker(file: Blob): Promise<VideoReading> {
   return new Promise((resolve) => {
     const worker = new Worker(VIDEO_METADATA_WORKER_URL, { type: "module" });
-    const finish = (reading: WorkerReading) => {
+    const finish = (reading: VideoReading) => {
       worker.terminate();
       resolve(reading);
     };
-    worker.onmessage = (event: MessageEvent<WorkerReading>) => finish(event.data);
+    worker.onmessage = (event: MessageEvent<unknown>) => {
+      const reading = videoReadingSchema.safeParse(event.data);
+      finish(reading.success ? reading.data : null);
+    };
     worker.onerror = () => finish(null);
     worker.postMessage(file);
   });
