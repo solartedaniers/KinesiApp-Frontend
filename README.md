@@ -17,7 +17,7 @@ Navegador ──HTML/RSC/Server Actions──▶ Next.js (runtime Node, Vercel f
 ```
 
 - **El navegador nunca habla gRPC ni conoce la URL del backend.** Los Server Components y las Server Actions corren en Node. Ahí llamo al backend con clientes gRPC-Web generados del contrato (`lib/grpc/transport.ts`). Uso gRPC-Web porque Render solo acepta HTTP/1.1 desde internet. Envoy, en el contenedor del backend, lo traduce a gRPC nativo.
-- **Contract-first.** Los `.proto` viven en [KinesiApp-Contracts](https://github.com/solartedaniers/KinesiApp-Contracts). Los traigo como submódulo en `contracts/`, fijado a un tag (hoy `v0.9.0`). `npm run generate` (Buf + `protoc-gen-es`) genera `lib/gen/`, que no se versiona ni se edita a mano.
+- **Contract-first.** Los `.proto` viven en [KinesiApp-Contracts](https://github.com/solartedaniers/KinesiApp-Contracts). Los traigo como submódulo en `contracts/`, fijado a un tag (hoy `v0.10.0`). `npm run generate` (Buf + `protoc-gen-es`) genera `lib/gen/`, que no se versiona ni se edita a mano.
 - **Un adaptador por servicio.** `lib/grpc/*-gateway.ts` envuelve cada servicio del contrato: `AuthService`, `AccountService`, `UserAdminService`, `AthleteProfileService`, `ManagedAthleteService`, `TeamService`, `AnalysisService`, `ChatService` y `SystemService`. Cada adaptador pasa los mensajes Protobuf a los tipos de la app (`lib/grpc/mappers.ts`), así ninguna pantalla depende del código generado.
 - **Sesión.** El access token y el refresh token viven en cookies `httpOnly`. Viajan en la metadata `authorization` de cada RPC, y el interceptor del backend los verifica. Cuando el access vence, lo renuevo con `RefreshSession`, que rota el refresh token.
 - **Errores.** El backend responde con el status code estándar de gRPC más un `google.rpc.ErrorInfo`. `lib/grpc/errors.ts` lee el `reason` (`EMAIL_ALREADY_REGISTERED`, `UNAVAILABLE`...), y `lib/errors.ts` lo convierte en un texto de i18n. Ninguna pantalla compara strings sueltos.
@@ -28,7 +28,7 @@ Navegador ──HTML/RSC/Server Actions──▶ Next.js (runtime Node, Vercel f
   3. otro RPC confirma la subida.
 
   Para reproducir un video, pido una URL firmada de vida corta.
-- **Validación en las fronteras.** Todo dato que entra se parsea en runtime antes de usarse; la sección [Por qué las respuestas gRPC no pasan por Zod](#por-qué-las-respuestas-grpc-no-pasan-por-zod) explica con qué. Los límites no se repiten aquí: llegan del backend por `GetClientPolicy`. Son la duración y el tamaño del video, la contraseña, la edad, la estatura, el peso y el largo del chat. El backend vuelve a validar todo.
+- **Validación en las fronteras.** Todo dato que entra se parsea en runtime antes de usarse; la sección [Por qué las respuestas gRPC no pasan por Zod](#por-qué-las-respuestas-grpc-no-pasan-por-zod) explica con qué. Los límites no se repiten aquí: llegan del backend por `GetClientPolicy`. Son la duración y el tamaño del video, la contraseña, la edad, la estatura, el peso, el largo del chat y los cortes de nivel de riesgo. Cada análisis ya trae su nivel; los cortes solo sirven para lo que calculo aquí, como promedios, la peor repetición y las bandas de los medidores. El backend vuelve a validar todo.
 - **Estado de la IA.** Al iniciar sesión disparo `WakeUpAi` y muestro "IA despertando" o "IA activada". Si la IA no responde, el backend devuelve `UNAVAILABLE` y la interfaz lo comunica sin romperse.
 
 ## Por qué las respuestas gRPC no pasan por Zod
@@ -119,7 +119,7 @@ npm run dev                  # genera lib/gen/ y copia pdf-lib antes de arrancar
 Si cambia el contrato, muevo el submódulo al tag nuevo y regenero:
 
 ```bash
-git -C contracts fetch --tags && git -C contracts checkout v0.9.0
+git -C contracts fetch --tags && git -C contracts checkout v0.10.0
 npm run generate
 ```
 
