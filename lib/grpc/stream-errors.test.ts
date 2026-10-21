@@ -1,5 +1,6 @@
 // Error a mitad de un stream de gRPC-Web: el motivo viaja en el trailer, después de los mensajes. Correr con: npm test
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import test from "node:test";
@@ -64,4 +65,15 @@ test("también con el base64 sin relleno que usa grpcio en los encabezados binar
   const unpadded = details.toString("base64").replace(/=+$/, "");
   const { error } = await failureAfterFirstMessage(`grpc-status:14\r\ngrpc-message:down\r\ngrpc-status-details-bin:${unpadded}\r\n`);
   assert.equal(rpcReason(error), "ASSISTANT_UNAVAILABLE");
+});
+
+test("la cuota agotada llega con su motivo y la interfaz tiene un mensaje para cada caso", async () => {
+  const es = JSON.parse(readFileSync(new URL("../i18n/es.json", import.meta.url), "utf8"));
+  for (const reason of ["ASSISTANT_BUSY", "ASSISTANT_DAILY_LIMIT"]) {
+    const exhausted = Buffer.from(statusBytes(Code.ResourceExhausted, reason)).toString("base64");
+    const { received, error } = await failureAfterFirstMessage(`grpc-status:8\r\ngrpc-message:quota\r\ngrpc-status-details-bin:${exhausted}\r\n`);
+    assert.equal(received, 1);
+    assert.equal(rpcReason(error), reason);
+    assert.ok(es.errors[reason], `falta el texto de ${reason}`);
+  }
 });

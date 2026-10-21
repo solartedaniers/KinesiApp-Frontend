@@ -751,6 +751,8 @@
     "ANALYSIS_NOT_PROCESSED": "El asistente estará disponible cuando termine el análisis.",
     "CHAT_RATE_LIMITED": "Hiciste muchas preguntas seguidas. Espera un momento antes de enviar otra.",
     "ASSISTANT_UNAVAILABLE": "El asistente no pudo responder esta vez.",
+    "ASSISTANT_BUSY": "El asistente está ocupado, intenta en un minuto.",
+    "ASSISTANT_DAILY_LIMIT": "Alcanzaste el límite de hoy, vuelve mañana.",
     "TEAM_NAME_TAKEN": "Ya tienes un equipo con ese nombre.",
     "INVALID_TEAM_MEMBER": "Ese deportista no puede estar en este equipo.",
     "CANNOT_MODIFY_OWN_ACCOUNT": "No puedes cambiar el rol ni el estado de tu propia cuenta.",
