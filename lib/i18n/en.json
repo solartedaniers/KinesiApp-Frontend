@@ -10,8 +10,6 @@
     "guides": "Recording guides",
     "signIn": "Sign in",
     "createAccount": "Create account",
-    "language": "Language",
-    "theme": "Theme",
     "legal": "Video consent",
     "sampleData": "Example with sample data"
   },
@@ -205,7 +203,6 @@
     "working": "Working…",
     "save": "Save changes",
     "saving": "Saving…",
-    "edit": "Edit",
     "delete": "Delete",
     "back": "Back"
   },
@@ -249,9 +246,6 @@
       "moderate": "Moderate",
       "high": "High"
     },
-    "riskValue": "{value} risk",
-    "noScore": "No score",
-    "open": "View the recording from {date}",
     "listEmpty": "No recordings yet.",
     "listEmptyHint": "When a jump or a squat is analyzed, it will show up here.",
     "kneeTarget": {
@@ -297,12 +291,8 @@
     "failedTitle": "The analysis couldn't be completed",
     "failedBody": "The video couldn't be processed. Try recording it again in good light, with the whole body in frame.",
     "angles": "Joint angles",
-    "anglesEmpty": "This analysis has no angle measurements.",
     "peak": "Peak: {value}",
     "timeline": "Movement timeline",
-    "timelineHint": "Markers show each joint's peak angle. Tap one to jump to that moment.",
-    "peakMarker": "{joint}: {value} at {time}",
-    "liveAngles": "Angles at this moment",
     "delete": "Delete recording",
     "deleteTitle": "Delete this recording?",
     "deleteBody": "The video, the analysis and the conversation with the assistant will be deleted. This can't be undone.",
@@ -345,9 +335,6 @@
     "forAthlete": "Video of {name}. It will be analyzed as one of their recordings.",
     "newRecording": "New recording",
     "movement": "Movement",
-    "chooseVideo": "Record or choose a video",
-    "changeVideo": "Change the video",
-    "limitHint": "A single video, up to {max} MB.",
     "submit": "Upload and analyze",
     "uploading": "Uploading video…",
     "progress": "Uploaded: {percent}",
@@ -412,7 +399,6 @@
     "label": "Your question",
     "placeholder": "Type your question about this analysis…",
     "send": "Send",
-    "sending": "Sending…",
     "thinking": "The assistant is typing…",
     "roles": {
       "user": "You",
@@ -424,14 +410,6 @@
     "keptQuestion": "Your question is still here: you can try again now.",
     "retryOpening": "Ask for the explanation again"
   },
-  "angleChart": {
-    "subtitle": "Angle throughout the movement.",
-    "pointLabel": "{time}: {value}",
-    "tableToggle": "Show as table",
-    "time": "Time",
-    "angle": "Angle",
-    "notEnough": "There aren't enough measurements to draw the curve."
-  },
   "stats": {
     "recordings": "Recordings",
     "processed": "Processed",
@@ -440,7 +418,6 @@
     "averageRisk": "Average risk",
     "highestRisk": "Highest risk",
     "highRiskCount": "High risk",
-    "lastRecording": "Last recording",
     "none": "No data",
     "empty": "Record a movement to see your statistics.",
     "lead": "Your average and highest risk, how it changed over time and where your knees land in each movement.",
@@ -457,16 +434,6 @@
       "kneeTitle": "Knee peaks by movement",
       "kneeLead": "Minimum, median and maximum of the sessions over the risk-free range of each movement's latest analysis."
     }
-  },
-  "riskChart": {
-    "title": "Risk over time",
-    "subtitle": "Risk score of each processed recording, in chronological order.",
-    "threshold": "High risk",
-    "pointLabel": "{date}: {value}",
-    "tableToggle": "Show as table",
-    "date": "Date",
-    "score": "Risk",
-    "notEnough": "At least two processed recordings are needed to show the trend."
   },
   "athleteHome": {
     "summary": "Summary",
@@ -872,7 +839,6 @@
       "riskLead": "Always shown with the word and one to three steps: it never depends on color alone.",
       "surfaces": "Surfaces and ink",
       "contrast": "Contrast {ratio}:1",
-      "contrastOn": "Contrast {ratio}:1 on {surface}",
       "shared": "Cobalt is both the knee and the main action: the knee is the app's leading measure, and buttons never appear inside a chart, so they don't get mixed up.",
       "names": {
         "knee": "Knee",

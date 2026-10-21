@@ -10,8 +10,6 @@
     "guides": "Guías de grabación",
     "signIn": "Iniciar sesión",
     "createAccount": "Crear cuenta",
-    "language": "Idioma",
-    "theme": "Tema",
     "legal": "Consentimiento de video",
     "sampleData": "Ejemplo con datos de muestra"
   },
@@ -205,7 +203,6 @@
     "working": "Procesando…",
     "save": "Guardar cambios",
     "saving": "Guardando…",
-    "edit": "Editar",
     "delete": "Eliminar",
     "back": "Volver"
   },
@@ -249,9 +246,6 @@
       "moderate": "Moderado",
       "high": "Alto"
     },
-    "riskValue": "{value} de riesgo",
-    "noScore": "Sin puntaje",
-    "open": "Ver detalle de la grabación del {date}",
     "listEmpty": "Todavía no hay grabaciones.",
     "listEmptyHint": "Cuando se analice un salto o una sentadilla, aparecerá aquí.",
     "kneeTarget": {
@@ -297,12 +291,8 @@
     "failedTitle": "No se pudo completar el análisis",
     "failedBody": "El video no se pudo procesar. Intenta grabarlo de nuevo con buena luz y de cuerpo completo.",
     "angles": "Ángulos articulares",
-    "anglesEmpty": "Este análisis no tiene mediciones de ángulos.",
     "peak": "Máximo: {value}",
     "timeline": "Línea de tiempo del movimiento",
-    "timelineHint": "Las marcas señalan el ángulo máximo de cada articulación. Tócalas para ir a ese instante.",
-    "peakMarker": "{joint}: {value} en {time}",
-    "liveAngles": "Ángulos en este instante",
     "delete": "Eliminar grabación",
     "deleteTitle": "¿Eliminar esta grabación?",
     "deleteBody": "Se borrarán el video, el análisis y la conversación con el asistente. Esta acción no se puede deshacer.",
@@ -345,9 +335,6 @@
     "forAthlete": "Video de {name}. Se analizará como una grabación suya.",
     "newRecording": "Nueva grabación",
     "movement": "Movimiento",
-    "chooseVideo": "Grabar o elegir un video",
-    "changeVideo": "Cambiar el video",
-    "limitHint": "Un solo video, de hasta {max} MB.",
     "submit": "Subir y analizar",
     "uploading": "Subiendo video…",
     "progress": "Subido: {percent}",
@@ -412,7 +399,6 @@
     "label": "Tu pregunta",
     "placeholder": "Escribe tu pregunta sobre este análisis…",
     "send": "Enviar",
-    "sending": "Enviando…",
     "thinking": "El asistente está escribiendo…",
     "roles": {
       "user": "Tú",
@@ -424,14 +410,6 @@
     "keptQuestion": "Tu pregunta sigue escrita: puedes reintentar ahora.",
     "retryOpening": "Pedir la explicación de nuevo"
   },
-  "angleChart": {
-    "subtitle": "Ángulo a lo largo del movimiento.",
-    "pointLabel": "{time}: {value}",
-    "tableToggle": "Ver como tabla",
-    "time": "Tiempo",
-    "angle": "Ángulo",
-    "notEnough": "No hay suficientes mediciones para trazar la curva."
-  },
   "stats": {
     "recordings": "Grabaciones",
     "processed": "Procesadas",
@@ -440,7 +418,6 @@
     "averageRisk": "Riesgo promedio",
     "highestRisk": "Riesgo máximo",
     "highRiskCount": "Con riesgo alto",
-    "lastRecording": "Última grabación",
     "none": "Sin datos",
     "empty": "Graba un movimiento para ver tus estadísticas.",
     "lead": "Tu riesgo promedio y el más alto, cómo cambió en el tiempo y dónde quedan tus rodillas en cada movimiento.",
@@ -457,16 +434,6 @@
       "kneeTitle": "Picos de rodilla por movimiento",
       "kneeLead": "Mínimo, mediana y máximo de las sesiones sobre el rango sin riesgo del último análisis de cada movimiento."
     }
-  },
-  "riskChart": {
-    "title": "Evolución del riesgo",
-    "subtitle": "Puntaje de riesgo de cada grabación procesada, en orden cronológico.",
-    "threshold": "Riesgo alto",
-    "pointLabel": "{date}: {value}",
-    "tableToggle": "Ver como tabla",
-    "date": "Fecha",
-    "score": "Riesgo",
-    "notEnough": "Se necesitan al menos dos grabaciones procesadas para mostrar la evolución."
   },
   "athleteHome": {
     "summary": "Resumen",
@@ -872,7 +839,6 @@
       "riskLead": "Va siempre con la palabra y de uno a tres escalones: nunca depende sólo del color.",
       "surfaces": "Superficies y tinta",
       "contrast": "Contraste {ratio}:1",
-      "contrastOn": "Contraste {ratio}:1 sobre {surface}",
       "shared": "El cobalto es a la vez la rodilla y la acción principal: la rodilla es la medida protagonista de la app, y los botones nunca aparecen dentro de una gráfica, así que no se confunden.",
       "names": {
         "knee": "Rodilla",
