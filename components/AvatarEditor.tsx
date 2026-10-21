@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { type ReactNode, useState, useTransition } from "react";
 
 import { Avatar } from "@/components/app/Avatar";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonClasses } from "@/components/instrument/Button";
+import { Glyph } from "@/components/instrument/Glyph";
 import { FormAlert } from "@/components/ui/FormAlert";
-import { Icon } from "@/components/ui/Icon";
 import type { AvatarResult, AvatarUploadStart } from "@/lib/actions/profile";
 import { isImageFile } from "@/lib/avatar";
 import { AvatarTooLargeError, prepareAvatar } from "@/lib/avatar-upload";
@@ -15,14 +15,18 @@ import { uploadToBucket } from "@/lib/video-upload";
 
 const styles = {
   editor: "flex flex-wrap items-center gap-4",
+  stacked: "grid justify-items-center gap-4 text-center",
   controls: "grid min-w-50 flex-1 gap-2",
   buttons: "flex flex-wrap gap-2",
-  pick: "inline-flex min-h-control cursor-pointer items-center gap-2 rounded-control border border-line-strong bg-panel px-4 text-[0.95rem] font-semibold text-ink transition-colors duration-fast hover:border-accent hover:text-accent focus-within:border-accent focus-within:text-accent aria-disabled:cursor-progress aria-disabled:opacity-60",
+  pick: buttonClasses("secondary", false, "cursor-pointer aria-disabled:cursor-progress aria-disabled:opacity-60"),
 };
 
+type EditorLabels = { add: string; change: string; remove: string };
+
 /**
- * Foto de perfil: elegir (o tomar con la cámara) → comprimir en un Web Worker → URL firmada → PUT directo
- * al bucket → confirmar. La usan la cuenta propia y los deportistas gestionados, cada uno con sus acciones.
+ * Imagen que sube directo al bucket: elegir (o tomar con la cámara) → comprimir en un Web Worker → URL firmada
+ * → PUT directo → confirmar. La usan la cuenta propia y los deportistas gestionados con su avatar, y los
+ * equipos con su logo (`preview` y `labels` propios).
  */
 export function AvatarEditor({
   name,
@@ -30,14 +34,22 @@ export function AvatarEditor({
   start,
   confirm,
   remove,
+  preview,
+  labels,
+  stacked = false,
 }: {
   name: string;
   imageUrl: string | null;
   start: (type: string, size: number) => Promise<AvatarUploadStart>;
   confirm: (uploadId: string) => Promise<AvatarResult>;
   remove: () => Promise<AvatarResult>;
+  preview?: ReactNode;
+  labels?: EditorLabels;
+  /** Imagen arriba y botones debajo, centrados (encabezado del equipo). */
+  stacked?: boolean;
 }) {
   const t = useT();
+  const text = labels ?? t.avatar;
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -70,11 +82,11 @@ export function AvatarEditor({
   }
 
   return (
-    <div className={styles.editor}>
-      <Avatar name={name} imageUrl={imageUrl} size="lg" />
+    <div className={stacked ? styles.stacked : styles.editor}>
+      {preview ?? <Avatar name={name} imageUrl={imageUrl} size="lg" />}
       <div className={styles.controls}>
         {error && <FormAlert tone="error">{error}</FormAlert>}
-        <div className={styles.buttons}>
+        <div className={`${styles.buttons} ${stacked ? "justify-center" : ""}`}>
           <label className={styles.pick} aria-disabled={pending || undefined}>
             <input
               type="file"
@@ -86,12 +98,12 @@ export function AvatarEditor({
                 event.target.value = "";
               }}
             />
-            <Icon name="camera" size={18} />
-            {pending ? t.common.working : imageUrl ? t.avatar.change : t.avatar.add}
+            <Glyph name="upload" size={18} />
+            {pending ? t.common.working : imageUrl ? text.change : text.add}
           </label>
           {imageUrl && (
-            <Button type="button" variant="ghost" disabled={pending} onClick={() => run(remove)}>
-              {t.avatar.remove}
+            <Button type="button" variant="quiet" disabled={pending} onClick={() => run(remove)}>
+              {text.remove}
             </Button>
           )}
         </div>

@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { pageStyles as styles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
-import { ListSkeleton } from "@/components/app/Skeleton";
+import { PageIntro } from "@/components/app/PageIntro";
 import { CoachAthletesList } from "@/components/coach/CoachData";
-import { ButtonLink } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
+import { ButtonLink } from "@/components/instrument/Button";
+import { LoadingState } from "@/components/instrument/States";
 import { SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";
 import { getT } from "@/lib/i18n/server";
@@ -21,17 +19,15 @@ export default async function CoachAthletesPage() {
   const t = await getT();
   await requireRole(SECTION_ROLES.coach);
   return (
-    <div className={styles.page}>
-      <div className={styles.headerRow}>
-        <PageHeader title={t.nav.athletes} />
-        <ButtonLink href={ROUTES.newCoachAthlete}>
-          <Icon name="plus" size={18} />
-          {t.coach.newAthlete}
-        </ButtonLink>
-      </div>
-      <Suspense fallback={<ListSkeleton />}>
+    <>
+      <PageIntro
+        title={t.nav.athletes}
+        lead={t.coach.athletesLead}
+        action={<ButtonLink href={ROUTES.newCoachAthlete} glyph="plus" className="max-sm:w-full">{t.coach.newAthlete}</ButtonLink>}
+      />
+      <Suspense fallback={<LoadingState label={t.coachHome.loading} />}>
         <CoachAthletesList />
       </Suspense>
-    </div>
+    </>
   );
 }

@@ -47,6 +47,9 @@ export function createFormatters(locale: Locale): Formatters {
 /** "Ana María Pérez" → "Ana": el saludo usa sólo el primer nombre. */
 export const firstName = (fullName: string) => fullName.trim().split(/\s+/)[0] ?? fullName;
 
+/** Hasta dos iniciales en mayúscula: "Sub 17 Norte" → "S1", "Ana Pérez" → "AP". */
+export const initials = (name: string) => name.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((word) => word[0]!.toUpperCase()).join("");
+
 // "en-CA" no es un idioma de la interfaz: es el formato que da yyyy-mm-dd
 const isoDate = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: APP_TIME_ZONE });
 /** "Hoy" en APP_TIME_ZONE (el servidor corre en UTC): para edades y otros cálculos por fecha. */

@@ -553,7 +553,20 @@
     "byAthleteTitle": "Riesgo promedio por deportista",
     "byAthleteSubtitle": "Promedio de las grabaciones procesadas de cada deportista, de mayor a menor.",
     "byAthleteEmpty": "Ningún deportista tiene grabaciones procesadas todavía.",
-    "athleteColumn": "Deportista"
+    "athleteColumn": "Deportista",
+    "noRisk": "Sin análisis",
+    "noRiskLabel": "{name}: sin análisis procesados",
+    "latestRiskLabel": "Último riesgo de {name}: {value}",
+    "byRiskTitle": "Deportistas por su último riesgo",
+    "byRiskLead": "Del riesgo más alto al más bajo; los que todavía no tienen análisis van al final.",
+    "athletesLead": "Cada deportista con su último riesgo. Entra a su ficha para ver sus análisis, grabar o editarla.",
+    "analysesLead": "Las grabaciones de todos tus deportistas, de la más reciente a la más antigua.",
+    "statsLead": "Riesgo promedio y máximo, la evolución y los picos de rodilla de tus deportistas, de todos o de un equipo.",
+    "statsLoading": "Cargando las estadísticas…",
+    "analysesLoading": "Cargando las grabaciones…",
+    "record": "Grabar o subir video",
+    "recordOwnHint": "Tiene cuenta propia: graba sus videos desde su cuenta y aquí ves sus análisis.",
+    "athleteLoading": "Cargando sus análisis…"
   },
   "teams": {
     "name": "Nombre del equipo",
@@ -586,7 +599,27 @@
     "showingTeam": "Mostrando sólo el equipo {name}.",
     "byTeamTitle": "Riesgo promedio por equipo",
     "byTeamSubtitle": "Promedio de las grabaciones procesadas de los deportistas de cada equipo.",
-    "byTeamEmpty": "Ningún equipo tiene grabaciones procesadas todavía."
+    "byTeamEmpty": "Ningún equipo tiene grabaciones procesadas todavía.",
+    "editName": "Editar el nombre del equipo",
+    "editNameHint": "Enter guarda · Escape cancela",
+    "namePlaceholder": "Por ejemplo, Sub 17",
+    "logo": {
+      "add": "Subir logo",
+      "change": "Cambiar logo",
+      "remove": "Quitar logo"
+    },
+    "addTitle": "Agregar deportistas",
+    "allIn": "Todos tus deportistas ya están en este equipo.",
+    "membersEmpty": "Este equipo todavía no tiene deportistas",
+    "membersEmptyHint": "Agrégalos desde la lista de abajo.",
+    "record": "Grabar o subir",
+    "recordFor": "Grabar o subir un video de {name}",
+    "recordOwn": "Graba desde su cuenta",
+    "addMemberLabel": "Agregar a {name} al equipo",
+    "removeMemberLabel": "Quitar a {name} del equipo",
+    "statsTitle": "Estadísticas del equipo",
+    "recentTitle": "Análisis recientes del equipo",
+    "loading": "Cargando los deportistas y las estadísticas del equipo…"
   },
   "admin": {
     "summary": "Resumen del sistema",
@@ -1028,5 +1061,27 @@
     "unavailable": "IA no disponible",
     "wakingHint": "La primera vez tarda unos segundos.",
     "unavailableHint": "Tus videos quedan guardados; el análisis empieza cuando vuelva."
+  },
+  "coachHome": {
+    "lead": {
+      "high": "{count} de tus {total} deportistas terminaron su último análisis con riesgo alto.",
+      "none": "Ninguno de tus {total} deportistas terminó su último análisis con riesgo alto.",
+      "noAnalyses": "Cuando tus deportistas graben, aquí verás cómo viene su riesgo.",
+      "noAthletes": "Crea tu primer deportista o pide que te asignen uno con cuenta."
+    },
+    "loading": "Cargando a tus deportistas…",
+    "squad": "Riesgo de tu plantel",
+    "squadLead": "Promedio del último análisis de cada deportista.",
+    "squadEmpty": "Sin análisis procesados todavía",
+    "highNow": "Con riesgo alto ahora",
+    "attention": "Mira primero",
+    "attentionLead": "Tus deportistas con el último riesgo más alto.",
+    "seeAllAthletes": "Ver todos los deportistas",
+    "teams": "Tus equipos",
+    "seeAllTeams": "Ver los equipos",
+    "createTeam": "Crear un equipo",
+    "noTeams": "Agrupa a tus deportistas en equipos para comparar su riesgo.",
+    "recent": "Lo último que se grabó",
+    "seeAllAnalyses": "Ver todas las grabaciones"
   }
 }

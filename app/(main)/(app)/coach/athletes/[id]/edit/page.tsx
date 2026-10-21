@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { pageStyles as styles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
+import { PageIntro } from "@/components/app/PageIntro";
 import { AvatarEditor } from "@/components/AvatarEditor";
 import { ManagedAthleteForm } from "@/components/coach/ManagedAthleteForm";
-import { Icon } from "@/components/ui/Icon";
+import { Glyph } from "@/components/instrument/Glyph";
 import { SECTION_ROLES } from "@/lib/access";
 import { updateManagedAthlete } from "@/lib/actions/managed-athletes";
 import { confirmManagedAvatarUpload, removeManagedAvatar, startManagedAvatarUpload } from "@/lib/actions/profile";
@@ -32,13 +31,13 @@ export default async function EditManagedAthletePage({ params }: PageProps<"/coa
   if (!athlete.is_managed) notFound();
 
   return (
-    <div className={styles.page}>
-      <Link href={coachAthletePath(athlete.id)} className={styles.backLink}>
-        <Icon name="chevronRight" size={16} />
+    <>
+      <Link href={coachAthletePath(athlete.id)} className="inline-flex w-fit items-center gap-1 text-sm font-semibold">
+        <Glyph name="chevronLeft" size={16} />
         {t.common.back}
       </Link>
-      <PageHeader title={t.coach.editAthleteTitle} subtitle={athlete.display_name} />
-      <section className={`${styles.card} ${styles.narrow}`} aria-label={t.profile.photo}>
+      <PageIntro title={t.coach.editAthleteTitle} lead={athlete.display_name} />
+      <section className="kin-card grid max-w-2xl gap-4 p-5 sm:p-6" aria-label={t.profile.photo}>
         <AvatarEditor
           name={athlete.display_name}
           imageUrl={athlete.display_avatar}
@@ -47,7 +46,7 @@ export default async function EditManagedAthletePage({ params }: PageProps<"/coa
           remove={removeManagedAvatar.bind(null, athlete.id)}
         />
       </section>
-      <section className={`${styles.card} ${styles.narrow}`}>
+      <section className="kin-card grid max-w-2xl gap-4 p-5 sm:p-6">
         <ManagedAthleteForm
           action={updateManagedAthlete.bind(null, athlete.id)}
           initial={{
@@ -62,6 +61,6 @@ export default async function EditManagedAthletePage({ params }: PageProps<"/coa
           pendingLabel={t.common.saving}
         />
       </section>
-    </div>
+    </>
   );
 }

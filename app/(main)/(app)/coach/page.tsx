@@ -1,38 +1,40 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { pageStyles as styles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
-import { ListSkeleton, TilesSkeleton } from "@/components/app/Skeleton";
-import { CoachOverview } from "@/components/coach/CoachData";
+import { PageIntro } from "@/components/app/PageIntro";
+import { CoachLead, CoachOverview } from "@/components/coach/CoachData";
+import { ButtonLink } from "@/components/instrument/Button";
+import { LoadingState } from "@/components/instrument/States";
 import { SECTION_ROLES } from "@/lib/access";
 import { firstName } from "@/lib/format";
 import { requireRole } from "@/lib/guard";
 import { format } from "@/lib/i18n";
 import { getT } from "@/lib/i18n/server";
+import { ROUTES } from "@/lib/routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getT();
   return { title: t.nav.home };
 }
 
-// SSR streaming (§3): saludo inmediato; resumen del equipo y deportistas en un chunk posterior
+// SSR con streaming: el saludo sale con el primer chunk; la frase, el plantel y los equipos después
 export default async function CoachHomePage() {
   const t = await getT();
   const user = await requireRole(SECTION_ROLES.coach);
   return (
-    <div className={styles.page}>
-      <PageHeader title={format(t.home.greeting, { name: firstName(user.full_name) })} subtitle={t.home.coach} />
-      <Suspense
-        fallback={
-          <>
-            <TilesSkeleton />
-            <ListSkeleton />
-          </>
+    <>
+      <PageIntro
+        title={format(t.home.greeting, { name: firstName(user.full_name) })}
+        lead={
+          <Suspense fallback={<p className="max-w-prose text-lg text-ink-muted">{t.home.coach}</p>}>
+            <CoachLead />
+          </Suspense>
         }
-      >
+        action={<ButtonLink href={ROUTES.newCoachAthlete} glyph="plus" className="max-sm:w-full">{t.coach.newAthlete}</ButtonLink>}
+      />
+      <Suspense fallback={<LoadingState label={t.coachHome.loading} />}>
         <CoachOverview />
       </Suspense>
-    </div>
+    </>
   );
 }

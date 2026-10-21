@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { ageOn, computeStatistics, riskLevel, riskTrend, sortByRecordedDesc, statsByAthlete } from "./analysis-stats.ts";
+import { ageOn, computeStatistics, riskLevel, sortByRecordedDesc, statsByAthlete } from "./analysis-stats.ts";
 import type { AnalysisSummary } from "./types.ts";
 
 const analysis = (id: number, day: number, status: AnalysisSummary["status"], risk: number | null): AnalysisSummary => ({
@@ -44,9 +44,8 @@ test("estadísticas de una lista vacía no inventan valores", () => {
   assert.equal(stats.lastRecordedAt, null);
 });
 
-test("orden por fecha, tendencia y nivel de riesgo", () => {
+test("orden por fecha y nivel de riesgo", () => {
   assert.deepEqual(sortByRecordedDesc(sample).map((a) => a.id), ["4", "2", "3", "5", "1"]);
-  assert.deepEqual(riskTrend(sample).map((p) => p.analysisId), ["1", "5", "2"]);
   assert.deepEqual([riskLevel(0.1), riskLevel(0.33), riskLevel(0.66)], ["low", "moderate", "high"]);
 });
 

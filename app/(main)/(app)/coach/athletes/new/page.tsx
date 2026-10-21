@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { pageStyles as styles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
+import { PageIntro } from "@/components/app/PageIntro";
 import { ManagedAthleteForm } from "@/components/coach/ManagedAthleteForm";
-import { Icon } from "@/components/ui/Icon";
+import { Glyph } from "@/components/instrument/Glyph";
 import { SECTION_ROLES } from "@/lib/access";
 import { createManagedAthlete } from "@/lib/actions/managed-athletes";
 import { todayInAppTimeZone } from "@/lib/format";
@@ -22,13 +21,13 @@ export default async function NewManagedAthletePage() {
   const t = await getT();
   await requireRole(SECTION_ROLES.coach);
   return (
-    <div className={styles.page}>
-      <Link href={ROUTES.coachAthletes} className={styles.backLink}>
-        <Icon name="chevronRight" size={16} />
+    <>
+      <Link href={ROUTES.coachAthletes} className="inline-flex w-fit items-center gap-1 text-sm font-semibold">
+        <Glyph name="chevronLeft" size={16} />
         {t.coach.backToTeam}
       </Link>
-      <PageHeader title={t.coach.newAthleteTitle} />
-      <section className={`${styles.card} ${styles.narrow}`}>
+      <PageIntro title={t.coach.newAthleteTitle} lead={t.coach.newAthleteSubtitle} />
+      <section className="kin-card grid max-w-2xl gap-4 p-5 sm:p-6">
         <ManagedAthleteForm
           action={createManagedAthlete}
           today={isoDate(todayInAppTimeZone())}
@@ -36,6 +35,6 @@ export default async function NewManagedAthletePage() {
           pendingLabel={t.coach.creatingAthlete}
         />
       </section>
-    </div>
+    </>
   );
 }

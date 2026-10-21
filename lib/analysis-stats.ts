@@ -43,19 +43,6 @@ export function computeStatistics(analyses: AnalysisSummary[]): AnalysisStatisti
   };
 }
 
-export type RiskPoint = { analysisId: string; recordedAt: string; score: number };
-
-/** Serie temporal del gráfico: sólo análisis con puntaje, del más antiguo al más reciente. */
-export function riskTrend(analyses: AnalysisSummary[]): RiskPoint[] {
-  return sortByRecordedDesc(analyses)
-    .reverse()
-    .flatMap((analysis) =>
-      analysis.risk_score === null
-        ? []
-        : [{ analysisId: analysis.id, recordedAt: analysis.recorded_at, score: analysis.risk_score }],
-    );
-}
-
 export type AthleteSummary = { athleteId: string; stats: AnalysisStatistics; latestScore: number | null };
 
 /** Estadísticas por deportista (vista de equipo del coach); sólo deportistas con grabaciones. */

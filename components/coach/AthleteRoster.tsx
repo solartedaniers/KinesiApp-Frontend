@@ -1,85 +1,94 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 
-import { RiskBadge } from "@/components/analysis/RiskBadge";
+import { RiskDial } from "@/components/analysis/RiskDial";
 import { Avatar } from "@/components/app/Avatar";
-import { EmptyState } from "@/components/app/EmptyState";
-import { ButtonLink } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
-import { ageOn, type AthleteSummary } from "@/lib/analysis-stats";
+import { RiskScale } from "@/components/instrument/Status";
+import { ageOn, type AthleteSummary, riskLevel } from "@/lib/analysis-stats";
+import { cssVars } from "@/lib/design/css";
+import { RISK_STEP, RISK_TEXT } from "@/lib/design/risk";
 import { todayInAppTimeZone } from "@/lib/format";
 import { format } from "@/lib/i18n";
-import { getT } from "@/lib/i18n/server";
-import { coachAthletePath, ROUTES } from "@/lib/routes";
+import { getFormat, getT } from "@/lib/i18n/server";
+import { coachAthletePath } from "@/lib/routes";
 import type { AthleteProfile } from "@/lib/types";
 
-// Una fila por deportista, columnas alineadas para escanear el riesgo de un vistazo. En celular,
-// nombre y datos en dos líneas con el riesgo a la derecha (los encabezados se ocultan)
-const COLUMNS = "md:grid-cols-[minmax(0,2.2fr)_5rem_7.5rem_7.5rem_9rem_1.25rem]";
+const styles = {
+  list: "kin-card divide-y divide-line overflow-hidden",
+  row: "relative grid grid-cols-[3.5rem_1fr_auto] items-center gap-x-4 gap-y-2 px-4 py-3 transition-colors hover:bg-accent-soft sm:px-5",
+  withScale: "lg:grid-cols-[3.5rem_1fr_auto_10rem]",
+  withActions: "sm:grid-cols-[3.5rem_1fr_auto_auto]",
+  value: "font-display text-xl font-semibold [font-variant-numeric:tabular-nums]",
+  // El enlace del nombre cubre toda la fila; las acciones van encima para seguir siendo clicables
+  link: "font-semibold text-ink after:absolute after:inset-0 hover:no-underline",
+  actions: "relative col-span-full flex flex-wrap gap-2 sm:col-span-1 sm:justify-end",
+};
 
-/** Lista de los deportistas del coach con su último riesgo y cantidad de grabaciones. */
-export async function AthleteRoster({ athletes, summaries }: { athletes: AthleteProfile[]; summaries: Map<string, AthleteSummary> }) {
-  const t = await getT();
-  if (athletes.length === 0) {
-    return (
-      <EmptyState icon="users" title={t.coach.rosterEmpty} body={t.coach.rosterEmptyHint}>
-        <ButtonLink href={ROUTES.newCoachAthlete}>
-          <Icon name="plus" size={18} />
-          {t.coach.newAthlete}
-        </ButtonLink>
-      </EmptyState>
-    );
-  }
+/**
+ * Deportistas con lo último de cada uno: mini medidor y escala de su último riesgo, cuenta y grabaciones.
+ * Sin `summaries` (el admin no lee análisis) la fila lleva la foto en lugar del medidor y sin enlace.
+ */
+export async function AthleteRoster({
+  athletes,
+  summaries,
+  empty,
+  actions,
+}: {
+  athletes: AthleteProfile[];
+  summaries?: Map<string, AthleteSummary>;
+  empty: ReactNode;
+  /** Botones propios de la fila (p. ej. grabar o quitar del equipo). */
+  actions?: (athlete: AthleteProfile) => ReactNode;
+}) {
+  const [t, f] = await Promise.all([getT(), getFormat()]);
+  if (athletes.length === 0) return empty;
   const today = todayInAppTimeZone();
 
   return (
-    <div className="overflow-hidden rounded-panel border border-line bg-panel">
-      <div className={`hidden gap-4 border-b border-line bg-sunken px-4 py-2.5 text-sm font-medium text-ink-muted md:grid ${COLUMNS}`} aria-hidden>
-        <span>{t.coach.athleteMetaTitle}</span>
-        <span>{t.athleteProfile.age}</span>
-        <span>{t.coach.accountColumn}</span>
-        <span>{t.coach.recordingsTitle}</span>
-        <span>{t.coach.latestRisk}</span>
-        <span />
-      </div>
-      <ul className="divide-y divide-line">
-        {athletes.map((athlete) => {
-          const summary = summaries.get(athlete.id);
-          const age = format(t.athleteProfile.ageValue, { years: ageOn(athlete.birth_date, today) });
-          const account = athlete.is_managed ? t.athleteProfile.managed : t.athleteProfile.withAccount;
-          const recordings = summary ? format(t.coach.recordings, { count: summary.stats.total }) : t.coach.noRecordings;
-          return (
-            <li key={athlete.id}>
-              <Link
-                href={coachAthletePath(athlete.id)}
-                className={`group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-0.5 px-4 py-3 text-ink transition-colors duration-fast hover:bg-sunken hover:no-underline md:min-h-16 ${COLUMNS}`}
-                aria-label={format(t.coach.openAthlete, { name: athlete.display_name })}
-              >
-                <span className="flex min-w-0 items-center gap-3">
-                  <Avatar name={athlete.display_name} imageUrl={athlete.display_avatar} />
-                  <span className="grid min-w-0">
-                    <span className="truncate font-semibold">{athlete.display_name}</span>
-                    {/* Celular: los datos de las columnas en una segunda línea */}
-                    <span className="flex flex-wrap gap-x-3 text-sm text-ink-muted md:hidden">
-                      <span>{age}</span>
-                      <span>{account}</span>
-                      <span>{recordings}</span>
-                    </span>
-                  </span>
-                </span>
-                <span className="hidden text-sm tabular-nums text-ink-muted md:block">{age}</span>
-                <span className="hidden text-sm text-ink-muted md:block">{account}</span>
-                <span className="hidden text-sm tabular-nums text-ink-muted md:block">{recordings}</span>
-                <span className="justify-self-end md:justify-self-start">
-                  {summary?.latestScore != null ? <RiskBadge score={summary.latestScore} /> : <span className="text-sm text-ink-muted">-</span>}
-                </span>
-                <span className="hidden text-line-strong transition-colors group-hover:text-accent md:block">
-                  <Icon name="chevronRight" size={18} />
-                </span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+    <ul className={styles.list}>
+      {athletes.map((athlete, i) => {
+        const summary = summaries?.get(athlete.id);
+        const score = summary?.latestScore ?? null;
+        const level = score === null ? null : riskLevel(score);
+        const delay = Math.min(i, 8);
+        return (
+          <li key={athlete.id} className={`kin-rise ${styles.row} ${actions ? styles.withActions : styles.withScale}`} style={cssVars({ "--i": delay })}>
+            {!summaries ? (
+              <span className="grid place-items-center"><Avatar name={athlete.display_name} imageUrl={athlete.display_avatar} /></span>
+            ) : (
+            <RiskDial
+              mini
+              score={score}
+              delayMs={delay * 120 + 300}
+              label={score === null ? format(t.coach.noRiskLabel, { name: athlete.display_name }) : format(t.coach.latestRiskLabel, { name: athlete.display_name, value: f.percent(score) })}
+              className="w-14"
+            />
+            )}
+            <span className="grid min-w-0 gap-0.5">
+              {summaries ? <Link href={coachAthletePath(athlete.id)} className={styles.link}>{athlete.display_name}</Link> : <span className="font-semibold text-ink">{athlete.display_name}</span>}
+              <span className="flex flex-wrap gap-x-3 text-sm text-ink-muted">
+                <span>{athlete.is_managed ? t.athleteProfile.managed : t.athleteProfile.withAccount}</span>
+                <span>{format(t.athleteProfile.ageValue, { years: ageOn(athlete.birth_date, today) })}</span>
+                {summaries && <span>{summary ? format(t.coach.recordings, { count: summary.stats.total }) : t.coach.noRecordings}</span>}
+              </span>
+            </span>
+            {!summaries ? (
+              <span />
+            ) : score !== null && level ? (
+              <span className={`${styles.value} ${RISK_TEXT[level]}`}>{f.percent(score)}</span>
+            ) : (
+              <span className="text-sm text-ink-muted">{t.coach.noRisk}</span>
+            )}
+            {actions ? (
+              <span className={styles.actions}>{actions(athlete)}</span>
+            ) : (
+              <span className="max-lg:hidden">
+                {level && <RiskScale compact level={level} label={t.analysis.riskShort[level]} steps={format(t.analysis.riskSteps, { step: RISK_STEP[level] })} />}
+              </span>
+            )}
+          </li>
+        );
+      })}
+    </ul>
   );
 }

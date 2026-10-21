@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-import { pageStyles as styles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
-import { ChartSkeleton, TilesSkeleton } from "@/components/app/Skeleton";
+import { PageIntro } from "@/components/app/PageIntro";
 import { TeamStats } from "@/components/coach/CoachData";
+import { LoadingState } from "@/components/instrument/States";
 import { SECTION_ROLES } from "@/lib/access";
 import { requireRole } from "@/lib/guard";
 import { getT } from "@/lib/i18n/server";
@@ -15,23 +14,16 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.nav.stats };
 }
 
-// SSR streaming (§3): cifras y riesgo por deportista, de todos o de un equipo (?team=), y por equipo
+// SSR con streaming: los instrumentos se calculan en el servidor, de todos o de un equipo (?team=)
 export default async function Page({ searchParams }: PageProps<"/coach/stats">) {
   const t = await getT();
   await requireRole(SECTION_ROLES.coach);
   return (
-    <div className={styles.page}>
-      <PageHeader title={t.nav.stats} />
-      <Suspense
-        fallback={
-          <>
-            <TilesSkeleton count={8} />
-            <ChartSkeleton />
-          </>
-        }
-      >
+    <>
+      <PageIntro title={t.nav.stats} lead={t.coach.statsLead} />
+      <Suspense fallback={<LoadingState label={t.coach.statsLoading} />}>
         <TeamStats teamParam={(await searchParams)[TEAM_PARAM]} />
       </Suspense>
-    </div>
+    </>
   );
 }
