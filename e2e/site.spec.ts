@@ -24,6 +24,17 @@ test("la tarjeta de consentimiento lleva a la página legal", async ({ page }) =
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(es.consent.title);
 });
 
+test("la cabecera muestra Iniciar sesión en el celular y las dos opciones en PC; el pie solo el aviso", async ({ page, isMobile }) => {
+  await page.goto("/");
+  const header = page.getByRole("banner");
+  await expect(header.getByRole("link", { name: es.site.signIn, exact: true })).toBeVisible();
+  await expect(header.getByRole("link", { name: es.site.createAccount, exact: true })).toBeVisible({ visible: !isMobile });
+
+  const footer = page.getByRole("contentinfo");
+  await expect(footer.getByText(es.app.disclaimer)).toBeVisible();
+  await expect(footer.getByRole("link")).toHaveCount(0);
+});
+
 test("el selector de idioma pasa la landing a inglés", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("link", { name: es.preferences.languageNames.en }).first().click();

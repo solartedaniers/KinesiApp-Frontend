@@ -38,8 +38,10 @@ export function SiteHeader({ locale, path }: { locale: Locale; path: string }) {
         <div className="ml-auto flex items-center gap-2">
           <LocaleSwitch path={path} />
           <ThemeSwitch className="max-sm:hidden" />
+          {/* En el celular solo cabe un botón: entrar, porque desde el login se llega al registro */}
+          <ButtonLink href={ROUTES.login} className="max-sm:px-3 md:hidden">{t.site.signIn}</ButtonLink>
           <ButtonLink href={ROUTES.login} variant="quiet" className="max-md:hidden">{t.site.signIn}</ButtonLink>
-          <ButtonLink href={ROUTES.register} className="max-sm:px-3">{t.site.createAccount}</ButtonLink>
+          <ButtonLink href={ROUTES.register} className="max-md:hidden">{t.site.createAccount}</ButtonLink>
         </div>
       </div>
     </header>
