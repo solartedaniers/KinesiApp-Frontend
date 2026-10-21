@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { SITE_ORIGIN } from "@/lib/config";
+import { SITE_ORIGIN } from "@/lib/server-config";
 import { LOCALES } from "@/lib/i18n";
 import { guidePath, localizedPath, ROUTES } from "@/lib/routes";
 import { MOVEMENT_TYPES } from "@/lib/types";

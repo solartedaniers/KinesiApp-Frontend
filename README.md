@@ -151,6 +151,10 @@ Hay tres pruebas que se saltan a propósito, y lo dicen:
 
 Vercel construye cada push. Las ramas de trabajo generan un preview, y `main` va a producción.
 
-- Las variables (`GRPC_WEB_BASE_URL`, `GRPC_TIMEOUT_MS`, `GRPC_STREAM_TIMEOUT_MS`, `AI_WAKE_UP_TIMEOUT_MS`, `APP_TIME_ZONE`) se definen en el proyecto de Vercel. Ninguna tiene secretos.
+- Las variables se definen en el proyecto de Vercel y ninguna tiene secretos. Solo `GRPC_WEB_BASE_URL` es obligatoria; las demás tienen su default documentado en `.env.example`.
+  - Del servidor: `lib/grpc/env.ts` (timeouts de gRPC) y `lib/server-config.ts` (origen del sitio, tamaño de página, renovación del token).
+  - Públicas (`NEXT_PUBLIC_*`, en `lib/config.ts`): zona horaria, renovación de la URL del video, espera del OTP y tiempos del estado de la IA. Next las incrusta al construir, así que cambiarlas pide redesplegar.
+  - Todas pasan por Zod: un valor inválido hace fallar el arranque en vez de usarse.
+  - Los límites de negocio (duración y tamaño del video, contraseña, edad, estatura, peso, chat) no son variables del frontend: llegan del backend por `GetClientPolicy`.
 - Las funciones corren en `fra1` (`vercel.json`), junto al backend.
 - La página del análisis declara `maxDuration = 300` porque el stream de `WatchAnalysis` con la IA en frío dura más de un minuto.

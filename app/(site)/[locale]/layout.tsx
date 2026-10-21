@@ -5,7 +5,8 @@ import type { Metadata, Viewport } from "next";
 
 import { RevealRoot } from "@/components/instrument/RevealRoot";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
-import { PREFERENCE_COOKIE, SITE_ORIGIN } from "@/lib/config";
+import { PREFERENCE_COOKIE } from "@/lib/config";
+import { SITE_ORIGIN } from "@/lib/server-config";
 import { INSTRUMENT_FONT_VARIABLES } from "@/lib/design/fonts";
 import { DICTIONARIES, LOCALES } from "@/lib/i18n";
 import { siteLocale } from "@/lib/i18n/site";

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { ACCESS_REFRESH_LEEWAY_SECONDS, SESSION_COOKIE } from "@/lib/config";
+import { SESSION_COOKIE } from "@/lib/config";
+import { ACCESS_REFRESH_LEEWAY_SECONDS } from "@/lib/server-config";
 import { secondsUntilExpiry, shouldRefresh } from "@/lib/jwt";
 import { isAuthRoute, isPrivateRoute, NEXT_PARAM, ROUTES } from "@/lib/routes";
 import { SESSION_COOKIE_NAMES, sessionCookies } from "@/lib/session-cookies";

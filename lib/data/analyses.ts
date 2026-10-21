@@ -2,7 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 
-import { LIST_PAGE_SIZE } from "../config";
+import { LIST_PAGE_SIZE } from "../server-config";
 import { analysisGateway } from "../grpc/analysis-gateway";
 import { chatGateway } from "../grpc/chat-gateway";
 import type { AnalysisSummary, ChatMessage, JumpAnalysis, SignedUrl } from "../types";

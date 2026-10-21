@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { SITE_ORIGIN } from "@/lib/config";
+import { SITE_ORIGIN } from "@/lib/server-config";
 
 // Lo privado ya redirige al login; aquí solo indico dónde está el mapa del sitio público
 export default function robots(): MetadataRoute.Robots {

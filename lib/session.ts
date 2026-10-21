@@ -3,9 +3,10 @@ import "server-only";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-import { AI_WAKE_COOKIE, AI_WAKE_COOKIE_MAX_AGE_SECONDS, IS_PRODUCTION, SESSION_COOKIE } from "./config";
+import { AI_WAKE_COOKIE, IS_PRODUCTION, SESSION_COOKIE } from "./config";
 import { accountGateway } from "./grpc/account-gateway";
 import { Code, rpcCode } from "./grpc/errors";
+import { AI_WAKE_COOKIE_MAX_AGE_SECONDS } from "./server-config";
 import { SESSION_COOKIE_NAMES, sessionCookies } from "./session-cookies";
 import type { TokenPair, User } from "./types";
 

@@ -3,7 +3,7 @@ import "server-only";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
-import { LIST_PAGE_SIZE } from "../config";
+import { LIST_PAGE_SIZE } from "../server-config";
 import { analysisGateway } from "../grpc/analysis-gateway";
 import { athleteGateway, managedAthleteGateway } from "../grpc/athlete-gateway";
 import { getLocale } from "../i18n/server";

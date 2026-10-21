@@ -2,7 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 
-import { LIST_PAGE_SIZE } from "../config";
+import { LIST_PAGE_SIZE } from "../server-config";
 import { athleteGateway } from "../grpc/athlete-gateway";
 import { userAdminGateway } from "../grpc/user-admin-gateway";
 import { getLocale } from "../i18n/server";
