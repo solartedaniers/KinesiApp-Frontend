@@ -20,6 +20,12 @@ type DialProps = {
   max?: number;
   /** Rango sin riesgo del análisis; sin él la esfera no pinta zonas. */
   target?: KneeTarget | null;
+  /** Bandas propias de la escala (p. ej. los niveles de riesgo) en lugar de las zonas de la rodilla. */
+  bands?: { key: string; from: number; to: number; stroke: string }[];
+  /** Color de la aguja y del arco cuando no es una señal articular (p. ej. el nivel de riesgo). */
+  tone?: { stroke: string; fill: string; text: string; tint: string };
+  /** Cada cuánto va un número en la escala. */
+  labelStep?: number;
   peak?: number;
   /** Escala numerada cada 30: sólo en los medidores grandes. */
   labels?: boolean;
@@ -36,15 +42,16 @@ type DialProps = {
  * Medidor de 240° con bisel, esfera hundida, zonas del rango objetivo, arco del valor y aguja.
  * Sin estado: lo usan tanto las fichas del servidor como la lectura en vivo del cliente.
  */
-export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, peak, labels = false, ticks: showTicks = true, sweep = true, delayMs = 0, className = "", children }: DialProps) {
+export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, bands, tone: toneOverride, labelStep = 30, peak, labels = false, ticks: showTicks = true, sweep = true, delayMs = 0, className = "", children }: DialProps) {
   const ticks = showTicks ? Array.from({ length: max / 10 + 1 }, (_, i) => i * 10) : [];
-  const tone = SIGNAL_CLASS[signal];
+  const tone = toneOverride ?? SIGNAL_CLASS[signal];
+  const arcs = bands ?? (target ? zoneSpans(max, target).map(({ zone, from, to }) => ({ key: zone, from, to, stroke: ZONE_CLASS[zone].stroke })) : []);
   const motion = cssVars({ "--angle": `${r(dialAngle(value, max))}deg`, "--fill": r((Math.min(value, max) / max) * 100), "--delay": `${delayMs}ms` });
   const peakA = peak === undefined ? null : dialPoint(C, VALUE_R - 9, peak, max);
   const peakB = peak === undefined ? null : dialPoint(C, VALUE_R + 9, peak, max);
   const screw = useId();
   return (
-    <div className={`kin-bezel ${className}`} style={cssVars({ "--tint": `var(--kin-${signal})` })} role="img" aria-label={label}>
+    <div className={`kin-bezel ${className}`} style={cssVars({ "--tint": toneOverride?.tint ?? `var(--kin-${signal})` })} role="img" aria-label={label}>
       <div className="kin-face relative aspect-square">
         <svg viewBox="0 0 200 200" className="absolute inset-0 size-full" aria-hidden>
           <path d={dialArc(C, VALUE_R, 0, max, max)} className="fill-none stroke-sunken" strokeWidth="11" strokeLinecap="round" />
@@ -56,11 +63,11 @@ export function Dial({ value, label, signal = "knee", max = DIAL_MAX, target, pe
             strokeLinecap="round"
             style={motion}
           />
-          {target && zoneSpans(max, target).map(({ zone, from, to }) => (
-            <path key={zone} d={dialArc(C, ZONE_R, from, to, max)} className={`fill-none ${ZONE_CLASS[zone].stroke}`} strokeWidth="4" />
+          {arcs.map(({ key, from, to, stroke }) => (
+            <path key={key} d={dialArc(C, ZONE_R, from, to, max)} className={`fill-none ${stroke}`} strokeWidth="4" />
           ))}
           {ticks.map((tick) => {
-            const major = tick % 30 === 0;
+            const major = tick % labelStep === 0;
             const a = dialPoint(C, ZONE_R - 6, tick, max);
             const b = dialPoint(C, ZONE_R - (major ? 15 : 10), tick, max);
             const text = dialPoint(C, ZONE_R - 25, tick, max);

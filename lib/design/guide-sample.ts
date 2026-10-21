@@ -1,7 +1,7 @@
 // Datos de ejemplo que comparten la guía y sus pantallas: la misma sentadilla en todas partes.
 import type { Formatters } from "@/lib/format";
-import { format } from "@/lib/i18n";
 import { lttb } from "@/lib/charts/lttb";
+import { riskTrendData } from "@/lib/charts/trend";
 import type { RiskLevel } from "@/lib/design/risk";
 import type { KneeTarget } from "@/lib/design/signals";
 import { type AngleSample, levelFor, SAMPLE_ANALYSIS, SAMPLE_DURATION_MS, SAMPLE_SESSIONS } from "@/lib/design/sample-analysis";
@@ -56,12 +56,5 @@ export const TEAM_RANGES = [
 
 /** Sesiones de ejemplo como puntos de la tendencia; también las usa el inicio del deportista. */
 export function trendData(f: Formatters, lastTemplate: string) {
-  const points = GUIDE_SAMPLE.sessions.map((s, i) => ({ x: i, score: s.score, level: s.level, label: `${f.shortDate(s.date)}: ${f.percent(s.score)}` }));
-  return {
-    points,
-    yTicks: [0, 0.25, 0.5, 0.75, 1].map((value) => ({ value, label: f.percent(value) })),
-    // Una fecha de por medio: ocho rótulos no caben en el celular
-    xTicks: GUIDE_SAMPLE.sessions.map((s, i) => ({ value: i, label: f.shortDate(s.date) })).filter((_, i) => i % 2 === 0),
-    lastLabel: format(lastTemplate, { score: f.percent(points.at(-1)!.score) }),
-  };
+  return riskTrendData(GUIDE_SAMPLE.sessions, f, lastTemplate);
 }

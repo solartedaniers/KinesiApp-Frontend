@@ -402,7 +402,14 @@
     "highRiskCount": "High risk",
     "lastRecording": "Last recording",
     "none": "No data",
-    "empty": "Record a movement to see your statistics."
+    "empty": "Record a movement to see your statistics.",
+    "lead": "Your average and highest risk, how it changed over time and where your knees land in each movement.",
+    "sessions": "Every processed recording, in order",
+    "trend": "Risk over time",
+    "kneeTitle": "Your knee peaks by movement",
+    "kneeLead": "Minimum, median and maximum of your sessions over the risk-free range of the latest analysis of each movement.",
+    "loading": "Loading your statistics…",
+    "emptyBody": "Once you have processed analyses you will see your gauges and progress here."
   },
   "riskChart": {
     "title": "Risk over time",
@@ -418,7 +425,22 @@
     "summary": "Summary",
     "recent": "Recent recordings",
     "seeAll": "See all recordings",
-    "loading": "Loading your analyses…"
+    "loading": "Loading your analyses…",
+    "lead": {
+      "jump": "Your last jump stayed within the risk-free range in {count} of {total} repetitions.",
+      "squat": "Your last squat stayed within the risk-free range in {count} of {total} repetitions.",
+      "risk": "Your last analysis ended with {risk}.",
+      "pending": "Your last recording is being analyzed.",
+      "empty": "Record your first jump or squat and your measures will show up here."
+    },
+    "last": "Last analysis",
+    "openAnalysis": "Open the analysis",
+    "trend": "Your risk over time",
+    "trendLabel": "Risk score of your last {count} sessions, from {first} to {last}",
+    "trendLast": "Last: {score}",
+    "trendEmptyTitle": "No trend yet",
+    "trendEmptyBody": "With two processed analyses you will see how your risk changes.",
+    "emptyTitle": "No analyses yet"
   },
   "onboarding": {
     "metaTitle": "Complete your profile",

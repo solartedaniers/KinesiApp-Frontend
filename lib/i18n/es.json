@@ -402,7 +402,14 @@
     "highRiskCount": "Con riesgo alto",
     "lastRecording": "Última grabación",
     "none": "Sin datos",
-    "empty": "Graba un movimiento para ver tus estadísticas."
+    "empty": "Graba un movimiento para ver tus estadísticas.",
+    "lead": "Tu riesgo promedio y el más alto, cómo cambió en el tiempo y dónde quedan tus rodillas en cada movimiento.",
+    "sessions": "Cada grabación procesada, en orden",
+    "trend": "Evolución del riesgo",
+    "kneeTitle": "Tus picos de rodilla por movimiento",
+    "kneeLead": "Mínimo, mediana y máximo de tus sesiones sobre el rango sin riesgo del último análisis de cada movimiento.",
+    "loading": "Cargando tus estadísticas…",
+    "emptyBody": "Cuando tengas análisis procesados verás aquí tus medidores y tu evolución."
   },
   "riskChart": {
     "title": "Evolución del riesgo",
@@ -418,7 +425,22 @@
     "summary": "Resumen",
     "recent": "Grabaciones recientes",
     "seeAll": "Ver todas las grabaciones",
-    "loading": "Cargando tus análisis…"
+    "loading": "Cargando tus análisis…",
+    "lead": {
+      "jump": "Tu último salto quedó dentro del rango sin riesgo en {count} de {total} repeticiones.",
+      "squat": "Tu última sentadilla quedó dentro del rango sin riesgo en {count} de {total} repeticiones.",
+      "risk": "Tu último análisis terminó con {risk}.",
+      "pending": "Tu última grabación se está analizando.",
+      "empty": "Graba tu primer salto o sentadilla y aquí verás tus medidas."
+    },
+    "last": "Último análisis",
+    "openAnalysis": "Ver el análisis",
+    "trend": "Tu riesgo en el tiempo",
+    "trendLabel": "Puntaje de riesgo de tus últimas {count} sesiones, de {first} a {last}",
+    "trendLast": "Última: {score}",
+    "trendEmptyTitle": "Todavía no hay tendencia",
+    "trendEmptyBody": "Con dos análisis procesados verás cómo cambia tu riesgo.",
+    "emptyTitle": "Todavía no hay análisis"
   },
   "onboarding": {
     "metaTitle": "Completa tu ficha",
