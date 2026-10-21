@@ -45,11 +45,27 @@ export function uploadToBucket(target: UploadTarget, body: Blob, onProgress?: (f
   return { done, abort: () => xhr.abort() };
 }
 
-/**
- * Duración del video con los metadatos que lee el propio navegador (<video preload="metadata">).
- * CreateVideoUpload la exige para rechazar de entrada lo que pase de 40 s.
- */
-export function readVideoDurationMs(file: Blob): Promise<number> {
+export type VideoMetadata = { durationMs: number; width: number; height: number; container: string | null };
+
+export const VIDEO_METADATA_WORKER_URL = "/workers/video-metadata-worker.js";
+
+type WorkerReading = { durationMs: number | null; width: number; height: number; container: string } | null;
+
+function readInWorker(file: Blob): Promise<WorkerReading> {
+  return new Promise((resolve) => {
+    const worker = new Worker(VIDEO_METADATA_WORKER_URL, { type: "module" });
+    const finish = (reading: WorkerReading) => {
+      worker.terminate();
+      resolve(reading);
+    };
+    worker.onmessage = (event: MessageEvent<WorkerReading>) => finish(event.data);
+    worker.onerror = () => finish(null);
+    worker.postMessage(file);
+  });
+}
+
+/** Respaldo con lo que lee el propio navegador (<video preload="metadata">). */
+function readWithVideoElement(file: Blob): Promise<{ durationMs: number | null; width: number; height: number }> {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
     const video = document.createElement("video");
@@ -60,8 +76,22 @@ export function readVideoDurationMs(file: Blob): Promise<number> {
     };
     video.preload = "metadata";
     video.onloadedmetadata = () =>
-      finish(() => (Number.isFinite(video.duration) ? resolve(Math.round(video.duration * 1000)) : reject(new Error("unknown duration"))));
+      finish(() => resolve({ durationMs: Number.isFinite(video.duration) ? Math.round(video.duration * 1000) : null, width: video.videoWidth, height: video.videoHeight }));
     video.onerror = () => finish(() => reject(new Error("unreadable video")));
     video.src = url;
   });
+}
+
+/**
+ * Duración, resolución y contenedor. Primero el lector propio en un Web Worker; si no entiende el
+ * archivo o no trae duración, el <video> del navegador. `recordedMs` es lo que midió la grabación:
+ * el WebM de MediaRecorder no trae duración y Chrome la informa como Infinity.
+ */
+export async function readVideoMetadata(file: Blob, recordedMs?: number): Promise<VideoMetadata | null> {
+  const worker = typeof Worker === "undefined" ? null : await readInWorker(file);
+  if (worker?.durationMs != null && worker.width) return { ...worker, durationMs: worker.durationMs };
+  const element = await readWithVideoElement(file).catch(() => null);
+  const durationMs = element?.durationMs ?? worker?.durationMs ?? recordedMs ?? null;
+  if (durationMs === null) return null;
+  return { durationMs, width: element?.width || worker?.width || 0, height: element?.height || worker?.height || 0, container: worker?.container ?? null };
 }

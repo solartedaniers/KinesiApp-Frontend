@@ -1,19 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { pageStyles as styles } from "@/components/app/page-classes";
-import { PageHeader } from "@/components/app/PageHeader";
 import { CaptureFlow } from "@/components/CaptureFlow";
-import { Icon } from "@/components/ui/Icon";
-import { analysesListHref, SECTION_ROLES } from "@/lib/access";
+import { SECTION_ROLES } from "@/lib/access";
 import { getMyAthleteProfile } from "@/lib/data/athletes";
 import { listMyAthletes } from "@/lib/data/coach";
 import { getClientPolicy } from "@/lib/data/public";
 import { requireRole } from "@/lib/guard";
 import { format } from "@/lib/i18n";
 import { getT } from "@/lib/i18n/server";
-import { ATHLETE_PARAM, coachAthletePath, newAnalysisPath, ROUTES, withNext, parseId } from "@/lib/routes";
+import { ATHLETE_PARAM, newAnalysisPath, parseId, ROUTES, withNext } from "@/lib/routes";
 import type { AthleteProfile, User } from "@/lib/types";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -28,7 +24,7 @@ async function uploadTarget(user: User, athleteParam: string | string[] | undefi
   return (await listMyAthletes()).find((athlete) => athlete.id === athleteId && athlete.is_managed) ?? null;
 }
 
-// SSR de la decisión (a quién se sube, consentimiento, límites) + isla CSR con la subida
+// SSR de la decisión (a quién se sube, consentimiento, límites) + isla CSR con la cámara y la subida
 export default async function NewAnalysisPage({ searchParams }: PageProps<"/analyses/new">) {
   const t = await getT();
   const user = await requireRole(SECTION_ROLES.analysis);
@@ -39,19 +35,15 @@ export default async function NewAnalysisPage({ searchParams }: PageProps<"/anal
   if (user.video_consent_version !== policy.video_consent_version) {
     redirect(withNext(ROUTES.videoConsent, newAnalysisPath(user.role === "coach" ? athlete.id : undefined)));
   }
-  const backHref = user.role === "coach" ? coachAthletePath(athlete.id) : analysesListHref(user.role);
 
   return (
-    <div className={styles.page}>
-      <Link href={backHref} className={styles.backLink}>
-        <Icon name="chevronRight" size={16} />
-        {t.common.back}
-      </Link>
-      <PageHeader
-        title={t.capture.title}
-        subtitle={user.role === "coach" ? format(t.capture.forAthlete, { name: athlete.display_name }) : t.capture.subtitle}
-      />
+    <>
+      <section aria-labelledby="capture-title" className="grid gap-2">
+        {user.role === "coach" && <p className="text-sm font-semibold text-ink-muted">{format(t.capture.forAthlete, { name: athlete.display_name })}</p>}
+        <h1 id="capture-title" className="font-display text-hero font-bold tracking-tight text-ink">{t.capture.title}</h1>
+        <p className="max-w-prose text-lg text-ink-muted">{format(t.capture.lead, { seconds: policy.video_max_duration_seconds })}</p>
+      </section>
       <CaptureFlow athleteId={athlete.id} maxBytes={policy.video_max_size_bytes} maxSeconds={policy.video_max_duration_seconds} />
-    </div>
+    </>
   );
 }

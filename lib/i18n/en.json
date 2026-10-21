@@ -366,7 +366,35 @@
       "videoTooLarge": "The video exceeds the {max} MB limit.",
       "videoTooLong": "The video is {seconds} seconds long. Please select or trim a clip of at most {max} seconds to continue.",
       "videoUnreadable": "We couldn't read this video's duration. Try another file."
-    }
+    },
+    "lead": "Choose the movement, frame yourself side-on and record. Recording stops on its own at {seconds} seconds.",
+    "movementLegend": "Which movement will you record?",
+    "hints": {
+      "jump": "Vertical countermovement jump",
+      "squat": "Free squat, side-on"
+    },
+    "setup": "Keep the camera still and side-on, about three meters away and at hip height.",
+    "frame": "Camera view",
+    "frameHint": "Keep your whole body in view, feet to head",
+    "openCamera": "Turn on the camera",
+    "record": "Record",
+    "stop": "Stop",
+    "recording": "Recording",
+    "limit": "Up to {seconds} s",
+    "autoStopped": "Recording stopped on its own at {seconds} seconds.",
+    "again": "Record again",
+    "chooseFile": "Choose a video",
+    "or": "Already have the video?",
+    "cameraDenied": "We could not use the camera. Check the browser permission or choose a saved video.",
+    "noRecorder": "This browser cannot record here. Record with your phone camera and choose the video.",
+    "reading": "Reading the video…",
+    "details": "Video details",
+    "duration": "Duration",
+    "resolution": "Resolution",
+    "container": "Format",
+    "size": "Size",
+    "uploadingLabel": "Video upload",
+    "confirming": "Preparing the analysis…"
   },
   "consent": {
     "title": "Video consent",

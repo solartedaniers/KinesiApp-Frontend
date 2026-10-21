@@ -366,7 +366,35 @@
       "videoTooLarge": "El video supera el máximo de {max} MB.",
       "videoTooLong": "El video dura {seconds} segundos. Por favor, selecciona o recorta un clip de máximo {max} segundos para continuar.",
       "videoUnreadable": "No pudimos leer la duración de este video. Prueba con otro archivo."
-    }
+    },
+    "lead": "Elige el movimiento, encuadra de perfil y graba. La grabación se detiene sola a los {seconds} segundos.",
+    "movementLegend": "¿Qué movimiento vas a grabar?",
+    "hints": {
+      "jump": "Salto vertical con contramovimiento",
+      "squat": "Sentadilla libre, de perfil"
+    },
+    "setup": "La cámara debe quedar fija y de perfil, a unos tres metros y a la altura de la cadera.",
+    "frame": "Vista de la cámara",
+    "frameHint": "Que se vea el cuerpo entero, del pie a la cabeza",
+    "openCamera": "Encender la cámara",
+    "record": "Grabar",
+    "stop": "Detener",
+    "recording": "Grabando",
+    "limit": "Máximo {seconds} s",
+    "autoStopped": "La grabación se detuvo sola a los {seconds} segundos.",
+    "again": "Grabar otra vez",
+    "chooseFile": "Elegir un video",
+    "or": "¿Ya tienes el video?",
+    "cameraDenied": "No pudimos usar la cámara. Revisa el permiso del navegador o elige un video guardado.",
+    "noRecorder": "Este navegador no puede grabar aquí. Graba con la cámara del celular y elige el video.",
+    "reading": "Leyendo el video…",
+    "details": "Datos del video",
+    "duration": "Duración",
+    "resolution": "Resolución",
+    "container": "Formato",
+    "size": "Tamaño",
+    "uploadingLabel": "Subida del video",
+    "confirming": "Preparando el análisis…"
   },
   "consent": {
     "title": "Consentimiento para el video",
