@@ -5,7 +5,6 @@ const styles = {
   tile: "h-24",
   stack: "grid gap-4",
   row: "h-16",
-  chart: "aspect-video w-full",
   title: "h-12 w-72 max-w-full",
 };
 
@@ -27,10 +26,6 @@ export function ListSkeleton({ rows = 3 }: { rows?: number }) {
       ))}
     </div>
   );
-}
-
-export function ChartSkeleton() {
-  return <div className={`${styles.block} ${styles.chart}`} aria-hidden />;
 }
 
 export function TitleSkeleton() {
