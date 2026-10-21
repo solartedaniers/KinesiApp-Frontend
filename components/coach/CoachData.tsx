@@ -14,7 +14,7 @@ import { RISK_DIAL_MAX, RISK_TONE } from "@/lib/design/risk";
 import { listAnalysesByAthlete } from "@/lib/data/analyses";
 import { listMyAthletes, listTeamAnalyses } from "@/lib/data/coach";
 import { listTeams } from "@/lib/data/teams";
-import { format } from "@/lib/i18n";
+import { plural } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
 import { NAV_BY_ROLE } from "@/lib/access";
 import { ROUTES, teamPath, teamsPath, teamStatsPath } from "@/lib/routes";
@@ -64,7 +64,7 @@ export async function CoachLead() {
   const { athletes, summaries } = await teamData();
   const scores = latestScores(athletes, summaries);
   const high = scores.filter((score) => score >= RISK_THRESHOLDS.high).length;
-  const text = athletes.length === 0 ? l.noAthletes : scores.length === 0 ? l.noAnalyses : high ? format(l.high, { count: high, total: athletes.length }) : format(l.none, { total: athletes.length });
+  const text = athletes.length === 0 ? l.noAthletes : scores.length === 0 ? l.noAnalyses : high ? plural(l.high, high, { total: athletes.length }) : plural(l.none, athletes.length);
   return <p className="max-w-prose text-lg text-ink-muted">{text}</p>;
 }
 
@@ -144,7 +144,7 @@ export async function CoachOverview() {
                     <TeamEmblem team={team} />
                     <span className="grid min-w-0">
                       <span className="truncate font-display font-semibold">{team.name}</span>
-                      <span className="text-sm text-ink-muted">{format(t.teams.members, { count: team.athlete_ids.length })}</span>
+                      <span className="text-sm text-ink-muted">{plural(t.teams.members, team.athlete_ids.length)}</span>
                     </span>
                     {average !== null && <span className={`ml-auto font-display text-lg font-semibold ${RISK_TONE[riskLevel(average)].text}`}>{f.percent(average)}</span>}
                   </Link>

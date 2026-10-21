@@ -13,7 +13,7 @@ import { createTeam, confirmTeamLogoUpload, deleteTeam, removeTeamLogo, renameTe
 import { statsByAthlete } from "@/lib/analysis-stats";
 import { cssVars } from "@/lib/design/css";
 import { listTeamAnalyses } from "@/lib/data/coach";
-import { format } from "@/lib/i18n";
+import { format, plural } from "@/lib/i18n";
 import { getT } from "@/lib/i18n/server";
 import { newAnalysisPath, teamsPath } from "@/lib/routes";
 import { statsByTeam } from "@/lib/team-stats";
@@ -75,7 +75,7 @@ export async function TeamHeader({ section, team, ownerName }: { section: TeamSe
         />
         <TeamNameHeading name={team.name} action={renameTeam.bind(null, id)} />
         <p className="flex flex-wrap justify-center gap-x-3 text-ink-muted">
-          <span>{format(t.teams.members, { count: team.athlete_ids.length })}</span>
+          <span>{plural(t.teams.members, team.athlete_ids.length)}</span>
           {ownerName && <span>{format(t.teams.ownedBy, { name: ownerName })}</span>}
         </p>
         <ConfirmDialog

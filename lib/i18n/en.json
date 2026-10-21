@@ -535,7 +535,10 @@
     "deleteAthlete": "Delete athlete",
     "deleteAthleteTitle": "Delete {name}?",
     "deleteAthleteBody": "All their recordings and analyses will be deleted too. This can't be undone.",
-    "recordings": "{count} recordings",
+    "recordings": {
+      "one": "{count} recording",
+      "other": "{count} recordings"
+    },
     "noRecordings": "No recordings",
     "athleteMetaTitle": "Athlete",
     "backToTeam": "Back to my athletes",
@@ -563,7 +566,10 @@
     "adminSubtitle": "Every team in the system, from coaches and administrators.",
     "empty": "No teams yet.",
     "emptyHint": "Create one with a name, for example \"Under 17\", and then add athletes to it.",
-    "members": "{count} athletes",
+    "members": {
+      "one": "{count} athlete",
+      "other": "{count} athletes"
+    },
     "unknownOwner": "No owner",
     "ownedBy": "{name}'s team",
     "back": "Back to teams",
@@ -591,7 +597,7 @@
       "remove": "Remove logo"
     },
     "addTitle": "Add athletes",
-    "allIn": "All your athletes are already on this team.",
+    "allIn": "Every available athlete is already on this team.",
     "membersEmpty": "This team has no athletes yet",
     "membersEmptyHint": "Add them from the list below.",
     "record": "Record or upload",
@@ -1032,8 +1038,14 @@
   },
   "coachHome": {
     "lead": {
-      "high": "{count} of your {total} athletes finished their latest analysis with high risk.",
-      "none": "None of your {total} athletes finished their latest analysis with high risk.",
+      "high": {
+        "one": "{count} of your {total} athletes finished their latest analysis with high risk.",
+        "other": "{count} of your {total} athletes finished their latest analysis with high risk."
+      },
+      "none": {
+        "one": "Your athlete didn't finish their latest analysis with high risk.",
+        "other": "None of your {count} athletes finished their latest analysis with high risk."
+      },
       "noAnalyses": "Once your athletes record, you'll see how their risk is trending here.",
       "noAthletes": "Create your first athlete or ask for one with an account to be assigned."
     },
@@ -1054,7 +1066,10 @@
   },
   "adminHome": {
     "lead": {
-      "pending": "There are {users} accounts and {count} athletes are waiting for a coach.",
+      "pending": {
+        "one": "There are {users} accounts and {count} athlete is waiting for a coach.",
+        "other": "There are {users} accounts and {count} athletes are waiting for a coach."
+      },
       "clear": "There are {users} accounts and every athlete has a coach."
     },
     "loading": "Loading accounts…",

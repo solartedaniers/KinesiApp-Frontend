@@ -11,7 +11,7 @@ import { accountStatus, systemSummary, unassignedFirst } from "@/lib/admin-stats
 import { cssVars } from "@/lib/design/css";
 import { SIGNAL_CLASS } from "@/lib/design/signals";
 import { listAllAthletes, listUsers } from "@/lib/data/admin";
-import { format } from "@/lib/i18n";
+import { format, plural } from "@/lib/i18n";
 import { getFormat, getLocale, getT } from "@/lib/i18n/server";
 import { USER_ROLES } from "@/lib/types";
 
@@ -42,7 +42,7 @@ async function systemData() {
 export async function AdminLead() {
   const t = await getT();
   const { summary } = await systemData();
-  const text = summary.unassigned ? format(t.adminHome.lead.pending, { count: summary.unassigned, users: summary.users }) : format(t.adminHome.lead.clear, { users: summary.users });
+  const text = summary.unassigned ? plural(t.adminHome.lead.pending, summary.unassigned, { users: summary.users }) : format(t.adminHome.lead.clear, { users: summary.users });
   return <p className="max-w-prose text-lg text-ink-muted">{text}</p>;
 }
 
@@ -113,7 +113,7 @@ export async function AdminOverview() {
                 <span key={role} className={`kin-light rounded-full ${SIGNAL_CLASS[ROLE_SIGNAL[role]].bg}`} style={{ ...cssVars({ "--i": i }), flexGrow: count }} />
               ))}
             </div>
-            <dl className="grid grid-cols-3 gap-3">
+            <dl className="grid gap-3 sm:grid-cols-3">
               {roles.map(({ role, count }, i) => (
                 <div key={role} className="kin-well grid gap-1 p-3">
                   <dt className="flex items-center gap-1.5 text-xs text-ink-muted">
@@ -217,7 +217,7 @@ export async function UsersTable({ currentUserId }: { currentUserId: string }) {
       {users.map((user, i) => {
         const isSelf = user.id === currentUserId;
         return (
-          <li key={user.id} className="kin-rise grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-3 px-4 py-4 sm:px-5 lg:grid-cols-[auto_minmax(0,1fr)_8rem_auto_9rem]" style={cssVars({ "--i": Math.min(i, 8) })}>
+          <li key={user.id} className="kin-rise grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-3 px-4 py-4 sm:px-5 lg:grid-cols-[auto_minmax(0,1fr)_8rem_16rem_9rem]" style={cssVars({ "--i": Math.min(i, 8) })}>
             <span className="relative">
               <Avatar name={user.full_name} imageUrl={user.avatar_url} />
               <span className={`absolute -right-0.5 -bottom-0.5 size-3 rounded-full ring-2 ring-panel ${SIGNAL_CLASS[ROLE_SIGNAL[user.role]].bg}`} aria-hidden />

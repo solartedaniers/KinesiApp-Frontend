@@ -535,7 +535,10 @@
     "deleteAthlete": "Eliminar deportista",
     "deleteAthleteTitle": "¿Eliminar a {name}?",
     "deleteAthleteBody": "Se borrarán también todas sus grabaciones y análisis. Esta acción no se puede deshacer.",
-    "recordings": "{count} grabaciones",
+    "recordings": {
+      "one": "{count} grabación",
+      "other": "{count} grabaciones"
+    },
     "noRecordings": "Sin grabaciones",
     "athleteMetaTitle": "Deportista",
     "backToTeam": "Volver a mis deportistas",
@@ -563,7 +566,10 @@
     "adminSubtitle": "Todos los equipos del sistema, de entrenadores y administradores.",
     "empty": "Todavía no hay equipos.",
     "emptyHint": "Crea uno con un nombre, por ejemplo «Sub 17», y después asígnale deportistas.",
-    "members": "{count} deportistas",
+    "members": {
+      "one": "{count} deportista",
+      "other": "{count} deportistas"
+    },
     "unknownOwner": "Sin dueño",
     "ownedBy": "Equipo de {name}",
     "back": "Volver a los equipos",
@@ -591,7 +597,7 @@
       "remove": "Quitar logo"
     },
     "addTitle": "Agregar deportistas",
-    "allIn": "Todos tus deportistas ya están en este equipo.",
+    "allIn": "Todos los deportistas disponibles ya están en este equipo.",
     "membersEmpty": "Este equipo todavía no tiene deportistas",
     "membersEmptyHint": "Agrégalos desde la lista de abajo.",
     "record": "Grabar o subir",
@@ -1032,8 +1038,14 @@
   },
   "coachHome": {
     "lead": {
-      "high": "{count} de tus {total} deportistas terminaron su último análisis con riesgo alto.",
-      "none": "Ninguno de tus {total} deportistas terminó su último análisis con riesgo alto.",
+      "high": {
+        "one": "{count} de tus {total} deportistas terminó su último análisis con riesgo alto.",
+        "other": "{count} de tus {total} deportistas terminaron su último análisis con riesgo alto."
+      },
+      "none": {
+        "one": "Tu deportista no terminó su último análisis con riesgo alto.",
+        "other": "Ninguno de tus {count} deportistas terminó su último análisis con riesgo alto."
+      },
       "noAnalyses": "Cuando tus deportistas graben, aquí verás cómo viene su riesgo.",
       "noAthletes": "Crea tu primer deportista o pide que te asignen uno con cuenta."
     },
@@ -1054,7 +1066,10 @@
   },
   "adminHome": {
     "lead": {
-      "pending": "Hay {users} cuentas y {count} deportistas esperan entrenador.",
+      "pending": {
+        "one": "Hay {users} cuentas y {count} deportista espera entrenador.",
+        "other": "Hay {users} cuentas y {count} deportistas esperan entrenador."
+      },
       "clear": "Hay {users} cuentas y todos los deportistas tienen entrenador."
     },
     "loading": "Cargando las cuentas…",

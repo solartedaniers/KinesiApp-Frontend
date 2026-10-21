@@ -6,7 +6,7 @@ import { RiskScale } from "@/components/instrument/Status";
 import { type AnalysisStatistics, riskLevel } from "@/lib/analysis-stats";
 import { cssVars } from "@/lib/design/css";
 import { RISK_STEP, RISK_TEXT } from "@/lib/design/risk";
-import { format } from "@/lib/i18n";
+import { format, plural } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
 import { teamPath } from "@/lib/routes";
 import type { Team } from "@/lib/types";
@@ -49,7 +49,7 @@ export async function TeamsList({
               <span className="grid min-w-0 gap-0.5">
                 <span className="font-display text-lg font-semibold [overflow-wrap:anywhere]">{team.name}</span>
                 <span className="flex flex-wrap gap-x-3 text-sm text-ink-muted">
-                  <span>{format(t.teams.members, { count: team.athlete_ids.length })}</span>
+                  <span>{plural(t.teams.members, team.athlete_ids.length)}</span>
                   {ownerNames && <span>{format(t.teams.ownedBy, { name: ownerNames.get(team.owner_id) ?? t.teams.unknownOwner })}</span>}
                 </span>
               </span>

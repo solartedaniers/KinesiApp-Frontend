@@ -8,7 +8,7 @@ import { ageOn, type AthleteSummary, riskLevel } from "@/lib/analysis-stats";
 import { cssVars } from "@/lib/design/css";
 import { RISK_STEP, RISK_TEXT } from "@/lib/design/risk";
 import { todayInAppTimeZone } from "@/lib/format";
-import { format } from "@/lib/i18n";
+import { format, plural } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
 import { coachAthletePath } from "@/lib/routes";
 import type { AthleteProfile } from "@/lib/types";
@@ -69,7 +69,7 @@ export async function AthleteRoster({
               <span className="flex flex-wrap gap-x-3 text-sm text-ink-muted">
                 <span>{athlete.is_managed ? t.athleteProfile.managed : t.athleteProfile.withAccount}</span>
                 <span>{format(t.athleteProfile.ageValue, { years: ageOn(athlete.birth_date, today) })}</span>
-                {summaries && <span>{summary ? format(t.coach.recordings, { count: summary.stats.total }) : t.coach.noRecordings}</span>}
+                {summaries && <span>{summary ? plural(t.coach.recordings, summary.stats.total) : t.coach.noRecordings}</span>}
               </span>
             </span>
             {!summaries ? (
