@@ -26,7 +26,7 @@ export async function ChartSection() {
   return (
     <GuideSection id="charts" title={t.styleGuide.sections.charts} lead={c.lead} tint="var(--kin-center)">
       <Specimen title={c.timeline} lead={c.timelineLead} className={card}>
-        <SimulatedTimeline knee={GUIDE_SAMPLE.knee} trunk={GUIDE_SAMPLE.trunk} repetitions={GUIDE_SAMPLE.timeline} durationMs={GUIDE_SAMPLE.durationMs} target={GUIDE_SAMPLE.kneeTarget} zoneNames={t.analysis.kneeZones[GUIDE_SAMPLE.movement]} />
+        <SimulatedTimeline primary={GUIDE_SAMPLE.knee} secondary={GUIDE_SAMPLE.trunk} repetitions={GUIDE_SAMPLE.timeline} durationMs={GUIDE_SAMPLE.durationMs} target={GUIDE_SAMPLE.kneeTarget} zoneNames={t.analysis.kneeZones[GUIDE_SAMPLE.movement]} />
       </Specimen>
       <div className="grid gap-5 lg:grid-cols-2">
         <Specimen title={c.trend} lead={c.trendLead} className={card}>

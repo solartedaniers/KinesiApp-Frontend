@@ -79,7 +79,7 @@ export default async function AnalysisScreen() {
           <h2 id="analysis-timeline" className="font-display text-xl font-semibold text-ink">{t.styleGuide.charts.timeline}</h2>
           <p className="text-sm text-ink-muted">{t.styleGuide.charts.timelineLead}</p>
         </div>
-        <SimulatedTimeline knee={sample.knee} trunk={sample.trunk} repetitions={sample.timeline} durationMs={sample.durationMs} target={target} zoneNames={t.analysis.kneeZones[sample.movement]} />
+        <SimulatedTimeline primary={sample.knee} secondary={sample.trunk} repetitions={sample.timeline} durationMs={sample.durationMs} target={target} zoneNames={t.analysis.kneeZones[sample.movement]} />
         <p className="text-sm text-ink-muted">{t.analysis.rangesNote}</p>
       </section>
     </ScreenShell>

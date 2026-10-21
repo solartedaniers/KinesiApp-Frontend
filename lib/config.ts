@@ -46,6 +46,9 @@ const publicConfigSchema = z.object({
   // Si la IA responde pero sigue cargando modelos, vuelvo a preguntar cada tanto, con un tope de intentos
   NEXT_PUBLIC_AI_WARMING_RETRY_MS: z.coerce.number().int().positive().default(3_000),
   NEXT_PUBLIC_AI_WARMING_ATTEMPTS: z.coerce.number().int().positive().default(20),
+  // La IA manda la pose solo en el instante de cada pico: la dibujo sobre el video mientras el cabezal
+  // esté a menos de esto, para que se vea al reproducir y no solo en el cuadro exacto
+  NEXT_PUBLIC_RISK_POSE_WINDOW_MS: z.coerce.number().int().positive().default(250),
 });
 
 export type PublicConfig = z.infer<typeof publicConfigSchema>;
@@ -65,12 +68,14 @@ const config = parsePublicConfig({
   NEXT_PUBLIC_AI_WAKE_STALE_MS: process.env.NEXT_PUBLIC_AI_WAKE_STALE_MS,
   NEXT_PUBLIC_AI_WARMING_RETRY_MS: process.env.NEXT_PUBLIC_AI_WARMING_RETRY_MS,
   NEXT_PUBLIC_AI_WARMING_ATTEMPTS: process.env.NEXT_PUBLIC_AI_WARMING_ATTEMPTS,
+  NEXT_PUBLIC_RISK_POSE_WINDOW_MS: process.env.NEXT_PUBLIC_RISK_POSE_WINDOW_MS,
 });
 
 export const APP_TIME_ZONE = config.NEXT_PUBLIC_APP_TIME_ZONE;
 export const VIDEO_URL_RENEW_MARGIN_MS = config.NEXT_PUBLIC_VIDEO_URL_RENEW_MARGIN_MS;
 export const OTP_RESEND_COOLDOWN_SECONDS = config.NEXT_PUBLIC_OTP_RESEND_COOLDOWN_SECONDS;
 export const PREFERENCE_COOKIE_MAX_AGE_SECONDS = config.NEXT_PUBLIC_PREFERENCE_COOKIE_MAX_AGE_SECONDS;
+export const RISK_POSE_WINDOW_MS = config.NEXT_PUBLIC_RISK_POSE_WINDOW_MS;
 
 // Estado de la IA compartido entre pestañas (Shared Worker o BroadcastChannel)
 export const AI_STATUS = {

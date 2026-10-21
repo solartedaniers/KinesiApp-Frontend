@@ -14,7 +14,7 @@ type Props = Omit<ComponentProps<typeof AngleTimeline>, "ms" | "playing" | "onSe
 /** La línea de tiempo de la guía: un reloj propio mueve el cabezal y el esqueleto hace de video. */
 export function SimulatedTimeline(props: Props) {
   const c = useT().styleGuide.charts;
-  const { durationMs, knee } = props;
+  const { durationMs, primary } = props;
   const [ms, setMs] = useState(0);
   const [playing, setPlaying] = useState(false);
   const position = useRef(0);
@@ -53,7 +53,7 @@ export function SimulatedTimeline(props: Props) {
         <figure data-theme="dark" className="kin-stage grid aspect-[4/3] place-items-center rounded-stage text-on-stage sm:aspect-auto">
           <svg viewBox="-50 -116 106 126" className="h-full max-h-60 w-full" role="img" aria-label={`${c.stage}: ${seconds}`}>
             <line x1="-50" x2="56" y1="0" y2="0" className="stroke-line-strong" strokeWidth="0.8" />
-            <PoseFigure keypoints={squatPoseAt(valueAt(knee, ms) ?? 0)} />
+            <PoseFigure keypoints={squatPoseAt(valueAt(primary, ms) ?? 0)} />
           </svg>
           <figcaption className="absolute top-2 left-3 font-display text-xs font-semibold text-on-stage [font-variant-numeric:tabular-nums]">{seconds}</figcaption>
         </figure>

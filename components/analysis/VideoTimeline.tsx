@@ -6,10 +6,14 @@ import { AngleTimeline } from "@/components/instrument/charts/AngleTimeline";
 import { ErrorState, LoadingState } from "@/components/instrument/States";
 import { renewPlaybackUrl } from "@/lib/actions/analyses";
 import { buildTimeline } from "@/lib/analysis-timeline";
-import { VIDEO_URL_RENEW_MARGIN_MS } from "@/lib/config";
+import { RISK_POSE_WINDOW_MS, VIDEO_URL_RENEW_MARGIN_MS } from "@/lib/config";
 import type { KneeTarget } from "@/lib/design/signals";
-import { useT } from "@/lib/i18n/client";
+import { format } from "@/lib/i18n";
+import { useFormat, useT } from "@/lib/i18n/client";
+import { focusJointText, focusNear } from "@/lib/risk-focus";
 import type { JointAngleMeasurement, MovementType, RiskAssessment, RiskCuts, SignedUrl } from "@/lib/types";
+
+import { RiskPose } from "./RiskPose";
 
 type Props = {
   analysisId: string;
@@ -31,7 +35,9 @@ type Props = {
  */
 export function VideoTimeline({ analysisId, initial, measurements, assessment, cuts, target, movement }: Props) {
   const t = useT();
+  const f = useFormat();
   const video = useRef<HTMLVideoElement>(null);
+  const [frame, setFrame] = useState<{ width: number; height: number } | null>(null);
   const resumeAt = useRef(0);
   const [timeline, setTimeline] = useState<Awaited<ReturnType<typeof buildTimeline>> | null>(null);
   const [source, setSource] = useState(initial);
@@ -76,9 +82,17 @@ export function VideoTimeline({ analysisId, initial, measurements, assessment, c
   if (failed) return <ErrorState title={t.analysisDetail.videoError} body={t.analysisDetail.videoUnsupported} />;
   if (!timeline) return <LoadingState label={t.analysisDetail.preparing} />;
 
+  const near = focusNear(timeline.repetitions, ms, RISK_POSE_WINDOW_MS);
+  const pose = near?.focus?.keyframe ? { ...near.focus, keyframe: near.focus.keyframe } : null;
+  const channels =
+    timeline.view === "front"
+      ? { primary: { label: t.analysis.valgus.left, signal: "knee" as const }, secondary: { label: t.analysis.valgus.right, signal: "center" as const } }
+      : undefined;
+
   return (
     <AngleTimeline
       {...timeline}
+      channels={channels}
       durationMs={Math.max(timeline.durationMs, videoMs)}
       target={target}
       zoneNames={t.analysis.kneeZones[movement]}
@@ -88,7 +102,7 @@ export function VideoTimeline({ analysisId, initial, measurements, assessment, c
       onTogglePlay={() => (video.current?.paused ? void video.current.play() : video.current?.pause())}
       layout="video"
       stage={
-        <figure data-theme="dark" className="kin-stage overflow-hidden rounded-stage text-on-stage">
+        <figure data-theme="dark" className="kin-stage relative overflow-hidden rounded-stage text-on-stage">
           <video
             ref={video}
             className="block aspect-[3/4] max-h-[70vh] w-full object-contain sm:aspect-video"
@@ -101,6 +115,7 @@ export function VideoTimeline({ analysisId, initial, measurements, assessment, c
             onLoadedMetadata={(event) => {
               const element = event.currentTarget;
               if (Number.isFinite(element.duration)) setVideoMs(element.duration * 1000);
+              if (element.videoWidth && element.videoHeight) setFrame({ width: element.videoWidth, height: element.videoHeight });
               if (resumeAt.current > 0) element.currentTime = resumeAt.current;
             }}
             onTimeUpdate={(event) => setMs(event.currentTarget.currentTime * 1000)}
@@ -109,6 +124,18 @@ export function VideoTimeline({ analysisId, initial, measurements, assessment, c
           >
             {t.analysisDetail.videoUnsupported}
           </video>
+          {near && pose && frame && (
+            <RiskPose
+              focus={pose}
+              level={near.level}
+              width={frame.width}
+              height={frame.height}
+              label={format(t.analysisDetail.focusPose, {
+                joint: focusJointText(pose, t.analysis),
+                degrees: pose.degrees === null ? "—" : f.degrees(pose.degrees),
+              })}
+            />
+          )}
         </figure>
       }
     />

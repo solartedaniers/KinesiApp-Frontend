@@ -4,11 +4,23 @@ import { lttb } from "./charts/lttb.ts";
 import { riskLevel } from "./analysis-stats.ts";
 import { repetitionKneePeaks } from "./analysis-reading.ts";
 import type { RiskLevel } from "./design/risk.ts";
-import type { JointAngleMeasurement, RiskAssessment, RiskCuts } from "./types.ts";
+import { type RiskFocus, repetitionFocus } from "./risk-focus.ts";
+import type { CameraView, JointAngleMeasurement, RiskAssessment, RiskCuts } from "./types.ts";
 
 export type AngleSample = { ms: number; degrees: number };
-export type TimelineRepetition = { startMs: number; endMs: number; level: RiskLevel; peak: AngleSample };
-export type Timeline = { knee: AngleSample[]; trunk: AngleSample[]; repetitions: TimelineRepetition[]; durationMs: number };
+/** `focus` existe cuando la repetición tiene riesgo moderado o alto: qué articulación, de qué lado y cuándo. */
+export type TimelineRepetition = { startMs: number; endMs: number; level: RiskLevel; peak: AngleSample; focus?: RiskFocus | null };
+/**
+ * De lado, `primary` es la flexión de rodilla y `secondary` la inclinación del tronco; de frente, el valgo de
+ * la rodilla izquierda y el de la derecha.
+ */
+export type Timeline = { view: CameraView; primary: AngleSample[]; secondary: AngleSample[]; repetitions: TimelineRepetition[]; durationMs: number };
+
+/** A qué serie va una muestra según la vista; null si esa vista no la dibuja. */
+function channelOf(view: CameraView, m: JointAngleMeasurement): "primary" | "secondary" | null {
+  if (view === "front") return m.joint_name === "knee_valgus" ? (m.side === "right" ? "secondary" : "primary") : null;
+  return m.joint_name === "knee_flexion" ? "primary" : m.joint_name === "trunk_inclination" ? "secondary" : null;
+}
 
 // Una gráfica de 1200 px no muestra más de esto; la lectura del instante usa todas las muestras
 export const DRAWN_POINTS = 240;
@@ -58,33 +70,49 @@ export function valueAt(samples: readonly AngleSample[], ms: number): number | n
 }
 
 /**
- * Arma la línea de tiempo en tasks: separa y ordena las muestras por articulación, reduce lo que se
- * dibuja y ubica el pico de rodilla de cada repetición. El nivel de cada repetición sale del patrón
- * que más puntuó en ella. Devuelve también las series completas para leer el instante exacto.
+ * Arma la línea de tiempo en tasks: separa y ordena las muestras según la vista, reduce lo que se
+ * dibuja y ubica el pico de cada repetición (de lado, el de la rodilla; de frente, el del valgo mayor).
+ * El nivel de cada repetición sale del patrón que más puntuó en ella. Devuelve también las series
+ * completas para leer el instante exacto.
  */
 export async function buildTimeline(
   measurements: readonly JointAngleMeasurement[],
   assessment: RiskAssessment | null,
   cuts: RiskCuts,
   pause: () => Promise<void> = yieldToMain,
-): Promise<Timeline & { fullKnee: AngleSample[]; fullTrunk: AngleSample[] }> {
-  const fullKnee: AngleSample[] = [];
-  const fullTrunk: AngleSample[] = [];
-  await forEachInTasks(measurements, (m) => (m.joint_name === "knee_flexion" ? fullKnee : fullTrunk).push({ ms: m.frame_timestamp_ms, degrees: m.angle_degrees }), pause);
-  fullKnee.sort((a, b) => a.ms - b.ms);
-  fullTrunk.sort((a, b) => a.ms - b.ms);
+): Promise<Timeline & { fullPrimary: AngleSample[]; fullSecondary: AngleSample[] }> {
+  const view = assessment?.camera_view ?? "side";
+  const full = { primary: [] as AngleSample[], secondary: [] as AngleSample[] };
+  await forEachInTasks(measurements, (m) => {
+    const channel = channelOf(view, m);
+    if (channel) full[channel].push({ ms: m.frame_timestamp_ms, degrees: m.angle_degrees });
+  }, pause);
+  full.primary.sort((a, b) => a.ms - b.ms);
+  full.secondary.sort((a, b) => a.ms - b.ms);
   await pause();
 
-  const peaks = assessment ? repetitionKneePeaks(assessment) : [];
+  const peaks = assessment && view !== "front" ? repetitionKneePeaks(assessment) : [];
+  // De frente la marca va en la rodilla que más se fue hacia adentro; de lado, en la flexión
+  const peakSeries = view === "front" ? [...full.primary, ...full.secondary] : full.primary;
   const repetitions = (assessment?.repetitions ?? []).map((rep, i) => {
-    let top: AngleSample = { ms: rep.start_ms, degrees: 0 };
-    for (const sample of fullKnee) if (sample.ms >= rep.start_ms && sample.ms < rep.end_ms && sample.degrees > top.degrees) top = sample;
+    let top: AngleSample | null = null;
+    for (const sample of peakSeries) if (sample.ms >= rep.start_ms && sample.ms < rep.end_ms && sample.degrees > (top?.degrees ?? -Infinity)) top = sample;
     const worst = Math.max(0, ...rep.pattern_scores.map((score) => score.score ?? 0));
+    const level = riskLevel(worst, cuts);
     // El ángulo es el que midió la IA; la muestra solo ubica el instante en la gráfica
-    return { startMs: rep.start_ms, endMs: rep.end_ms, level: riskLevel(worst, cuts), peak: { ms: top.ms, degrees: peaks[i] ?? top.degrees } };
+    const peak = { ms: top?.ms ?? rep.start_ms, degrees: peaks[i] ?? top?.degrees ?? 0 };
+    return { startMs: rep.start_ms, endMs: rep.end_ms, level, peak, focus: level === "low" ? null : repetitionFocus(assessment!, rep) };
   });
   await pause();
 
-  const durationMs = Math.max(fullKnee.at(-1)?.ms ?? 0, fullTrunk.at(-1)?.ms ?? 0, ...repetitions.map((rep) => rep.endMs));
-  return { knee: decimate(fullKnee), trunk: decimate(fullTrunk), repetitions, durationMs, fullKnee, fullTrunk };
+  const durationMs = Math.max(full.primary.at(-1)?.ms ?? 0, full.secondary.at(-1)?.ms ?? 0, ...repetitions.map((rep) => rep.endMs));
+  return {
+    view,
+    primary: decimate(full.primary),
+    secondary: decimate(full.secondary),
+    repetitions,
+    durationMs,
+    fullPrimary: full.primary,
+    fullSecondary: full.secondary,
+  };
 }
