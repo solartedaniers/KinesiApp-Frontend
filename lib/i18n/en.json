@@ -419,7 +419,10 @@
       "assistant": "Assistant"
     },
     "disclaimer": "The assistant explains the analysis result in general terms. It doesn't replace an assessment by a health professional.",
-    "preparing": "The assistant is preparing the explanation of the result…"
+    "preparing": "The assistant is preparing the explanation of the result…",
+    "retry": "Try again",
+    "keptQuestion": "Your question is still here: you can try again now.",
+    "retryOpening": "Ask for the explanation again"
   },
   "angleChart": {
     "subtitle": "Angle throughout the movement.",
@@ -747,7 +750,7 @@
     "CONSENT_REQUIRED": "You must accept the video consent before uploading a recording.",
     "ANALYSIS_NOT_PROCESSED": "The assistant will be available when the analysis finishes.",
     "CHAT_RATE_LIMITED": "You've asked many questions in a row. Wait a moment before sending another.",
-    "ASSISTANT_UNAVAILABLE": "The assistant isn't available right now. Try again later.",
+    "ASSISTANT_UNAVAILABLE": "The assistant couldn't answer this time.",
     "TEAM_NAME_TAKEN": "You already have a team with that name.",
     "INVALID_TEAM_MEMBER": "That athlete can't be in this team.",
     "CANNOT_MODIFY_OWN_ACCOUNT": "You can't change the role or status of your own account.",

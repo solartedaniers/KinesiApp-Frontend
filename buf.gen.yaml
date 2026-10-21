@@ -6,5 +6,8 @@ inputs:
 plugins:
   - local: protoc-gen-es
     out: lib/gen
-    opt: target=ts
+    # Con la extensión .ts en los imports, las pruebas de Node cargan el código generado sin bundler
+    opt:
+      - target=ts
+      - import_extension=ts
 clean: true

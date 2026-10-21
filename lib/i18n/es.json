@@ -419,7 +419,10 @@
       "assistant": "Asistente"
     },
     "disclaimer": "El asistente explica el resultado del análisis de forma general. No reemplaza la valoración de un profesional de la salud.",
-    "preparing": "El asistente está preparando la explicación del resultado…"
+    "preparing": "El asistente está preparando la explicación del resultado…",
+    "retry": "Reintentar",
+    "keptQuestion": "Tu pregunta sigue escrita: puedes reintentar ahora.",
+    "retryOpening": "Pedir la explicación de nuevo"
   },
   "angleChart": {
     "subtitle": "Ángulo a lo largo del movimiento.",
@@ -747,7 +750,7 @@
     "CONSENT_REQUIRED": "Debes aceptar el consentimiento de video antes de subir una grabación.",
     "ANALYSIS_NOT_PROCESSED": "El asistente estará disponible cuando termine el análisis.",
     "CHAT_RATE_LIMITED": "Hiciste muchas preguntas seguidas. Espera un momento antes de enviar otra.",
-    "ASSISTANT_UNAVAILABLE": "El asistente no está disponible en este momento. Inténtalo más tarde.",
+    "ASSISTANT_UNAVAILABLE": "El asistente no pudo responder esta vez.",
     "TEAM_NAME_TAKEN": "Ya tienes un equipo con ese nombre.",
     "INVALID_TEAM_MEMBER": "Ese deportista no puede estar en este equipo.",
     "CANNOT_MODIFY_OWN_ACCOUNT": "No puedes cambiar el rol ni el estado de tu propia cuenta.",
