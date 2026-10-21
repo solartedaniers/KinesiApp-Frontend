@@ -15,6 +15,7 @@ export default async function RegisterPage() {
   const t = await getT();
   return (
     <AuthShell
+      wide
       title={t.register.title}
       subtitle={t.register.subtitle}
       footer={
