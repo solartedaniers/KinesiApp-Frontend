@@ -74,7 +74,7 @@
     "eyebrow": "Recording guide",
     "setupTitle": "Set up the camera",
     "setup": [
-      "From the side: the camera faces your side, not your front.",
+      "Side-on or front-on, never at an angle: the camera faces your side or your chest.",
       "Fixed, on a tripod or propped up: don't follow the movement by hand.",
       "About three meters away and at hip height, with your whole body in frame, from feet to head.",
       "Good light, a clear background and clothes that let the knee and hip show."
@@ -123,12 +123,18 @@
           "Stand up without bouncing and repeat at a steady pace."
         ],
         "mistakes": [
-          "Facing the camera: from the front it can't see how much the knee bends.",
+          "Recording at an angle: neither side-on nor front-on, the angles come out approximate.",
           "Someone else crossing the frame during the set.",
           "Cutting the video before the last rep is up."
         ]
       }
-    }
+    },
+    "viewsTitle": "Side-on or front-on",
+    "views": [
+      "From the side, it measures how much the knee and trunk bend.",
+      "From the front, it measures whether each knee caves in (valgus) on landing or on the way down.",
+      "KinesiApp detects the view on its own. If you record at an angle, the analysis warns that it is approximate."
+    ]
   },
   "offline": {
     "metaTitle": "Offline",
@@ -269,7 +275,38 @@
     "kneeMedian": "Median of the knee peaks",
     "repetitions": "Repetitions",
     "noKnee": "No knee measure",
-    "riskSteps": "Level {step} of 3"
+    "riskSteps": "Level {step} of 3",
+    "sides": {
+      "left": "left",
+      "right": "right"
+    },
+    "riskJoint": {
+      "knee_flexion": "Flexion of the {side} knee",
+      "trunk_inclination": "Trunk inclination",
+      "knee_valgus": "{side} knee caving in"
+    },
+    "riskJointBoth": {
+      "knee_flexion": "Knee flexion",
+      "trunk_inclination": "Trunk inclination",
+      "knee_valgus": "Knees caving in"
+    },
+    "view": {
+      "side": "Side-on",
+      "front": "Front-on",
+      "inconclusive": "Inconclusive"
+    },
+    "viewLead": {
+      "side": "Knee flexion and trunk inclination were measured. To measure whether the knee caves in, record from the front.",
+      "front": "Each knee was checked for caving in (valgus) on landing or at the bottom. To measure knee flexion and the trunk, record from the side.",
+      "inconclusive": "The camera was neither clearly side-on nor front-on: the angles are approximate and knee caving was not measured. To measure it, record from the front."
+    },
+    "valgus": {
+      "left": "Left knee valgus",
+      "right": "Right knee valgus"
+    },
+    "valgusAsymmetry": "Difference between knees",
+    "valgusNote": "Frontal plane projection angle: positive means the knee caves in, negative that it bows out. Median of each repetition's peak; indicative thresholds without clinical validation.",
+    "viewStatus": "Detected view: {view}."
   },
   "analysisDetail": {
     "metaTitle": "Recording",
@@ -322,11 +359,16 @@
     "chat": "Ask the AI",
     "timelineTitle": "Synchronized timeline",
     "timelineLead": "The video, the readings and the chart share the same playhead. Tap a repetition to jump to it.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "focusTitle": "Where the risk is",
+    "focusAt": "Repetition {index}: {joint}, {degrees} at {time}.",
+    "focusNone": "No repetition reached moderate or high risk.",
+    "focusPose": "Skeleton at the moment of risk: {joint}, {degrees}"
   },
   "joints": {
     "knee_flexion": "Knee flexion",
-    "trunk_inclination": "Trunk inclination"
+    "trunk_inclination": "Trunk inclination",
+    "knee_valgus": "Knee caving in (valgus)"
   },
   "capture": {
     "metaTitle": "New recording",
@@ -344,7 +386,7 @@
       "items": [
         "Record at 30 fps and upload the original file.",
         "Feet inside the frame for the whole movement, including the landing.",
-        "A steady camera, to the side or at three quarters of the athlete."
+        "A steady camera: side-on measures flexion; front-on, whether the knee caves in."
       ]
     },
     "errors": {
@@ -354,13 +396,13 @@
       "videoTooLong": "The video is {seconds} seconds long. Please select or trim a clip of at most {max} seconds to continue.",
       "videoUnreadable": "We couldn't read this video's duration. Try another file."
     },
-    "lead": "Choose the movement, frame yourself side-on and record. Recording stops on its own at {seconds} seconds.",
+    "lead": "Choose the movement, frame yourself side-on or front-on and record. Recording stops on its own at {seconds} seconds.",
     "movementLegend": "Which movement will you record?",
     "hints": {
       "jump": "Vertical countermovement jump",
-      "squat": "Free squat, side-on"
+      "squat": "Free squat, side-on or front-on"
     },
-    "setup": "Keep the camera still and side-on, about three meters away and at hip height.",
+    "setup": "Keep the camera still, side-on or front-on, about three meters away and at hip height.",
     "frame": "Camera view",
     "frameHint": "Keep your whole body in view, feet to head",
     "openCamera": "Turn on the camera",
@@ -786,7 +828,11 @@
     "page": "Page {page} of {total}",
     "generating": "Generating the PDF…",
     "failed": "The PDF could not be generated. Please try again.",
-    "risk": "Risk"
+    "risk": "Risk",
+    "view": "Detected view",
+    "focus": "At risk",
+    "peak": "Peak",
+    "chartsFront": "Each knee's valgus throughout the video"
   },
   "systemPing": {
     "title": "Backend connection test",
@@ -933,7 +979,8 @@
       "trendLast": "Latest: {score}",
       "comparison": "Athlete comparison",
       "comparisonLead": "Range and median of each athlete's peak flexion on the same scale.",
-      "median": "Median"
+      "median": "Median",
+      "repetitionFocus": "Repetition {index}: {risk}, {joint} at {time}"
     },
     "progress": {
       "lead": "While the AI works, the skeleton assembles point by point and the ring advances through stages in each one's color.",

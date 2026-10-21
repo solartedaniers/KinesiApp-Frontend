@@ -92,6 +92,15 @@ export default async function GuidePage({ params }: PageProps<"/[locale]/guide/[
           </div>
         </section>
 
+        <section aria-labelledby="guide-views" className="grid gap-3" data-reveal>
+          <h2 id="guide-views" className="font-display text-2xl font-semibold text-ink">{g.viewsTitle}</h2>
+          <ul className="grid gap-x-8 gap-y-3 text-ink md:grid-cols-3">
+            {g.views.map((item) => (
+              <li key={item} className="border-l-2 border-accent pl-3">{item}</li>
+            ))}
+          </ul>
+        </section>
+
         {/* Sin la política (backend dormido en el build) omito la sección: no guardo una copia local de los
             límites y la siguiente regeneración la completa */}
         {policy && (

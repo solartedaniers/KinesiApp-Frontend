@@ -74,7 +74,7 @@
     "eyebrow": "Guía de grabación",
     "setupTitle": "Prepara la cámara",
     "setup": [
-      "De perfil: la cámara mira tu costado, no tu frente.",
+      "De lado o de frente, nunca en diagonal: la cámara mira tu costado o tu pecho.",
       "Fija, en un trípode o apoyada: nada de seguir el movimiento con la mano.",
       "A unos tres metros y a la altura de la cadera, con todo el cuerpo en cuadro, de los pies a la cabeza.",
       "Buena luz, fondo despejado y ropa que deje ver la rodilla y la cadera."
@@ -123,12 +123,18 @@
           "Sube sin rebotar y repite a un ritmo constante."
         ],
         "mistakes": [
-          "Ponerte de frente: de frente no se ve cuánto se dobla la rodilla.",
+          "Grabar en diagonal: ni de lado ni de frente, los ángulos salen aproximados.",
           "Que otra persona cruce el cuadro durante la serie.",
           "Cortar el video antes de la última subida."
         ]
       }
-    }
+    },
+    "viewsTitle": "De lado o de frente",
+    "views": [
+      "De lado se mide cuánto se doblan la rodilla y el tronco.",
+      "De frente se mide si la rodilla se va hacia adentro (valgo) al aterrizar o al bajar, en cada pierna.",
+      "KinesiApp detecta sola la vista. Si grabas en diagonal, el análisis avisa que es aproximado."
+    ]
   },
   "offline": {
     "metaTitle": "Sin conexión",
@@ -269,7 +275,38 @@
     "kneeMedian": "Mediana de los picos de rodilla",
     "repetitions": "Repeticiones",
     "noKnee": "Sin medida de rodilla",
-    "riskSteps": "Nivel {step} de 3"
+    "riskSteps": "Nivel {step} de 3",
+    "sides": {
+      "left": "izquierda",
+      "right": "derecha"
+    },
+    "riskJoint": {
+      "knee_flexion": "Flexión de la rodilla {side}",
+      "trunk_inclination": "Inclinación del tronco",
+      "knee_valgus": "Rodilla {side} hacia adentro"
+    },
+    "riskJointBoth": {
+      "knee_flexion": "Flexión de rodilla",
+      "trunk_inclination": "Inclinación del tronco",
+      "knee_valgus": "Rodillas hacia adentro"
+    },
+    "view": {
+      "side": "De lado",
+      "front": "De frente",
+      "inconclusive": "No concluyente"
+    },
+    "viewLead": {
+      "side": "Se midió la flexión de rodilla y la inclinación del tronco. Para medir si la rodilla se va hacia adentro, graba de frente.",
+      "front": "Se midió si cada rodilla se va hacia adentro (valgo) al aterrizar o en el fondo. Para medir la flexión de rodilla y el tronco, graba de lado.",
+      "inconclusive": "La cámara no estaba claramente de lado ni de frente: los ángulos son aproximados y no se midió si la rodilla se va hacia adentro. Para medirlo, graba de frente."
+    },
+    "valgus": {
+      "left": "Valgo de la rodilla izquierda",
+      "right": "Valgo de la rodilla derecha"
+    },
+    "valgusAsymmetry": "Diferencia entre rodillas",
+    "valgusNote": "Ángulo de proyección frontal: positivo es la rodilla hacia adentro y negativo hacia afuera. Mediana de los picos por repetición; umbrales orientativos, sin validación clínica.",
+    "viewStatus": "Vista detectada: {view}."
   },
   "analysisDetail": {
     "metaTitle": "Grabación",
@@ -322,11 +359,16 @@
     "chat": "Preguntarle a la IA",
     "timelineTitle": "Línea de tiempo sincronizada",
     "timelineLead": "El video, las lecturas y la gráfica comparten el mismo cabezal. Toca una repetición para saltar a ella.",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "focusTitle": "Dónde está el riesgo",
+    "focusAt": "Repetición {index}: {joint}, {degrees} a los {time}.",
+    "focusNone": "Ninguna repetición llegó a riesgo moderado o alto.",
+    "focusPose": "Esqueleto en el instante del riesgo: {joint}, {degrees}"
   },
   "joints": {
     "knee_flexion": "Flexión de rodilla",
-    "trunk_inclination": "Inclinación del tronco"
+    "trunk_inclination": "Inclinación del tronco",
+    "knee_valgus": "Rodilla hacia adentro (valgo)"
   },
   "capture": {
     "metaTitle": "Nueva grabación",
@@ -344,7 +386,7 @@
       "items": [
         "Graba a 30 fps y sube el archivo original.",
         "Los pies dentro del cuadro durante todo el movimiento, también al aterrizar.",
-        "Cámara fija, de costado o a tres cuartos del deportista."
+        "Cámara fija: de lado mide la flexión; de frente, si la rodilla se va hacia adentro."
       ]
     },
     "errors": {
@@ -354,13 +396,13 @@
       "videoTooLong": "El video dura {seconds} segundos. Por favor, selecciona o recorta un clip de máximo {max} segundos para continuar.",
       "videoUnreadable": "No pudimos leer la duración de este video. Prueba con otro archivo."
     },
-    "lead": "Elige el movimiento, encuadra de perfil y graba. La grabación se detiene sola a los {seconds} segundos.",
+    "lead": "Elige el movimiento, encuadra de lado o de frente y graba. La grabación se detiene sola a los {seconds} segundos.",
     "movementLegend": "¿Qué movimiento vas a grabar?",
     "hints": {
       "jump": "Salto vertical con contramovimiento",
-      "squat": "Sentadilla libre, de perfil"
+      "squat": "Sentadilla libre, de lado o de frente"
     },
-    "setup": "La cámara debe quedar fija y de perfil, a unos tres metros y a la altura de la cadera.",
+    "setup": "La cámara debe quedar fija, de lado o de frente, a unos tres metros y a la altura de la cadera.",
     "frame": "Vista de la cámara",
     "frameHint": "Que se vea el cuerpo entero, del pie a la cabeza",
     "openCamera": "Encender la cámara",
@@ -786,7 +828,11 @@
     "page": "Página {page} de {total}",
     "generating": "Generando el PDF…",
     "failed": "No se pudo generar el PDF. Inténtalo de nuevo.",
-    "risk": "Riesgo"
+    "risk": "Riesgo",
+    "view": "Vista detectada",
+    "focus": "En riesgo",
+    "peak": "Pico",
+    "chartsFront": "Valgo de cada rodilla a lo largo del video"
   },
   "systemPing": {
     "title": "Prueba de conexión con el backend",
@@ -933,7 +979,8 @@
       "trendLast": "Última: {score}",
       "comparison": "Comparación entre deportistas",
       "comparisonLead": "Rango y mediana de la flexión máxima de cada deportista sobre la misma escala.",
-      "median": "Mediana"
+      "median": "Mediana",
+      "repetitionFocus": "Repetición {index}: {risk}, {joint} a los {time}"
     },
     "progress": {
       "lead": "Mientras la IA trabaja, el esqueleto se arma punto por punto y el anillo avanza por etapas con el color de cada una.",
