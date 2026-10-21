@@ -2,7 +2,7 @@ import { type ReactNode, useId } from "react";
 
 import { dialAngle, dialArc, dialPoint } from "@/lib/charts/dial";
 import { cssVars } from "@/lib/design/css";
-import { type Signal, SIGNAL_CLASS, ZONE_CLASS, zoneSpans } from "@/lib/design/signals";
+import { type KneeTarget, type Signal, SIGNAL_CLASS, ZONE_CLASS, zoneSpans } from "@/lib/design/signals";
 
 // Escala de la flexión de rodilla en la esfera; pasa del máximo que la IA registra en una sentadilla
 export const DIAL_MAX = 150;
@@ -18,7 +18,8 @@ type DialProps = {
   label: string;
   signal?: Signal;
   max?: number;
-  target?: readonly [number, number];
+  /** Rango sin riesgo del análisis; sin él la esfera no pinta zonas. */
+  target?: KneeTarget | null;
   peak?: number;
   /** Escala numerada cada 30: sólo en los medidores grandes. */
   labels?: boolean;

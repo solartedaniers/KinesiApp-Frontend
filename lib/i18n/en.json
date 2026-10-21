@@ -253,7 +253,25 @@
     "noScore": "No score",
     "open": "View the recording from {date}",
     "listEmpty": "No recordings yet.",
-    "listEmptyHint": "When a jump or a squat is analyzed, it will show up here."
+    "listEmptyHint": "When a jump or a squat is analyzed, it will show up here.",
+    "kneeTarget": {
+      "between": "{low}–{high}",
+      "from": "{low} or more",
+      "upTo": "up to {high}"
+    },
+    "kneeZones": {
+      "jump": {
+        "under": "Stiff",
+        "target": "On target",
+        "over": "Deep"
+      },
+      "squat": {
+        "under": "Shallow",
+        "target": "On target",
+        "over": "Above"
+      }
+    },
+    "rangesNote": "Guide ranges from the AI; they do not replace an assessment by a professional."
   },
   "analysisDetail": {
     "metaTitle": "Recording",
@@ -749,7 +767,7 @@
       "peak": "Peak",
       "target": "Target",
       "skeleton": "Side-view skeleton doing a squat, with the knee, trunk, hip and center of gravity in their colors",
-      "dial": "Knee flexion gauge: {value}, peak {peak}, target {low} to {high}"
+      "dial": "Knee flexion gauge: {value}, peak {peak}, target {range}"
     },
     "color": {
       "lead": "Color never decorates: it says what is being measured. The same four signals paint the skeleton, the lines and the needles; zones tell whether a measure fell short, hit the target or went past it, and risk has its own scale with a word and steps.",
@@ -758,7 +776,7 @@
       "signals": "Signals",
       "signalsLead": "One per joint or measure, the same in every view.",
       "zones": "Range zones",
-      "zonesLead": "Relative to the knee flexion target ({low}–{high}).",
+      "zonesLead": "Relative to the risk-free knee flexion range the AI used for each analysis; in the sample squat, {range}.",
       "risk": "Risk scale",
       "riskLead": "Always shown with the word and one to three steps: it never depends on color alone.",
       "surfaces": "Surfaces and ink",

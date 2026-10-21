@@ -253,7 +253,25 @@
     "noScore": "Sin puntaje",
     "open": "Ver detalle de la grabación del {date}",
     "listEmpty": "Todavía no hay grabaciones.",
-    "listEmptyHint": "Cuando se analice un salto o una sentadilla, aparecerá aquí."
+    "listEmptyHint": "Cuando se analice un salto o una sentadilla, aparecerá aquí.",
+    "kneeTarget": {
+      "between": "{low}–{high}",
+      "from": "{low} o más",
+      "upTo": "hasta {high}"
+    },
+    "kneeZones": {
+      "jump": {
+        "under": "Rígida",
+        "target": "En el objetivo",
+        "over": "Profunda"
+      },
+      "squat": {
+        "under": "Corta",
+        "target": "En el objetivo",
+        "over": "Por encima"
+      }
+    },
+    "rangesNote": "Rangos orientativos de la IA; no sustituyen la evaluación de un profesional."
   },
   "analysisDetail": {
     "metaTitle": "Grabación",
@@ -749,7 +767,7 @@
       "peak": "Pico",
       "target": "Objetivo",
       "skeleton": "Esqueleto de perfil haciendo una sentadilla, con la rodilla, el tronco, la cadera y el centro de gravedad en sus colores",
-      "dial": "Medidor de flexión de rodilla: {value}, pico {peak}, objetivo de {low} a {high}"
+      "dial": "Medidor de flexión de rodilla: {value}, pico {peak}, objetivo {range}"
     },
     "color": {
       "lead": "El color nunca decora: dice qué se mide. Las mismas cuatro señales pintan el esqueleto, las líneas y las agujas; las zonas dicen si una medida quedó corta, en el objetivo o se pasó, y el riesgo tiene su propia escala con palabra y escalones.",
@@ -758,7 +776,7 @@
       "signals": "Señales",
       "signalsLead": "Una por articulación o medida, igual en todas las vistas.",
       "zones": "Zonas del rango",
-      "zonesLead": "Relativas al objetivo de flexión de rodilla ({low}–{high}).",
+      "zonesLead": "Relativas al rango sin riesgo de flexión de rodilla que usó la IA en cada análisis; en la sentadilla de ejemplo, {range}.",
       "risk": "Escala de riesgo",
       "riskLead": "Va siempre con la palabra y de uno a tres escalones: nunca depende sólo del color.",
       "surfaces": "Superficies y tinta",

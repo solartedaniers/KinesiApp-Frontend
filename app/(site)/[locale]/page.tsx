@@ -87,7 +87,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
 
         <section aria-labelledby="landing-measures" className="mx-auto grid max-w-content items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]" data-reveal>
           <figure data-theme="dark" className="kin-card kin-tinted grid gap-3 p-5 sm:p-7 lg:order-2">
-            <LiveGauge samples={GUIDE_SAMPLE.firstRepetition} />
+            <LiveGauge samples={GUIDE_SAMPLE.firstRepetition} target={GUIDE_SAMPLE.kneeTarget} movement={GUIDE_SAMPLE.movement} />
             <figcaption className="text-sm text-ink-muted">{t.site.sampleData}</figcaption>
           </figure>
           <div className="grid gap-5">

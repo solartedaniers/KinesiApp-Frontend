@@ -2,7 +2,7 @@ import { CountUp } from "../CountUp";
 
 import { linear } from "@/lib/charts/scale";
 import { cssVars } from "@/lib/design/css";
-import { TARGET_KNEE, ZONE_CLASS, zoneOf, zoneSpans } from "@/lib/design/signals";
+import { type KneeTarget, ZONE_CLASS, zoneOf, zoneSpans } from "@/lib/design/signals";
 
 export type RangeRow = { label: string; min: number; median: number; max: number };
 
@@ -12,14 +12,14 @@ const COLUMNS = "grid grid-cols-[minmax(5.5rem,8rem)_1fr_3.5rem] items-center ga
  * Rango y mediana de la flexión máxima por deportista sobre la misma escala. El riel lleva las zonas
  * del objetivo, así se ve de un vistazo quién queda corto y quién se pasa.
  */
-export function RangeComparison({ rows, domain, ticks, format, medianLabel }: { rows: RangeRow[]; domain: [number, number]; ticks: number[]; format: (value: number) => string; medianLabel: string }) {
+export function RangeComparison({ rows, domain, ticks, format, medianLabel, target }: { rows: RangeRow[]; domain: [number, number]; ticks: number[]; format: (value: number) => string; medianLabel: string; target: KneeTarget }) {
   const x = linear(domain, [0, 100]);
-  const spans = zoneSpans(domain[1], TARGET_KNEE).filter((s) => s.to > domain[0]).map((s) => ({ ...s, from: Math.max(s.from, domain[0]) }));
+  const spans = zoneSpans(domain[1], target).filter((s) => s.to > domain[0]).map((s) => ({ ...s, from: Math.max(s.from, domain[0]) }));
   return (
     <div className="kin-instrument grid gap-1">
       <ul className="grid gap-1">
         {rows.map((row, i) => {
-          const zone = zoneOf(row.median);
+          const zone = zoneOf(row.median, target);
           return (
             <li key={row.label} className={`${COLUMNS} kin-rise py-2`} style={cssVars({ "--i": i })}>
               <span className="truncate text-sm font-semibold text-ink">{row.label}</span>

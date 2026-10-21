@@ -3,6 +3,7 @@ import type { Formatters } from "@/lib/format";
 import { format } from "@/lib/i18n";
 import { lttb } from "@/lib/charts/lttb";
 import type { RiskLevel } from "@/lib/design/risk";
+import type { KneeTarget } from "@/lib/design/signals";
 import { type AngleSample, levelFor, SAMPLE_ANALYSIS, SAMPLE_DURATION_MS, SAMPLE_SESSIONS } from "@/lib/design/sample-analysis";
 
 // 240 puntos por serie bastan para el ancho máximo de la gráfica y alivianan el HTML
@@ -16,7 +17,12 @@ const { knee, trunk, repetitions, score, level } = SAMPLE_ANALYSIS;
 const peakIn = (samples: AngleSample[], from: number, to: number) =>
   samples.filter((s) => s.ms >= from && s.ms < to).reduce((best, s) => (s.degrees > best.degrees ? s : best));
 
+// Lo que traería el resumen de esta sentadilla con los umbrales por defecto de la IA: solo límite inferior
+const SAMPLE_KNEE_TARGET: KneeTarget = { low: 90, high: null };
+
 export const GUIDE_SAMPLE = {
+  movement: "squat" as const,
+  kneeTarget: SAMPLE_KNEE_TARGET,
   date: "2026-10-14T15:20:00Z",
   athlete: "Valentina Ríos",
   durationMs: SAMPLE_DURATION_MS,

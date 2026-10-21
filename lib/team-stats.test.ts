@@ -11,7 +11,7 @@ const athlete = (id: number): AthleteProfile => ({
 });
 const analysis = (id: number, athleteId: number, score: number | null): AnalysisSummary => ({
   id: String(id), athlete_id: String(athleteId), movement_type: "jump", status: score === null ? "pending" : "processed",
-  risk_score: score, recorded_at: `2026-09-0${id}T10:00:00Z`, risk_level: null, dominant_risk_pattern: null, failure_reason: null,
+  risk_score: score, recorded_at: `2026-09-0${id}T10:00:00Z`, risk_level: null, dominant_risk_pattern: null, failure_reason: null, knee_median_peak_degrees: null, knee_target: null,
 });
 const team = (id: number, athleteIds: number[]): Team => ({ id: String(id), name: `T${id}`, owner_id: "1", athlete_ids: athleteIds.map(String), created_at: "2026-09-01T00:00:00Z" });
 

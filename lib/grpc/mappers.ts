@@ -15,17 +15,21 @@ import type { CalendarDate } from "@/lib/gen/kinesiapp/common/v1/date_pb";
 import { ErrorReason } from "@/lib/gen/kinesiapp/common/v1/errors_pb";
 import { UserRole as UserRoleEnum } from "@/lib/gen/kinesiapp/common/v1/identity_pb";
 import {
+  type AngleRange as AngleRangeMessage,
   type AnalysisProgress as ProgressMessage,
   AnalysisStage as StageEnum,
   AnalysisStatus as StatusEnum,
   JointAngle,
   MovementType as MovementEnum,
+  RiskDirection,
+  type RiskSignal as RiskSignalMessage,
   type RepetitionScore as RepetitionScoreMessage,
   type RiskAssessment as RiskAssessmentMessage,
   RiskLevel as RiskLevelEnum,
 } from "@/lib/gen/kinesiapp/common/v1/movement_pb";
 import type { SignedUrl as SignedUrlMessage } from "@/lib/gen/kinesiapp/common/v1/storage_pb";
 import type { Team as TeamMessage } from "@/lib/gen/kinesiapp/team/v1/team_pb";
+import type { KneeTarget } from "@/lib/design/signals";
 
 import type {
   AdminUser,
@@ -43,6 +47,7 @@ import type {
   RepetitionScore,
   RiskAssessment,
   RiskLevel,
+  RiskSignal,
   SignedUrl,
   Team,
   TokenPair,
@@ -185,6 +190,32 @@ export function toAnalysisSummary(summary: AnalysisSummaryMessage | undefined): 
     risk_level: RISK[summary.riskLevel],
     dominant_risk_pattern: summary.dominantRiskPattern ?? null,
     failure_reason: reasonCode(summary.failureReason),
+    knee_median_peak_degrees: summary.kneeMedianPeakDegrees ?? null,
+    knee_target: summary.kneeTarget ? toKneeTarget(summary.kneeTarget) : null,
+  };
+}
+
+function toKneeTarget(range: AngleRangeMessage): KneeTarget {
+  return { low: range.lowDegrees ?? null, high: range.highDegrees ?? null };
+}
+
+const DIRECTION: Record<RiskDirection, RiskSignal["direction"] | null> = {
+  [RiskDirection.UNSPECIFIED]: null,
+  [RiskDirection.HIGHER_IS_RISKIER]: "higher_is_riskier",
+  [RiskDirection.LOWER_IS_RISKIER]: "lower_is_riskier",
+};
+
+function toRiskSignal(signal: RiskSignalMessage): RiskSignal {
+  return {
+    code: signal.code,
+    joint: JOINT[signal.joint],
+    direction: DIRECTION[signal.direction],
+    onset_degrees: signal.onsetDegrees,
+    saturation_degrees: signal.saturationDegrees,
+    measured: signal.measured
+      ? { median: signal.measured.medianDegrees, min: signal.measured.minDegrees, max: signal.measured.maxDegrees }
+      : null,
+    score_median: signal.scoreMedian ?? null,
   };
 }
 
@@ -201,6 +232,7 @@ function toRiskAssessment(assessment: RiskAssessmentMessage): RiskAssessment {
       code: pattern.code,
       score: pattern.score ?? null,
       repetitions_triggered: pattern.repetitionsTriggered,
+      signals: pattern.signals.map(toRiskSignal),
     })),
     repetitions: assessment.repetitions.map((repetition) => ({
       start_ms: repetition.startMs,

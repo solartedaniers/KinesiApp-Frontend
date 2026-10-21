@@ -5,7 +5,8 @@ import { contrastRatio } from "@/lib/design/contrast";
 import { cssVars } from "@/lib/design/css";
 import { COLORS, type PaletteColor } from "@/lib/design/palette";
 import { RISK_LEVELS, RISK_STEP } from "@/lib/design/risk";
-import { SIGNAL_CLASS, SIGNALS, TARGET_KNEE, ZONES } from "@/lib/design/signals";
+import { SIGNAL_CLASS, SIGNALS, targetText, ZONES } from "@/lib/design/signals";
+import { GUIDE_SAMPLE } from "@/lib/design/guide-sample";
 import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
 
@@ -51,7 +52,8 @@ async function PalettePanel({ mode }: { mode: Mode }) {
 
       <div className="grid gap-3">
         <h4 className="font-display text-lg font-semibold text-ink">{c.zones}</h4>
-        <p className="text-sm text-ink-muted">{format(c.zonesLead, { low: TARGET_KNEE[0], high: f.degrees(TARGET_KNEE[1]) })}</p>
+        <p className="text-sm text-ink-muted">{format(c.zonesLead, { range: targetText(GUIDE_SAMPLE.kneeTarget, f.degrees, t.analysis.kneeTarget) })}</p>
+        <p className="text-xs text-ink-muted">{t.analysis.rangesNote}</p>
         <ul className="grid gap-2">
           {ZONES.map((zone) => (
             <li key={zone} className="flex flex-wrap items-center justify-between gap-2">

@@ -26,14 +26,14 @@ export async function ChartSection() {
   return (
     <GuideSection id="charts" title={t.styleGuide.sections.charts} lead={c.lead} tint="var(--kin-center)">
       <Specimen title={c.timeline} lead={c.timelineLead} className={card}>
-        <AngleTimeline knee={GUIDE_SAMPLE.knee} trunk={GUIDE_SAMPLE.trunk} repetitions={GUIDE_SAMPLE.timeline} durationMs={GUIDE_SAMPLE.durationMs} />
+        <AngleTimeline knee={GUIDE_SAMPLE.knee} trunk={GUIDE_SAMPLE.trunk} repetitions={GUIDE_SAMPLE.timeline} durationMs={GUIDE_SAMPLE.durationMs} target={GUIDE_SAMPLE.kneeTarget} zoneNames={t.analysis.kneeZones[GUIDE_SAMPLE.movement]} />
       </Specimen>
       <div className="grid gap-5 lg:grid-cols-2">
         <Specimen title={c.trend} lead={c.trendLead} className={card}>
           <RiskTrend {...trend} label={format(c.trendLabel, { first: f.percent(sessions[0].score), last: f.percent(sessions.at(-1)!.score) })} bandLabels={t.analysis.riskShort} />
         </Specimen>
         <Specimen title={c.comparison} lead={c.comparisonLead} className={card}>
-          <RangeComparison rows={TEAM_RANGES} domain={COMPARISON_DOMAIN} ticks={COMPARISON_TICKS} format={f.degrees} medianLabel={c.median} />
+          <RangeComparison rows={TEAM_RANGES} domain={COMPARISON_DOMAIN} ticks={COMPARISON_TICKS} format={f.degrees} medianLabel={c.median} target={GUIDE_SAMPLE.kneeTarget} />
         </Specimen>
       </div>
     </GuideSection>

@@ -15,6 +15,8 @@ const analysis = (id: number, day: number, status: AnalysisSummary["status"], ri
   risk_level: null,
   dominant_risk_pattern: null,
   failure_reason: null,
+  knee_median_peak_degrees: null,
+  knee_target: null,
 });
 
 const sample = [

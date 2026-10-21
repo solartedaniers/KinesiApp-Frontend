@@ -11,7 +11,7 @@ import { RiskScale } from "@/components/instrument/Status";
 import { cssVars } from "@/lib/design/css";
 import { GUIDE_SAMPLE } from "@/lib/design/guide-sample";
 import { RISK_STEP } from "@/lib/design/risk";
-import { TARGET_KNEE, ZONE_CLASS, zoneOf } from "@/lib/design/signals";
+import { ZONE_CLASS, zoneOf } from "@/lib/design/signals";
 import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
 
@@ -28,7 +28,8 @@ export default async function AnalysisScreen() {
   const a = t.styleGuide.screens.analysis;
   const c = t.styleGuide.components;
   const sample = GUIDE_SAMPLE;
-  const inTarget = sample.timeline.filter((rep) => zoneOf(rep.peak.degrees) === "target").length;
+  const target = sample.kneeTarget;
+  const inTarget = sample.timeline.filter((rep) => zoneOf(rep.peak.degrees, target) === "target").length;
   return (
     <ScreenShell active="analysis">
       <section aria-labelledby="analysis-title" className="flex flex-wrap items-end justify-between gap-4">
@@ -46,7 +47,7 @@ export default async function AnalysisScreen() {
         <article className="kin-card kin-tinted grid content-start gap-3 p-5" aria-labelledby="analysis-knee">
           <h2 id="analysis-knee" className="text-sm font-semibold text-ink-muted">{a.peakKnee}</h2>
           <ViewTransition name="kin-last-analysis" share="kin-morph" default="none">
-            <Dial value={sample.peakKnee} peak={sample.peakKnee} target={TARGET_KNEE} labels label={`${a.peakKnee}: ${f.degrees(sample.peakKnee)}`} className="mx-auto w-full max-w-[15rem]">
+            <Dial value={sample.peakKnee} peak={sample.peakKnee} target={target} labels label={`${a.peakKnee}: ${f.degrees(sample.peakKnee)}`} className="mx-auto w-full max-w-[15rem]">
               <CountUp value={sample.peakKnee} text={f.degrees(sample.peakKnee)} className="font-display text-3xl font-bold text-knee" />
             </Dial>
           </ViewTransition>
@@ -62,7 +63,7 @@ export default async function AnalysisScreen() {
           <p className="font-display text-score font-bold text-ink"><CountUp value={sample.timeline.length} text={String(sample.timeline.length)} delayMs={300} /></p>
           <ol className="flex gap-1.5" aria-label={format(a.inTarget, { count: inTarget, total: sample.timeline.length })}>
             {sample.timeline.map((rep, i) => (
-              <li key={rep.startMs} className={`kin-light h-8 flex-1 rounded-full ${ZONE_CLASS[zoneOf(rep.peak.degrees)].bg} ${ZONE_CLASS[zoneOf(rep.peak.degrees)].text}`} style={cssVars({ "--i": i })} />
+              <li key={rep.startMs} className={`kin-light h-8 flex-1 rounded-full ${ZONE_CLASS[zoneOf(rep.peak.degrees, target)].bg} ${ZONE_CLASS[zoneOf(rep.peak.degrees, target)].text}`} style={cssVars({ "--i": i })} />
             ))}
           </ol>
           <p className="text-sm text-ink">{format(a.inTarget, { count: inTarget, total: sample.timeline.length })}</p>
@@ -78,7 +79,8 @@ export default async function AnalysisScreen() {
           <h2 id="analysis-timeline" className="font-display text-xl font-semibold text-ink">{t.styleGuide.charts.timeline}</h2>
           <p className="text-sm text-ink-muted">{t.styleGuide.charts.timelineLead}</p>
         </div>
-        <AngleTimeline knee={sample.knee} trunk={sample.trunk} repetitions={sample.timeline} durationMs={sample.durationMs} />
+        <AngleTimeline knee={sample.knee} trunk={sample.trunk} repetitions={sample.timeline} durationMs={sample.durationMs} target={target} zoneNames={t.analysis.kneeZones[sample.movement]} />
+        <p className="text-sm text-ink-muted">{t.analysis.rangesNote}</p>
       </section>
     </ScreenShell>
   );

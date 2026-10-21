@@ -12,7 +12,7 @@ import { AiStatus, RiskScale, ZoneChip } from "@/components/instrument/Status";
 import { cssVars } from "@/lib/design/css";
 import { GUIDE_SAMPLE, RECENT_ANALYSES, trendData } from "@/lib/design/guide-sample";
 import { RISK_STEP } from "@/lib/design/risk";
-import { TARGET_KNEE, zoneOf } from "@/lib/design/signals";
+import { zoneOf } from "@/lib/design/signals";
 import { firstName } from "@/lib/format";
 import { format } from "@/lib/i18n";
 import { getFormat, getT } from "@/lib/i18n/server";
@@ -30,7 +30,9 @@ export default async function HomeScreen() {
   const last = RECENT_ANALYSES[0];
   const trend = trendData(f, t.styleGuide.charts.trendLast);
   const analysisHref = ROUTES.styleGuideScreen("analysis");
-  const inTarget = GUIDE_SAMPLE.timeline.filter((rep) => zoneOf(rep.peak.degrees) === "target").length;
+  const target = GUIDE_SAMPLE.kneeTarget;
+  const zoneNames = t.analysis.kneeZones[GUIDE_SAMPLE.movement];
+  const inTarget = GUIDE_SAMPLE.timeline.filter((rep) => zoneOf(rep.peak.degrees, target) === "target").length;
   return (
     <ScreenShell active="home">
       <section aria-labelledby="home-title" className="flex flex-wrap items-end justify-between gap-4">
@@ -49,14 +51,14 @@ export default async function HomeScreen() {
             <span className="text-sm text-ink-muted">{f.shortDate(last.date)}</span>
           </div>
           <ViewTransition name="kin-last-analysis" share="kin-morph" default="none">
-            <Dial value={last.peak} peak={last.peak} target={TARGET_KNEE} labels label={`${s.analysis.peakKnee}: ${f.degrees(last.peak)}`} className="mx-auto w-full max-w-[17rem]">
+            <Dial value={last.peak} peak={last.peak} target={target} labels label={`${s.analysis.peakKnee}: ${f.degrees(last.peak)}`} className="mx-auto w-full max-w-[17rem]">
               <CountUp value={last.peak} text={f.degrees(last.peak)} className="font-display text-3xl font-bold text-knee" />
             </Dial>
           </ViewTransition>
           <dl className="grid grid-cols-2 gap-3">
             <div className="kin-well grid gap-1 p-3">
               <dt className="text-xs text-ink-muted">{t.joints.knee_flexion}</dt>
-              <dd><ZoneChip zone={zoneOf(last.peak)} label={t.styleGuide.color.names[zoneOf(last.peak)]} /></dd>
+              <dd><ZoneChip zone={zoneOf(last.peak, target)} label={zoneNames[zoneOf(last.peak, target)]} /></dd>
             </div>
             <div className="kin-well grid gap-1 p-3">
               <dt className="text-xs text-ink-muted">{s.analysis.repetitions}</dt>
@@ -79,7 +81,7 @@ export default async function HomeScreen() {
           {RECENT_ANALYSES.map((item, i) => (
             <li key={item.id} className="kin-rise" style={cssVars({ "--i": i })}>
               <Link href={analysisHref} className="grid grid-cols-[3.5rem_1fr_auto] items-center gap-4 px-4 py-3 transition-colors hover:bg-accent-soft sm:grid-cols-[3.5rem_1fr_auto_auto] sm:px-5">
-                <Dial value={item.peak} target={TARGET_KNEE} ticks={false} delayMs={i * 120 + 300} label={f.degrees(item.peak)} className="w-14" />
+                <Dial value={item.peak} target={target} ticks={false} delayMs={i * 120 + 300} label={f.degrees(item.peak)} className="w-14" />
                 <span className="grid min-w-0 gap-0.5">
                   <span className="flex items-center gap-2 font-semibold text-ink">
                     <Glyph name={item.movement} size={18} className="text-ink-muted" />
@@ -88,7 +90,7 @@ export default async function HomeScreen() {
                   <span className="text-sm text-ink-muted">{f.dateTime(item.date)}</span>
                 </span>
                 <span className="font-display text-xl font-semibold text-knee [font-variant-numeric:tabular-nums]">{f.degrees(item.peak)}</span>
-                <span className="max-sm:hidden"><ZoneChip zone={zoneOf(item.peak)} label={t.styleGuide.color.names[zoneOf(item.peak)]} /></span>
+                <span className="max-sm:hidden"><ZoneChip zone={zoneOf(item.peak, target)} label={zoneNames[zoneOf(item.peak, target)]} /></span>
               </Link>
             </li>
           ))}

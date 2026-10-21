@@ -69,7 +69,7 @@ export default async function StyleGuidePage() {
           </div>
           {/* La lectura principal va en una cabina oscura en ambos modos: así el instrumento brilla */}
           <div data-theme="dark" className="kin-card kin-tinted p-5 sm:p-7">
-            <LiveGauge samples={GUIDE_SAMPLE.firstRepetition} />
+            <LiveGauge samples={GUIDE_SAMPLE.firstRepetition} target={GUIDE_SAMPLE.kneeTarget} movement={GUIDE_SAMPLE.movement} />
           </div>
         </section>
 

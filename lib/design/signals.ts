@@ -10,8 +10,11 @@ export const SIGNAL_CLASS: Record<Signal, { stroke: string; fill: string; bg: st
   center: { stroke: "stroke-center", fill: "fill-center", bg: "bg-center", text: "text-center", soft: "bg-center-soft" },
 };
 
-/** Rango de flexión de rodilla que la app marca como objetivo en la sentadilla, en grados. */
-export const TARGET_KNEE: readonly [number, number] = [90, 120];
+/**
+ * Rango sin riesgo de la rodilla con que la IA puntuó un análisis (AnalysisSummary.knee_target). No hay
+ * un rango propio del frontend: un extremo en null es que el modelo no pone límite de ese lado.
+ */
+export type KneeTarget = { low: number | null; high: number | null };
 
 export const ZONES = ["under", "target", "over"] as const;
 export type Zone = (typeof ZONES)[number];
@@ -23,15 +26,33 @@ export const ZONE_CLASS: Record<Zone, { stroke: string; fill: string; bg: string
 };
 
 /** Zona de un valor respecto del rango; los bordes cuentan como dentro. */
-export function zoneOf(value: number, [low, high]: readonly [number, number] = TARGET_KNEE): Zone {
-  return value < low ? "under" : value > high ? "over" : "target";
+export function zoneOf(value: number, { low, high }: KneeTarget): Zone {
+  if (low !== null && value < low) return "under";
+  return high !== null && value > high ? "over" : "target";
+}
+
+/** Textos del rango según qué extremos tenga: "60–80°", "90° o más", "hasta 80°". */
+export function targetText(
+  { low, high }: KneeTarget,
+  degrees: (value: number) => string,
+  templates: { between: string; from: string; upTo: string },
+): string {
+  const fill = (template: string) => template.replace("{low}", low === null ? "" : degrees(low)).replace("{high}", high === null ? "" : degrees(high));
+  return fill(low !== null && high !== null ? templates.between : low !== null ? templates.from : templates.upTo);
+}
+
+/** Zonas que existen para un rango: la sentadilla, sin tope, no tiene "por encima". */
+export function zonesOf({ low, high }: KneeTarget): Zone[] {
+  return ZONES.filter((zone) => (zone === "under" ? low !== null : zone === "over" ? high !== null : true));
 }
 
 /** Tramos de cada zona en una escala de 0 a `max`, para pintar esferas y bandas. */
-export function zoneSpans(max: number, [low, high]: readonly [number, number] = TARGET_KNEE): { zone: Zone; from: number; to: number }[] {
+export function zoneSpans(max: number, { low, high }: KneeTarget): { zone: Zone; from: number; to: number }[] {
+  const from = Math.min(low ?? 0, max);
+  const to = Math.min(high ?? max, max);
   return [
-    { zone: "under" as const, from: 0, to: Math.min(low, max) },
-    { zone: "target" as const, from: Math.min(low, max), to: Math.min(high, max) },
-    { zone: "over" as const, from: Math.min(high, max), to: max },
-  ].filter(({ from, to }) => to > from);
+    { zone: "under" as const, from: 0, to: from },
+    { zone: "target" as const, from, to },
+    { zone: "over" as const, from: to, to: max },
+  ].filter((span) => span.to > span.from);
 }

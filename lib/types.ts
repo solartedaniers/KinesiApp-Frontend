@@ -1,3 +1,5 @@
+import type { KneeTarget } from "./design/signals.ts";
+
 // Modelos de dominio del cliente web. Los gateways de lib/grpc los arman desde los mensajes del contrato:
 // la UI nunca ve tipos de Protobuf. Los ids son string porque el contrato los entrega con jstype JS_STRING.
 
@@ -79,6 +81,10 @@ export type AnalysisSummary = {
   dominant_risk_pattern: string | null;
   /** Motivo en minúsculas (clave de errors en i18n); solo en FAILED. */
   failure_reason: string | null;
+  /** Mediana de los picos de flexión por repetición; solo en PROCESSED y si la IA midió la rodilla. */
+  knee_median_peak_degrees: number | null;
+  /** Rango sin riesgo con que la IA puntuó este análisis; null si el modelo no mira la rodilla. */
+  knee_target: KneeTarget | null;
 };
 
 export type RepetitionScore = { code: string; score: number | null; measured_degrees: number | null };
@@ -88,7 +94,17 @@ export type Repetition = {
   pattern_scores: RepetitionScore[];
   signal_scores: RepetitionScore[];
 };
-export type RiskPattern = { code: string; score: number | null; repetitions_triggered: number };
+/** Una señal con la rampa que la puntúa: el riesgo empieza en `onset_degrees` y satura en `saturation_degrees`. */
+export type RiskSignal = {
+  code: string;
+  joint: Joint | null;
+  direction: "higher_is_riskier" | "lower_is_riskier" | null;
+  onset_degrees: number;
+  saturation_degrees: number;
+  measured: { median: number; min: number; max: number } | null;
+  score_median: number | null;
+};
+export type RiskPattern = { code: string; score: number | null; repetitions_triggered: number; signals: RiskSignal[] };
 export type RiskAssessment = {
   risk_score: number;
   risk_level: RiskLevel | null;
