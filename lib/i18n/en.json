@@ -219,9 +219,9 @@
     "teams": "Teams",
     "users": "Users",
     "assignments": "Coaches",
-    "menu": "Menu",
-    "openMenu": "Open the menu",
-    "closeMenu": "Close the menu"
+    "capture": "Record",
+    "account": "Your account",
+    "openAccount": "Open your account menu"
   },
   "home": {
     "greeting": "Hi, {name}",

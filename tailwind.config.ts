@@ -112,8 +112,6 @@ const config: Config = {
       },
       spacing: {
         control: "2.75rem",
-        sidebar: "15rem",
-        topbar: "3.5rem",
       },
       maxWidth: {
         content: "76rem",
