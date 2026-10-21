@@ -53,13 +53,22 @@ export const MOVEMENT_TYPES = ["jump", "squat"] as const;
 export type MovementType = (typeof MOVEMENT_TYPES)[number];
 export const RISK_LEVELS = ["low", "moderate", "high"] as const;
 export type RiskLevel = (typeof RISK_LEVELS)[number];
-export const JOINTS = ["knee_flexion", "trunk_inclination"] as const;
+export const JOINTS = ["knee_flexion", "trunk_inclination", "knee_valgus"] as const;
 export type Joint = (typeof JOINTS)[number];
+/** Lado del cuerpo del deportista, no de la imagen. */
+export const SIDES = ["left", "right"] as const;
+export type Side = (typeof SIDES)[number];
+/** Desde dónde grabó la cámara, según la IA. Los análisis anteriores a detectarla llegan como "side". */
+export const CAMERA_VIEWS = ["side", "front", "inconclusive"] as const;
+export type CameraView = (typeof CAMERA_VIEWS)[number];
+export type AnalysisWarning = "camera_view_inconclusive";
 
 export type JointAngleMeasurement = {
   /** Índice dentro de la serie: el contrato no da id por muestra y React necesita una clave estable. */
   id: number;
   joint_name: Joint;
+  /** Solo en las articulaciones que se miden por pierna (el valgo). */
+  side: Side | null;
   angle_degrees: number;
   frame_timestamp_ms: number;
 };
@@ -88,12 +97,21 @@ export type AnalysisSummary = {
   knee_target: KneeTarget | null;
 };
 
-export type RepetitionScore = { code: string; score: number | null; measured_degrees: number | null };
+/** En las señales, `side` es la pierna medida y `peak_ms` el instante del pico; en los patrones van en null. */
+export type RepetitionScore = { code: string; score: number | null; measured_degrees: number | null; side: Side | null; peak_ms: number | null };
+export const BODY_LANDMARKS = [
+  "left_shoulder", "right_shoulder", "left_hip", "right_hip", "left_knee", "right_knee",
+  "left_ankle", "right_ankle", "left_heel", "right_heel", "left_foot_index", "right_foot_index",
+] as const;
+export type BodyLandmark = (typeof BODY_LANDMARKS)[number];
+/** La pose en el instante de un pico, en coordenadas normalizadas al cuadro del video (y hacia abajo). */
+export type PoseKeyframe = { ms: number; points: Partial<Record<BodyLandmark, { x: number; y: number }>> };
 export type Repetition = {
   start_ms: number;
   end_ms: number;
   pattern_scores: RepetitionScore[];
   signal_scores: RepetitionScore[];
+  keyframes: PoseKeyframe[];
 };
 /** Una señal con la rampa que la puntúa: el riesgo empieza en `onset_degrees` y satura en `saturation_degrees`. */
 export type RiskSignal = {
@@ -104,6 +122,7 @@ export type RiskSignal = {
   saturation_degrees: number;
   measured: { median: number; min: number; max: number } | null;
   score_median: number | null;
+  side: Side | null;
 };
 export type RiskPattern = { code: string; score: number | null; repetitions_triggered: number; signals: RiskSignal[] };
 export type RiskAssessment = {
@@ -112,6 +131,8 @@ export type RiskAssessment = {
   dominant_pattern: string | null;
   patterns: RiskPattern[];
   repetitions: Repetition[];
+  camera_view: CameraView;
+  warnings: AnalysisWarning[];
 };
 
 /** El análisis completo, con las series de ángulos y el detalle de riesgo cuando existe. */

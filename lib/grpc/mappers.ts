@@ -19,7 +19,12 @@ import {
   type AnalysisProgress as ProgressMessage,
   AnalysisStage as StageEnum,
   AnalysisStatus as StatusEnum,
+  AnalysisWarning as WarningEnum,
+  BodyLandmark as LandmarkEnum,
+  BodySide,
+  CameraView as ViewEnum,
   JointAngle,
+  type PoseKeyframe as PoseKeyframeMessage,
   MovementType as MovementEnum,
   RiskDirection,
   type RiskSignal as RiskSignalMessage,
@@ -38,22 +43,28 @@ import type {
   AnalysisStage,
   AnalysisStatus,
   AnalysisSummary,
+  AnalysisWarning,
   AthleteProfile,
+  BodyLandmark,
+  CameraView,
   ChatMessage,
   Gender,
   Joint,
   JumpAnalysis,
   MovementType,
+  PoseKeyframe,
   RepetitionScore,
   RiskAssessment,
   RiskLevel,
   RiskSignal,
+  Side,
   SignedUrl,
   Team,
   TokenPair,
   User,
   UserRole,
 } from "../types";
+import { BODY_LANDMARKS } from "../types";
 
 // Traducciones entre los enums del contrato y los valores del dominio. Las uso en los dos sentidos.
 export const ROLE = { athlete: UserRoleEnum.ATHLETE, coach: UserRoleEnum.COACH, admin: UserRoleEnum.ADMIN } as const;
@@ -76,6 +87,23 @@ const JOINT: Record<JointAngle, Joint | null> = {
   [JointAngle.UNSPECIFIED]: null,
   [JointAngle.KNEE_FLEXION]: "knee_flexion",
   [JointAngle.TRUNK_INCLINATION]: "trunk_inclination",
+  [JointAngle.KNEE_VALGUS]: "knee_valgus",
+};
+const SIDE: Record<BodySide, Side | null> = {
+  [BodySide.UNSPECIFIED]: null,
+  [BodySide.LEFT]: "left",
+  [BodySide.RIGHT]: "right",
+};
+// Antes de detectar la vista, todo se analizaba como de lado
+const VIEW: Record<ViewEnum, CameraView> = {
+  [ViewEnum.UNSPECIFIED]: "side",
+  [ViewEnum.SIDE]: "side",
+  [ViewEnum.FRONT]: "front",
+  [ViewEnum.INCONCLUSIVE]: "inconclusive",
+};
+const WARNING: Record<WarningEnum, AnalysisWarning | null> = {
+  [WarningEnum.UNSPECIFIED]: null,
+  [WarningEnum.CAMERA_VIEW_INCONCLUSIVE]: "camera_view_inconclusive",
 };
 const STAGE: Record<StageEnum, AnalysisStage> = {
   [StageEnum.UNSPECIFIED]: "queued",
@@ -223,11 +251,30 @@ function toRiskSignal(signal: RiskSignalMessage): RiskSignal {
       ? { median: signal.measured.medianDegrees, min: signal.measured.minDegrees, max: signal.measured.maxDegrees }
       : null,
     score_median: signal.scoreMedian ?? null,
+    side: SIDE[signal.side],
   };
 }
 
 function toRepetitionScore(score: RepetitionScoreMessage): RepetitionScore {
-  return { code: score.code, score: score.score ?? null, measured_degrees: score.measuredDegrees ?? null };
+  return {
+    code: score.code,
+    score: score.score ?? null,
+    measured_degrees: score.measuredDegrees ?? null,
+    side: SIDE[score.side],
+    peak_ms: score.peakMs ?? null,
+  };
+}
+
+const isLandmark = (name: string | undefined): name is BodyLandmark => (BODY_LANDMARKS as readonly (string | undefined)[]).includes(name);
+
+function toKeyframe(frame: PoseKeyframeMessage): PoseKeyframe {
+  const points: PoseKeyframe["points"] = {};
+  for (const point of frame.keypoints) {
+    // Un punto que este cliente no conoce no se dibuja
+    const name = LandmarkEnum[point.landmark]?.toLowerCase();
+    if (isLandmark(name)) points[name] = { x: point.x, y: point.y };
+  }
+  return { ms: frame.timestampMs, points };
 }
 
 function toRiskAssessment(assessment: RiskAssessmentMessage): RiskAssessment {
@@ -246,7 +293,10 @@ function toRiskAssessment(assessment: RiskAssessmentMessage): RiskAssessment {
       end_ms: repetition.endMs,
       pattern_scores: repetition.patternScores.map(toRepetitionScore),
       signal_scores: repetition.signalScores.map(toRepetitionScore),
+      keyframes: repetition.keyframes.map(toKeyframe),
     })),
+    camera_view: VIEW[assessment.cameraView] ?? "side",
+    warnings: assessment.warnings.flatMap((warning) => WARNING[warning] ?? []),
   };
 }
 
@@ -256,7 +306,7 @@ export function toAnalysis(analysis: Analysis | undefined): JumpAnalysis {
     const joint = JOINT[sample.joint];
     // Descarto las articulaciones que este cliente todavía no sabe dibujar
     return joint
-      ? [{ id: index, joint_name: joint, angle_degrees: sample.angleDegrees, frame_timestamp_ms: sample.frameTimestampMs }]
+      ? [{ id: index, joint_name: joint, side: SIDE[sample.side], angle_degrees: sample.angleDegrees, frame_timestamp_ms: sample.frameTimestampMs }]
       : [];
   });
   return {
