@@ -41,7 +41,8 @@ export function RangeComparison({ rows, domain, ticks, format, medianLabel, targ
       <div className={COLUMNS} aria-hidden>
         <span />
         <span className="relative h-5 text-xs text-ink-muted [font-variant-numeric:tabular-nums]">
-          {ticks.map((tick) => <span key={tick} className="absolute -translate-x-1/2" style={{ left: `${x(tick)}%` }}>{format(tick)}</span>)}
+          {/* En el celular las seis marcas no caben: dejo una de cada dos */}
+          {ticks.map((tick, i) => <span key={tick} className={`absolute -translate-x-1/2 ${i % 2 ? "max-sm:hidden" : ""}`} style={{ left: `${x(tick)}%` }}>{format(tick)}</span>)}
         </span>
       </div>
     </div>
