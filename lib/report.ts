@@ -6,6 +6,7 @@ import { targetText, type Zone, zoneOf, zoneSpans } from "./design/signals.ts";
 import type { Formatters } from "./format.ts";
 import type { Dictionary } from "./i18n/index.ts";
 import { format } from "./i18n/locale.ts";
+import { focusJointText, valgusSummary } from "./risk-focus.ts";
 import type { ChatMessage, JumpAnalysis } from "./types.ts";
 
 type ReportFormat = Pick<Formatters, "degrees" | "percent" | "secondsFromMs" | "dateTime">;
@@ -13,6 +14,7 @@ type ReportPair = { label: string; value: string; color: string };
 type ReportChart = {
   title: string;
   durationMs: number;
+  minDegrees: number;
   maxDegrees: number;
   series: { label: string; color: string; points: AngleSample[] }[];
   bands: { from: number; to: number; color: string }[];
@@ -88,27 +90,37 @@ export function plainParagraphs(text: string): string[] {
 }
 
 function chartOf({ analysis, timeline, t, f }: { analysis: JumpAnalysis; timeline: Timeline; t: Dictionary; f: ReportFormat }): ReportChart | null {
-  if (timeline.knee.length === 0 && timeline.trunk.length === 0) return null;
-  const target = analysis.knee_target;
-  const highest = Math.max(...timeline.knee.map((s) => s.degrees), ...timeline.trunk.map((s) => s.degrees), target?.low ?? 0, target?.high ?? 0);
+  const { primary, secondary } = timeline;
+  if (primary.length === 0 && secondary.length === 0) return null;
+  const front = timeline.view === "front";
+  const target = front ? null : analysis.knee_target;
+  const all = [...primary, ...secondary].map((s) => s.degrees);
+  const highest = Math.max(...all, target?.low ?? 0, target?.high ?? 0);
+  // El valgo es negativo cuando la rodilla se abre: el eje baja de 0 sólo si hace falta
+  const minDegrees = Math.min(0, Math.floor(Math.min(...all) / DEGREE_STEP) * DEGREE_STEP);
   const maxDegrees = Math.ceil((highest + 1) / DEGREE_STEP) * DEGREE_STEP;
   const seconds = SECOND_STEPS.find((step) => timeline.durationMs / (step * 1000) <= MAX_TIME_LABELS) ?? SECOND_STEPS.at(-1)!;
-  const peaks = analysis.risk_assessment ? repetitionKneePeaks(analysis.risk_assessment) : [];
+  const peaks = analysis.risk_assessment && !front ? repetitionKneePeaks(analysis.risk_assessment) : [];
+  const labels = front ? [t.analysis.valgus.left, t.analysis.valgus.right] : [t.joints.knee_flexion, t.joints.trunk_inclination];
   return {
-    title: t.report.charts,
+    title: front ? t.report.chartsFront : t.report.charts,
     durationMs: timeline.durationMs,
+    minDegrees,
     maxDegrees,
     series: [
-      { label: t.joints.knee_flexion, color: paper("knee"), points: timeline.knee },
-      { label: t.joints.trunk_inclination, color: paper("trunk"), points: timeline.trunk },
+      { label: labels[0], color: paper("knee"), points: primary },
+      { label: labels[1], color: paper(front ? "center" : "trunk"), points: secondary },
     ].filter((series) => series.points.length > 0),
     bands: target ? zoneSpans(maxDegrees, target).map(({ zone, from, to }) => ({ from, to, color: paper(ZONE_SOFT[zone]) })) : [],
     marks: timeline.repetitions.map((rep, i) => {
       const peak = peaks[i];
-      return { ...rep.peak, color: paper(target && peak !== null ? ZONE_STRONG[zoneOf(peak, target)] : RISK_STRONG[rep.level]) };
+      return { ...rep.peak, color: paper(target && peak !== undefined && peak !== null ? ZONE_STRONG[zoneOf(peak, target)] : RISK_STRONG[rep.level]) };
     }),
     xLabels: Array.from({ length: Math.floor(timeline.durationMs / (seconds * 1000)) + 1 }, (_, i) => ({ ms: i * seconds * 1000, text: f.secondsFromMs(i * seconds * 1000) })),
-    yLabels: Array.from({ length: maxDegrees / DEGREE_STEP + 1 }, (_, i) => ({ degrees: i * DEGREE_STEP, text: f.degrees(i * DEGREE_STEP) })),
+    yLabels: Array.from({ length: (maxDegrees - minDegrees) / DEGREE_STEP + 1 }, (_, i) => {
+      const degrees = minDegrees + i * DEGREE_STEP;
+      return { degrees, text: f.degrees(degrees) };
+    }),
   };
 }
 
@@ -119,13 +131,24 @@ export function buildReportModel({ source, timeline, t, f }: { source: ReportSou
   const target = analysis.knee_target;
   const knee = analysis.knee_median_peak_degrees;
   const peaks = analysis.risk_assessment ? repetitionKneePeaks(analysis.risk_assessment) : [];
-  const trunkPeak = timeline.trunk.length ? Math.max(...timeline.trunk.map((s) => s.degrees)) : null;
+  const front = timeline.view === "front";
+  const trunkPeak = !front && timeline.secondary.length ? Math.max(...timeline.secondary.map((s) => s.degrees)) : null;
+  const valgus = front ? valgusSummary(analysis.angle_measurements, analysis.risk_assessment?.repetitions ?? []) : null;
+  const degreesOr = (value: number | null) => (value === null ? r.empty : f.degrees(value));
   const level = analysis.risk_level;
   const zones = t.analysis.kneeZones[analysis.movement_type];
   const ink = paper("ink");
 
+  const measured: ReportPair[] = valgus
+    ? [
+        { label: t.analysis.valgus.left, value: degreesOr(valgus.left), color: paper("knee") },
+        { label: t.analysis.valgus.right, value: degreesOr(valgus.right), color: paper("center") },
+        { label: t.analysis.valgusAsymmetry, value: degreesOr(valgus.asymmetry), color: ink },
+      ]
+    : [{ label: t.analysis.kneeMedian, value: knee === null ? t.analysis.noKnee : f.degrees(knee), color: paper("knee") }];
   const figures: ReportPair[] = [
-    { label: t.analysis.kneeMedian, value: knee === null ? t.analysis.noKnee : f.degrees(knee), color: paper("knee") },
+    { label: r.view, value: t.analysis.view[timeline.view], color: ink },
+    ...measured,
     ...(target ? [{ label: r.target, value: targetText(target, f.degrees, t.analysis.kneeTarget), color: paper("zone-target") }] : []),
     ...(trunkPeak === null ? [] : [{ label: t.analysisDetail.peakTrunk, value: f.degrees(trunkPeak), color: paper("trunk") }]),
     {
@@ -149,19 +172,21 @@ export function buildReportModel({ source, timeline, t, f }: { source: ReportSou
     repetitions: timeline.repetitions.length
       ? {
           title: t.analysis.repetitions,
-          headers: [r.repetition, r.kneePeak, r.zone, r.risk],
+          headers: [r.repetition, front ? r.peak : r.kneePeak, target && !front ? r.zone : r.focus, r.risk],
           rows: timeline.repetitions.map((rep, i) => {
-            const peak = peaks[i];
-            const zone = target && peak !== null ? zoneOf(peak, target) : null;
+            const peak = front ? rep.peak.degrees : (peaks[i] ?? null);
+            const zone = target && !front && peak !== null ? zoneOf(peak, target) : null;
+            // Con rango objetivo manda la zona; sin él, qué articulación quedó en riesgo y en qué segundo
+            const place = zone ? zones[zone] : rep.focus ? `${focusJointText(rep.focus, t.analysis)} · ${f.secondsFromMs(rep.focus.ms)}` : r.empty;
             return {
-              cells: [String(i + 1), peak === null ? r.empty : f.degrees(peak), zone ? zones[zone] : r.empty, t.analysis.riskShort[rep.level]],
+              cells: [String(i + 1), degreesOr(peak), place, t.analysis.riskShort[rep.level]],
               color: paper(zone ? ZONE_STRONG[zone] : RISK_STRONG[rep.level]),
             };
           }),
         }
       : null,
     explanation: { title: r.explanation, paragraphs: source.explanation ? plainParagraphs(source.explanation) : [r.noExplanation] },
-    notes: target ? [t.analysis.rangesNote] : [],
+    notes: [...(target && !front ? [t.analysis.rangesNote] : []), ...(front ? [t.analysis.valgusNote] : []), ...(timeline.view === "inconclusive" ? [t.analysis.viewLead.inconclusive] : [])],
     disclaimer: { title: r.disclaimerTitle, body: r.disclaimer },
     pageLabel: r.page,
     colors: { ink, muted: paper("ink-muted"), line: paper("line"), accent: paper("accent"), panel: paper("raised") },

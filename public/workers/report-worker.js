@@ -117,7 +117,7 @@ function chart(canvas, model) {
   const top = canvas.y;
   const bottom = top - CHART_HEIGHT;
   const x = (ms) => left + (c.durationMs ? (ms / c.durationMs) * plotWidth : 0);
-  const y = (degrees) => bottom + (degrees / c.maxDegrees) * CHART_HEIGHT;
+  const y = (degrees) => bottom + ((degrees - c.minDegrees) / (c.maxDegrees - c.minDegrees)) * CHART_HEIGHT;
   const { page, fonts } = canvas;
   const muted = color(model.colors.muted);
 
@@ -153,7 +153,7 @@ function chart(canvas, model) {
 function repetitions(canvas, model) {
   const table = model.repetitions;
   sectionTitle(canvas, table.title);
-  const widths = [0.18, 0.27, 0.3, 0.25].map((share) => share * WIDTH);
+  const widths = [0.14, 0.2, 0.44, 0.22].map((share) => share * WIDTH);
   const row = (cells, { bold, tint, dot }) => {
     canvas.ensure(20);
     canvas.y -= 18;
