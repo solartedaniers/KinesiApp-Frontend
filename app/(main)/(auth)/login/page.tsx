@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { AuthShell } from "@/components/auth/AuthShell";
 import { LoginForm } from "@/components/auth/LoginForm";
+import { readDemoLogin } from "@/lib/demo-login";
 import { getT } from "@/lib/i18n/server";
 import { ROUTES } from "@/lib/routes";
 
@@ -24,7 +25,7 @@ export default async function LoginPage() {
         </>
       }
     >
-      <LoginForm />
+      <LoginForm demo={readDemoLogin(process.env)} />
     </AuthShell>
   );
 }

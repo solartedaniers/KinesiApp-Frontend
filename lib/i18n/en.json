@@ -181,7 +181,8 @@
     "noAccount": "Don't have an account yet?",
     "register": "Sign up",
     "verifyNow": "Verify my email",
-    "registerNow": "Create an account with this email"
+    "registerNow": "Create an account with this email",
+    "demoNotice": "Demo account preloaded: just click Sign in, or type another account."
   },
   "register": {
     "metaTitle": "Create account",

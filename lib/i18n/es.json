@@ -181,7 +181,8 @@
     "noAccount": "¿Aún no tienes una cuenta?",
     "register": "Regístrate",
     "verifyNow": "Verificar mi correo",
-    "registerNow": "Crear una cuenta con este correo"
+    "registerNow": "Crear una cuenta con este correo",
+    "demoNotice": "Cuenta de demostración precargada: solo da clic en Iniciar sesión, o escribe otra cuenta."
   },
   "register": {
     "metaTitle": "Crear cuenta",
