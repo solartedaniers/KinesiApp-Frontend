@@ -1,7 +1,6 @@
 // Análisis de ejemplo para la guía de estilo: una sentadilla de 40 s a 30 fps con la forma de los
 // datos reales (flexión de rodilla e inclinación del tronco por frame, repeticiones con su puntaje).
 // Es determinista (semilla fija) para que el render del servidor y el del cliente coincidan.
-import { VIDEO_MAX_SECONDS } from "../config.ts";
 import type { AngleSample } from "../analysis-timeline.ts";
 import type { RiskLevel } from "./risk";
 
@@ -12,7 +11,7 @@ export type SampleRepetition = { startMs: number; endMs: number; score: number; 
 export type SampleSession = { date: string; score: number; level: RiskLevel };
 
 const SAMPLE_FPS = 30;
-export const SAMPLE_DURATION_MS = VIDEO_MAX_SECONDS * 1000;
+export const SAMPLE_DURATION_MS = 40_000;
 const REPETITIONS = 10;
 
 /** Generador pseudoaleatorio con semilla (mulberry32). */

@@ -9,13 +9,12 @@ import { PoseFigure } from "./PoseFigure";
 import { SimulatedAnalysis } from "./SimulatedAnalysis";
 import { Notice } from "./Status";
 
-import { VIDEO_MAX_SECONDS } from "@/lib/config";
 import { squatPoseAt } from "@/lib/design/pose";
 import { format } from "@/lib/i18n";
 import { useFormat, useT } from "@/lib/i18n/client";
 import { ROUTES } from "@/lib/routes";
 
-// En la guía la grabación corre cuatro veces más rápido: el tope de 40 s se ve en 10 s reales
+// En la guía la grabación corre cuatro veces más rápido: un tope de 40 s se ve en 10 s reales
 const SIMULATED_SPEED = 4;
 // Una sentadilla simulada cada 4 s de video
 const REPETITION_MS = 4000;
@@ -24,16 +23,16 @@ type Phase = "idle" | "recording" | "stopped" | "analyzing" | "done";
 
 /**
  * Captura simulada: misma secuencia que la real (elegir movimiento, grabar, tope automático, subir y
- * analizar), sin pedir la cámara. El tope es el de la configuración, no un número suelto.
+ * analizar), sin pedir la cámara. El tope llega de GetClientPolicy.
  */
-export function CaptureSimulator() {
+export function CaptureSimulator({ maxSeconds }: { maxSeconds: number }) {
   const t = useT();
   const f = useFormat();
   const c = t.styleGuide.screens.capture;
   const [phase, setPhase] = useState<Phase>("idle");
   const [ms, setMs] = useState(0);
   const [autoStopped, setAutoStopped] = useState(false);
-  const limitMs = VIDEO_MAX_SECONDS * 1000;
+  const limitMs = maxSeconds * 1000;
   const stopRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -94,14 +93,14 @@ export function CaptureSimulator() {
       </div>
 
       <div className="grid content-start gap-4">
-        <CaptureFrame label={c.frame} hint={c.frameHint} status={phase === "recording" ? c.recording : format(c.limit, { seconds: VIDEO_MAX_SECONDS })} recording={phase === "recording"} fill={fill} value={seconds}>
+        <CaptureFrame label={c.frame} hint={c.frameHint} status={phase === "recording" ? c.recording : format(c.limit, { seconds: maxSeconds })} recording={phase === "recording"} fill={fill} value={seconds}>
           <svg viewBox="-60 -128 126 150" className="absolute inset-0 size-full" role="img" aria-label={c.frame}>
             <line x1="-54" x2="60" y1="0" y2="0" className="stroke-line-strong" strokeWidth="0.8" />
             <PoseFigure keypoints={squatPoseAt(knee)} center={phase === "recording"} />
           </svg>
         </CaptureFrame>
 
-        {autoStopped && <Notice tone="warning">{format(c.autoStopped, { seconds: VIDEO_MAX_SECONDS })}</Notice>}
+        {autoStopped && <Notice tone="warning">{format(c.autoStopped, { seconds: maxSeconds })}</Notice>}
 
         <div className="flex flex-wrap items-center justify-center gap-3">
           {phase === "idle" && <Button glyph="capture" onClick={record} className="min-w-40">{c.record}</Button>}

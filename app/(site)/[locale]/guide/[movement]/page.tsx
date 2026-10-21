@@ -9,7 +9,6 @@ import { Glyph } from "@/components/instrument/Glyph";
 import { Notice } from "@/components/instrument/Status";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
-import { VIDEO_MAX_SECONDS } from "@/lib/config";
 import { cssVars } from "@/lib/design/css";
 import { getClientPolicyOrNull } from "@/lib/data/public";
 import { DICTIONARIES, format, LOCALES } from "@/lib/i18n";
@@ -56,7 +55,6 @@ export default async function GuidePage({ params }: PageProps<"/[locale]/guide/[
   const copy = g.movements[movement];
   const other = MOVEMENT_TYPES.find((option) => option !== movement)!;
   const policy = await getClientPolicyOrNull();
-  const seconds = policy?.video_max_duration_seconds ?? VIDEO_MAX_SECONDS;
   return (
     <>
       <SiteHeader locale={locale} path={guidePath(movement)} />
@@ -94,22 +92,24 @@ export default async function GuidePage({ params }: PageProps<"/[locale]/guide/[
           </div>
         </section>
 
-        <section aria-labelledby="guide-limits" className="grid gap-3" data-reveal>
-          <h2 id="guide-limits" className="font-display text-2xl font-semibold text-ink">{g.limitsTitle}</h2>
-          <ul className="grid gap-2 text-ink">
-            <li className="flex items-center gap-3">
-              <Glyph name="clock" size={20} className="text-center" />
-              {format(g.limitDuration, { seconds })}
-            </li>
-            {policy && (
+        {/* Sin la política (backend dormido en el build) omito la sección: no guardo una copia local de los
+            límites y la siguiente regeneración la completa */}
+        {policy && (
+          <section aria-labelledby="guide-limits" className="grid gap-3" data-reveal>
+            <h2 id="guide-limits" className="font-display text-2xl font-semibold text-ink">{g.limitsTitle}</h2>
+            <ul className="grid gap-2 text-ink">
+              <li className="flex items-center gap-3">
+                <Glyph name="clock" size={20} className="text-center" />
+                {format(g.limitDuration, { seconds: policy.video_max_duration_seconds })}
+              </li>
               <li className="flex items-center gap-3">
                 <Glyph name="upload" size={20} className="text-center" />
                 {format(g.limitSize, { size: bytesToMegabytes(policy.video_max_size_bytes) })}
               </li>
-            )}
-          </ul>
-          <p className="text-sm text-ink-muted">{g.limitsNote}</p>
-        </section>
+            </ul>
+            <p className="text-sm text-ink-muted">{g.limitsNote}</p>
+          </section>
+        )}
 
         <div className="grid gap-8 md:grid-cols-2" data-reveal>
           <section aria-labelledby="guide-execution" className="grid content-start gap-4">

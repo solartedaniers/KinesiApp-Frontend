@@ -8,7 +8,6 @@ import { LiveGauge } from "@/components/instrument/LiveGauge";
 import { VideoPrivacy } from "@/components/instrument/VideoPrivacy";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
-import { VIDEO_MAX_SECONDS } from "@/lib/config";
 import { cssVars } from "@/lib/design/css";
 import type { GlyphName } from "@/lib/design/icons";
 import { GUIDE_SAMPLE } from "@/lib/design/guide-sample";
@@ -80,7 +79,7 @@ export default async function LandingPage({ params }: PageProps<"/[locale]">) {
                   <Glyph name={STEPS[i].glyph} size={22} className="text-ink-muted" />
                 </span>
                 <h3 className="font-display text-xl font-semibold text-ink">{step.title}</h3>
-                <p className="text-ink-muted">{format(step.body, { seconds: VIDEO_MAX_SECONDS })}</p>
+                <p className="text-ink-muted">{step.body}</p>
               </li>
             ))}
           </ol>

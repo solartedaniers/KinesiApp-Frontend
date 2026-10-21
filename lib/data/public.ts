@@ -10,7 +10,7 @@ export const getClientPolicy = cache((): Promise<ClientPolicy> => systemGateway(
 
 /**
  * Para las páginas estáticas: si el backend no responde en el build (Render dormido), la página sale
- * igual con los límites del cliente y la siguiente regeneración trae los del servidor.
+ * sin la sección de límites y la siguiente regeneración la completa.
  */
 export async function getClientPolicyOrNull(): Promise<ClientPolicy | null> {
   try {
