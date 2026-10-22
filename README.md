@@ -144,6 +144,7 @@ Si están las dos, `/login` sale prellenado con esa cuenta y un aviso pequeño (
 - Las lee solo la página de login, en el servidor (`lib/demo-login.ts`, validadas con Zod). No llegan al bundle del cliente ni a otras rutas.
 - Un correo mal escrito hace fallar la página en vez de prellenar algo inválido.
 - Nada de la cuenta está escrito en el código: vive solo en las variables de Vercel.
+- **`DEMO_LOGIN_PASSWORD` es un secreto.** Su valor vive solo en las variables de Vercel (Production y Preview); en `.env.example` va vacía. Se borra después de la evaluación.
 - **La contraseña sí llega al navegador.** Prellenar un formulario implica mandar el valor en el HTML de `/login`, así que cualquiera que abra esa página puede verla. No hay forma de prellenar sin exponerla. Lo acepté a propósito para la evaluación: lo pidió el profesor y es una cuenta solo de la app, sin relación con ningún otro servicio.
 - **Se quitan cuando termine la evaluación.** Al borrarlas (o dejarlas vacías) y redesplegar, el login vuelve a su forma normal y el riesgo desaparece. Después se cambia la contraseña de esa cuenta, porque ya estuvo expuesta.
 
@@ -180,7 +181,7 @@ Vercel construye cada push. Las ramas de trabajo generan un preview, y `main` va
 - **Previews:** usan el mismo backend de producción (`GRPC_WEB_BASE_URL`); los buckets de producción aceptan su origen. No hay un backend de desarrollo en la nube: desarrollo es local contra grpc-dev.
 - **Volver atrás:** en Deployments, "Promote" del deploy anterior de Production.
 
-- Las variables se definen en el proyecto de Vercel y ninguna tiene secretos. Solo `GRPC_WEB_BASE_URL` es obligatoria; las demás tienen su default documentado en `.env.example`.
+- Las variables se definen en el proyecto de Vercel. La única secreta es `DEMO_LOGIN_PASSWORD`, que se borra después de la evaluación. Solo `GRPC_WEB_BASE_URL` es obligatoria; las demás tienen su default documentado en `.env.example`.
   - Del servidor: `lib/grpc/env.ts` (timeouts de gRPC) y `lib/server-config.ts` (origen del sitio, tamaño de página, renovación del token).
   - Públicas (`NEXT_PUBLIC_*`, en `lib/config.ts`): zona horaria, renovación de la URL del video, espera del OTP y tiempos del estado de la IA. Next las incrusta al construir, así que cambiarlas pide redesplegar.
   - Todas pasan por Zod: un valor inválido hace fallar el arranque en vez de usarse.
