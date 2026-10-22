@@ -23,6 +23,9 @@ test("la lista de requisitos de la contraseña se marca mientras escribo", async
 
 test("la Server Action del login valida antes de llamar al backend", async ({ page }) => {
   await page.goto("/login");
+  // Vacío los campos porque con la cuenta de demostración configurada el login llega prellenado
+  await page.getByLabel(fields.email, { exact: true }).fill("");
+  await page.getByLabel(fields.password, { exact: true }).fill("");
   await page.getByRole("button", { name: es.login.submit }).click();
   await expect(page.getByText(es.validation.required)).toHaveCount(2);
   await expect(page).toHaveURL(/\/login$/);
