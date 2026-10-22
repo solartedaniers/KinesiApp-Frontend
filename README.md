@@ -1,8 +1,16 @@
 # KinesiApp Frontend
 
+**La app está publicada en https://www.kinesiapp.com.**
+
 Es la interfaz de KinesiApp, hecha con Next.js (App Router). El deportista graba un salto o una sentadilla en vista lateral, y yo le muestro los ángulos de rodilla y tronco, el riesgo por repetición y un chat que le explica el resultado. El coach sigue a sus deportistas y equipos, y el admin gestiona cuentas y roles.
 
 Despliego en Vercel, en la región `fra1`, junto al backend de Render Frankfurt y la base de Neon.
+
+### Dominio
+
+- Compré `kinesiapp.com` en **Namecheap**. Su DNS apunta a Vercel con dos registros: un `A` para `@` y un `CNAME` para `www`, con los valores que da Vercel en Settings → Domains.
+- `https://www.kinesiapp.com` es el dominio canónico. `kinesiapp.com` redirige con **308** a `www`, así que el sitemap, el canonical y los buscadores ven una sola URL.
+- El **HTTPS es automático**: Vercel emite y renueva el certificado de los dos nombres, sin que yo haga nada.
 
 ## Arquitectura: gRPC de punta a punta, sin REST
 
@@ -105,15 +113,55 @@ Solo los uso donde hay trabajo real que sacar del hilo principal o algo que comp
 
 La identidad visual es de "laboratorio de biomecánica": cuadrícula milimetrada, esqueletos con keypoints, arcos de transportador, cronofotografías SVG propias y trayectorias del centro de gravedad. Los colores, espacios, radios y tipografías son design tokens (variables CSS que consume Tailwind). Los textos están en `lib/i18n/{es,en}.json`, los íconos en `lib/design/icons.ts`, y el modo claro y el oscuro cumplen contraste AA. Las animaciones respetan `prefers-reduced-motion`. La guía completa está en `/style-guide`.
 
-## Cómo correrlo
+## Requisitos
 
-Necesito Node 20+ y el backend gRPC accesible: local con Docker o el de Render.
+- **Node 20.9 o más nuevo**, el mínimo que pide Next 16. Yo uso Node 24.
+- **Git** con submódulos, porque los contratos llegan en `contracts/`.
+- **buf 1.74**: no hay que instalarlo aparte, porque llega con `npm install` (`@bufbuild/buf`) y lo usa `npm run generate`.
+- **Docker** (uso Docker Desktop 29.4), para levantar el backend en local. Si no, el frontend puede apuntar al backend de Render.
+- **Playwright 1.64**, que llega con `npm install`. Sus navegadores se instalan una vez con `npx playwright install`.
+
+## Configuración
+
+Copio `.env.example` a `.env.local` y lo lleno así. En Vercel, las mismas variables van en Settings → Environment Variables. Todas pasan por Zod al arrancar: un valor inválido hace fallar el arranque en vez de usarse.
+
+**Del servidor** (las lee solo Next en Node; el navegador nunca las ve)
+
+| Variable | Para qué la uso | De dónde saco el valor | Secreta |
+|---|---|---|---|
+| `GRPC_WEB_BASE_URL` | La URL pública del Envoy del backend, sin barra final. Es la única obligatoria. | En local, `http://localhost:10000` (el contenedor del backend). En Vercel, la URL del servicio de Render | No |
+| `GRPC_TIMEOUT_MS` | El plazo de cada RPC simple (30 s). | Default | No |
+| `GRPC_STREAM_TIMEOUT_MS` | El plazo de los streams de análisis y chat (240 s), por debajo del `maxDuration` de 300 s de Vercel. | Default | No |
+| `AI_WAKE_UP_TIMEOUT_MS` | Cuánto espero a `WakeUpAi` con la IA en frío (60 s). | Default | No |
+| `SITE_ORIGIN` | El origen público para el sitemap, el canonical y la metadata. En producción es `https://www.kinesiapp.com`; si falta, Vercel lo deduce del despliegue. | Lo defino yo, solo en Production | No |
+| `LIST_PAGE_SIZE` | El tamaño de página de los listados. El backend no entrega más de 50. | Default | No |
+| `ACCESS_REFRESH_LEEWAY_SECONDS` | Cuántos segundos antes del vencimiento renuevo el access token (60). | Default | No |
+| `AI_WAKE_COOKIE_MAX_AGE_SECONDS` | La vida de la cookie que pide despertar la IA al entrar. | Default | No |
+| `DEMO_LOGIN_EMAIL` | El correo de la cuenta de demostración que prellena `/login`. | Lo defino yo en Vercel | No es secreta, pero no la publico |
+| `DEMO_LOGIN_PASSWORD` | La contraseña de esa cuenta. Llega al HTML de `/login`, y aun así es un secreto: se borra después de la evaluación y luego se cambia la contraseña. | Lo defino yo en Vercel | **Sí** |
+
+**Públicas** (`NEXT_PUBLIC_*`: Next las incrusta en el bundle al construir, así que cambiarlas pide redesplegar)
+
+| Variable | Para qué la uso |
+|---|---|
+| `NEXT_PUBLIC_APP_TIME_ZONE` | La zona IANA con la que formateo fechas en el servidor y en el navegador (`America/Bogota`), para que las dos coincidan. |
+| `NEXT_PUBLIC_VIDEO_URL_RENEW_MARGIN_MS` | Cuánto antes de que venza la URL firmada del video pido otra. |
+| `NEXT_PUBLIC_OTP_RESEND_COOLDOWN_SECONDS` | La espera entre reenvíos del código por correo. Es solo de la interfaz: el backend decide. |
+| `NEXT_PUBLIC_PREFERENCE_COOKIE_MAX_AGE_SECONDS` | La vida de las cookies de idioma y tema (un año). |
+| `NEXT_PUBLIC_AI_READY_TTL_MS`, `NEXT_PUBLIC_AI_WAKE_STALE_MS`, `NEXT_PUBLIC_AI_WARMING_RETRY_MS`, `NEXT_PUBLIC_AI_WARMING_ATTEMPTS` | El estado de la IA: cuánto vale un "IA activada", cuándo doy por perdido un "despertando" y cómo reintento. |
+| `NEXT_PUBLIC_RISK_POSE_WINDOW_MS` | Cuánto antes y después del pico de riesgo dibujo el esqueleto sobre el video. |
+
+Ninguna pública es secreta, y todas tienen su default en `.env.example`.
+
+**Solo para pruebas.** `E2E_BASE_URL` hace que Playwright corra contra una URL ya desplegada (un preview o www) en vez de levantar `next start`.
+
+## Cómo correrlo
 
 ```bash
 git clone --recurse-submodules https://github.com/solartedaniers/KinesiApp-Frontend.git
 cd KinesiApp-Frontend
 npm install
-cp .env.example .env.local   # GRPC_WEB_BASE_URL apunta al Envoy del backend
+cp .env.example .env.local   # y lo lleno con la tabla de Configuración
 npm run dev                  # genera lib/gen/ y copia pdf-lib antes de arrancar
 ```
 
@@ -136,6 +184,7 @@ Si están las dos, `/login` sale prellenado con esa cuenta y un aviso pequeño (
 - Las lee solo la página de login, en el servidor (`lib/demo-login.ts`, validadas con Zod). No llegan al bundle del cliente ni a otras rutas.
 - Un correo mal escrito hace fallar la página en vez de prellenar algo inválido.
 - Nada de la cuenta está escrito en el código: vive solo en las variables de Vercel.
+- **`DEMO_LOGIN_PASSWORD` es un secreto.** Su valor vive solo en las variables de Vercel (Production y Preview); en `.env.example` va vacía. Se borra después de la evaluación.
 - **La contraseña sí llega al navegador.** Prellenar un formulario implica mandar el valor en el HTML de `/login`, así que cualquiera que abra esa página puede verla. No hay forma de prellenar sin exponerla. Lo acepté a propósito para la evaluación: lo pidió el profesor y es una cuenta solo de la app, sin relación con ningún otro servicio.
 - **Se quitan cuando termine la evaluación.** Al borrarlas (o dejarlas vacías) y redesplegar, el login vuelve a su forma normal y el riesgo desaparece. Después se cambia la contraseña de esa cuenta, porque ya estuvo expuesta.
 
@@ -164,6 +213,44 @@ Hay cinco pruebas que se saltan a propósito, y lo dicen:
 - el offline en Firefox, donde Playwright no corta la red dentro del Service Worker.
 - la carga del idioma en los dos proyectos WebKit, porque el WebKit de Playwright para Windows no deja interceptar el `fetch` de la Server Action para retrasarla.
 
+## Errores comunes
+
+| Lo que veo | Por qué pasa | Cómo lo arreglo |
+|---|---|---|
+| `contracts/` está vacío y `buf generate` no encuentra los `.proto` | Cloné sin `--recurse-submodules`. | `git submodule update --init` y `npm run generate`. |
+| `Cannot find module '@/lib/gen/...'` en el editor o en `tsc` | `lib/gen/` no se versiona, y todavía no lo generé. | `npm run generate`. `npm run dev` y `npm run build` lo hacen solos. |
+| Next no arranca con un error de Zod sobre `GRPC_WEB_BASE_URL` | Falta la variable o no es una URL `http`/`https`. | La defino en `.env.local`, por ejemplo `http://localhost:10000`. |
+| Las páginas con sesión muestran "No pudimos conectar con el servidor" | El backend no está corriendo o `GRPC_WEB_BASE_URL` apunta mal. | Levanto el contenedor del backend con `-p 10000:10000` o apunto a Render. |
+| "IA despertando" se queda un rato | La IA escala a cero y arranca en frío en 20–33 s. | Es normal. Si pasa del plazo, la interfaz muestra "IA no disponible" sin romperse, y basta con intentarlo de nuevo en un minuto. |
+| La subida del video falla por CORS en local | El bucket de desarrollo no tiene `http://localhost:3000` en su CORS. | Lo agrego al CORS del bucket (ver el README del backend). |
+| Cambié una `NEXT_PUBLIC_*` y no cambió nada | Next las incrusta al construir. | Reinicio `npm run dev` o redespliego en Vercel. |
+| Las guías salen sin la sección de límites | El backend no respondió durante el build. | La siguiente regeneración de ISR (cada hora) la completa sola. |
+| Después de un deploy veo una landing vieja | El Service Worker la sirve con *stale-while-revalidate*. | La siguiente recarga ya trae la nueva. |
+| Playwright dice "Executable doesn't exist" | Faltan sus navegadores. | `npx playwright install chromium firefox webkit`. |
+| `/login` sale prellenado en un preview | El preview tiene las variables de la cuenta de demostración. | Es a propósito. Borro los campos para entrar con otra cuenta. |
+
+## Flujo de trabajo
+
+- **Trabajo en ramas feature.** Aquí es `feature/grpc-frontend`. Nunca hago commit directo en `main`; fusiono con `--no-ff` cuando el cambio está probado.
+- **Cada push a una rama genera un preview** en Vercel.
+- **El push a `main` despliega a producción:** Vercel publica en `www.kinesiapp.com` y Render reconstruye el backend desde su propio `main`.
+- **La IA necesita un paso a mano.** Su push construye la imagen en GHCR, pero Azure no la toma hasta que corro `az containerapp update -n kinesiapp-ia -g kinesiapp-rg --image ghcr.io/solartedaniers/kinesiapp-ai:<sha>`.
+- **Las migraciones se corren a mano** desde el repo del backend, con `alembic upgrade head`, antes de fusionar un cambio de esquema.
+- **Las previews usan la base real.** Hablan con el backend de producción, así que lo que creo en un preview queda en la base de production y lo que analizo gasta cuota de Gemini. Para probar con datos de mentira corro todo en local contra grpc-dev.
+- **Contract-first.** Si cambia un RPC, primero va el contrato con un tag nuevo en KinesiApp-Contracts. Después muevo el submódulo y corro `npm run generate`.
+
+## Producción
+
+| Servicio | Dónde corre | Cómo llega a producción |
+|---|---|---|
+| Frontend (este repo) | Vercel, con las funciones en `fra1` (Fráncfort): https://www.kinesiapp.com | Push a `main`, automático |
+| Backend (Envoy + `grpcio`) | Render en Frankfurt, como servicio Docker | Push a `main` de su repo, automático |
+| IA (Envoy + `grpcio`) | Azure Container Apps en `canadacentral`, con 0 a 1 réplica | `az containerapp update` con la imagen de GHCR |
+| Base de datos | Neon Postgres en Frankfurt, branch `production` | Migraciones a mano con Alembic |
+| Archivos | Neon Storage, buckets privados. El navegador sube directo con URLs firmadas. | — |
+| Correo | Resend, desde `no-reply@kinesiapp.com` | — |
+| Dominio | `kinesiapp.com` en Namecheap, con DNS hacia Vercel | — |
+
 ## Despliegue
 
 Vercel construye cada push. Las ramas de trabajo generan un preview, y `main` va a producción.
@@ -172,7 +259,7 @@ Vercel construye cada push. Las ramas de trabajo generan un preview, y `main` va
 - **Previews:** usan el mismo backend de producción (`GRPC_WEB_BASE_URL`); los buckets de producción aceptan su origen. No hay un backend de desarrollo en la nube: desarrollo es local contra grpc-dev.
 - **Volver atrás:** en Deployments, "Promote" del deploy anterior de Production.
 
-- Las variables se definen en el proyecto de Vercel y ninguna tiene secretos. Solo `GRPC_WEB_BASE_URL` es obligatoria; las demás tienen su default documentado en `.env.example`.
+- Las variables se definen en el proyecto de Vercel. La única secreta es `DEMO_LOGIN_PASSWORD`, que se borra después de la evaluación. Solo `GRPC_WEB_BASE_URL` es obligatoria; las demás tienen su default documentado en `.env.example`.
   - Del servidor: `lib/grpc/env.ts` (timeouts de gRPC) y `lib/server-config.ts` (origen del sitio, tamaño de página, renovación del token).
   - Públicas (`NEXT_PUBLIC_*`, en `lib/config.ts`): zona horaria, renovación de la URL del video, espera del OTP y tiempos del estado de la IA. Next las incrusta al construir, así que cambiarlas pide redesplegar.
   - Todas pasan por Zod: un valor inválido hace fallar el arranque en vez de usarse.
