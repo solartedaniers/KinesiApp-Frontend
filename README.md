@@ -97,6 +97,7 @@ Solo los uso donde hay trabajo real que sacar del hilo principal o algo que comp
   - en el resto, un mensaje de `MessageChannel`, que agenda una task nueva sin el retraso mínimo de `setTimeout`.
 
   La línea de tiempo del video y el informe en PDF se arman así, sin bloquear el render.
+- **Transiciones para lo que espera al servidor.** El tema se cambia en el navegador (cookie y `data-theme`), sin ir al servidor. El idioma sí necesita los textos del servidor: su Server Action corre en `startTransition`, marca el idioma elegido con `useOptimistic` y deja la interfaz usable mientras llega la página. Mientras dura, ignora otros clics de idioma para no encolar renders completos. En el sitio estático el idioma es un enlace, y `useLinkStatus` muestra la carga si la página no estaba precargada.
 - **`setTimeout` cuando quiero una task posterior a propósito.** El registro del Service Worker, la espera entre reintentos de `WakeUpAi` y la cuenta regresiva de "reenviar código".
 - **`requestAnimationFrame`** solo para animar el medidor en vivo (`LiveGauge`), sincronizado con el pintado.
 
@@ -151,15 +152,17 @@ npm run test:e2e                    # Chromium, Firefox, WebKit, Pixel 7 e iPhon
 Las pruebas de `e2e/` levantan `next start` sobre el build y recorren las páginas públicas en los cinco navegadores. Cubren:
 
 - la landing estática, el idioma, el tema y la ausencia de scroll horizontal en móvil;
+- en la app, que el tema no hace Server Action y que el idioma muestra su carga sin encolar clics;
 - el movimiento reducido y la validación de formularios;
 - los tres Web Workers, el Shared Worker y la página offline del Service Worker.
 
 Leen los textos de los mismos JSON de i18n que la app, así una traducción nueva no las rompe. Con `E2E_BASE_URL=<url del preview>` corren contra Vercel.
 
-Hay tres pruebas que se saltan a propósito, y lo dicen:
+Hay cinco pruebas que se saltan a propósito, y lo dicen:
 
 - el avatar en los dos proyectos WebKit, porque el WebKit de Playwright para Windows no trae `OffscreenCanvas` (Safari 16.4+ sí);
 - el offline en Firefox, donde Playwright no corta la red dentro del Service Worker.
+- la carga del idioma en los dos proyectos WebKit, porque el WebKit de Playwright para Windows no deja interceptar el `fetch` de la Server Action para retrasarla.
 
 ## Despliegue
 
