@@ -1,8 +1,16 @@
 # KinesiApp Frontend
 
+**La app está publicada en https://www.kinesiapp.com.**
+
 Es la interfaz de KinesiApp, hecha con Next.js (App Router). El deportista graba un salto o una sentadilla en vista lateral, y yo le muestro los ángulos de rodilla y tronco, el riesgo por repetición y un chat que le explica el resultado. El coach sigue a sus deportistas y equipos, y el admin gestiona cuentas y roles.
 
 Despliego en Vercel, en la región `fra1`, junto al backend de Render Frankfurt y la base de Neon.
+
+### Dominio
+
+- Compré `kinesiapp.com` en **Namecheap**. Su DNS apunta a Vercel con dos registros: un `A` para `@` y un `CNAME` para `www`, con los valores que da Vercel en Settings → Domains.
+- `https://www.kinesiapp.com` es el dominio canónico. `kinesiapp.com` redirige con **308** a `www`, así que el sitemap, el canonical y los buscadores ven una sola URL.
+- El **HTTPS es automático**: Vercel emite y renueva el certificado de los dos nombres, sin que yo haga nada.
 
 ## Arquitectura: gRPC de punta a punta, sin REST
 
