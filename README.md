@@ -168,6 +168,10 @@ Hay cinco pruebas que se saltan a propósito, y lo dicen:
 
 Vercel construye cada push. Las ramas de trabajo generan un preview, y `main` va a producción.
 
+- **Producción:** https://www.kinesiapp.com, desde `main`. `kinesiapp.com` redirige con 308 a `www`, que es el canónico (`SITE_ORIGIN=https://www.kinesiapp.com` solo en Production).
+- **Previews:** usan el mismo backend de producción (`GRPC_WEB_BASE_URL`); los buckets de producción aceptan su origen. No hay un backend de desarrollo en la nube: desarrollo es local contra grpc-dev.
+- **Volver atrás:** en Deployments, "Promote" del deploy anterior de Production.
+
 - Las variables se definen en el proyecto de Vercel y ninguna tiene secretos. Solo `GRPC_WEB_BASE_URL` es obligatoria; las demás tienen su default documentado en `.env.example`.
   - Del servidor: `lib/grpc/env.ts` (timeouts de gRPC) y `lib/server-config.ts` (origen del sitio, tamaño de página, renovación del token).
   - Públicas (`NEXT_PUBLIC_*`, en `lib/config.ts`): zona horaria, renovación de la URL del video, espera del OTP y tiempos del estado de la IA. Next las incrusta al construir, así que cambiarlas pide redesplegar.
