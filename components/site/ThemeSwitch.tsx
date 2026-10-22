@@ -27,12 +27,13 @@ function chooseTheme(theme: Theme) {
 }
 
 /**
- * Tema en las páginas estáticas: no hay servidor que lea la cookie, así que la escribo aquí y cambio
- * data-theme al instante. La misma cookie la lee después el servidor de la app.
+ * Tema en el navegador: escribo la cookie y cambio data-theme al instante, sin ir al servidor. La misma
+ * cookie la lee después el layout de la app. `initial` es el tema que ya conoce el servidor; en las
+ * páginas estáticas no hay servidor que lo lea y queda el del sistema hasta hidratar.
  */
-export function ThemeSwitch({ className = "" }: { className?: string }) {
+export function ThemeSwitch({ className = "", initial = DEFAULT_THEME }: { className?: string; initial?: Theme }) {
   const t = useT().preferences;
-  const theme = useSyncExternalStore(subscribe, currentTheme, () => DEFAULT_THEME);
+  const theme = useSyncExternalStore(subscribe, currentTheme, () => initial);
   return (
     <fieldset className={className}>
       <legend className="visually-hidden">{t.theme}</legend>

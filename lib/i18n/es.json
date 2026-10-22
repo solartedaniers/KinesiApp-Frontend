@@ -800,6 +800,7 @@
       "es": "Español",
       "en": "English"
     },
+    "changingLanguage": "Cambiando el idioma…",
     "theme": "Tema",
     "themeNames": {
       "system": "Sistema",
