@@ -2,7 +2,7 @@
 
 **La app está publicada en https://www.kinesiapp.com.**
 
-Es la interfaz de KinesiApp, hecha con Next.js (App Router). El deportista graba un salto o una sentadilla en vista lateral, y yo le muestro los ángulos de rodilla y tronco, el riesgo por repetición y un chat que le explica el resultado. El coach sigue a sus deportistas y equipos, y el admin gestiona cuentas y roles.
+Es la interfaz de KinesiApp, hecha con Next.js (App Router). El deportista graba un salto o una sentadilla de perfil o de frente. De perfil le muestro los ángulos de rodilla y tronco; de frente mido si cada rodilla se va hacia adentro (valgo) y la diferencia entre las dos. En ambos casos ve el riesgo por repetición y un chat que le explica el resultado. El coach sigue a sus deportistas y equipos, y el admin gestiona cuentas y roles.
 
 Despliego en Vercel, en la región `fra1`, junto al backend de Render Frankfurt y la base de Neon.
 
