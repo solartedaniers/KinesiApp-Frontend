@@ -46,3 +46,7 @@ next-env.d.ts
 
 # pdf-lib para el worker del informe (npm run vendor)
 /public/vendor/
+
+# Los genera next dev para herramientas del editor; no son parte del proyecto
+/CLAUDE.md
+/AGENTS.md
