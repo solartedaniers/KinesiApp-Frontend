@@ -213,6 +213,44 @@ Hay cinco pruebas que se saltan a propósito, y lo dicen:
 - el offline en Firefox, donde Playwright no corta la red dentro del Service Worker.
 - la carga del idioma en los dos proyectos WebKit, porque el WebKit de Playwright para Windows no deja interceptar el `fetch` de la Server Action para retrasarla.
 
+## Errores comunes
+
+| Lo que veo | Por qué pasa | Cómo lo arreglo |
+|---|---|---|
+| `contracts/` está vacío y `buf generate` no encuentra los `.proto` | Cloné sin `--recurse-submodules`. | `git submodule update --init` y `npm run generate`. |
+| `Cannot find module '@/lib/gen/...'` en el editor o en `tsc` | `lib/gen/` no se versiona, y todavía no lo generé. | `npm run generate`. `npm run dev` y `npm run build` lo hacen solos. |
+| Next no arranca con un error de Zod sobre `GRPC_WEB_BASE_URL` | Falta la variable o no es una URL `http`/`https`. | La defino en `.env.local`, por ejemplo `http://localhost:10000`. |
+| Las páginas con sesión muestran "No pudimos conectar con el servidor" | El backend no está corriendo o `GRPC_WEB_BASE_URL` apunta mal. | Levanto el contenedor del backend con `-p 10000:10000` o apunto a Render. |
+| "IA despertando" se queda un rato | La IA escala a cero y arranca en frío en 20–33 s. | Es normal. Si pasa del plazo, la interfaz muestra "IA no disponible" sin romperse, y basta con intentarlo de nuevo en un minuto. |
+| La subida del video falla por CORS en local | El bucket de desarrollo no tiene `http://localhost:3000` en su CORS. | Lo agrego al CORS del bucket (ver el README del backend). |
+| Cambié una `NEXT_PUBLIC_*` y no cambió nada | Next las incrusta al construir. | Reinicio `npm run dev` o redespliego en Vercel. |
+| Las guías salen sin la sección de límites | El backend no respondió durante el build. | La siguiente regeneración de ISR (cada hora) la completa sola. |
+| Después de un deploy veo una landing vieja | El Service Worker la sirve con *stale-while-revalidate*. | La siguiente recarga ya trae la nueva. |
+| Playwright dice "Executable doesn't exist" | Faltan sus navegadores. | `npx playwright install chromium firefox webkit`. |
+| `/login` sale prellenado en un preview | El preview tiene las variables de la cuenta de demostración. | Es a propósito. Borro los campos para entrar con otra cuenta. |
+
+## Flujo de trabajo
+
+- **Trabajo en ramas feature.** Aquí es `feature/grpc-frontend`. Nunca hago commit directo en `main`; fusiono con `--no-ff` cuando el cambio está probado.
+- **Cada push a una rama genera un preview** en Vercel.
+- **El push a `main` despliega a producción:** Vercel publica en `www.kinesiapp.com` y Render reconstruye el backend desde su propio `main`.
+- **La IA necesita un paso a mano.** Su push construye la imagen en GHCR, pero Azure no la toma hasta que corro `az containerapp update -n kinesiapp-ia -g kinesiapp-rg --image ghcr.io/solartedaniers/kinesiapp-ai:<sha>`.
+- **Las migraciones se corren a mano** desde el repo del backend, con `alembic upgrade head`, antes de fusionar un cambio de esquema.
+- **Las previews usan la base real.** Hablan con el backend de producción, así que lo que creo en un preview queda en la base de production y lo que analizo gasta cuota de Gemini. Para probar con datos de mentira corro todo en local contra grpc-dev.
+- **Contract-first.** Si cambia un RPC, primero va el contrato con un tag nuevo en KinesiApp-Contracts. Después muevo el submódulo y corro `npm run generate`.
+
+## Producción
+
+| Servicio | Dónde corre | Cómo llega a producción |
+|---|---|---|
+| Frontend (este repo) | Vercel, con las funciones en `fra1` (Fráncfort): https://www.kinesiapp.com | Push a `main`, automático |
+| Backend (Envoy + `grpcio`) | Render en Frankfurt, como servicio Docker | Push a `main` de su repo, automático |
+| IA (Envoy + `grpcio`) | Azure Container Apps en `canadacentral`, con 0 a 1 réplica | `az containerapp update` con la imagen de GHCR |
+| Base de datos | Neon Postgres en Frankfurt, branch `production` | Migraciones a mano con Alembic |
+| Archivos | Neon Storage, buckets privados. El navegador sube directo con URLs firmadas. | — |
+| Correo | Resend, desde `no-reply@kinesiapp.com` | — |
+| Dominio | `kinesiapp.com` en Namecheap, con DNS hacia Vercel | — |
+
 ## Despliegue
 
 Vercel construye cada push. Las ramas de trabajo generan un preview, y `main` va a producción.
