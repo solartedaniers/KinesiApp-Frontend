@@ -113,15 +113,55 @@ Solo los uso donde hay trabajo real que sacar del hilo principal o algo que comp
 
 La identidad visual es de "laboratorio de biomecánica": cuadrícula milimetrada, esqueletos con keypoints, arcos de transportador, cronofotografías SVG propias y trayectorias del centro de gravedad. Los colores, espacios, radios y tipografías son design tokens (variables CSS que consume Tailwind). Los textos están en `lib/i18n/{es,en}.json`, los íconos en `lib/design/icons.ts`, y el modo claro y el oscuro cumplen contraste AA. Las animaciones respetan `prefers-reduced-motion`. La guía completa está en `/style-guide`.
 
-## Cómo correrlo
+## Requisitos
 
-Necesito Node 20+ y el backend gRPC accesible: local con Docker o el de Render.
+- **Node 20.9 o más nuevo**, el mínimo que pide Next 16. Yo uso Node 24.
+- **Git** con submódulos, porque los contratos llegan en `contracts/`.
+- **buf 1.74**: no hay que instalarlo aparte, porque llega con `npm install` (`@bufbuild/buf`) y lo usa `npm run generate`.
+- **Docker** (uso Docker Desktop 29.4), para levantar el backend en local. Si no, el frontend puede apuntar al backend de Render.
+- **Playwright 1.64**, que llega con `npm install`. Sus navegadores se instalan una vez con `npx playwright install`.
+
+## Configuración
+
+Copio `.env.example` a `.env.local` y lo lleno así. En Vercel, las mismas variables van en Settings → Environment Variables. Todas pasan por Zod al arrancar: un valor inválido hace fallar el arranque en vez de usarse.
+
+**Del servidor** (las lee solo Next en Node; el navegador nunca las ve)
+
+| Variable | Para qué la uso | De dónde saco el valor | Secreta |
+|---|---|---|---|
+| `GRPC_WEB_BASE_URL` | La URL pública del Envoy del backend, sin barra final. Es la única obligatoria. | En local, `http://localhost:10000` (el contenedor del backend). En Vercel, la URL del servicio de Render | No |
+| `GRPC_TIMEOUT_MS` | El plazo de cada RPC simple (30 s). | Default | No |
+| `GRPC_STREAM_TIMEOUT_MS` | El plazo de los streams de análisis y chat (240 s), por debajo del `maxDuration` de 300 s de Vercel. | Default | No |
+| `AI_WAKE_UP_TIMEOUT_MS` | Cuánto espero a `WakeUpAi` con la IA en frío (60 s). | Default | No |
+| `SITE_ORIGIN` | El origen público para el sitemap, el canonical y la metadata. En producción es `https://www.kinesiapp.com`; si falta, Vercel lo deduce del despliegue. | Lo defino yo, solo en Production | No |
+| `LIST_PAGE_SIZE` | El tamaño de página de los listados. El backend no entrega más de 50. | Default | No |
+| `ACCESS_REFRESH_LEEWAY_SECONDS` | Cuántos segundos antes del vencimiento renuevo el access token (60). | Default | No |
+| `AI_WAKE_COOKIE_MAX_AGE_SECONDS` | La vida de la cookie que pide despertar la IA al entrar. | Default | No |
+| `DEMO_LOGIN_EMAIL` | El correo de la cuenta de demostración que prellena `/login`. | Lo defino yo en Vercel | No es secreta, pero no la publico |
+| `DEMO_LOGIN_PASSWORD` | La contraseña de esa cuenta. Llega al HTML de `/login`, y aun así es un secreto: se borra después de la evaluación y luego se cambia la contraseña. | Lo defino yo en Vercel | **Sí** |
+
+**Públicas** (`NEXT_PUBLIC_*`: Next las incrusta en el bundle al construir, así que cambiarlas pide redesplegar)
+
+| Variable | Para qué la uso |
+|---|---|
+| `NEXT_PUBLIC_APP_TIME_ZONE` | La zona IANA con la que formateo fechas en el servidor y en el navegador (`America/Bogota`), para que las dos coincidan. |
+| `NEXT_PUBLIC_VIDEO_URL_RENEW_MARGIN_MS` | Cuánto antes de que venza la URL firmada del video pido otra. |
+| `NEXT_PUBLIC_OTP_RESEND_COOLDOWN_SECONDS` | La espera entre reenvíos del código por correo. Es solo de la interfaz: el backend decide. |
+| `NEXT_PUBLIC_PREFERENCE_COOKIE_MAX_AGE_SECONDS` | La vida de las cookies de idioma y tema (un año). |
+| `NEXT_PUBLIC_AI_READY_TTL_MS`, `NEXT_PUBLIC_AI_WAKE_STALE_MS`, `NEXT_PUBLIC_AI_WARMING_RETRY_MS`, `NEXT_PUBLIC_AI_WARMING_ATTEMPTS` | El estado de la IA: cuánto vale un "IA activada", cuándo doy por perdido un "despertando" y cómo reintento. |
+| `NEXT_PUBLIC_RISK_POSE_WINDOW_MS` | Cuánto antes y después del pico de riesgo dibujo el esqueleto sobre el video. |
+
+Ninguna pública es secreta, y todas tienen su default en `.env.example`.
+
+**Solo para pruebas.** `E2E_BASE_URL` hace que Playwright corra contra una URL ya desplegada (un preview o www) en vez de levantar `next start`.
+
+## Cómo correrlo
 
 ```bash
 git clone --recurse-submodules https://github.com/solartedaniers/KinesiApp-Frontend.git
 cd KinesiApp-Frontend
 npm install
-cp .env.example .env.local   # GRPC_WEB_BASE_URL apunta al Envoy del backend
+cp .env.example .env.local   # y lo lleno con la tabla de Configuración
 npm run dev                  # genera lib/gen/ y copia pdf-lib antes de arrancar
 ```
 
