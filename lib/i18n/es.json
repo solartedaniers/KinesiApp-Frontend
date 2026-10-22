@@ -14,9 +14,9 @@
   },
   "landing": {
     "metaTitle": "KinesiApp · Análisis biomecánico del salto y la sentadilla",
-    "metaDescription": "Graba de perfil un salto o una sentadilla y mide los ángulos de rodilla y tronco, las repeticiones y el riesgo de lesión de rodilla, con un asistente que explica el resultado.",
+    "metaDescription": "Graba un salto o una sentadilla de perfil o de frente y mide los ángulos de rodilla y tronco, la rodilla hacia adentro, las repeticiones y el riesgo de lesión de rodilla, con un asistente que explica el resultado.",
     "title": "Mide cómo se mueven tus rodillas en cada salto",
-    "lead": "Graba de perfil un salto o una sentadilla. KinesiApp sigue tus articulaciones cuadro a cuadro y te muestra ángulos, repeticiones y el riesgo de lesión de rodilla, con un asistente que te explica cada número.",
+    "lead": "Graba un salto o una sentadilla de perfil o de frente. KinesiApp sigue tus articulaciones cuadro a cuadro y te muestra ángulos, repeticiones y el riesgo de lesión de rodilla, con un asistente que te explica cada número.",
     "signIn": "Ya tengo cuenta",
     "createAccount": "Crear cuenta gratis",
     "heroCaption": "Salto con contramovimiento: cada silueta es una fase y la curva es la trayectoria del centro de gravedad.",
@@ -27,8 +27,8 @@
         "body": "Salto vertical o sentadilla: cada uno se analiza con sus propias fases y umbrales."
       },
       {
-        "title": "Graba de perfil",
-        "body": "Cámara fija, a unos tres metros y a la altura de la cadera. Videos cortos: la guía de cada movimiento indica el límite."
+        "title": "Graba de perfil o de frente",
+        "body": "Cámara fija, a unos tres metros y a la altura de la cadera. De perfil se miden la flexión y el tronco; de frente, si cada rodilla se va hacia adentro. Videos cortos: la guía de cada movimiento indica el límite."
       },
       {
         "title": "Lee tu movimiento",
