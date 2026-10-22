@@ -1,0 +1,545 @@
+/*
+ * Relieve, luz y movimiento del instrumento vivo. Los colores salen de los tokens --kin-*; aquí sólo
+ * vive lo que Tailwind no expresa bien: fondos en capas, biseles, brillos y animaciones.
+ * Regla de movimiento: el estado sin animar es el final, así que con movimiento reducido (o sin
+ * soporte del navegador) todo se ve completo y quieto.
+ */
+
+@property --kin-count {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+/* ---- Luz ambiental: cada sección se ilumina con el color de lo que muestra ---- */
+
+.kin-ambient {
+  background-color: var(--kin-canvas);
+  background-image:
+    radial-gradient(70rem 40rem at -10% -12%, color-mix(in srgb, var(--kin-knee) 26%, transparent), transparent 62%),
+    radial-gradient(56rem 34rem at 112% 4%, color-mix(in srgb, var(--kin-center) 22%, transparent), transparent 60%),
+    radial-gradient(60rem 36rem at 50% 118%, color-mix(in srgb, var(--kin-hip) 14%, transparent), transparent 60%);
+}
+
+.kin-tinted {
+  --kin-card-light: radial-gradient(46rem 24rem at 0% 0%, color-mix(in srgb, var(--tint, var(--kin-knee)) 18%, transparent), transparent 70%);
+  background-image: var(--kin-card-light);
+}
+
+/* ---- Tarjetas en capas: el borde brilla con el color de su contenido en vez de una línea gris ---- */
+
+/* Va después de .kin-tinted a propósito: en una tarjeta, esa luz entra como una capa más del fondo */
+.kin-card {
+  --tint: var(--kin-knee);
+  border: 1px solid transparent;
+  border-radius: 1.25rem;
+  background:
+    var(--kin-card-light, linear-gradient(transparent, transparent)) padding-box,
+    linear-gradient(180deg, var(--kin-raised), var(--kin-panel) 40%) padding-box,
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--tint) var(--kin-glow-mix), var(--kin-line)),
+      var(--kin-line) 38%,
+      var(--kin-line) 68%,
+      color-mix(in srgb, var(--tint-end, var(--tint)) var(--kin-glow-mix), var(--kin-line))
+    ) border-box;
+  box-shadow:
+    inset 0 1px 0 var(--kin-highlight),
+    0 1px 2px var(--kin-shade),
+    0 28px 56px -34px color-mix(in srgb, var(--tint) 55%, transparent);
+}
+
+/* Tarjeta elegible (radio): la elegida se enciende con un anillo de la acción */
+.kin-pick:has(:checked) {
+  --tint: var(--kin-accent);
+  box-shadow:
+    inset 0 1px 0 var(--kin-highlight),
+    0 0 0 2px var(--kin-accent),
+    0 18px 40px -24px color-mix(in srgb, var(--kin-accent) 80%, transparent);
+}
+
+/* Pozo hundido para lecturas y campos: la sombra interior dice que está "dentro" del instrumento */
+.kin-well {
+  border-radius: 0.875rem;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--tint, var(--kin-knee)) 7%, var(--kin-sunken)),
+    color-mix(in srgb, var(--kin-sunken) 70%, var(--kin-panel))
+  );
+  box-shadow: inset 0 2px 5px var(--kin-shade), inset 0 -1px 0 var(--kin-highlight);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .kin-lift {
+    transition: transform 280ms var(--kin-ease-out), box-shadow 280ms var(--kin-ease-out);
+  }
+
+  .kin-lift:hover {
+    transform: perspective(900px) rotateX(2deg) translateY(-3px);
+    box-shadow:
+      inset 0 1px 0 var(--kin-highlight),
+      0 2px 4px var(--kin-shade),
+      0 34px 64px -30px color-mix(in srgb, var(--tint) 70%, transparent);
+  }
+}
+
+/* ---- Relieve de los instrumentos: carcasa alzada, sombras en capas y carátula hundida ----
+ * Las sombras salen de --kin-shade y --kin-highlight; en el celular las achico con --kin-depth para
+ * que el panel no se vea pesado. En la cabina oscura, el instrumento además brilla con su señal. */
+
+.kin-bezel,
+.kin-instrument {
+  --kin-depth: 1;
+  --kin-rest:
+    0 1px 1.5px var(--kin-shade),
+    0 calc(16px * var(--kin-depth)) calc(36px * var(--kin-depth)) calc(-18px * var(--kin-depth)) var(--kin-shade),
+    0 0 calc(30px * var(--kin-depth)) calc(-8px * var(--kin-depth)) color-mix(in srgb, var(--tint, var(--kin-knee)) calc(var(--kin-glow-mix) * 0.7), transparent);
+  --kin-raise:
+    0 2px 3px var(--kin-shade),
+    0 calc(26px * var(--kin-depth)) calc(52px * var(--kin-depth)) calc(-20px * var(--kin-depth)) var(--kin-shade),
+    0 0 calc(40px * var(--kin-depth)) calc(-6px * var(--kin-depth)) color-mix(in srgb, var(--tint, var(--kin-knee)) var(--kin-glow-mix), transparent);
+  /* Aro: luz arriba y sombra abajo, como una pieza torneada que recibe luz cenital */
+  --kin-rim: inset 0 1.5px 0 var(--kin-highlight), inset 0 -2px 3px var(--kin-shade), 0 0 0 1px var(--kin-line);
+}
+
+@media (max-width: 640px) {
+  .kin-bezel,
+  .kin-instrument {
+    --kin-depth: 0.55;
+  }
+}
+
+.kin-bezel {
+  border-radius: 50%;
+  padding: 5.5%;
+  background:
+    linear-gradient(180deg, var(--kin-highlight), transparent 45%, var(--kin-shade)),
+    conic-gradient(from 200deg, var(--kin-raised), var(--kin-sunken) 25%, var(--kin-raised) 50%, var(--kin-sunken) 75%, var(--kin-raised));
+  box-shadow: var(--kin-rim), var(--kin-rest);
+}
+
+/* Carcasa de las gráficas: el mismo aro que los medidores, en rectángulo */
+.kin-instrument {
+  border-radius: var(--kin-radius-stage);
+  padding: 0.875rem 0.875rem 0.5rem;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--kin-highlight) 60%, var(--kin-raised)), var(--kin-panel) 30%, var(--kin-raised));
+  box-shadow: var(--kin-rim), var(--kin-rest);
+}
+
+@media (max-width: 640px) {
+  .kin-instrument {
+    padding: 0.625rem 0.5rem 0.375rem;
+  }
+}
+
+/* Cristal hundido: la carátula y el área de trazado quedan por debajo del aro */
+.kin-face,
+.kin-screen {
+  position: relative;
+}
+
+.kin-face {
+  overflow: hidden;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 32%, var(--kin-panel), var(--kin-sunken) 78%);
+}
+
+.kin-screen {
+  border-radius: var(--kin-radius-panel);
+  background: linear-gradient(180deg, var(--kin-sunken), var(--kin-panel) 70%);
+}
+
+/* La sombra interior va encima del contenido (bandas, trazos) para que se lea como un cristal */
+.kin-face::before,
+.kin-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow: inset 0 calc(3px * var(--kin-depth, 1) + 1px) calc(10px * var(--kin-depth, 1) + 2px) var(--kin-shade), inset 0 -1px 0 var(--kin-highlight);
+  pointer-events: none;
+}
+
+/* Reflejo en diagonal: una franja de luz arriba a la izquierda, lejos de las cifras */
+.kin-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(135deg, transparent 12%, var(--kin-highlight) 24%, transparent 40%);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* El instrumento se alza al pasar el puntero o al tocarlo; sin inclinación si se pidió menos movimiento */
+.kin-bezel,
+.kin-instrument {
+  transition: box-shadow var(--kin-motion-lift) var(--kin-ease-out), transform var(--kin-motion-lift) var(--kin-ease-out);
+}
+
+.kin-bezel:hover,
+.kin-instrument:hover,
+.kin-bezel:active,
+.kin-instrument:active {
+  box-shadow: var(--kin-rim), var(--kin-raise);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .kin-bezel:hover,
+  .kin-bezel:active {
+    transform: perspective(900px) rotateX(2.5deg) translateY(-2px);
+  }
+
+  .kin-instrument:hover,
+  .kin-instrument:active {
+    transform: perspective(1400px) rotateX(1.5deg) translateY(-2px);
+  }
+}
+
+/* Aguja separada de la esfera por una sombra corta, y eje con volumen de tornillo */
+.kin-needle-body {
+  filter: drop-shadow(0 1.5px 1px var(--kin-shade));
+}
+
+/* Escenario del video: un pozo oscuro con el mismo relieve de la esfera, pero rectangular */
+.kin-stage {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--kin-knee) 16%, var(--kin-stage)), var(--kin-stage) 70%);
+  box-shadow: inset 0 2px 12px rgb(0 0 0 / 0.6), 0 0 0 1px var(--kin-line);
+}
+
+/* La aguja y el arco del valor giran desde el cero; --angle y --fill los pone el componente */
+.kin-needle {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+  transform: rotate(var(--angle));
+}
+
+.kin-fill {
+  stroke-dasharray: 100 100;
+  stroke-dashoffset: calc(100 - var(--fill));
+}
+
+.kin-dial-label {
+  font-family: var(--kin-font-display);
+  font-size: 10.5px;
+  font-weight: 600;
+  fill: var(--kin-ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.kin-signal-glow {
+  filter: drop-shadow(0 0 3px color-mix(in srgb, currentColor var(--kin-glow-mix), transparent));
+}
+
+/* ---- Números que cuentan hasta su valor (sin JS: un contador CSS sobre una propiedad registrada) ---- */
+
+.kin-count {
+  --kin-count: var(--to);
+  counter-reset: kin-count var(--kin-count);
+  font-variant-numeric: tabular-nums;
+}
+
+.kin-count::after {
+  content: counter(kin-count);
+}
+
+/* ---- Animaciones al cargar ---- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .kin-needle-sweep {
+    animation: kin-sweep var(--kin-motion-measure) both;
+    animation-timing-function: var(--kin-ease-out);
+    /* Resorte: pasa del valor, vuelve y se asienta, como una aguja con inercia */
+    animation-timing-function: linear(0, 0.1 4%, 0.36 9%, 0.7 15%, 0.95 21%, 1.08 27%, 1.11 31%, 1.08 36%, 1.02 43%, 0.985 50%, 0.98 56%, 0.995 66%, 1.003 76%, 1);
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .kin-fill-sweep {
+    animation: kin-fill var(--kin-motion-measure) both;
+    animation-timing-function: var(--kin-ease-out);
+    animation-timing-function: linear(0, 0.1 4%, 0.36 9%, 0.7 15%, 0.95 21%, 1.08 27%, 1.11 31%, 1.08 36%, 1.02 43%, 0.985 50%, 0.98 56%, 0.995 66%, 1.003 76%, 1);
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .kin-count {
+    animation: kin-count var(--kin-motion-measure) var(--kin-ease-out) var(--delay, 0ms) both;
+  }
+
+  /* Las líneas de las gráficas se trazan de izquierda a derecha */
+  .kin-draw {
+    animation: kin-draw var(--kin-motion-draw) var(--kin-ease-out) var(--delay, 0ms) both;
+  }
+
+  /* Las repeticiones se encienden una tras otra */
+  .kin-light {
+    animation: kin-light 560ms var(--kin-ease-out) both;
+    animation-delay: calc(var(--i, 0) * var(--kin-motion-stagger) + 500ms);
+  }
+
+  .kin-rise {
+    animation: kin-rise 640ms var(--kin-ease-out) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+
+  .kin-waking {
+    animation: kin-pulse 1400ms var(--kin-ease-out) infinite;
+  }
+
+  /* La IA acaba de quedar activa: el punto se enciende una sola vez, como un piloto */
+  .kin-ignite {
+    animation: kin-ignite 900ms var(--kin-ease-out) both;
+  }
+
+  .kin-scan {
+    animation: kin-scan 2400ms ease-in-out infinite alternate;
+  }
+
+  .kin-shimmer {
+    animation: kin-shimmer 1500ms linear infinite;
+  }
+
+  .kin-oscillate {
+    animation: kin-oscillate 900ms ease-in-out infinite alternate;
+  }
+}
+
+/* Lo que está fuera de pantalla espera a entrar para animarse (lo marca RevealRoot) */
+[data-reveal="wait"],
+[data-reveal="wait"] * {
+  animation-name: none !important;
+}
+
+@keyframes kin-sweep {
+  from { transform: rotate(-120deg); }
+}
+
+@keyframes kin-fill {
+  from { stroke-dashoffset: 100; }
+}
+
+@keyframes kin-count {
+  from { --kin-count: 0; }
+}
+
+@keyframes kin-draw {
+  from { clip-path: inset(0 100% 0 0); }
+}
+
+@keyframes kin-light {
+  from { opacity: 0.15; transform: scale(0.55); }
+  60% { box-shadow: 0 0 0 6px color-mix(in srgb, currentColor 28%, transparent); }
+}
+
+@keyframes kin-rise {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+@keyframes kin-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 60%, transparent); }
+  100% { box-shadow: 0 0 0 10px transparent; }
+}
+
+@keyframes kin-ignite {
+  0% { transform: scale(0.5); box-shadow: 0 0 0 0 currentColor; }
+  55% { transform: scale(1.3); }
+  100% { transform: scale(1); box-shadow: 0 0 0 10px transparent; }
+}
+
+@keyframes kin-scan {
+  from { transform: translateY(-40%); }
+  to { transform: translateY(40%); }
+}
+
+@keyframes kin-shimmer {
+  to { background-position: -200% 0; }
+}
+
+@keyframes kin-oscillate {
+  from { transform: rotate(-35deg); }
+  to { transform: rotate(35deg); }
+}
+
+/* ---- Botones: presión que hunde, brillo que cruza y luz del color de la acción ---- */
+
+.kin-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    transform var(--kin-motion-hover) var(--kin-ease-out),
+    box-shadow var(--kin-motion-hover) var(--kin-ease-out),
+    background-color var(--kin-motion-hover),
+    color var(--kin-motion-hover);
+}
+
+.kin-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.32) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 640ms var(--kin-ease-out);
+  pointer-events: none;
+}
+
+.kin-btn:hover::before {
+  transform: translateX(120%);
+}
+
+.kin-btn:active {
+  transform: translateY(1px) scale(0.98);
+  transition-duration: var(--kin-motion-press);
+}
+
+.kin-btn-primary {
+  color: var(--kin-on-accent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--kin-accent) 86%, white), var(--kin-accent) 55%, var(--kin-accent-hover));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.32),
+    inset 0 -2px 0 rgb(0 0 0 / 0.14),
+    0 10px 22px -12px color-mix(in srgb, var(--kin-accent) 75%, transparent);
+}
+
+.kin-btn-primary:hover {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.32),
+    inset 0 -2px 0 rgb(0 0 0 / 0.14),
+    0 14px 28px -12px color-mix(in srgb, var(--kin-accent) 90%, transparent);
+}
+
+.kin-btn-secondary {
+  color: var(--kin-ink);
+  border: 1px solid transparent;
+  background:
+    linear-gradient(180deg, var(--kin-panel), var(--kin-raised)) padding-box,
+    linear-gradient(145deg, color-mix(in srgb, var(--kin-accent) 55%, var(--kin-line-strong)), var(--kin-line-strong)) border-box;
+  box-shadow: inset 0 1px 0 var(--kin-highlight), 0 2px 6px -2px var(--kin-shade);
+}
+
+.kin-btn-secondary:hover {
+  color: var(--kin-accent);
+  box-shadow: inset 0 1px 0 var(--kin-highlight), 0 8px 18px -10px color-mix(in srgb, var(--kin-accent) 60%, transparent);
+}
+
+.kin-btn-quiet::before {
+  display: none;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .kin-btn-primary:hover,
+  .kin-btn-secondary:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* ---- Campos, checkbox e interruptor ---- */
+
+.kin-field {
+  border-radius: 0.75rem;
+  background: linear-gradient(180deg, var(--kin-sunken), color-mix(in srgb, var(--kin-sunken) 60%, var(--kin-panel)));
+  box-shadow: inset 0 1px 3px var(--kin-shade), 0 0 0 1px var(--kin-line-strong);
+  transition: box-shadow var(--kin-motion-hover) var(--kin-ease-out);
+}
+
+.kin-field:focus-within {
+  box-shadow:
+    inset 0 1px 3px var(--kin-shade),
+    0 0 0 2px var(--kin-accent),
+    0 0 0 6px color-mix(in srgb, var(--kin-accent) 20%, transparent);
+}
+
+/* Sin rojo: el rojo es del riesgo. El error se marca con borde de tinta doble y el ícono */
+.kin-field:has([aria-invalid="true"]) {
+  box-shadow: inset 0 1px 3px var(--kin-shade), 0 0 0 2px var(--kin-ink);
+}
+
+/* Con error y foco a la vez conservo el anillo del foco; si no, la regla del error lo borraba */
+.kin-field:has([aria-invalid="true"]):focus-within {
+  box-shadow:
+    inset 0 1px 3px var(--kin-shade),
+    0 0 0 2px var(--kin-ink),
+    0 0 0 5px var(--kin-accent);
+}
+
+.kin-check-box {
+  background: linear-gradient(180deg, var(--kin-panel), var(--kin-raised));
+  box-shadow: inset 0 0 0 1.5px var(--kin-line-strong), 0 1px 2px var(--kin-shade);
+  transition: background var(--kin-motion-hover), box-shadow var(--kin-motion-hover);
+}
+
+:checked + .kin-check-box {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--kin-accent) 86%, white), var(--kin-accent-hover));
+  box-shadow: 0 0 0 0 transparent, 0 4px 12px -4px color-mix(in srgb, var(--kin-accent) 80%, transparent);
+}
+
+.kin-check-box path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset var(--kin-motion-hover) var(--kin-ease-out);
+}
+
+:checked + .kin-check-box path {
+  stroke-dashoffset: 0;
+}
+
+.kin-switch-track {
+  background: linear-gradient(180deg, var(--kin-sunken), color-mix(in srgb, var(--kin-sunken) 60%, var(--kin-panel)));
+  box-shadow: inset 0 1px 3px var(--kin-shade), inset 0 0 0 1px var(--kin-line-strong);
+  transition: background var(--kin-motion-hover), box-shadow var(--kin-motion-hover);
+}
+
+.kin-switch-knob {
+  background: linear-gradient(180deg, var(--kin-panel), var(--kin-raised));
+  box-shadow: 0 1px 1px rgb(0 0 0 / 0.12), 0 3px 8px -2px var(--kin-shade);
+  transition: transform 420ms var(--kin-ease-out);
+  transition-timing-function: linear(0, 0.1 4%, 0.36 9%, 0.7 15%, 0.95 21%, 1.08 27%, 1.11 31%, 1.08 36%, 1.02 43%, 0.985 50%, 0.98 56%, 0.995 66%, 1.003 76%, 1);
+}
+
+:checked + .kin-switch-track {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--kin-accent) 86%, white), var(--kin-accent-hover));
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.2), 0 0 14px -2px color-mix(in srgb, var(--kin-accent) 70%, transparent);
+}
+
+:checked + .kin-switch-track .kin-switch-knob {
+  transform: translateX(1.25rem);
+}
+
+/* ---- Diálogo ---- */
+
+.kin-dialog::backdrop {
+  background: var(--kin-backdrop);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .kin-dialog[open] {
+    animation: kin-dialog-in 320ms var(--kin-ease-out);
+  }
+}
+
+@keyframes kin-dialog-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+}
+
+/* ---- Carga ---- */
+
+.kin-shimmer {
+  background: linear-gradient(
+      90deg,
+      var(--kin-sunken) 0%,
+      color-mix(in srgb, var(--tint, var(--kin-knee)) 22%, var(--kin-sunken)) 50%,
+      var(--kin-sunken) 100%
+    )
+    0 0 / 200% 100%;
+}
+
+/* ---- Transiciones entre vistas: la esfera del último análisis se transforma en la del detalle ---- */
+
+::view-transition-group(.kin-morph) {
+  animation-duration: 460ms;
+  animation-timing-function: var(--kin-ease-out);
+}

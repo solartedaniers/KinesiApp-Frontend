@@ -1,7 +1,7 @@
 // Reglas de la foto de perfil: única fuente de la configuración que usan la UI y el Web Worker
 // (public/workers/avatar-worker.js, que la recibe en cada mensaje). Lógica pura.
 
-// Igual a MAX_AVATAR_BYTES y a los tipos de AvatarUpload del backend (app/schemas/avatar.py)
+// Tipos que acepta CreateAvatarUpload (ImageContentType del contrato)
 export const AVATAR_MAX_BYTES = 1_000_000;
 export const AVATAR_UPLOAD_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
 
@@ -15,8 +15,6 @@ export const AVATAR_COMPRESSION = {
   qualities: [0.86, 0.75, 0.6, 0.45],
   outputType: "image/jpeg",
 } as const;
-
-export type AvatarPayload = { content_type: string; data_base64: string };
 
 export function isImageFile(file: { type: string } | null): boolean {
   return file !== null && file.type.startsWith("image/");

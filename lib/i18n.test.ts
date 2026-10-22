@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 
-import { format, resolveLocale } from "./i18n/locale.ts";
+import { format, plural, resolveLocale } from "./i18n/locale.ts";
 
 type Json = string | Json[] | { [key: string]: Json };
 
@@ -54,4 +54,11 @@ test("el idioma sale de la cookie y, si no hay, del navegador; si no, español",
 test("format reemplaza las variables y deja intactas las desconocidas", () => {
   assert.equal(format("Hola, {name}", { name: "Ana" }), "Hola, Ana");
   assert.equal(format("{a} y {b}", { a: 1 }), "1 y {b}");
+});
+
+test("plural elige la forma según la cantidad", () => {
+  const members = { one: "{count} deportista", other: "{count} deportistas" };
+  assert.equal(plural(members, 1), "1 deportista");
+  assert.equal(plural(members, 0), "0 deportistas");
+  assert.equal(plural({ one: "{count} de {total}", other: "{count} de {total}" }, 2, { total: 5 }), "2 de 5");
 });

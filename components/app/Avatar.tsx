@@ -1,18 +1,10 @@
+import { initials } from "@/lib/format";
 
 const styles = {
   avatar: "grid flex-none place-items-center overflow-hidden rounded-full bg-sunken object-cover font-semibold text-ink-muted ring-1 ring-line",
   md: "size-9 text-xs",
   lg: "size-20 text-xl",
 };
-
-function initials(name: string): string {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0]?.toUpperCase())
-    .join("");
-}
 
 /** Foto (URL pública del bucket de imágenes) o iniciales. Decorativa: el nombre siempre va en texto al lado. */
 export function Avatar({ name, imageUrl, size = "md" }: { name: string; imageUrl?: string | null; size?: "md" | "lg" }) {

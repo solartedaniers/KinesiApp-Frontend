@@ -7,6 +7,8 @@ export type Formatters = {
   /** risk_score ∈ [0, 1] → "42 %". */
   percent: (fraction: number) => string;
   degrees: (value: number) => string;
+  /** Una cifra decimal, p. ej. el contraste "4,8". */
+  decimal: (value: number) => string;
   /** Milisegundos desde el inicio del video → "0,4 s". */
   secondsFromMs: (ms: number) => string;
   height: (cm: number) => string;
@@ -24,6 +26,7 @@ export function createFormatters(locale: Locale): Formatters {
   const shortDate = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", timeZone: APP_TIME_ZONE });
   const percent = new Intl.NumberFormat(locale, { style: "percent", maximumFractionDigits: 0 });
   const degrees = new Intl.NumberFormat(locale, { style: "unit", unit: "degree", maximumFractionDigits: 0 });
+  const decimal = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const seconds = new Intl.NumberFormat(locale, { style: "unit", unit: "second", maximumFractionDigits: 2 });
   const centimeters = new Intl.NumberFormat(locale, { style: "unit", unit: "centimeter", maximumFractionDigits: 0 });
   const kilograms = new Intl.NumberFormat(locale, { style: "unit", unit: "kilogram", maximumFractionDigits: 1 });
@@ -32,6 +35,7 @@ export function createFormatters(locale: Locale): Formatters {
     shortDate: (iso) => shortDate.format(new Date(iso)),
     percent: (fraction) => percent.format(fraction),
     degrees: (value) => degrees.format(value),
+    decimal: (value) => decimal.format(value),
     secondsFromMs: (ms) => seconds.format(ms / 1000),
     height: (cm) => centimeters.format(cm),
     weight: (kg) => kilograms.format(kg),
@@ -42,6 +46,9 @@ export function createFormatters(locale: Locale): Formatters {
 
 /** "Ana María Pérez" → "Ana": el saludo usa sólo el primer nombre. */
 export const firstName = (fullName: string) => fullName.trim().split(/\s+/)[0] ?? fullName;
+
+/** Hasta dos iniciales en mayúscula: "Sub 17 Norte" → "S1", "Ana Pérez" → "AP". */
+export const initials = (name: string) => name.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((word) => word[0]!.toUpperCase()).join("");
 
 // "en-CA" no es un idioma de la interfaz: es el formato que da yyyy-mm-dd
 const isoDate = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: APP_TIME_ZONE });

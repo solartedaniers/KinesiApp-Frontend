@@ -3,67 +3,95 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/Button";
-import { API_PATHS } from "@/lib/api-paths";
-import { ANALYSIS_POLLING } from "@/lib/config";
+import { type AnalysisStage as RingStage, AnalysisProgress as ProgressRing, StageList } from "@/components/instrument/AnalysisProgress";
+import { Notice } from "@/components/instrument/Status";
+import { Button } from "@/components/instrument/Button";
+import { watchAnalysis } from "@/lib/actions/analyses";
+import { useAiStatus, useWakeAi } from "@/lib/ai-status/use-ai-status";
+import { format } from "@/lib/i18n";
 import { useT } from "@/lib/i18n/client";
-import { proxyUrl } from "@/lib/proxy-allowlist";
-import type { JumpAnalysis } from "@/lib/types";
+import { ANALYSIS_STAGES, type AnalysisProgress, type AnalysisStage } from "@/lib/types";
 
-const styles = {
-  poller: "flex flex-wrap items-center gap-4 rounded-panel border border-accent bg-accent-soft px-5 py-4 text-ink [&_p]:text-sm [&_strong]:font-semibold",
-  spinner: "size-5 flex-none animate-spin rounded-full border-[3px] border-accent border-r-transparent motion-reduce:[animation-duration:3s]",
+// Las etapas del contrato y las del anillo van en el mismo orden; solo cambian los nombres cortos
+const RING_STAGE: Record<AnalysisStage, RingStage> = {
+  queued: "queued",
+  downloading_video: "downloading",
+  extracting_pose: "pose",
+  detecting_repetitions: "repetitions",
+  scoring_risk: "risk",
 };
 
 /**
- * Isla CSR del detalle (§3): mientras el análisis está en proceso consulta su estado con backoff
- * (2 s, 4 s, 8 s… hasta 30 s). Al cambiar, router.refresh() vuelve a renderizar la página en el
- * servidor con el resultado. Con la pestaña oculta no consulta.
+ * Isla CSR del detalle: se suscribe a WatchAnalysis por una Server Action que devuelve un stream.
+ * Cuando llega el resultado, router.refresh() vuelve a renderizar la página en el servidor.
  */
-export function AnalysisPoller({ analysisId }: { analysisId: number }) {
+export function AnalysisPoller({ analysisId }: { analysisId: string }) {
   const t = useT();
+  const p = t.analysisDetail.progress;
   const router = useRouter();
-  const [attempt, setAttempt] = useState(0);
-  const stalled = attempt >= ANALYSIS_POLLING.maxAttempts;
+  const [progress, setProgress] = useState<AnalysisProgress | null>(null);
+  const [stalled, setStalled] = useState(false);
+  const [subscription, setSubscription] = useState(0);
+  // El backend publica "en cola" también mientras despierta la IA: pregunto por ella para distinguirlo.
+  // Si ya está activa la respuesta es inmediata; si no, coincide con el arranque que el backend espera
+  useWakeAi();
+  const ai = useAiStatus();
 
   useEffect(() => {
-    if (stalled) return;
-    const delay = Math.min(ANALYSIS_POLLING.initialDelayMs * 2 ** attempt, ANALYSIS_POLLING.maxDelayMs);
-    const timer = setTimeout(async () => {
-      if (document.visibilityState === "visible") {
-        try {
-          const response = await fetch(proxyUrl(API_PATHS.analysis(analysisId)), { cache: "no-store" });
-          if (response.ok && ((await response.json()) as JumpAnalysis).status !== "pending") {
-            router.refresh();
-            return;
-          }
-        } catch {
-          // Red caída: se reintenta en la siguiente vuelta
-        }
+    let active = true;
+    (async () => {
+      for await (const event of await watchAnalysis(analysisId)) {
+        if (!active) return;
+        if (event.kind === "progress") setProgress(event.progress);
+        if (event.kind === "finished") return router.refresh();
+        if (event.kind === "failed") return setStalled(true);
       }
-      setAttempt((current) => current + 1);
-    }, delay);
-    return () => clearTimeout(timer);
-  }, [analysisId, attempt, stalled, router]);
+    })().catch(() => active && setStalled(true));
+    return () => {
+      active = false;
+    };
+  }, [analysisId, router, subscription]);
+
+  if (stalled) {
+    return (
+      <div className="kin-card flex flex-wrap items-center gap-4 p-5" role="status">
+        <p className="text-sm text-ink">{t.analysisDetail.pendingStalled}</p>
+        <Button
+          variant="secondary"
+          glyph="play"
+          onClick={() => {
+            setStalled(false);
+            setSubscription((current) => current + 1);
+          }}
+        >
+          {t.analysisDetail.pendingRetry}
+        </Button>
+      </div>
+    );
+  }
+
+  const stage = progress?.stage ?? "queued";
+  const coldStart = stage === "queued" && ai === "waking";
+  const index = ANALYSIS_STAGES.indexOf(stage);
+  const fraction = stage === "extracting_pose" && progress?.frames_total ? progress.frames_processed / progress.frames_total : 0;
+  const stageNames = Object.fromEntries(
+    ANALYSIS_STAGES.map((name) => [RING_STAGE[name], name === "queued" && coldStart ? p.waking : p.stages[name]]),
+  ) as Record<RingStage, string>;
 
   return (
-    <div className={styles.poller} role="status">
-      {stalled ? (
-        <>
-          <p>{t.analysisDetail.pendingStalled}</p>
-          <Button variant="secondary" onClick={() => setAttempt(0)}>
-            {t.analysisDetail.pendingRetry}
-          </Button>
-        </>
-      ) : (
-        <>
-          <span className={styles.spinner} aria-hidden />
-          <div>
-            <strong>{t.analysisDetail.pendingTitle}</strong>
-            <p>{t.analysisDetail.pendingBody}</p>
-          </div>
-        </>
-      )}
-    </div>
+    <section data-theme="dark" className="kin-card kin-tinted grid items-center gap-6 p-5 sm:p-8 md:grid-cols-[minmax(0,20rem)_1fr]" aria-labelledby="analysis-pending-title">
+      <ProgressRing stage={index} fraction={fraction} labels={{ title: p.label, stage: p.stage, stageNames, done: p.done }} />
+      <div className="grid content-start gap-4">
+        <h2 id="analysis-pending-title" className="font-display text-xl font-semibold text-ink">{t.analysisDetail.pendingTitle}</h2>
+        {/* Solo el nombre de la etapa va en la región viva: el conteo de cuadros cambia demasiado seguido */}
+        <p className="visually-hidden" role="status">{stageNames[RING_STAGE[stage]]}</p>
+        <StageList stage={index} names={stageNames} />
+        {stage === "extracting_pose" && progress?.frames_total ? (
+          <p className="text-sm text-ink-muted [font-variant-numeric:tabular-nums]">{format(p.frames, { done: progress.frames_processed, total: progress.frames_total })}</p>
+        ) : null}
+        {coldStart && <Notice tone="info">{p.coldStart}</Notice>}
+        <p className="text-sm text-ink-muted">{t.analysisDetail.pendingBody}</p>
+      </div>
+    </section>
   );
 }

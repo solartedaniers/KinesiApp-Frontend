@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { ACCESS_REFRESH_LEEWAY_SECONDS, SESSION_COOKIE } from "@/lib/config";
+import { SESSION_COOKIE } from "@/lib/config";
+import { ACCESS_REFRESH_LEEWAY_SECONDS } from "@/lib/server-config";
 import { secondsUntilExpiry, shouldRefresh } from "@/lib/jwt";
 import { isAuthRoute, isPrivateRoute, NEXT_PARAM, ROUTES } from "@/lib/routes";
 import { SESSION_COOKIE_NAMES, sessionCookies } from "@/lib/session-cookies";
@@ -8,7 +9,7 @@ import { refreshSession } from "@/lib/session-refresh";
 import type { TokenPair } from "@/lib/types";
 
 /**
- * Corre antes de renderizar (§4.4 y §9.2 del diseño):
+ * Corre antes de renderizar:
  * 1. Renueva el access token si falta o vence en menos de ACCESS_REFRESH_LEEWAY_SECONDS.
  * 2. Sólo decide anónimo vs. autenticado; el rol lo valida el layout de cada rol.
  */
@@ -60,10 +61,10 @@ function applySession(response: NextResponse, refreshed: TokenPair | null, revok
 export const config = {
   matcher: [
     {
-      // Todo salvo archivos estáticos (incluido el Web Worker de public/workers). Los prefetch del
+      // Todo salvo archivos estáticos (incluidos los workers de public/workers y el Service Worker). Los prefetch del
       // router se excluyen: nunca renuevan tokens, porque varios en paralelo gastarían el mismo
-      // refresh token rotado (§4.4)
-      source: "/((?!_next/static|_next/image|icon.svg|workers/).*)",
+      // refresh token rotado
+      source: "/((?!_next/static|_next/image|icon.svg|sw.js|workers/).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },

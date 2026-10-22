@@ -1,45 +1,44 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { Logo } from "@/components/brand/Logo";
-import { homeFor } from "@/lib/access";
+import { AiStatusIndicator } from "@/components/ai/AiStatusIndicator";
+import { shellStyles as styles } from "@/components/instrument/shell-classes";
+import { Wordmark } from "@/components/instrument/Wordmark";
+import { homeFor, NAV_BY_ROLE } from "@/lib/access";
+import { getT } from "@/lib/i18n/server";
 import type { User } from "@/lib/types";
 
+import { AccountMenu } from "./AccountMenu";
+import { AppNav } from "./AppNav";
 import { BfcacheGuard } from "./BfcacheGuard";
-import { MobileMenu } from "./MobileMenu";
-import { NavigationPanel } from "./NavigationPanel";
-import { PreferencesControls } from "./PreferencesControls";
 
 /**
- * Marco de la app autenticada según el rol: barra lateral desde tablet horizontal; en celular y
- * tablet vertical, barra superior con menú. Ambos muestran el mismo NavigationPanel. Las
- * preferencias van en la barra visible (la otra está oculta con display:none, fuera del árbol accesible).
+ * Marco de la app, el mismo de las pantallas de la guía: barra superior con relieve y pestañas en el
+ * computador; en celular y tablet las pestañas bajan adonde llega el pulgar. El perfil, las
+ * preferencias y el cierre de sesión van en el menú de la cuenta.
  */
-export function AppShell({ user, children }: { user: User; children: ReactNode }) {
-  const home = homeFor(user.role);
-
+export async function AppShell({ user, children }: { user: User; children: ReactNode }) {
+  const t = await getT();
+  const items = NAV_BY_ROLE[user.role];
+  const tabs = items.filter((item) => item.key !== "profile");
   return (
-    <div className="min-h-dvh">
-      <aside className="fixed inset-y-0 left-0 hidden w-sidebar flex-col gap-6 border-r border-line bg-panel px-4 py-5 lg:flex">
-        <div className="px-2">
-          <Logo href={home} />
-        </div>
-        <NavigationPanel user={user} />
-        <PreferencesControls />
-      </aside>
-
-      <header className="sticky top-0 z-20 flex h-topbar items-center gap-2 border-b border-line bg-panel px-2 sm:px-4 lg:hidden">
-        <MobileMenu>
-          <NavigationPanel user={user} />
-        </MobileMenu>
-        <Logo href={home} size={26} collapsible />
-        <div className="ml-auto">
-          <PreferencesControls compact />
+    <div className="kin-ambient min-h-dvh pb-24 xl:pb-10">
+      <header className={styles.top}>
+        <div className={styles.bar}>
+          <Link href={homeFor(user.role)} aria-label={t.app.name} className="rounded-panel">
+            <Wordmark name={t.app.name} />
+          </Link>
+          <AppNav items={tabs} placement="top" />
+          <div className="ml-auto flex items-center gap-3">
+            <span className="max-sm:hidden"><AiStatusIndicator /></span>
+            <AccountMenu user={user} profile={items.find((item) => item.key === "profile")} />
+          </div>
         </div>
       </header>
-
-      <main className="lg:pl-sidebar">
-        <div className="mx-auto w-full max-w-content px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-10">{children}</div>
-      </main>
+      {/* En el celular el estado de la IA no cabe en la barra: lo muestro arriba del contenido */}
+      <div className="mx-auto max-w-content px-4 pt-4 sm:hidden"><AiStatusIndicator /></div>
+      <main className={styles.main}>{children}</main>
+      <AppNav items={tabs} placement="bottom" />
       <BfcacheGuard />
     </div>
   );

@@ -4,25 +4,144 @@
     "description": "Video analysis of jumps and squats to detect knee injury risk.",
     "disclaimer": "KinesiApp is a support tool and does not replace an assessment by a health professional."
   },
-  "landing": {
-    "title": "Spot injury risk before it shows up",
-    "lead": "Record a jump or a squat and get an estimate of your knee injury risk based on the joint angles of the movement.",
+  "site": {
+    "home": "KinesiApp home",
+    "guides": "Recording guides",
     "signIn": "Sign in",
     "createAccount": "Create account",
-    "features": [
+    "legal": "Video consent",
+    "sampleData": "Example with sample data"
+  },
+  "landing": {
+    "metaTitle": "KinesiApp · Biomechanical analysis of jumps and squats",
+    "metaDescription": "Record a jump or a squat from the side or from the front and measure knee and trunk angles, knee caving, repetitions and knee injury risk, with an assistant that explains the result.",
+    "title": "See how your knees move in every jump",
+    "lead": "Record a jump or a squat from the side or from the front. KinesiApp tracks your joints frame by frame and shows angles, repetitions and knee injury risk, with an assistant that explains every number.",
+    "signIn": "I already have an account",
+    "createAccount": "Create a free account",
+    "heroCaption": "Countermovement jump: each silhouette is a phase and the curve is the path of the center of gravity.",
+    "stepsTitle": "From video to reading in three steps",
+    "steps": [
       {
-        "title": "Athletes",
-        "body": "Record your movements and follow how your risk evolves."
+        "title": "Choose the movement",
+        "body": "Vertical jump or squat: each one is analyzed with its own phases and thresholds."
       },
       {
-        "title": "Coaches",
-        "body": "Manage your team and review each athlete's analyses."
+        "title": "Record from the side or the front",
+        "body": "A fixed camera, about three meters away at hip height. From the side it measures flexion and the trunk; from the front, whether each knee caves in. Short videos: each movement's guide states the limit."
       },
       {
-        "title": "On any device",
-        "body": "Works in the browser: you can use it from your phone or your computer."
+        "title": "Read your movement",
+        "body": "Angles, repetitions and risk on one screen, plus a chat that answers your questions about the result."
       }
+    ],
+    "measuresTitle": "What it measures",
+    "measuresLead": "Each signal has its own color, the same on the skeleton, the charts and the gauges.",
+    "measures": {
+      "knee": {
+        "name": "Knee flexion",
+        "body": "How much the knee bends in each repetition and whether it reaches the target zone."
+      },
+      "trunk": {
+        "name": "Trunk lean",
+        "body": "How far the trunk leans forward: compensating with the back loads the knee more."
+      },
+      "center": {
+        "name": "Center of gravity",
+        "body": "Its path shows whether you go down and up in line or drift."
+      },
+      "risk": {
+        "name": "Injury risk",
+        "body": "A low, moderate or high estimate based on the pattern of every repetition."
+      }
+    },
+    "rolesTitle": "For those who train and those who coach",
+    "roles": {
+      "athlete": {
+        "title": "Athletes",
+        "body": "Record your movements, compare each attempt with the previous ones and download the PDF report."
+      },
+      "coach": {
+        "title": "Coaches",
+        "body": "Build your teams, review each athlete's analyses and compare them side by side."
+      }
+    },
+    "guidesTitle": "Before you record",
+    "guidesLead": "A short guide per movement: where to place the camera and how to perform it so the measurement is reliable. And how we protect your video."
+  },
+  "guide": {
+    "metaDescription": "How to place the camera and perform {movement} so KinesiApp measures your joint angles correctly.",
+    "eyebrow": "Recording guide",
+    "setupTitle": "Set up the camera",
+    "setup": [
+      "Side-on or front-on, never at an angle: the camera faces your side or your chest.",
+      "Fixed, on a tripod or propped up: don't follow the movement by hand.",
+      "About three meters away and at hip height, with your whole body in frame, from feet to head.",
+      "Good light, a clear background and clothes that let the knee and hip show."
+    ],
+    "diagram": {
+      "label": "Diagram: the camera about three meters away, from the side and at hip height.",
+      "distance": "≈ 3 m",
+      "height": "hip height"
+    },
+    "limitsTitle": "Video limits",
+    "limitDuration": "Up to {seconds} seconds per video. Recording stops by itself when it gets there.",
+    "limitSize": "Files up to {size} MB.",
+    "limitsNote": "The server sets these limits and this page updates itself when they change.",
+    "executionTitle": "How to perform it",
+    "mistakesTitle": "What ruins the measurement",
+    "phasesLabel": "Phases of {movement}, from left to right, with the path of the center of gravity.",
+    "start": "Record now",
+    "other": "See the guide for {movement}",
+    "back": "Back to home",
+    "movements": {
+      "jump": {
+        "name": "the jump",
+        "title": "How to record your jump",
+        "lead": "A countermovement vertical jump: you dip, drive up with your arms and land in the same spot.",
+        "execution": [
+          "Start standing still for a second, side-on to the camera.",
+          "Dip quickly bending knees and hips, and swing your arms back.",
+          "Jump as high as you can, swinging your arms up.",
+          "Land on the balls of your feet and absorb by bending your knees.",
+          "You can do several jumps in the same video, with a short pause between them."
+        ],
+        "mistakes": [
+          "Leaving the frame during flight: leave room above your head.",
+          "Turning your body toward the camera when landing.",
+          "Recording in slow motion or with a filter that crops the video."
+        ]
+      },
+      "squat": {
+        "name": "the squat",
+        "title": "How to record your squat",
+        "lead": "A bodyweight squat: you lower with control to a comfortable depth and stand back up.",
+        "execution": [
+          "Feet hip-width apart and arms forward for balance.",
+          "Lower by pushing your hips back, chest up.",
+          "Go as deep as you can without lifting your heels.",
+          "Stand up without bouncing and repeat at a steady pace."
+        ],
+        "mistakes": [
+          "Recording at an angle: neither side-on nor front-on, the angles come out approximate.",
+          "Someone else crossing the frame during the set.",
+          "Cutting the video before the last rep is up."
+        ]
+      }
+    },
+    "viewsTitle": "Side-on or front-on",
+    "views": [
+      "From the side, it measures how much the knee and trunk bend.",
+      "From the front, it measures whether each knee caves in (valgus) on landing or on the way down.",
+      "KinesiApp detects the view on its own. If you record at an angle, the analysis warns that it is approximate."
     ]
+  },
+  "offline": {
+    "metaTitle": "Offline",
+    "title": "You're offline",
+    "body": "We couldn't load this page because there's no internet. Your recordings and analyses are stored on the server; nothing is lost.",
+    "retry": "Try again",
+    "available": "Meanwhile you can read the recording guides you already visited."
   },
   "authShell": {
     "tagline": "Your movement, measured precisely.",
@@ -67,7 +186,8 @@
     "noAccount": "Don't have an account yet?",
     "register": "Sign up",
     "verifyNow": "Verify my email",
-    "registerNow": "Create an account with this email"
+    "registerNow": "Create an account with this email",
+    "demoNotice": "Demo account preloaded: just click Sign in, or type another account."
   },
   "register": {
     "metaTitle": "Create account",
@@ -77,7 +197,9 @@
     "pending": "Creating account…",
     "hasAccount": "Already have an account?",
     "signIn": "Sign in",
-    "verifyNow": "Go verify my email"
+    "verifyNow": "Go verify my email",
+    "videoConsent": "I accept the handling of my videos for movement analysis.",
+    "videoConsentLink": "Read the consent"
   },
   "session": {
     "logout": "Sign out"
@@ -87,7 +209,6 @@
     "working": "Working…",
     "save": "Save changes",
     "saving": "Saving…",
-    "edit": "Edit",
     "delete": "Delete",
     "back": "Back"
   },
@@ -101,9 +222,9 @@
     "teams": "Teams",
     "users": "Users",
     "assignments": "Coaches",
-    "menu": "Menu",
-    "openMenu": "Open the menu",
-    "closeMenu": "Close the menu"
+    "capture": "Record",
+    "account": "Your account",
+    "openAccount": "Open your account menu"
   },
   "home": {
     "greeting": "Hi, {name}",
@@ -131,11 +252,61 @@
       "moderate": "Moderate",
       "high": "High"
     },
-    "riskValue": "{value} risk",
-    "noScore": "No score",
-    "open": "View the recording from {date}",
     "listEmpty": "No recordings yet.",
-    "listEmptyHint": "When a jump or a squat is analyzed, it will show up here."
+    "listEmptyHint": "When a jump or a squat is analyzed, it will show up here.",
+    "kneeTarget": {
+      "between": "{low}–{high}",
+      "from": "{low} or more",
+      "upTo": "up to {high}"
+    },
+    "kneeZones": {
+      "jump": {
+        "under": "Stiff",
+        "target": "On target",
+        "over": "Deep"
+      },
+      "squat": {
+        "under": "Shallow",
+        "target": "On target",
+        "over": "Above"
+      }
+    },
+    "rangesNote": "Guide ranges from the AI; they do not replace an assessment by a professional.",
+    "kneeMedian": "Median of the knee peaks",
+    "repetitions": "Repetitions",
+    "noKnee": "No knee measure",
+    "riskSteps": "Level {step} of 3",
+    "sides": {
+      "left": "left",
+      "right": "right"
+    },
+    "riskJoint": {
+      "knee_flexion": "Flexion of the {side} knee",
+      "trunk_inclination": "Trunk inclination",
+      "knee_valgus": "{side} knee caving in"
+    },
+    "riskJointBoth": {
+      "knee_flexion": "Knee flexion",
+      "trunk_inclination": "Trunk inclination",
+      "knee_valgus": "Knees caving in"
+    },
+    "view": {
+      "side": "Side-on",
+      "front": "Front-on",
+      "inconclusive": "Inconclusive"
+    },
+    "viewLead": {
+      "side": "Knee flexion and trunk inclination were measured. To measure whether the knee caves in, record from the front.",
+      "front": "Each knee was checked for caving in (valgus) on landing or at the bottom. To measure knee flexion and the trunk, record from the side.",
+      "inconclusive": "The camera was neither clearly side-on nor front-on: the angles are approximate and knee caving was not measured. To measure it, record from the front."
+    },
+    "valgus": {
+      "left": "Left knee valgus",
+      "right": "Right knee valgus"
+    },
+    "valgusAsymmetry": "Difference between knees",
+    "valgusNote": "Frontal plane projection angle: positive means the knee caves in, negative that it bows out. Median of each repetition's peak; indicative thresholds without clinical validation.",
+    "viewStatus": "Detected view: {view}."
   },
   "analysisDetail": {
     "metaTitle": "Recording",
@@ -157,22 +328,47 @@
     "failedTitle": "The analysis couldn't be completed",
     "failedBody": "The video couldn't be processed. Try recording it again in good light, with the whole body in frame.",
     "angles": "Joint angles",
-    "anglesEmpty": "This analysis has no angle measurements.",
     "peak": "Peak: {value}",
     "timeline": "Movement timeline",
-    "timelineHint": "Markers show each joint's peak angle. Tap one to jump to that moment.",
-    "peakMarker": "{joint}: {value} at {time}",
-    "liveAngles": "Angles at this moment",
     "delete": "Delete recording",
     "deleteTitle": "Delete this recording?",
     "deleteBody": "The video, the analysis and the conversation with the assistant will be deleted. This can't be undone.",
     "movement": "Movement",
     "recordedAt": "Date",
-    "status": "Status"
+    "status": "Status",
+    "progress": {
+      "label": "Analysis progress",
+      "stage": "Step {index} of {total}: {name}",
+      "done": "Analysis ready",
+      "stages": {
+        "queued": "Queued",
+        "downloading_video": "Downloading the video",
+        "extracting_pose": "Detecting the skeleton",
+        "detecting_repetitions": "Counting repetitions",
+        "scoring_risk": "Calculating risk"
+      },
+      "waking": "Starting the AI…",
+      "coldStart": "The AI was asleep. It takes a little longer to start the first time; then the analysis continues by itself.",
+      "frames": "{done} of {total} frames"
+    },
+    "title": "{movement} on {date}",
+    "preparing": "Preparing the timeline…",
+    "peakTrunk": "Peak trunk lean",
+    "inTarget": "{count} of {total} in the risk-free range",
+    "risk": "Risk of the set",
+    "chat": "Ask the AI",
+    "timelineTitle": "Synchronized timeline",
+    "timelineLead": "The video, the readings and the chart share the same playhead. Tap a repetition to jump to it.",
+    "retry": "Try again",
+    "focusTitle": "Where the risk is",
+    "focusAt": "Repetition {index}: {joint}, {degrees} at {time}.",
+    "focusNone": "No repetition reached moderate or high risk.",
+    "focusPose": "Skeleton at the moment of risk: {joint}, {degrees}"
   },
   "joints": {
     "knee_flexion": "Knee flexion",
-    "trunk_inclination": "Trunk inclination"
+    "trunk_inclination": "Trunk inclination",
+    "knee_valgus": "Knee caving in (valgus)"
   },
   "capture": {
     "metaTitle": "New recording",
@@ -181,9 +377,6 @@
     "forAthlete": "Video of {name}. It will be analyzed as one of their recordings.",
     "newRecording": "New recording",
     "movement": "Movement",
-    "chooseVideo": "Record or choose a video",
-    "changeVideo": "Change the video",
-    "limitHint": "A single video, up to {max} MB.",
     "submit": "Upload and analyze",
     "uploading": "Uploading video…",
     "progress": "Uploaded: {percent}",
@@ -193,14 +386,44 @@
       "items": [
         "Record at 30 fps and upload the original file.",
         "Feet inside the frame for the whole movement, including the landing.",
-        "A steady camera, to the side or at three quarters of the athlete."
+        "A steady camera: side-on measures flexion; front-on, whether the knee caves in."
       ]
     },
     "errors": {
       "videoRequired": "Choose a video to continue.",
       "videoInvalidType": "The selected file isn't a video.",
-      "videoTooLarge": "The video exceeds the {max} MB limit."
-    }
+      "videoTooLarge": "The video exceeds the {max} MB limit.",
+      "videoTooLong": "The video is {seconds} seconds long. Please select or trim a clip of at most {max} seconds to continue.",
+      "videoUnreadable": "We couldn't read this video's duration. Try another file."
+    },
+    "lead": "Choose the movement, frame yourself side-on or front-on and record. Recording stops on its own at {seconds} seconds.",
+    "movementLegend": "Which movement will you record?",
+    "hints": {
+      "jump": "Vertical countermovement jump",
+      "squat": "Free squat, side-on or front-on"
+    },
+    "setup": "Keep the camera still, side-on or front-on, about three meters away and at hip height.",
+    "frame": "Camera view",
+    "frameHint": "Keep your whole body in view, feet to head",
+    "openCamera": "Turn on the camera",
+    "record": "Record",
+    "stop": "Stop",
+    "recording": "Recording",
+    "limit": "Up to {seconds} s",
+    "autoStopped": "Recording stopped on its own at {seconds} seconds.",
+    "again": "Record again",
+    "chooseFile": "Choose a video",
+    "or": "Already have the video?",
+    "cameraDenied": "We could not use the camera. Check the browser permission or choose a saved video.",
+    "noRecorder": "This browser cannot record here. Record with your phone camera and choose the video.",
+    "reading": "Reading the video…",
+    "details": "Video details",
+    "duration": "Duration",
+    "resolution": "Resolution",
+    "container": "Format",
+    "size": "Size",
+    "uploadingLabel": "Video upload",
+    "confirming": "Preparing the analysis…"
   },
   "consent": {
     "title": "Video consent",
@@ -218,22 +441,16 @@
     "label": "Your question",
     "placeholder": "Type your question about this analysis…",
     "send": "Send",
-    "sending": "Sending…",
     "thinking": "The assistant is typing…",
     "roles": {
       "user": "You",
       "assistant": "Assistant"
     },
     "disclaimer": "The assistant explains the analysis result in general terms. It doesn't replace an assessment by a health professional.",
-    "preparing": "The assistant is preparing the explanation of the result…"
-  },
-  "angleChart": {
-    "subtitle": "Angle throughout the movement.",
-    "pointLabel": "{time}: {value}",
-    "tableToggle": "Show as table",
-    "time": "Time",
-    "angle": "Angle",
-    "notEnough": "There aren't enough measurements to draw the curve."
+    "preparing": "The assistant is preparing the explanation of the result…",
+    "retry": "Try again",
+    "keptQuestion": "Your question is still here: you can try again now.",
+    "retryOpening": "Ask for the explanation again"
   },
   "stats": {
     "recordings": "Recordings",
@@ -243,24 +460,43 @@
     "averageRisk": "Average risk",
     "highestRisk": "Highest risk",
     "highRiskCount": "High risk",
-    "lastRecording": "Last recording",
     "none": "No data",
-    "empty": "Record a movement to see your statistics."
-  },
-  "riskChart": {
-    "title": "Risk over time",
-    "subtitle": "Risk score of each processed recording, in chronological order.",
-    "threshold": "High risk",
-    "pointLabel": "{date}: {value}",
-    "tableToggle": "Show as table",
-    "date": "Date",
-    "score": "Risk",
-    "notEnough": "At least two processed recordings are needed to show the trend."
+    "empty": "Record a movement to see your statistics.",
+    "lead": "Your average and highest risk, how it changed over time and where your knees land in each movement.",
+    "sessions": "Every processed recording, in order",
+    "trend": "Risk over time",
+    "kneeTitle": "Your knee peaks by movement",
+    "kneeLead": "Minimum, median and maximum of your sessions over the risk-free range of the latest analysis of each movement.",
+    "loading": "Loading your statistics…",
+    "emptyBody": "Once you have processed analyses you will see your gauges and progress here.",
+    "group": {
+      "emptyBody": "Once there are processed analyses you'll see the gauges and the risk trend here.",
+      "trendLabel": "Risk score of the last {count} sessions, from {first} to {last}",
+      "trendEmptyBody": "With two processed analyses you'll see how the risk changes.",
+      "kneeTitle": "Knee peaks by movement",
+      "kneeLead": "Minimum, median and maximum of the sessions over the risk-free range of each movement's latest analysis."
+    }
   },
   "athleteHome": {
     "summary": "Summary",
     "recent": "Recent recordings",
-    "seeAll": "See all recordings"
+    "seeAll": "See all recordings",
+    "loading": "Loading your analyses…",
+    "lead": {
+      "jump": "Your last jump stayed within the risk-free range in {count} of {total} repetitions.",
+      "squat": "Your last squat stayed within the risk-free range in {count} of {total} repetitions.",
+      "risk": "Your last analysis ended with {risk}.",
+      "pending": "Your last recording is being analyzed.",
+      "empty": "Record your first jump or squat and your measures will show up here."
+    },
+    "last": "Last analysis",
+    "openAnalysis": "Open the analysis",
+    "trend": "Your risk over time",
+    "trendLabel": "Risk score of your last {count} sessions, from {first} to {last}",
+    "trendLast": "Last: {score}",
+    "trendEmptyTitle": "No trend yet",
+    "trendEmptyBody": "With two processed analyses you will see how your risk changes.",
+    "emptyTitle": "No analyses yet"
   },
   "onboarding": {
     "metaTitle": "Complete your profile",
@@ -275,6 +511,8 @@
     "birthDateHint": "Your age is calculated automatically from this date.",
     "heightCm": "Height (cm)",
     "weightKg": "Weight (kg)",
+    "heightHint": "In centimeters, between {min} and {max} (e.g. 175).",
+    "weightHint": "In kilograms, between {min} and {max} (e.g. 72.5).",
     "submit": "Save profile",
     "pending": "Saving…",
     "saved": "Your profile was updated."
@@ -295,12 +533,9 @@
     "withAccount": "Has an account"
   },
   "coach": {
-    "teamSummary": "Your team",
-    "athletes": "Athletes",
     "athletesCount": "Athletes",
     "rosterEmpty": "You don't have any athletes yet.",
     "rosterEmptyHint": "Create athletes without an account with \"New athlete\", or wait for an administrator to assign you athletes who have one.",
-    "athletesSubtitle": "Manage profiles and review their activity.",
     "newAthlete": "New athlete",
     "newAthleteTitle": "New athlete",
     "newAthleteSubtitle": "Complete the details to create a profile.",
@@ -308,25 +543,31 @@
     "creatingAthlete": "Creating…",
     "editAthleteTitle": "Edit athlete",
     "editAthlete": "Edit profile",
-    "uploadVideo": "Upload video",
     "deleteAthlete": "Delete athlete",
     "deleteAthleteTitle": "Delete {name}?",
     "deleteAthleteBody": "All their recordings and analyses will be deleted too. This can't be undone.",
-    "accountAthleteHint": "Has their own account: their data and videos are managed by the athlete.",
-    "recordings": "{count} recordings",
+    "recordings": {
+      "one": "{count} recording",
+      "other": "{count} recordings"
+    },
     "noRecordings": "No recordings",
-    "latestRisk": "Latest risk",
-    "accountColumn": "Account",
-    "openAthlete": "View {name}'s profile",
     "athleteMetaTitle": "Athlete",
     "backToTeam": "Back to my athletes",
     "profile": "Physical profile",
     "recordingsTitle": "Recordings",
-    "teamStatsTitle": "Team summary",
-    "byAthleteTitle": "Average risk per athlete",
-    "byAthleteSubtitle": "Average of each athlete's processed recordings, from highest to lowest.",
-    "byAthleteEmpty": "No athlete has processed recordings yet.",
-    "athleteColumn": "Athlete"
+    "noRisk": "No analyses",
+    "noRiskLabel": "{name}: no processed analyses",
+    "latestRiskLabel": "{name}'s latest risk: {value}",
+    "byRiskTitle": "Athletes by latest risk",
+    "byRiskLead": "From highest to lowest risk; athletes with no analyses yet go last.",
+    "athletesLead": "Each athlete with their latest risk. Open their profile to see analyses, record or edit it.",
+    "analysesLead": "Recordings from all your athletes, newest first.",
+    "statsLead": "Average and highest risk, the trend and knee peaks of your athletes, all of them or one team.",
+    "statsLoading": "Loading statistics…",
+    "analysesLoading": "Loading recordings…",
+    "record": "Record or upload video",
+    "recordOwnHint": "Has their own account: they record their videos from it and you see the analyses here.",
+    "athleteLoading": "Loading their analyses…"
   },
   "teams": {
     "name": "Team name",
@@ -336,11 +577,13 @@
     "adminSubtitle": "Every team in the system, from coaches and administrators.",
     "empty": "No teams yet.",
     "emptyHint": "Create one with a name, for example \"Under 17\", and then add athletes to it.",
-    "members": "{count} athletes",
+    "members": {
+      "one": "{count} athlete",
+      "other": "{count} athletes"
+    },
     "unknownOwner": "No owner",
     "ownedBy": "{name}'s team",
     "back": "Back to teams",
-    "rename": "Name",
     "renamed": "The team name was updated.",
     "delete": "Delete team",
     "deleteTitle": "Delete the team {name}?",
@@ -352,39 +595,41 @@
     "removeMember": "Remove",
     "noCandidates": "There are no athletes to add.",
     "noCandidatesHint": "First create athletes or ask to be assigned athletes who have an account.",
-    "viewStats": "View team statistics",
     "filterLabel": "Team",
     "allAthletes": "All my athletes",
-    "applyFilter": "Apply",
-    "showingTeam": "Showing only the team {name}.",
     "byTeamTitle": "Average risk per team",
     "byTeamSubtitle": "Average of the processed recordings of each team's athletes.",
-    "byTeamEmpty": "No team has processed recordings yet."
+    "editName": "Edit the team name",
+    "editNameHint": "Enter saves · Escape cancels",
+    "namePlaceholder": "For example, Under 17",
+    "logo": {
+      "add": "Upload logo",
+      "change": "Change logo",
+      "remove": "Remove logo"
+    },
+    "addTitle": "Add athletes",
+    "allIn": "Every available athlete is already on this team.",
+    "membersEmpty": "This team has no athletes yet",
+    "membersEmptyHint": "Add them from the list below.",
+    "record": "Record or upload",
+    "recordFor": "Record or upload a video of {name}",
+    "recordOwn": "Records from their own account",
+    "addMemberLabel": "Add {name} to the team",
+    "removeMemberLabel": "Remove {name} from the team",
+    "statsTitle": "Team statistics",
+    "recentTitle": "Recent team analyses",
+    "loading": "Loading the team's athletes and statistics…"
   },
   "admin": {
-    "summary": "System summary",
     "users": "Users",
-    "coaches": "Coaches",
     "athletes": "Athletes",
     "unassigned": "Without a coach",
-    "pendingVerification": "Unverified",
     "shortcuts": "Shortcuts",
     "manageUsers": "Manage users",
     "manageAssignments": "View coach assignments",
     "manageTeams": "View teams",
     "usersSubtitle": "Every account in the system. Change an account's role or deactivate it so it can't sign in.",
     "assignmentsSubtitle": "Each athlete's coach. When it changes, the athlete leaves the previous coach's teams.",
-    "columns": {
-      "name": "Name",
-      "email": "Email",
-      "role": "Role",
-      "status": "Status",
-      "createdAt": "Created",
-      "actions": "Actions",
-      "athlete": "Athlete",
-      "type": "Type",
-      "coach": "Coach"
-    },
     "apply": "Save",
     "roleFor": "Role of {name}",
     "coachFor": "Coach of {name}",
@@ -401,7 +646,7 @@
     "noCoach": "No coach",
     "usersEmpty": "There are no registered users.",
     "athletesEmpty": "There are no athlete profiles.",
-    "unassignedFirst": "Athletes without a coach are listed first."
+    "since": "Joined: {date}"
   },
   "profile": {
     "title": "Profile",
@@ -504,38 +749,50 @@
     "birthDateInFuture": "The date of birth must be before today.",
     "ageOutOfRange": "The age must be between {min} and {max} years.",
     "invalidNumber": "Enter a number, for example 72.5.",
-    "heightOutOfRange": "Enter a height between 1 and {max} cm.",
-    "weightOutOfRange": "Enter a weight between 1 and {max} kg."
+    "heightOutOfRange": "Height goes in centimeters, between {min} and {max} (e.g. 175).",
+    "weightOutOfRange": "Weight goes in kilograms, between {min} and {max} (e.g. 72.5)."
   },
   "errors": {
-    "generic": "Something went wrong. Try again.",
-    "network": "We couldn't reach the server. Check your connection and try again.",
-    "validation_error": "Check the information you entered.",
-    "invalid_credentials": "Incorrect email or password.",
-    "email_not_registered": "There's no account with that email.",
-    "email_domain_undeliverable": "That email's domain doesn't exist or doesn't receive email. Check that it's spelled correctly.",
-    "account_disabled": "Your account is disabled.",
-    "email_not_verified": "Verify your email before signing in.",
-    "invalid_otp": "The code you entered isn't valid.",
-    "invalid_refresh_token": "Your session expired. Sign in again.",
-    "email_already_registered": "That email is already registered.",
-    "email_delivery_failed": "We couldn't send the email. Try again in a few moments.",
-    "password_reused": "The new password must be different from the current one.",
-    "invalid_current_password": "Your current password is incorrect.",
-    "forbidden": "You don't have permission to do this.",
-    "not_found": "We couldn't find what you were looking for.",
-    "invalid_video": "The file isn't a valid video.",
-    "video_too_large": "The video exceeds the maximum allowed size.",
-    "storage_unavailable": "We couldn't save the file right now. Try again in a few minutes.",
-    "consent_required": "You must accept the video consent before uploading a recording.",
-    "analysis_not_processed": "The assistant will be available when the analysis finishes.",
-    "chat_rate_limited": "You've asked many questions in a row. Wait a moment before sending another.",
-    "assistant_unavailable": "The assistant isn't available right now. Try again later.",
-    "team_name_taken": "You already have a team with that name.",
-    "invalid_team_member": "That athlete can't be in this team.",
-    "cannot_modify_own_account": "You can't change the role or status of your own account.",
-    "coach_has_athletes": "This coach still has athletes. Reassign them before changing the role.",
-    "invalid_role_assignment": "That user doesn't have the role required for this assignment."
+    "GENERIC": "Something went wrong. Try again.",
+    "NETWORK": "We couldn't reach the server. Check your connection and try again.",
+    "BAD_REQUEST": "Check the information you entered.",
+    "INVALID_CREDENTIALS": "Incorrect email or password.",
+    "EMAIL_NOT_REGISTERED": "There's no account with that email.",
+    "EMAIL_DOMAIN_UNDELIVERABLE": "That email's domain doesn't exist or doesn't receive email. Check that it's spelled correctly.",
+    "ACCOUNT_DISABLED": "Your account is disabled.",
+    "EMAIL_NOT_VERIFIED": "Verify your email before signing in.",
+    "INVALID_OTP": "The code you entered isn't valid.",
+    "INVALID_REFRESH_TOKEN": "Your session expired. Sign in again.",
+    "EMAIL_ALREADY_REGISTERED": "That email is already registered.",
+    "EMAIL_DELIVERY_FAILED": "We couldn't send the email. Try again in a few moments.",
+    "PASSWORD_REUSED": "The new password must be different from the current one.",
+    "INVALID_CURRENT_PASSWORD": "Your current password is incorrect.",
+    "FORBIDDEN": "You don't have permission to do this.",
+    "NOT_FOUND": "We couldn't find what you were looking for.",
+    "INVALID_VIDEO": "The file isn't a valid video.",
+    "VIDEO_TOO_LARGE": "The video exceeds the maximum allowed size.",
+    "STORAGE_UNAVAILABLE": "We couldn't save the file right now. Try again in a few minutes.",
+    "CONSENT_REQUIRED": "You must accept the video consent before uploading a recording.",
+    "ANALYSIS_NOT_PROCESSED": "The assistant will be available when the analysis finishes.",
+    "CHAT_RATE_LIMITED": "You've asked many questions in a row. Wait a moment before sending another.",
+    "ASSISTANT_UNAVAILABLE": "The assistant couldn't answer this time.",
+    "ASSISTANT_BUSY": "The assistant is busy, try again in a minute.",
+    "ASSISTANT_DAILY_LIMIT": "You reached today's limit, come back tomorrow.",
+    "TEAM_NAME_TAKEN": "You already have a team with that name.",
+    "INVALID_TEAM_MEMBER": "That athlete can't be in this team.",
+    "CANNOT_MODIFY_OWN_ACCOUNT": "You can't change the role or status of your own account.",
+    "COACH_HAS_ATHLETES": "This coach still has athletes. Reassign them before changing the role.",
+    "INVALID_ROLE_ASSIGNMENT": "That user doesn't have the role required for this assignment.",
+    "UNAUTHORIZED": "Your session expired. Please sign in again.",
+    "VIDEO_TOO_LONG": "The video exceeds the maximum allowed duration.",
+    "UPLOAD_NOT_FOUND": "We couldn't find the uploaded file. Please upload it again.",
+    "INVALID_IMAGE": "The image is invalid or exceeds the maximum size.",
+    "VIDEO_UNREADABLE": "We couldn't read the video. Try another recording.",
+    "NO_MOVEMENT_DETECTED": "We didn't detect the movement in the video. Record from the side with your whole body in view.",
+    "AI_UNAVAILABLE": "The AI didn't respond in time. Try again in a few minutes.",
+    "AI_BUSY": "The AI is busy with another analysis. We'll retry shortly.",
+    "PROFILE_ALREADY_EXISTS": "You already completed your athlete profile.",
+    "CONFLICT": "That action conflicts with the current state. Reload the page and try again."
   },
   "preferences": {
     "language": "Language",
@@ -543,6 +800,7 @@
       "es": "Español",
       "en": "English"
     },
+    "changingLanguage": "Changing the language…",
     "theme": "Theme",
     "themeNames": {
       "system": "System",
@@ -551,20 +809,302 @@
     }
   },
   "report": {
-    "export": "Export to PDF",
     "download": "Download PDF",
-    "back": "Back to the analysis",
-    "printHint": "In the dialog that opens, choose \"Save as PDF\" as the destination.",
     "fileTitle": "Analysis report {date}",
     "title": "Movement analysis report",
     "subtitle": "{movement}, {date}",
     "coach": "Responsible coach",
     "noCoach": "No coach assigned",
     "athlete": "Athlete",
-    "charts": "Joint angle charts and data",
+    "charts": "Knee and trunk across the video",
     "explanation": "Assistant's explanation",
     "noExplanation": "The assistant hasn't generated an explanation for this analysis yet.",
     "disclaimerTitle": "Important",
-    "disclaimer": "This report is an automatic estimate based on a video, with thresholds that have no clinical validation. It is not a diagnosis and does not replace an assessment by a health professional."
+    "disclaimer": "This report is an automatic estimate based on a video, with thresholds that have no clinical validation. It is not a diagnosis and does not replace an assessment by a health professional.",
+    "target": "Knee target range",
+    "repetition": "Repetition",
+    "kneePeak": "Knee peak",
+    "zone": "Zone",
+    "empty": "—",
+    "page": "Page {page} of {total}",
+    "generating": "Generating the PDF…",
+    "failed": "The PDF could not be generated. Please try again.",
+    "risk": "Risk",
+    "view": "Detected view",
+    "focus": "At risk",
+    "peak": "Peak",
+    "chartsFront": "Each knee's valgus throughout the video"
+  },
+  "systemPing": {
+    "title": "Backend connection test",
+    "subtitle": "Next.js calls the backend Ping RPC over gRPC-Web, through Envoy.",
+    "probe": "hello from Next.js",
+    "sent": "Message sent",
+    "received": "Message received",
+    "serverTime": "Server time",
+    "roundTrip": "Round trip",
+    "errors": {
+      "unavailable": "The backend is unavailable. If it was asleep, wait a minute and reload.",
+      "timeout": "The backend took too long to respond. Reload to try again.",
+      "generic": "The call to the backend failed."
+    }
+  },
+  "styleGuide": {
+    "metaTitle": "Style guide",
+    "metaDescription": "Living instrument: KinesiApp's visual identity, with its palette, type, components, charts and sample screens.",
+    "eyebrow": "Style guide",
+    "title": "Living instrument",
+    "lead": "KinesiApp reads like a measuring instrument that breathes: every joint has its color, every range its zone, and every figure reaches its value with the inertia of a real needle.",
+    "sampleNote": "Figures are sample data from a 40-second squat set.",
+    "index": "In this guide",
+    "home": "Go to the top of the guide",
+    "sections": {
+      "color": "Color",
+      "type": "Typography",
+      "glyphs": "Icons",
+      "components": "Components",
+      "charts": "Charts",
+      "progress": "Analysis progress",
+      "screens": "Screens"
+    },
+    "hero": {
+      "reading": "Knee flexion",
+      "peak": "Peak",
+      "target": "Target",
+      "skeleton": "Side-view skeleton doing a squat, with the knee, trunk, hip and center of gravity in their colors",
+      "dial": "Knee flexion gauge: {value}, peak {peak}, target {range}"
+    },
+    "color": {
+      "lead": "Color never decorates: it says what is being measured. The same four signals paint the skeleton, the lines and the needles; zones tell whether a measure fell short, hit the target or went past it, and risk has its own scale with a word and steps.",
+      "light": "Light mode",
+      "dark": "Dark mode",
+      "signals": "Signals",
+      "signalsLead": "One per joint or measure, the same in every view.",
+      "zones": "Range zones",
+      "zonesLead": "Relative to the risk-free knee flexion range the AI used for each analysis; in the sample squat, {range}.",
+      "risk": "Risk scale",
+      "riskLead": "Always shown with the word and one to three steps: it never depends on color alone.",
+      "surfaces": "Surfaces and ink",
+      "contrast": "Contrast {ratio}:1",
+      "shared": "Cobalt is both the knee and the main action: the knee is the app's leading measure, and buttons never appear inside a chart, so they don't get mixed up.",
+      "names": {
+        "knee": "Knee",
+        "trunk": "Trunk",
+        "hip": "Hip",
+        "center": "Center of gravity",
+        "under": "Below",
+        "target": "On target",
+        "over": "Above",
+        "canvas": "Background",
+        "panel": "Panel",
+        "sunken": "Well",
+        "ink": "Ink",
+        "inkMuted": "Secondary ink",
+        "accent": "Action"
+      }
+    },
+    "type": {
+      "lead": "A narrow, technical display face for figures and headings, and a warm, legible sans for everything else. Figures are tabular so they don't jump while counting.",
+      "display": "Saira",
+      "displayUse": "Display and figures: headings, gauge readings and metrics.",
+      "sans": "Golos Text",
+      "sansUse": "Text: paragraphs, controls, labels and notices.",
+      "sampleTitle": "Your knee reached 108°",
+      "sampleBody": "On the fifth repetition your trunk leaned more than usual; check the chart to see at which second it happened.",
+      "scale": "Scale",
+      "figures": "Tabular figures"
+    },
+    "glyphs": {
+      "lead": "The same thin-stroke, round-cap set from the first design. They go with the text, never replace it."
+    },
+    "components": {
+      "lead": "Controls with relief: they sink when pressed, glow in their action's color when focused and answer with a short bounce.",
+      "buttons": "Buttons",
+      "primary": "Analyze video",
+      "secondary": "View history",
+      "quiet": "Cancel",
+      "pending": "Analyzing…",
+      "fields": "Fields",
+      "email": "Email",
+      "emailHint": "The one you sign in to KinesiApp with.",
+      "emailInvalid": "name@mail",
+      "emailError": "Enter a valid email, like name@domain.com.",
+      "checkbox": "I agree that KinesiApp stores and analyzes my videos.",
+      "switch": "Weekly reminder to record",
+      "movement": "Movement picker",
+      "movementLegend": "Which movement are you recording?",
+      "jumpHint": "Countermovement vertical jump",
+      "squatHint": "Bodyweight squat, side view",
+      "notices": "Notices",
+      "info": "Keep the camera still and side-on, about three meters away.",
+      "success": "Video ready. The analysis has started.",
+      "warning": "The video is longer than 40 seconds; trim it before uploading.",
+      "ai": "AI status",
+      "aiWaking": "AI waking up",
+      "aiReady": "AI ready",
+      "aiUnavailable": "AI unavailable",
+      "aiWakingHint": "It takes a few seconds the first time.",
+      "aiUnavailableHint": "Your videos are saved; the analysis starts when it's back.",
+      "navigation": "Navigation",
+      "navigationLead": "A top bar on desktop and a bottom bar on phones, with the active tab lit up.",
+      "states": "Empty, loading and error",
+      "emptyTitle": "No analyses yet",
+      "emptyBody": "Record your first squat or jump and you'll see how your joints move here.",
+      "emptyAction": "Record the first one",
+      "loading": "Loading your analyses",
+      "errorTitle": "We couldn't load your analyses",
+      "errorBody": "Check your connection and try again.",
+      "errorAction": "Try again",
+      "dialog": "Dialog",
+      "dialogOpen": "Delete analysis",
+      "dialogTitle": "Delete this analysis?",
+      "dialogBody": "The video, the metrics and the AI conversation are deleted. This can't be undone.",
+      "dialogConfirm": "Delete",
+      "dialogCancel": "Keep it"
+    },
+    "charts": {
+      "lead": "Lines draw themselves with a gradient that follows the zone, and repetitions light up one after another.",
+      "timeline": "Synchronized timeline",
+      "timelineLead": "The video, the skeleton and the chart share the same playhead. Tap a repetition to jump to it.",
+      "timelineLabel": "Knee flexion and trunk inclination during the 40 seconds of the set",
+      "stage": "Video frame at the current second",
+      "play": "Play",
+      "pause": "Pause",
+      "playhead": "Position in the video",
+      "repetitions": "Repetitions",
+      "repetition": "Repetition {index}: {risk}, peak {peak}",
+      "seconds": "s",
+      "trend": "Risk trend",
+      "trendLead": "Risk score per session over the three level bands.",
+      "trendLabel": "Risk score of the last eight sessions, from {first} to {last}",
+      "trendLast": "Latest: {score}",
+      "comparison": "Athlete comparison",
+      "comparisonLead": "Range and median of each athlete's peak flexion on the same scale.",
+      "median": "Median",
+      "repetitionFocus": "Repetition {index}: {risk}, {joint} at {time}"
+    },
+    "progress": {
+      "lead": "While the AI works, the skeleton assembles point by point and the ring advances through stages in each one's color.",
+      "label": "Analysis progress",
+      "stage": "Stage {index} of {total}: {name}",
+      "replay": "Replay the animation",
+      "stages": {
+        "queued": "Queued",
+        "downloading": "Downloading the video",
+        "pose": "Detecting the skeleton",
+        "repetitions": "Counting repetitions",
+        "risk": "Calculating risk"
+      },
+      "done": "Analysis ready"
+    },
+    "screens": {
+      "lead": "Three complete screens with the system applied. They switch with a view transition.",
+      "open": "Open the screen",
+      "back": "Back to the guide",
+      "label": "Sample screen",
+      "home": {
+        "name": "Athlete home",
+        "summary": "Greeting, AI status, latest analysis and trend.",
+        "greeting": "Hi, {name}",
+        "lead": "Your last squat set stayed within the target range in {count} of {total} repetitions.",
+        "last": "Latest analysis",
+        "recent": "Recent recordings",
+        "newAnalysis": "New analysis",
+        "openAnalysis": "View the analysis",
+        "trend": "Your risk over time"
+      },
+      "analysis": {
+        "name": "Analysis result",
+        "summary": "Gauges, synchronized timeline and repetitions.",
+        "title": "Squat on {date}",
+        "peakKnee": "Peak knee flexion",
+        "peakTrunk": "Peak trunk inclination",
+        "repetitions": "Repetitions",
+        "inTarget": "{count} of {total} on target",
+        "risk": "Set risk",
+        "riskSteps": "Level {step} of 3",
+        "chat": "Ask the AI",
+        "delete": "Delete"
+      },
+      "capture": {
+        "name": "Video capture",
+        "summary": "Movement picker, framing guide and recording capped at 40 s.",
+        "title": "New analysis",
+        "lead": "Pick the movement, frame yourself side-on and record. Recording stops by itself at {seconds} seconds.",
+        "frame": "Camera preview",
+        "frameHint": "Your whole body should be visible, from feet to head",
+        "record": "Record",
+        "stop": "Stop",
+        "recording": "Recording",
+        "limit": "Up to {seconds} s",
+        "autoStopped": "Recording stopped by itself at {seconds} seconds.",
+        "again": "Record again",
+        "upload": "Upload and analyze",
+        "simulated": "In the guide the camera is simulated: no permission is requested and nothing is recorded."
+      }
+    }
+  },
+  "ai": {
+    "label": "AI status",
+    "waking": "AI starting…",
+    "ready": "AI active",
+    "unavailable": "AI unavailable",
+    "wakingHint": "It takes a few seconds the first time.",
+    "unavailableHint": "Your videos are saved; the analysis starts when it's back."
+  },
+  "coachHome": {
+    "lead": {
+      "high": {
+        "one": "{count} of your {total} athletes finished their latest analysis with high risk.",
+        "other": "{count} of your {total} athletes finished their latest analysis with high risk."
+      },
+      "none": {
+        "one": "Your athlete didn't finish their latest analysis with high risk.",
+        "other": "None of your {count} athletes finished their latest analysis with high risk."
+      },
+      "noAnalyses": "Once your athletes record, you'll see how their risk is trending here.",
+      "noAthletes": "Create your first athlete or ask for one with an account to be assigned."
+    },
+    "loading": "Loading your athletes…",
+    "squad": "Squad risk",
+    "squadLead": "Average of each athlete's latest analysis.",
+    "squadEmpty": "No processed analyses yet",
+    "highNow": "High risk now",
+    "attention": "Look here first",
+    "attentionLead": "Your athletes with the highest latest risk.",
+    "seeAllAthletes": "See all athletes",
+    "teams": "Your teams",
+    "seeAllTeams": "See teams",
+    "createTeam": "Create a team",
+    "noTeams": "Group your athletes into teams to compare their risk.",
+    "recent": "Latest recordings",
+    "seeAllAnalyses": "See all recordings"
+  },
+  "adminHome": {
+    "lead": {
+      "pending": {
+        "one": "There are {users} accounts and {count} athlete is waiting for a coach.",
+        "other": "There are {users} accounts and {count} athletes are waiting for a coach."
+      },
+      "clear": "There are {users} accounts and every athlete has a coach."
+    },
+    "loading": "Loading accounts…",
+    "coverage": "Coach coverage",
+    "coverageLead": "Athletes who already have a coach assigned.",
+    "coverageLabel": "Coach coverage: {value}, {covered} of {total} athletes",
+    "coverageCount": "{covered} of {total}",
+    "roles": "Accounts by role",
+    "roleCount": {
+      "athlete": "Athletes",
+      "coach": "Coaches",
+      "admin": "Admins"
+    },
+    "status": "Account status",
+    "pendingTitle": "Waiting for a coach",
+    "pendingEmpty": "Everyone has a coach",
+    "pendingEmptyBody": "Athletes without a coach will show up here.",
+    "unverifiedTitle": "Email not verified",
+    "unverifiedEmpty": "No unverified accounts",
+    "unverifiedEmptyBody": "New accounts show up here until they confirm their email."
   }
 }

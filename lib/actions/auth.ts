@@ -3,14 +3,15 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { apiRequest } from "../api";
-import { API_PATHS } from "../api-paths";
-import { ApiError, errorMessage, validationMessages } from "../errors";
+import { getClientPolicy } from "../data/public";
+import { errorMessage, validationMessages } from "../errors";
 import { formText, type FormState } from "../form-state";
+import { authGateway } from "../grpc/auth-gateway";
+import { ErrorReason, hasReason } from "../grpc/errors";
 import { getT } from "../i18n/server";
 import { NEXT_PARAM, ROUTES, safeNextPath, withEmail } from "../routes";
-import { storeSession } from "../session";
-import { SIGNUP_ROLES, type TokenPair } from "../types";
+import { requestAiWakeOnEntry, storeSession } from "../session";
+import { SIGNUP_ROLES, type SignupRole, type TokenPair } from "../types";
 import {
   collectErrors,
   normalizeFullName,
@@ -23,7 +24,7 @@ import {
 } from "../validation";
 
 export type LoginField = "email" | "password";
-export type RegisterField = "full_name" | "email" | "password" | "confirm_password" | "role";
+export type RegisterField = "full_name" | "email" | "password" | "confirm_password" | "role" | "video_consent";
 
 export async function login(_previous: FormState<LoginField>, formData: FormData): Promise<FormState<LoginField>> {
   const t = await getT();
@@ -36,18 +37,18 @@ export async function login(_previous: FormState<LoginField>, formData: FormData
 
   let tokens: TokenPair;
   try {
-    tokens = await apiRequest<TokenPair>(API_PATHS.login, { method: "POST", body: { email, password } });
+    tokens = await authGateway().login(email, password);
   } catch (error) {
-    const code = error instanceof ApiError ? error.code : undefined;
     return {
       error: errorMessage(t, error),
       values,
-      unverifiedEmail: code === "email_not_verified" ? email : undefined,
-      emailNotRegistered: code === "email_not_registered",
+      unverifiedEmail: hasReason(error, ErrorReason.EMAIL_NOT_VERIFIED) ? email : undefined,
+      emailNotRegistered: hasReason(error, ErrorReason.EMAIL_NOT_REGISTERED),
     };
   }
 
   await storeSession(tokens);
+  await requestAiWakeOnEntry();
   redirect((await nextFromReferer()) ?? ROUTES.home);
 }
 
@@ -80,18 +81,24 @@ export async function register(
     password: validateNewPassword(password),
     confirm_password: validatePasswordConfirmation(password, formText(formData, "confirm_password")),
     role: validateOption(role, SIGNUP_ROLES),
+    video_consent: formText(formData, "video_consent") === "on" ? null : "consentRequired",
   });
   if (errors) return { fieldErrors: validationMessages(t, errors), values };
 
   try {
-    await apiRequest(API_PATHS.register, { method: "POST", body: { full_name: fullName, email, password, role } });
+    const { video_consent_version } = await getClientPolicy();
+    await authGateway().register({
+      email,
+      password,
+      fullName,
+      role: role as SignupRole,
+      acceptedVideoConsentVersion: video_consent_version,
+    });
   } catch (error) {
     // Dominio sin correo: el error va junto al campo, para que se corrija ahí
-    if (error instanceof ApiError && error.code === "email_domain_undeliverable") {
-      return { fieldErrors: { email: errorMessage(t, error) }, values };
-    }
+    if (hasReason(error, ErrorReason.EMAIL_DOMAIN_UNDELIVERABLE)) return { fieldErrors: { email: errorMessage(t, error) }, values };
     // La cuenta sí quedó creada aunque el correo no salió: se puede pedir otro código al verificar
-    const accountCreated = error instanceof ApiError && error.code === "email_delivery_failed";
+    const accountCreated = hasReason(error, ErrorReason.EMAIL_DELIVERY_FAILED);
     return { error: errorMessage(t, error), values, unverifiedEmail: accountCreated ? email : undefined };
   }
 

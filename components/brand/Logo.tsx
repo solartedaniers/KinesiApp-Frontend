@@ -15,7 +15,7 @@ export async function Logo({ href, collapsible = false, size = 30 }: { href: str
     <Link
       href={href}
       aria-label={t.app.name}
-      className="inline-flex items-center gap-2.5 rounded-control font-display text-lg font-semibold tracking-tight text-ink [font-stretch:112%] hover:no-underline"
+      className="inline-flex items-center gap-2.5 rounded-control font-display text-lg font-semibold tracking-tight text-ink hover:no-underline"
     >
       <LogoMark size={size} />
       <span className={collapsible ? "max-[399px]:hidden" : undefined}>{t.app.name}</span>

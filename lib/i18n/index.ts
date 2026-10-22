@@ -5,7 +5,7 @@ import en from "./en.json";
 import es from "./es.json";
 import type { Locale } from "./locale";
 
-export { DEFAULT_LOCALE, format, isLocale, type Locale, LOCALES, resolveLocale } from "./locale";
+export { DEFAULT_LOCALE, format, isLocale, type Locale, LOCALES, plural, resolveLocale } from "./locale";
 
 // `joints` se indexa con el nombre de articulación que manda el backend, que puede ser nuevo
 export type Dictionary = Omit<typeof es, "joints"> & { joints: Record<string, string> };

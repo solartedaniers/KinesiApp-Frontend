@@ -8,15 +8,20 @@ export const PASSWORD_MIN_LENGTH = 8;
 export const PASSWORD_MAX_LENGTH = 128;
 export const FULL_NAME_MAX_LENGTH = 150;
 export const OTP_LENGTH = 6;
-// Iguales a ATHLETE_MIN_AGE_YEARS / ATHLETE_MAX_AGE_YEARS del backend y a los límites de AthleteProfileBase
-export const ATHLETE_MIN_AGE_YEARS = 5;
-export const ATHLETE_MAX_AGE_YEARS = 100;
-export const HEIGHT_MAX_CM = 300;
 // Igual al largo de teams.name en el backend
 export const TEAM_NAME_MAX_LENGTH = 100;
 // Igual a CHAT_MESSAGE_MAX_CHARS del backend
 export const CHAT_MESSAGE_MAX_LENGTH = 1000;
-export const WEIGHT_MAX_KG = 400;
+
+/** Rangos de la ficha física: llegan del backend por GetClientPolicy, no se repiten aquí. */
+export type BiometricsRules = {
+  minAgeYears: number;
+  maxAgeYears: number;
+  minHeightCm: number;
+  maxHeightCm: number;
+  minWeightKg: number;
+  maxWeightKg: number;
+};
 
 export type ValidationError =
   | "required"
@@ -114,23 +119,25 @@ export function validateOtp(value: string): ValidationError | null {
 }
 
 /** Fecha ISO (yyyy-mm-dd) de nacimiento: pasada y con una edad dentro del rango admitido. */
-export function validateBirthDate(value: string, today: Date): ValidationError | null {
+export function validateBirthDate(value: string, today: Date, rules: BiometricsRules): ValidationError | null {
   if (!value) return "required";
   if (!isRealIsoDate(value)) return "invalidDate";
   if (value >= isoDate(today)) return "birthDateInFuture";
   const age = ageOn(value, today);
-  return age >= ATHLETE_MIN_AGE_YEARS && age <= ATHLETE_MAX_AGE_YEARS ? null : "ageOutOfRange";
+  return age >= rules.minAgeYears && age <= rules.maxAgeYears ? null : "ageOutOfRange";
 }
 
-function validateMeasure(value: string, max: number, outOfRange: ValidationError): ValidationError | null {
+function validateMeasure(value: string, min: number, max: number, outOfRange: ValidationError): ValidationError | null {
   if (!value.trim()) return "required";
   const number = Number(value.replace(",", "."));
   if (!Number.isFinite(number)) return "invalidNumber";
-  return number > 0 && number <= max ? null : outOfRange;
+  return number >= min && number <= max ? null : outOfRange;
 }
 
-export const validateHeight = (value: string) => validateMeasure(value, HEIGHT_MAX_CM, "heightOutOfRange");
-export const validateWeight = (value: string) => validateMeasure(value, WEIGHT_MAX_KG, "weightOutOfRange");
+export const validateHeight = (value: string, rules: BiometricsRules) =>
+  validateMeasure(value, rules.minHeightCm, rules.maxHeightCm, "heightOutOfRange");
+export const validateWeight = (value: string, rules: BiometricsRules) =>
+  validateMeasure(value, rules.minWeightKg, rules.maxWeightKg, "weightOutOfRange");
 
 /** "72,5" o "72.5" → 72.5: el teclado numérico en español escribe coma decimal. */
 export function parseMeasure(value: string): number {
@@ -152,10 +159,10 @@ export function isoDate(date: Date): string {
 }
 
 /** Límites del <input type="date"> de nacimiento, mismo rango que validateBirthDate. */
-export function birthDateBounds(today: Date): { min: string; max: string } {
+export function birthDateBounds(today: Date, rules: BiometricsRules): { min: string; max: string } {
   const shift = (years: number, days = 0) => new Date(today.getFullYear() - years, today.getMonth(), today.getDate() + days);
   // min: el día siguiente a cumplir MAX + 1 años, el primero en que la edad todavía es MAX
-  return { min: isoDate(shift(ATHLETE_MAX_AGE_YEARS + 1, 1)), max: isoDate(shift(ATHLETE_MIN_AGE_YEARS)) };
+  return { min: isoDate(shift(rules.maxAgeYears + 1, 1)), max: isoDate(shift(rules.minAgeYears)) };
 }
 
 export function validateOption<T extends string>(value: string, options: readonly T[]): ValidationError | null {
@@ -167,12 +174,18 @@ export const VALIDATION_PARAMS: Partial<Record<ValidationError, Record<string, n
   passwordTooShort: { min: PASSWORD_MIN_LENGTH },
   passwordTooLong: { max: PASSWORD_MAX_LENGTH },
   fullNameTooLong: { max: FULL_NAME_MAX_LENGTH },
-  ageOutOfRange: { min: ATHLETE_MIN_AGE_YEARS, max: ATHLETE_MAX_AGE_YEARS },
-  heightOutOfRange: { max: HEIGHT_MAX_CM },
-  weightOutOfRange: { max: WEIGHT_MAX_KG },
   chatMessageTooLong: { max: CHAT_MESSAGE_MAX_LENGTH },
   teamNameTooLong: { max: TEAM_NAME_MAX_LENGTH },
 };
+
+/** {min} y {max} de los errores de la ficha física, que dependen de la política del backend. */
+export function biometricsParams(rules: BiometricsRules): Partial<Record<ValidationError, Record<string, number>>> {
+  return {
+    ageOutOfRange: { min: rules.minAgeYears, max: rules.maxAgeYears },
+    heightOutOfRange: { min: rules.minHeightCm, max: rules.maxHeightCm },
+    weightOutOfRange: { min: rules.minWeightKg, max: rules.maxWeightKg },
+  };
+}
 
 export function validateTeamName(value: string): ValidationError | null {
   if (!value.trim()) return "required";

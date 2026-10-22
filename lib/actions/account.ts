@@ -1,13 +1,13 @@
 "use server";
 
-import { apiRequest } from "../api";
-import { API_PATHS } from "../api-paths";
-import { errorMessage, validationMessages } from "../errors";
+import { validationMessages } from "../errors";
 import { formText, type FormState } from "../form-state";
+import { authGateway } from "../grpc/auth-gateway";
 import { getT } from "../i18n/server";
-import { readAccessToken, storeSession } from "../session";
+import { storeSession } from "../session";
 import type { TokenPair } from "../types";
 import { collectErrors, validateNewPassword, validatePasswordConfirmation, validateRequired } from "../validation";
+import { authedMutation, failureMessage } from "./request";
 
 export type ChangePasswordField = "current_password" | "password" | "confirm_password";
 
@@ -28,16 +28,12 @@ export async function changePassword(
 
   let tokens: TokenPair;
   try {
-    tokens = await apiRequest<TokenPair>(API_PATHS.changePassword, {
-      method: "POST",
-      body: { current_password: currentPassword, new_password: password },
-      accessToken: (await readAccessToken()) ?? undefined,
-    });
+    tokens = await authedMutation(() => authGateway().changePassword(currentPassword, password));
   } catch (error) {
-    return { error: errorMessage(t, error) };
+    return { error: failureMessage(t, error) };
   }
 
-  // El backend revoca todos los refresh tokens y emite un par nuevo para este dispositivo
+  // El backend revoca las demás sesiones y abre una nueva en este dispositivo
   await storeSession(tokens);
   return { notice: t.changePassword.success };
 }

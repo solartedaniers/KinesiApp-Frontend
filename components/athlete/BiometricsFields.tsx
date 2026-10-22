@@ -3,9 +3,10 @@
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 import { TextField } from "@/components/ui/TextField";
 import type { BiometricsField } from "@/lib/biometrics";
+import { format } from "@/lib/i18n";
 import { useT } from "@/lib/i18n/client";
 import { GENDERS } from "@/lib/types";
-import { birthDateBounds } from "@/lib/validation";
+import { birthDateBounds, type BiometricsRules } from "@/lib/validation";
 
 /**
  * Campos de la ficha biométrica (sin <form>): los reusan el alta obligatoria, la edición del perfil y
@@ -15,15 +16,17 @@ export function BiometricsFields({
   values,
   errors,
   today,
+  rules,
 }: {
   values?: Partial<Record<BiometricsField, string>>;
   errors?: Partial<Record<BiometricsField, string>>;
   /** "Hoy" del servidor (APP_TIME_ZONE), en ISO: el rango de fechas no depende del reloj del navegador. */
   today: string;
+  rules: BiometricsRules;
 }) {
   const t = useT();
   const genderOptions = GENDERS.map((gender) => ({ value: gender, label: t.athleteProfile.gender[gender] }));
-  const bounds = birthDateBounds(new Date(`${today}T00:00:00`));
+  const bounds = birthDateBounds(new Date(`${today}T00:00:00`), rules);
   return (
     <>
       <SegmentedControl
@@ -52,6 +55,7 @@ export function BiometricsFields({
         required
         defaultValue={values?.height_cm}
         error={errors?.height_cm}
+        hint={format(t.biometrics.heightHint, { min: rules.minHeightCm, max: rules.maxHeightCm })}
       />
       <TextField
         name="weight_kg"
@@ -61,6 +65,7 @@ export function BiometricsFields({
         required
         defaultValue={values?.weight_kg}
         error={errors?.weight_kg}
+        hint={format(t.biometrics.weightHint, { min: rules.minWeightKg, max: rules.maxWeightKg })}
       />
     </>
   );

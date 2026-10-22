@@ -4,15 +4,11 @@ import { useActionState } from "react";
 
 import { formStyles as styles } from "@/components/app/page-classes";
 import { Button } from "@/components/ui/Button";
+import { CheckboxField } from "@/components/ui/CheckboxField";
 import { FormAlert } from "@/components/ui/FormAlert";
 import type { ConsentField } from "@/lib/actions/analyses";
 import type { FormState } from "@/lib/form-state";
 import { useT } from "@/lib/i18n/client";
-
-const fieldStyles = {
-  checkbox: "flex cursor-pointer items-start gap-3 [&_input]:mt-0.5 [&_input]:size-5 [&_input]:flex-none [&_input]:accent-accent",
-  error: "text-sm font-medium text-ink",
-};
 
 type ConsentAction = (previous: FormState<ConsentField>, formData: FormData) => Promise<FormState<ConsentField>>;
 
@@ -22,11 +18,9 @@ export function ConsentForm({ action }: { action: ConsentAction }) {
   return (
     <form action={formAction} className={styles.form} noValidate>
       {state.error && <FormAlert tone="error">{state.error}</FormAlert>}
-      <label className={fieldStyles.checkbox}>
-        <input type="checkbox" name="accept" aria-invalid={state.fieldErrors?.accept ? true : undefined} />
-        <span>{t.consent.checkbox}</span>
-      </label>
-      {state.fieldErrors?.accept && <p className={fieldStyles.error}>{state.fieldErrors.accept}</p>}
+      <CheckboxField name="accept" error={state.fieldErrors?.accept}>
+        {t.consent.checkbox}
+      </CheckboxField>
       <Button type="submit" block pending={pending} pendingLabel={t.common.working} className={styles.submit}>
         {t.consent.continue}
       </Button>

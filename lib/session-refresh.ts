@@ -1,6 +1,5 @@
-import { apiRequest } from "./api";
-import { API_PATHS } from "./api-paths";
-import { ApiError } from "./errors";
+import { authGateway } from "./grpc/auth-gateway";
+import { Code, rpcCode } from "./grpc/errors";
 import type { TokenPair } from "./types";
 
 export type RefreshResult =
@@ -12,12 +11,8 @@ export type RefreshResult =
 
 export async function refreshSession(refreshToken: string): Promise<RefreshResult> {
   try {
-    const tokens = await apiRequest<TokenPair>(API_PATHS.refresh, {
-      method: "POST",
-      body: { refresh_token: refreshToken },
-    });
-    return { status: "refreshed", tokens };
+    return { status: "refreshed", tokens: await authGateway().refresh(refreshToken) };
   } catch (error) {
-    return error instanceof ApiError && error.status === 401 ? { status: "revoked" } : { status: "unavailable" };
+    return rpcCode(error) === Code.Unauthenticated ? { status: "revoked" } : { status: "unavailable" };
   }
 }

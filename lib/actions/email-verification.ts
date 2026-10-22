@@ -2,13 +2,12 @@
 
 import { redirect } from "next/navigation";
 
-import { apiRequest } from "../api";
-import { API_PATHS } from "../api-paths";
 import { errorMessage, validationMessages } from "../errors";
 import { FORM_INTENT, formText, type FormState } from "../form-state";
+import { authGateway } from "../grpc/auth-gateway";
 import { getT } from "../i18n/server";
 import { ROUTES } from "../routes";
-import { storeSession } from "../session";
+import { requestAiWakeOnEntry, storeSession } from "../session";
 import type { TokenPair } from "../types";
 import { collectErrors, validateEmail, validateOtp } from "../validation";
 
@@ -27,7 +26,7 @@ export async function verifyEmail(
     const errors = collectErrors({ email: validateEmail(email) });
     if (errors) return { fieldErrors: validationMessages(t, errors), values };
     try {
-      await apiRequest(API_PATHS.requestVerificationCode, { method: "POST", body: { email } });
+      await authGateway().requestVerificationCode(email);
     } catch (error) {
       return { error: errorMessage(t, error), values };
     }
@@ -40,12 +39,13 @@ export async function verifyEmail(
 
   let tokens: TokenPair;
   try {
-    tokens = await apiRequest<TokenPair>(API_PATHS.verifyEmail, { method: "POST", body: { email, code } });
+    tokens = await authGateway().verifyEmail(email, code);
   } catch (error) {
     return { error: errorMessage(t, error), values };
   }
 
-  // Verificar el correo ya inicia sesión: el backend devuelve el par de tokens
+  // Verificar el correo ya inicia sesión: el backend devuelve la sesión
   await storeSession(tokens);
+  await requestAiWakeOnEntry();
   redirect(ROUTES.home);
 }

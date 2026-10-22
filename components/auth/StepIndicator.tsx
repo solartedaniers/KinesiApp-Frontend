@@ -10,12 +10,13 @@ export function StepIndicator({ current, total, label }: { current: number; tota
         aria-valuemax={total}
         aria-valuenow={current}
         aria-valuetext={label}
+        aria-label={label}
       >
         {Array.from({ length: total }, (_, index) => (
-          <span key={index} className={`h-1 rounded-full transition-colors duration-fast ${index < current ? "bg-accent" : "bg-line"}`} />
+          <span key={index} className={`h-1 rounded-full transition-colors duration-fast ${index < current ? "bg-accent shadow-[0_0_8px_var(--kin-accent)]" : "bg-sunken"}`} />
         ))}
       </div>
-      <p className="text-sm font-medium text-accent">{label}</p>
+      <p className="text-sm font-semibold text-accent" aria-hidden>{label}</p>
     </div>
   );
 }

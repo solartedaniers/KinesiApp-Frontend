@@ -1,33 +1,32 @@
 "use server";
 
-import { refresh } from "next/cache";
-
-import { API_PATHS } from "../api-paths";
-import { errorMessage, validationMessages } from "../errors";
-import { formText, type FormState } from "../form-state";
+import type { ChatEvent } from "../analysis-events";
+import { chatGateway } from "../grpc/chat-gateway";
+import { rpcReason } from "../grpc/errors";
 import { getT } from "../i18n/server";
+import { validationMessage } from "../errors";
 import { validateChatMessage } from "../validation";
-import { authedMutation } from "./request";
 
-export type ChatField = "content";
-
-/** Envía un mensaje al asistente sobre el análisis (ligada con `.bind(null, analysisId)`). */
-export async function sendChatMessage(
-  analysisId: number,
-  _previous: FormState<ChatField>,
-  formData: FormData,
-): Promise<FormState<ChatField>> {
-  const t = await getT();
-  const content = formText(formData, "content").trim();
-  const error = validateChatMessage(content);
-  if (error) return { fieldErrors: validationMessages(t, { content: error }), values: { content } };
-
+async function* guarded(events: () => AsyncIterable<ChatEvent>): AsyncGenerator<ChatEvent> {
   try {
-    await authedMutation(API_PATHS.chatMessages(analysisId), { method: "POST", body: { content } });
-  } catch (failure) {
-    // El texto se repone para no perderlo si el asistente no respondió (429, 503)
-    return { error: errorMessage(t, failure), values: { content } };
+    yield* events();
+  } catch (error) {
+    // La pregunta ya guardada sigue en el hilo: el cliente muestra el error y deja preguntar otra vez
+    yield { kind: "failed", reason: rpcReason(error) };
   }
-  refresh();
-  return {};
+}
+
+/** Primera explicación del resultado, por fragmentos. Idempotente: si ya existe llega en un solo mensaje. */
+export async function startConversation(analysisId: string): Promise<AsyncIterable<ChatEvent>> {
+  return guarded(() => chatGateway().start(analysisId));
+}
+
+export type ChatSendResult = { events: AsyncIterable<ChatEvent> } | { error: string };
+
+/** Una pregunta y su respuesta en streaming. Valido el texto aquí también: el navegador no es de fiar. */
+export async function sendChatMessage(analysisId: string, content: string): Promise<ChatSendResult> {
+  const text = content.trim();
+  const invalid = validateChatMessage(text);
+  if (invalid) return { error: validationMessage(await getT(), invalid) };
+  return { events: guarded(() => chatGateway().send(analysisId, text)) };
 }

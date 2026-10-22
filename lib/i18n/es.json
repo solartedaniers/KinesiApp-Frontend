@@ -4,25 +4,144 @@
     "description": "Análisis de video del salto y la sentadilla para detectar riesgo de lesión de rodilla.",
     "disclaimer": "KinesiApp es una herramienta de apoyo y no reemplaza la valoración de un profesional de la salud."
   },
-  "landing": {
-    "title": "Detecta el riesgo de lesión antes de que aparezca",
-    "lead": "Graba un salto o una sentadilla y recibe una estimación del riesgo de lesión de rodilla a partir de los ángulos articulares del movimiento.",
+  "site": {
+    "home": "Inicio de KinesiApp",
+    "guides": "Guías de grabación",
     "signIn": "Iniciar sesión",
     "createAccount": "Crear cuenta",
-    "features": [
+    "legal": "Consentimiento de video",
+    "sampleData": "Ejemplo con datos de muestra"
+  },
+  "landing": {
+    "metaTitle": "KinesiApp · Análisis biomecánico del salto y la sentadilla",
+    "metaDescription": "Graba un salto o una sentadilla de perfil o de frente y mide los ángulos de rodilla y tronco, la rodilla hacia adentro, las repeticiones y el riesgo de lesión de rodilla, con un asistente que explica el resultado.",
+    "title": "Mide cómo se mueven tus rodillas en cada salto",
+    "lead": "Graba un salto o una sentadilla de perfil o de frente. KinesiApp sigue tus articulaciones cuadro a cuadro y te muestra ángulos, repeticiones y el riesgo de lesión de rodilla, con un asistente que te explica cada número.",
+    "signIn": "Ya tengo cuenta",
+    "createAccount": "Crear cuenta gratis",
+    "heroCaption": "Salto con contramovimiento: cada silueta es una fase y la curva es la trayectoria del centro de gravedad.",
+    "stepsTitle": "Del video a la lectura en tres pasos",
+    "steps": [
       {
-        "title": "Deportistas",
-        "body": "Registra tus movimientos y sigue la evolución de tu riesgo."
+        "title": "Elige el movimiento",
+        "body": "Salto vertical o sentadilla: cada uno se analiza con sus propias fases y umbrales."
       },
       {
-        "title": "Entrenadores",
-        "body": "Gestiona a tu equipo y revisa los análisis de cada deportista."
+        "title": "Graba de perfil o de frente",
+        "body": "Cámara fija, a unos tres metros y a la altura de la cadera. De perfil se miden la flexión y el tronco; de frente, si cada rodilla se va hacia adentro. Videos cortos: la guía de cada movimiento indica el límite."
       },
       {
-        "title": "En cualquier dispositivo",
-        "body": "Funciona en el navegador: puedes acceder desde tu celular o desde tu computador."
+        "title": "Lee tu movimiento",
+        "body": "Ángulos, repeticiones y riesgo en una sola pantalla, y un chat que responde tus dudas sobre el resultado."
       }
+    ],
+    "measuresTitle": "Lo que mide",
+    "measuresLead": "Cada señal tiene su color, y es el mismo en el esqueleto, en las gráficas y en los medidores.",
+    "measures": {
+      "knee": {
+        "name": "Flexión de rodilla",
+        "body": "Cuánto se dobla la rodilla en cada repetición y si llega a la zona objetivo."
+      },
+      "trunk": {
+        "name": "Inclinación del tronco",
+        "body": "Cuánto se adelanta el tronco: compensar con la espalda carga más la rodilla."
+      },
+      "center": {
+        "name": "Centro de gravedad",
+        "body": "Su trayectoria muestra si bajas y subes en línea o te desplazas."
+      },
+      "risk": {
+        "name": "Riesgo de lesión",
+        "body": "Una estimación de bajo, moderado o alto a partir del patrón de todas las repeticiones."
+      }
+    },
+    "rolesTitle": "Para quien entrena y para quien acompaña",
+    "roles": {
+      "athlete": {
+        "title": "Deportistas",
+        "body": "Graba tus movimientos, compara cada intento con los anteriores y descarga el informe en PDF."
+      },
+      "coach": {
+        "title": "Entrenadores",
+        "body": "Arma tus equipos, revisa los análisis de cada deportista y compáralos lado a lado."
+      }
+    },
+    "guidesTitle": "Antes de grabar",
+    "guidesLead": "Una guía corta por movimiento: dónde poner la cámara y cómo ejecutarlo para que la medición sea confiable. Y cómo cuidamos tu video."
+  },
+  "guide": {
+    "metaDescription": "Cómo ubicar la cámara y ejecutar {movement} para que KinesiApp mida bien tus ángulos articulares.",
+    "eyebrow": "Guía de grabación",
+    "setupTitle": "Prepara la cámara",
+    "setup": [
+      "De lado o de frente, nunca en diagonal: la cámara mira tu costado o tu pecho.",
+      "Fija, en un trípode o apoyada: nada de seguir el movimiento con la mano.",
+      "A unos tres metros y a la altura de la cadera, con todo el cuerpo en cuadro, de los pies a la cabeza.",
+      "Buena luz, fondo despejado y ropa que deje ver la rodilla y la cadera."
+    ],
+    "diagram": {
+      "label": "Esquema: la cámara a unos tres metros, de perfil y a la altura de la cadera.",
+      "distance": "≈ 3 m",
+      "height": "altura de cadera"
+    },
+    "limitsTitle": "Límites del video",
+    "limitDuration": "Hasta {seconds} segundos por video. La grabación se detiene sola al llegar.",
+    "limitSize": "Archivos de hasta {size} MB.",
+    "limitsNote": "Estos límites los fija el servidor y esta página se actualiza sola cuando cambian.",
+    "executionTitle": "Cómo ejecutarlo",
+    "mistakesTitle": "Lo que arruina la medición",
+    "phasesLabel": "Fases de {movement}, de izquierda a derecha, con la trayectoria del centro de gravedad.",
+    "start": "Grabar ahora",
+    "other": "Ver la guía de {movement}",
+    "back": "Volver al inicio",
+    "movements": {
+      "jump": {
+        "name": "el salto",
+        "title": "Cómo grabar tu salto",
+        "lead": "Un salto vertical con contramovimiento: bajas, te impulsas con los brazos y aterrizas en el mismo lugar.",
+        "execution": [
+          "Empieza de pie y quieto un segundo, de perfil a la cámara.",
+          "Baja rápido doblando rodillas y cadera, y lleva los brazos atrás.",
+          "Salta lo más alto que puedas llevando los brazos arriba.",
+          "Aterriza con las puntas primero y amortigua doblando las rodillas.",
+          "Puedes hacer varios saltos en el mismo video, con una pausa corta entre cada uno."
+        ],
+        "mistakes": [
+          "Salir del cuadro en el vuelo: deja espacio arriba de la cabeza.",
+          "Girar el cuerpo hacia la cámara al aterrizar.",
+          "Grabar en cámara lenta o con un filtro que recorte el video."
+        ]
+      },
+      "squat": {
+        "name": "la sentadilla",
+        "title": "Cómo grabar tu sentadilla",
+        "lead": "Una sentadilla libre, sin peso: bajas con control hasta tu profundidad cómoda y vuelves a subir.",
+        "execution": [
+          "Pies al ancho de la cadera y brazos al frente para equilibrarte.",
+          "Baja empujando la cadera atrás, con el pecho arriba.",
+          "Llega hasta donde puedas sin despegar los talones.",
+          "Sube sin rebotar y repite a un ritmo constante."
+        ],
+        "mistakes": [
+          "Grabar en diagonal: ni de lado ni de frente, los ángulos salen aproximados.",
+          "Que otra persona cruce el cuadro durante la serie.",
+          "Cortar el video antes de la última subida."
+        ]
+      }
+    },
+    "viewsTitle": "De lado o de frente",
+    "views": [
+      "De lado se mide cuánto se doblan la rodilla y el tronco.",
+      "De frente se mide si la rodilla se va hacia adentro (valgo) al aterrizar o al bajar, en cada pierna.",
+      "KinesiApp detecta sola la vista. Si grabas en diagonal, el análisis avisa que es aproximado."
     ]
+  },
+  "offline": {
+    "metaTitle": "Sin conexión",
+    "title": "Sin conexión",
+    "body": "No pudimos cargar esta página porque no hay internet. Tus grabaciones y análisis están guardados en el servidor; no se pierde nada.",
+    "retry": "Reintentar",
+    "available": "Mientras tanto puedes leer las guías de grabación que ya visitaste."
   },
   "authShell": {
     "tagline": "Tu movimiento, medido con precisión.",
@@ -67,7 +186,8 @@
     "noAccount": "¿Aún no tienes una cuenta?",
     "register": "Regístrate",
     "verifyNow": "Verificar mi correo",
-    "registerNow": "Crear una cuenta con este correo"
+    "registerNow": "Crear una cuenta con este correo",
+    "demoNotice": "Cuenta de demostración precargada: solo da clic en Iniciar sesión, o escribe otra cuenta."
   },
   "register": {
     "metaTitle": "Crear cuenta",
@@ -77,7 +197,9 @@
     "pending": "Creando cuenta…",
     "hasAccount": "¿Ya tienes una cuenta?",
     "signIn": "Inicia sesión",
-    "verifyNow": "Ir a verificar mi correo"
+    "verifyNow": "Ir a verificar mi correo",
+    "videoConsent": "Acepto el manejo de mis videos para el análisis de movimiento.",
+    "videoConsentLink": "Leer el consentimiento"
   },
   "session": {
     "logout": "Cerrar sesión"
@@ -87,7 +209,6 @@
     "working": "Procesando…",
     "save": "Guardar cambios",
     "saving": "Guardando…",
-    "edit": "Editar",
     "delete": "Eliminar",
     "back": "Volver"
   },
@@ -101,9 +222,9 @@
     "teams": "Equipos",
     "users": "Usuarios",
     "assignments": "Coaches",
-    "menu": "Menú",
-    "openMenu": "Abrir el menú",
-    "closeMenu": "Cerrar el menú"
+    "capture": "Grabar",
+    "account": "Tu cuenta",
+    "openAccount": "Abrir el menú de tu cuenta"
   },
   "home": {
     "greeting": "Hola, {name}",
@@ -131,11 +252,61 @@
       "moderate": "Moderado",
       "high": "Alto"
     },
-    "riskValue": "{value} de riesgo",
-    "noScore": "Sin puntaje",
-    "open": "Ver detalle de la grabación del {date}",
     "listEmpty": "Todavía no hay grabaciones.",
-    "listEmptyHint": "Cuando se analice un salto o una sentadilla, aparecerá aquí."
+    "listEmptyHint": "Cuando se analice un salto o una sentadilla, aparecerá aquí.",
+    "kneeTarget": {
+      "between": "{low}–{high}",
+      "from": "{low} o más",
+      "upTo": "hasta {high}"
+    },
+    "kneeZones": {
+      "jump": {
+        "under": "Rígida",
+        "target": "En el objetivo",
+        "over": "Profunda"
+      },
+      "squat": {
+        "under": "Corta",
+        "target": "En el objetivo",
+        "over": "Por encima"
+      }
+    },
+    "rangesNote": "Rangos orientativos de la IA; no sustituyen la evaluación de un profesional.",
+    "kneeMedian": "Mediana de los picos de rodilla",
+    "repetitions": "Repeticiones",
+    "noKnee": "Sin medida de rodilla",
+    "riskSteps": "Nivel {step} de 3",
+    "sides": {
+      "left": "izquierda",
+      "right": "derecha"
+    },
+    "riskJoint": {
+      "knee_flexion": "Flexión de la rodilla {side}",
+      "trunk_inclination": "Inclinación del tronco",
+      "knee_valgus": "Rodilla {side} hacia adentro"
+    },
+    "riskJointBoth": {
+      "knee_flexion": "Flexión de rodilla",
+      "trunk_inclination": "Inclinación del tronco",
+      "knee_valgus": "Rodillas hacia adentro"
+    },
+    "view": {
+      "side": "De lado",
+      "front": "De frente",
+      "inconclusive": "No concluyente"
+    },
+    "viewLead": {
+      "side": "Se midió la flexión de rodilla y la inclinación del tronco. Para medir si la rodilla se va hacia adentro, graba de frente.",
+      "front": "Se midió si cada rodilla se va hacia adentro (valgo) al aterrizar o en el fondo. Para medir la flexión de rodilla y el tronco, graba de lado.",
+      "inconclusive": "La cámara no estaba claramente de lado ni de frente: los ángulos son aproximados y no se midió si la rodilla se va hacia adentro. Para medirlo, graba de frente."
+    },
+    "valgus": {
+      "left": "Valgo de la rodilla izquierda",
+      "right": "Valgo de la rodilla derecha"
+    },
+    "valgusAsymmetry": "Diferencia entre rodillas",
+    "valgusNote": "Ángulo de proyección frontal: positivo es la rodilla hacia adentro y negativo hacia afuera. Mediana de los picos por repetición; umbrales orientativos, sin validación clínica.",
+    "viewStatus": "Vista detectada: {view}."
   },
   "analysisDetail": {
     "metaTitle": "Grabación",
@@ -157,22 +328,47 @@
     "failedTitle": "No se pudo completar el análisis",
     "failedBody": "El video no se pudo procesar. Intenta grabarlo de nuevo con buena luz y de cuerpo completo.",
     "angles": "Ángulos articulares",
-    "anglesEmpty": "Este análisis no tiene mediciones de ángulos.",
     "peak": "Máximo: {value}",
     "timeline": "Línea de tiempo del movimiento",
-    "timelineHint": "Las marcas señalan el ángulo máximo de cada articulación. Tócalas para ir a ese instante.",
-    "peakMarker": "{joint}: {value} en {time}",
-    "liveAngles": "Ángulos en este instante",
     "delete": "Eliminar grabación",
     "deleteTitle": "¿Eliminar esta grabación?",
     "deleteBody": "Se borrarán el video, el análisis y la conversación con el asistente. Esta acción no se puede deshacer.",
     "movement": "Movimiento",
     "recordedAt": "Fecha",
-    "status": "Estado"
+    "status": "Estado",
+    "progress": {
+      "label": "Progreso del análisis",
+      "stage": "Etapa {index} de {total}: {name}",
+      "done": "Análisis listo",
+      "stages": {
+        "queued": "En cola",
+        "downloading_video": "Descargando el video",
+        "extracting_pose": "Detectando el esqueleto",
+        "detecting_repetitions": "Contando repeticiones",
+        "scoring_risk": "Calculando el riesgo"
+      },
+      "waking": "Encendiendo la IA…",
+      "coldStart": "La IA estaba en reposo. La primera vez tarda un poco más en arrancar; después el análisis sigue solo.",
+      "frames": "{done} de {total} cuadros"
+    },
+    "title": "{movement} del {date}",
+    "preparing": "Preparando la línea de tiempo…",
+    "peakTrunk": "Inclinación máxima del tronco",
+    "inTarget": "{count} de {total} en el rango sin riesgo",
+    "risk": "Riesgo de la serie",
+    "chat": "Preguntarle a la IA",
+    "timelineTitle": "Línea de tiempo sincronizada",
+    "timelineLead": "El video, las lecturas y la gráfica comparten el mismo cabezal. Toca una repetición para saltar a ella.",
+    "retry": "Reintentar",
+    "focusTitle": "Dónde está el riesgo",
+    "focusAt": "Repetición {index}: {joint}, {degrees} a los {time}.",
+    "focusNone": "Ninguna repetición llegó a riesgo moderado o alto.",
+    "focusPose": "Esqueleto en el instante del riesgo: {joint}, {degrees}"
   },
   "joints": {
     "knee_flexion": "Flexión de rodilla",
-    "trunk_inclination": "Inclinación del tronco"
+    "trunk_inclination": "Inclinación del tronco",
+    "knee_valgus": "Rodilla hacia adentro (valgo)"
   },
   "capture": {
     "metaTitle": "Nueva grabación",
@@ -181,9 +377,6 @@
     "forAthlete": "Video de {name}. Se analizará como una grabación suya.",
     "newRecording": "Nueva grabación",
     "movement": "Movimiento",
-    "chooseVideo": "Grabar o elegir un video",
-    "changeVideo": "Cambiar el video",
-    "limitHint": "Un solo video, de hasta {max} MB.",
     "submit": "Subir y analizar",
     "uploading": "Subiendo video…",
     "progress": "Subido: {percent}",
@@ -193,14 +386,44 @@
       "items": [
         "Graba a 30 fps y sube el archivo original.",
         "Los pies dentro del cuadro durante todo el movimiento, también al aterrizar.",
-        "Cámara fija, de costado o a tres cuartos del deportista."
+        "Cámara fija: de lado mide la flexión; de frente, si la rodilla se va hacia adentro."
       ]
     },
     "errors": {
       "videoRequired": "Elige un video para continuar.",
       "videoInvalidType": "El archivo elegido no es un video.",
-      "videoTooLarge": "El video supera el máximo de {max} MB."
-    }
+      "videoTooLarge": "El video supera el máximo de {max} MB.",
+      "videoTooLong": "El video dura {seconds} segundos. Por favor, selecciona o recorta un clip de máximo {max} segundos para continuar.",
+      "videoUnreadable": "No pudimos leer la duración de este video. Prueba con otro archivo."
+    },
+    "lead": "Elige el movimiento, encuadra de lado o de frente y graba. La grabación se detiene sola a los {seconds} segundos.",
+    "movementLegend": "¿Qué movimiento vas a grabar?",
+    "hints": {
+      "jump": "Salto vertical con contramovimiento",
+      "squat": "Sentadilla libre, de lado o de frente"
+    },
+    "setup": "La cámara debe quedar fija, de lado o de frente, a unos tres metros y a la altura de la cadera.",
+    "frame": "Vista de la cámara",
+    "frameHint": "Que se vea el cuerpo entero, del pie a la cabeza",
+    "openCamera": "Encender la cámara",
+    "record": "Grabar",
+    "stop": "Detener",
+    "recording": "Grabando",
+    "limit": "Máximo {seconds} s",
+    "autoStopped": "La grabación se detuvo sola a los {seconds} segundos.",
+    "again": "Grabar otra vez",
+    "chooseFile": "Elegir un video",
+    "or": "¿Ya tienes el video?",
+    "cameraDenied": "No pudimos usar la cámara. Revisa el permiso del navegador o elige un video guardado.",
+    "noRecorder": "Este navegador no puede grabar aquí. Graba con la cámara del celular y elige el video.",
+    "reading": "Leyendo el video…",
+    "details": "Datos del video",
+    "duration": "Duración",
+    "resolution": "Resolución",
+    "container": "Formato",
+    "size": "Tamaño",
+    "uploadingLabel": "Subida del video",
+    "confirming": "Preparando el análisis…"
   },
   "consent": {
     "title": "Consentimiento para el video",
@@ -218,22 +441,16 @@
     "label": "Tu pregunta",
     "placeholder": "Escribe tu pregunta sobre este análisis…",
     "send": "Enviar",
-    "sending": "Enviando…",
     "thinking": "El asistente está escribiendo…",
     "roles": {
       "user": "Tú",
       "assistant": "Asistente"
     },
     "disclaimer": "El asistente explica el resultado del análisis de forma general. No reemplaza la valoración de un profesional de la salud.",
-    "preparing": "El asistente está preparando la explicación del resultado…"
-  },
-  "angleChart": {
-    "subtitle": "Ángulo a lo largo del movimiento.",
-    "pointLabel": "{time}: {value}",
-    "tableToggle": "Ver como tabla",
-    "time": "Tiempo",
-    "angle": "Ángulo",
-    "notEnough": "No hay suficientes mediciones para trazar la curva."
+    "preparing": "El asistente está preparando la explicación del resultado…",
+    "retry": "Reintentar",
+    "keptQuestion": "Tu pregunta sigue escrita: puedes reintentar ahora.",
+    "retryOpening": "Pedir la explicación de nuevo"
   },
   "stats": {
     "recordings": "Grabaciones",
@@ -243,24 +460,43 @@
     "averageRisk": "Riesgo promedio",
     "highestRisk": "Riesgo máximo",
     "highRiskCount": "Con riesgo alto",
-    "lastRecording": "Última grabación",
     "none": "Sin datos",
-    "empty": "Graba un movimiento para ver tus estadísticas."
-  },
-  "riskChart": {
-    "title": "Evolución del riesgo",
-    "subtitle": "Puntaje de riesgo de cada grabación procesada, en orden cronológico.",
-    "threshold": "Riesgo alto",
-    "pointLabel": "{date}: {value}",
-    "tableToggle": "Ver como tabla",
-    "date": "Fecha",
-    "score": "Riesgo",
-    "notEnough": "Se necesitan al menos dos grabaciones procesadas para mostrar la evolución."
+    "empty": "Graba un movimiento para ver tus estadísticas.",
+    "lead": "Tu riesgo promedio y el más alto, cómo cambió en el tiempo y dónde quedan tus rodillas en cada movimiento.",
+    "sessions": "Cada grabación procesada, en orden",
+    "trend": "Evolución del riesgo",
+    "kneeTitle": "Tus picos de rodilla por movimiento",
+    "kneeLead": "Mínimo, mediana y máximo de tus sesiones sobre el rango sin riesgo del último análisis de cada movimiento.",
+    "loading": "Cargando tus estadísticas…",
+    "emptyBody": "Cuando tengas análisis procesados verás aquí tus medidores y tu evolución.",
+    "group": {
+      "emptyBody": "Cuando haya análisis procesados verás aquí los medidores y la evolución del riesgo.",
+      "trendLabel": "Puntaje de riesgo de las últimas {count} sesiones, de {first} a {last}",
+      "trendEmptyBody": "Con dos análisis procesados verás cómo cambia el riesgo.",
+      "kneeTitle": "Picos de rodilla por movimiento",
+      "kneeLead": "Mínimo, mediana y máximo de las sesiones sobre el rango sin riesgo del último análisis de cada movimiento."
+    }
   },
   "athleteHome": {
     "summary": "Resumen",
     "recent": "Grabaciones recientes",
-    "seeAll": "Ver todas las grabaciones"
+    "seeAll": "Ver todas las grabaciones",
+    "loading": "Cargando tus análisis…",
+    "lead": {
+      "jump": "Tu último salto quedó dentro del rango sin riesgo en {count} de {total} repeticiones.",
+      "squat": "Tu última sentadilla quedó dentro del rango sin riesgo en {count} de {total} repeticiones.",
+      "risk": "Tu último análisis terminó con {risk}.",
+      "pending": "Tu última grabación se está analizando.",
+      "empty": "Graba tu primer salto o sentadilla y aquí verás tus medidas."
+    },
+    "last": "Último análisis",
+    "openAnalysis": "Ver el análisis",
+    "trend": "Tu riesgo en el tiempo",
+    "trendLabel": "Puntaje de riesgo de tus últimas {count} sesiones, de {first} a {last}",
+    "trendLast": "Última: {score}",
+    "trendEmptyTitle": "Todavía no hay tendencia",
+    "trendEmptyBody": "Con dos análisis procesados verás cómo cambia tu riesgo.",
+    "emptyTitle": "Todavía no hay análisis"
   },
   "onboarding": {
     "metaTitle": "Completa tu ficha",
@@ -275,6 +511,8 @@
     "birthDateHint": "Tu edad se calcula sola a partir de esta fecha.",
     "heightCm": "Estatura (cm)",
     "weightKg": "Peso (kg)",
+    "heightHint": "En centímetros, entre {min} y {max} (ej.: 175).",
+    "weightHint": "En kilogramos, entre {min} y {max} (ej.: 72,5).",
     "submit": "Guardar ficha",
     "pending": "Guardando…",
     "saved": "Tu ficha se actualizó."
@@ -295,12 +533,9 @@
     "withAccount": "Con cuenta"
   },
   "coach": {
-    "teamSummary": "Tu equipo",
-    "athletes": "Deportistas",
     "athletesCount": "Deportistas",
     "rosterEmpty": "Todavía no tienes deportistas.",
     "rosterEmptyHint": "Crea deportistas sin cuenta con «Nuevo deportista», o espera a que un administrador te asigne deportistas con cuenta.",
-    "athletesSubtitle": "Administra los perfiles y consulta su actividad.",
     "newAthlete": "Nuevo deportista",
     "newAthleteTitle": "Nuevo deportista",
     "newAthleteSubtitle": "Completa los datos para crear un perfil.",
@@ -308,25 +543,31 @@
     "creatingAthlete": "Creando…",
     "editAthleteTitle": "Editar deportista",
     "editAthlete": "Editar ficha",
-    "uploadVideo": "Subir video",
     "deleteAthlete": "Eliminar deportista",
     "deleteAthleteTitle": "¿Eliminar a {name}?",
     "deleteAthleteBody": "Se borrarán también todas sus grabaciones y análisis. Esta acción no se puede deshacer.",
-    "accountAthleteHint": "Tiene cuenta propia: sus datos y sus videos los gestiona el propio deportista.",
-    "recordings": "{count} grabaciones",
+    "recordings": {
+      "one": "{count} grabación",
+      "other": "{count} grabaciones"
+    },
     "noRecordings": "Sin grabaciones",
-    "latestRisk": "Último riesgo",
-    "accountColumn": "Cuenta",
-    "openAthlete": "Ver ficha de {name}",
     "athleteMetaTitle": "Deportista",
     "backToTeam": "Volver a mis deportistas",
     "profile": "Ficha física",
     "recordingsTitle": "Grabaciones",
-    "teamStatsTitle": "Resumen del equipo",
-    "byAthleteTitle": "Riesgo promedio por deportista",
-    "byAthleteSubtitle": "Promedio de las grabaciones procesadas de cada deportista, de mayor a menor.",
-    "byAthleteEmpty": "Ningún deportista tiene grabaciones procesadas todavía.",
-    "athleteColumn": "Deportista"
+    "noRisk": "Sin análisis",
+    "noRiskLabel": "{name}: sin análisis procesados",
+    "latestRiskLabel": "Último riesgo de {name}: {value}",
+    "byRiskTitle": "Deportistas por su último riesgo",
+    "byRiskLead": "Del riesgo más alto al más bajo; los que todavía no tienen análisis van al final.",
+    "athletesLead": "Cada deportista con su último riesgo. Entra a su ficha para ver sus análisis, grabar o editarla.",
+    "analysesLead": "Las grabaciones de todos tus deportistas, de la más reciente a la más antigua.",
+    "statsLead": "Riesgo promedio y máximo, la evolución y los picos de rodilla de tus deportistas, de todos o de un equipo.",
+    "statsLoading": "Cargando las estadísticas…",
+    "analysesLoading": "Cargando las grabaciones…",
+    "record": "Grabar o subir video",
+    "recordOwnHint": "Tiene cuenta propia: graba sus videos desde su cuenta y aquí ves sus análisis.",
+    "athleteLoading": "Cargando sus análisis…"
   },
   "teams": {
     "name": "Nombre del equipo",
@@ -336,11 +577,13 @@
     "adminSubtitle": "Todos los equipos del sistema, de entrenadores y administradores.",
     "empty": "Todavía no hay equipos.",
     "emptyHint": "Crea uno con un nombre, por ejemplo «Sub 17», y después asígnale deportistas.",
-    "members": "{count} deportistas",
+    "members": {
+      "one": "{count} deportista",
+      "other": "{count} deportistas"
+    },
     "unknownOwner": "Sin dueño",
     "ownedBy": "Equipo de {name}",
     "back": "Volver a los equipos",
-    "rename": "Nombre",
     "renamed": "El nombre del equipo se actualizó.",
     "delete": "Eliminar equipo",
     "deleteTitle": "¿Eliminar el equipo {name}?",
@@ -352,39 +595,41 @@
     "removeMember": "Quitar",
     "noCandidates": "No hay deportistas para agregar.",
     "noCandidatesHint": "Primero crea deportistas o pide que te asignen deportistas con cuenta.",
-    "viewStats": "Ver estadísticas del equipo",
     "filterLabel": "Equipo",
     "allAthletes": "Todos mis deportistas",
-    "applyFilter": "Aplicar",
-    "showingTeam": "Mostrando sólo el equipo {name}.",
     "byTeamTitle": "Riesgo promedio por equipo",
     "byTeamSubtitle": "Promedio de las grabaciones procesadas de los deportistas de cada equipo.",
-    "byTeamEmpty": "Ningún equipo tiene grabaciones procesadas todavía."
+    "editName": "Editar el nombre del equipo",
+    "editNameHint": "Enter guarda · Escape cancela",
+    "namePlaceholder": "Por ejemplo, Sub 17",
+    "logo": {
+      "add": "Subir logo",
+      "change": "Cambiar logo",
+      "remove": "Quitar logo"
+    },
+    "addTitle": "Agregar deportistas",
+    "allIn": "Todos los deportistas disponibles ya están en este equipo.",
+    "membersEmpty": "Este equipo todavía no tiene deportistas",
+    "membersEmptyHint": "Agrégalos desde la lista de abajo.",
+    "record": "Grabar o subir",
+    "recordFor": "Grabar o subir un video de {name}",
+    "recordOwn": "Graba desde su cuenta",
+    "addMemberLabel": "Agregar a {name} al equipo",
+    "removeMemberLabel": "Quitar a {name} del equipo",
+    "statsTitle": "Estadísticas del equipo",
+    "recentTitle": "Análisis recientes del equipo",
+    "loading": "Cargando los deportistas y las estadísticas del equipo…"
   },
   "admin": {
-    "summary": "Resumen del sistema",
     "users": "Usuarios",
-    "coaches": "Entrenadores",
     "athletes": "Deportistas",
     "unassigned": "Sin entrenador",
-    "pendingVerification": "Sin verificar",
     "shortcuts": "Accesos rápidos",
     "manageUsers": "Gestionar usuarios",
     "manageAssignments": "Ver asignaciones de entrenador",
     "manageTeams": "Ver equipos",
     "usersSubtitle": "Todas las cuentas del sistema. Cambia el rol de una cuenta o desactívala para que no pueda iniciar sesión.",
     "assignmentsSubtitle": "Entrenador de cada deportista. Al cambiarlo, el deportista sale de los equipos del entrenador anterior.",
-    "columns": {
-      "name": "Nombre",
-      "email": "Correo",
-      "role": "Rol",
-      "status": "Estado",
-      "createdAt": "Alta",
-      "actions": "Acciones",
-      "athlete": "Deportista",
-      "type": "Tipo",
-      "coach": "Entrenador"
-    },
     "apply": "Guardar",
     "roleFor": "Rol de {name}",
     "coachFor": "Entrenador de {name}",
@@ -401,7 +646,7 @@
     "noCoach": "Sin entrenador",
     "usersEmpty": "No hay usuarios registrados.",
     "athletesEmpty": "No hay perfiles de deportista.",
-    "unassignedFirst": "Los deportistas sin entrenador aparecen primero."
+    "since": "Alta: {date}"
   },
   "profile": {
     "title": "Perfil",
@@ -504,38 +749,50 @@
     "birthDateInFuture": "La fecha de nacimiento debe ser anterior a hoy.",
     "ageOutOfRange": "La edad debe estar entre {min} y {max} años.",
     "invalidNumber": "Ingresa un número, por ejemplo 72,5.",
-    "heightOutOfRange": "Ingresa una estatura entre 1 y {max} cm.",
-    "weightOutOfRange": "Ingresa un peso entre 1 y {max} kg."
+    "heightOutOfRange": "La estatura va en centímetros, entre {min} y {max} (ej.: 175).",
+    "weightOutOfRange": "El peso va en kilogramos, entre {min} y {max} (ej.: 72,5)."
   },
   "errors": {
-    "generic": "Ocurrió un error. Intenta de nuevo.",
-    "network": "No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.",
-    "validation_error": "Revisa los datos ingresados.",
-    "invalid_credentials": "Correo o contraseña incorrectos.",
-    "email_not_registered": "No hay ninguna cuenta con ese correo.",
-    "email_domain_undeliverable": "El dominio de ese correo no existe o no recibe correos. Revisa que esté bien escrito.",
-    "account_disabled": "Tu cuenta está deshabilitada.",
-    "email_not_verified": "Verifica tu correo antes de iniciar sesión.",
-    "invalid_otp": "El código ingresado no es válido.",
-    "invalid_refresh_token": "Tu sesión expiró. Inicia sesión de nuevo.",
-    "email_already_registered": "Ese correo ya está registrado.",
-    "email_delivery_failed": "No pudimos enviar el correo. Inténtalo de nuevo en unos momentos.",
-    "password_reused": "La nueva contraseña debe ser distinta de la actual.",
-    "invalid_current_password": "Tu contraseña actual es incorrecta.",
-    "forbidden": "No tienes permiso para hacer esto.",
-    "not_found": "No encontramos lo que buscabas.",
-    "invalid_video": "El archivo no es un video válido.",
-    "video_too_large": "El video supera el tamaño máximo permitido.",
-    "storage_unavailable": "No pudimos guardar el archivo en este momento. Inténtalo de nuevo en unos minutos.",
-    "consent_required": "Debes aceptar el consentimiento de video antes de subir una grabación.",
-    "analysis_not_processed": "El asistente estará disponible cuando termine el análisis.",
-    "chat_rate_limited": "Hiciste muchas preguntas seguidas. Espera un momento antes de enviar otra.",
-    "assistant_unavailable": "El asistente no está disponible en este momento. Inténtalo más tarde.",
-    "team_name_taken": "Ya tienes un equipo con ese nombre.",
-    "invalid_team_member": "Ese deportista no puede estar en este equipo.",
-    "cannot_modify_own_account": "No puedes cambiar el rol ni el estado de tu propia cuenta.",
-    "coach_has_athletes": "Este entrenador todavía tiene deportistas. Reasígnalos antes de cambiarle el rol.",
-    "invalid_role_assignment": "Ese usuario no tiene el rol necesario para esta asignación."
+    "GENERIC": "Ocurrió un error. Intenta de nuevo.",
+    "NETWORK": "No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.",
+    "BAD_REQUEST": "Revisa los datos ingresados.",
+    "INVALID_CREDENTIALS": "Correo o contraseña incorrectos.",
+    "EMAIL_NOT_REGISTERED": "No hay ninguna cuenta con ese correo.",
+    "EMAIL_DOMAIN_UNDELIVERABLE": "El dominio de ese correo no existe o no recibe correos. Revisa que esté bien escrito.",
+    "ACCOUNT_DISABLED": "Tu cuenta está deshabilitada.",
+    "EMAIL_NOT_VERIFIED": "Verifica tu correo antes de iniciar sesión.",
+    "INVALID_OTP": "El código ingresado no es válido.",
+    "INVALID_REFRESH_TOKEN": "Tu sesión expiró. Inicia sesión de nuevo.",
+    "EMAIL_ALREADY_REGISTERED": "Ese correo ya está registrado.",
+    "EMAIL_DELIVERY_FAILED": "No pudimos enviar el correo. Inténtalo de nuevo en unos momentos.",
+    "PASSWORD_REUSED": "La nueva contraseña debe ser distinta de la actual.",
+    "INVALID_CURRENT_PASSWORD": "Tu contraseña actual es incorrecta.",
+    "FORBIDDEN": "No tienes permiso para hacer esto.",
+    "NOT_FOUND": "No encontramos lo que buscabas.",
+    "INVALID_VIDEO": "El archivo no es un video válido.",
+    "VIDEO_TOO_LARGE": "El video supera el tamaño máximo permitido.",
+    "STORAGE_UNAVAILABLE": "No pudimos guardar el archivo en este momento. Inténtalo de nuevo en unos minutos.",
+    "CONSENT_REQUIRED": "Debes aceptar el consentimiento de video antes de subir una grabación.",
+    "ANALYSIS_NOT_PROCESSED": "El asistente estará disponible cuando termine el análisis.",
+    "CHAT_RATE_LIMITED": "Hiciste muchas preguntas seguidas. Espera un momento antes de enviar otra.",
+    "ASSISTANT_UNAVAILABLE": "El asistente no pudo responder esta vez.",
+    "ASSISTANT_BUSY": "El asistente está ocupado, intenta en un minuto.",
+    "ASSISTANT_DAILY_LIMIT": "Alcanzaste el límite de hoy, vuelve mañana.",
+    "TEAM_NAME_TAKEN": "Ya tienes un equipo con ese nombre.",
+    "INVALID_TEAM_MEMBER": "Ese deportista no puede estar en este equipo.",
+    "CANNOT_MODIFY_OWN_ACCOUNT": "No puedes cambiar el rol ni el estado de tu propia cuenta.",
+    "COACH_HAS_ATHLETES": "Este entrenador todavía tiene deportistas. Reasígnalos antes de cambiarle el rol.",
+    "INVALID_ROLE_ASSIGNMENT": "Ese usuario no tiene el rol necesario para esta asignación.",
+    "UNAUTHORIZED": "Tu sesión expiró. Inicia sesión de nuevo.",
+    "VIDEO_TOO_LONG": "El video supera la duración máxima permitida.",
+    "UPLOAD_NOT_FOUND": "No encontramos el archivo subido. Intenta subirlo de nuevo.",
+    "INVALID_IMAGE": "La imagen no es válida o supera el tamaño máximo.",
+    "VIDEO_UNREADABLE": "No pudimos leer el video. Prueba con otra grabación.",
+    "NO_MOVEMENT_DETECTED": "No detectamos el movimiento en el video. Graba de perfil y con el cuerpo completo a la vista.",
+    "AI_UNAVAILABLE": "La IA no respondió a tiempo. Inténtalo de nuevo en unos minutos.",
+    "AI_BUSY": "La IA está ocupada con otro análisis. Reintentaremos en breve.",
+    "PROFILE_ALREADY_EXISTS": "Ya completaste tu ficha de deportista.",
+    "CONFLICT": "Esa operación choca con el estado actual. Recarga la página e inténtalo de nuevo."
   },
   "preferences": {
     "language": "Idioma",
@@ -543,6 +800,7 @@
       "es": "Español",
       "en": "English"
     },
+    "changingLanguage": "Cambiando el idioma…",
     "theme": "Tema",
     "themeNames": {
       "system": "Sistema",
@@ -551,20 +809,302 @@
     }
   },
   "report": {
-    "export": "Exportar a PDF",
     "download": "Descargar PDF",
-    "back": "Volver al análisis",
-    "printHint": "En el diálogo que se abre, elige «Guardar como PDF» como destino.",
     "fileTitle": "Informe de análisis {date}",
     "title": "Informe del análisis de movimiento",
     "subtitle": "{movement}, {date}",
     "coach": "Entrenador responsable",
     "noCoach": "Sin entrenador asignado",
     "athlete": "Deportista",
-    "charts": "Gráficas y datos de los ángulos articulares",
+    "charts": "Rodilla y tronco a lo largo del video",
     "explanation": "Explicación del asistente",
     "noExplanation": "El asistente todavía no generó una explicación para este análisis.",
     "disclaimerTitle": "Importante",
-    "disclaimer": "Este informe es una estimación automática a partir de un video, con umbrales sin validación clínica. No es un diagnóstico y no reemplaza la evaluación de un profesional de la salud."
+    "disclaimer": "Este informe es una estimación automática a partir de un video, con umbrales sin validación clínica. No es un diagnóstico y no reemplaza la evaluación de un profesional de la salud.",
+    "target": "Rango objetivo de la rodilla",
+    "repetition": "Repetición",
+    "kneePeak": "Pico de rodilla",
+    "zone": "Zona",
+    "empty": "—",
+    "page": "Página {page} de {total}",
+    "generating": "Generando el PDF…",
+    "failed": "No se pudo generar el PDF. Inténtalo de nuevo.",
+    "risk": "Riesgo",
+    "view": "Vista detectada",
+    "focus": "En riesgo",
+    "peak": "Pico",
+    "chartsFront": "Valgo de cada rodilla a lo largo del video"
+  },
+  "systemPing": {
+    "title": "Prueba de conexión con el backend",
+    "subtitle": "Next.js llama al RPC Ping del backend por gRPC-Web, a través de Envoy.",
+    "probe": "hola desde Next.js",
+    "sent": "Mensaje enviado",
+    "received": "Mensaje recibido",
+    "serverTime": "Hora del servidor",
+    "roundTrip": "Ida y vuelta",
+    "errors": {
+      "unavailable": "El backend no está disponible. Si estaba dormido, espera un minuto y recarga.",
+      "timeout": "El backend tardó demasiado en responder. Recarga para intentar de nuevo.",
+      "generic": "La llamada al backend falló."
+    }
+  },
+  "styleGuide": {
+    "metaTitle": "Guía de estilo",
+    "metaDescription": "Instrumento vivo: la identidad visual de KinesiApp, con su paleta, tipografía, componentes, gráficas y pantallas de ejemplo.",
+    "eyebrow": "Guía de estilo",
+    "title": "Instrumento vivo",
+    "lead": "KinesiApp se lee como un instrumento de medición que respira: cada articulación tiene su color, cada rango su zona y cada cifra llega a su valor con la inercia de una aguja real.",
+    "sampleNote": "Las cifras son datos de ejemplo de una sentadilla de 40 segundos.",
+    "index": "En esta guía",
+    "home": "Ir al inicio de la guía",
+    "sections": {
+      "color": "Color",
+      "type": "Tipografía",
+      "glyphs": "Íconos",
+      "components": "Componentes",
+      "charts": "Gráficas",
+      "progress": "Progreso del análisis",
+      "screens": "Pantallas"
+    },
+    "hero": {
+      "reading": "Flexión de rodilla",
+      "peak": "Pico",
+      "target": "Objetivo",
+      "skeleton": "Esqueleto de perfil haciendo una sentadilla, con la rodilla, el tronco, la cadera y el centro de gravedad en sus colores",
+      "dial": "Medidor de flexión de rodilla: {value}, pico {peak}, objetivo {range}"
+    },
+    "color": {
+      "lead": "El color nunca decora: dice qué se mide. Las mismas cuatro señales pintan el esqueleto, las líneas y las agujas; las zonas dicen si una medida quedó corta, en el objetivo o se pasó, y el riesgo tiene su propia escala con palabra y escalones.",
+      "light": "Modo claro",
+      "dark": "Modo oscuro",
+      "signals": "Señales",
+      "signalsLead": "Una por articulación o medida, igual en todas las vistas.",
+      "zones": "Zonas del rango",
+      "zonesLead": "Relativas al rango sin riesgo de flexión de rodilla que usó la IA en cada análisis; en la sentadilla de ejemplo, {range}.",
+      "risk": "Escala de riesgo",
+      "riskLead": "Va siempre con la palabra y de uno a tres escalones: nunca depende sólo del color.",
+      "surfaces": "Superficies y tinta",
+      "contrast": "Contraste {ratio}:1",
+      "shared": "El cobalto es a la vez la rodilla y la acción principal: la rodilla es la medida protagonista de la app, y los botones nunca aparecen dentro de una gráfica, así que no se confunden.",
+      "names": {
+        "knee": "Rodilla",
+        "trunk": "Tronco",
+        "hip": "Cadera",
+        "center": "Centro de gravedad",
+        "under": "Por debajo",
+        "target": "En el objetivo",
+        "over": "Por encima",
+        "canvas": "Fondo",
+        "panel": "Panel",
+        "sunken": "Pozo",
+        "ink": "Tinta",
+        "inkMuted": "Tinta secundaria",
+        "accent": "Acción"
+      }
+    },
+    "type": {
+      "lead": "Una display estrecha y técnica para cifras y títulos, y una sans cálida y legible para todo lo demás. Las cifras son tabulares para que no bailen al contar.",
+      "display": "Saira",
+      "displayUse": "Display y cifras: títulos, lecturas de medidores y métricas.",
+      "sans": "Golos Text",
+      "sansUse": "Texto: párrafos, controles, etiquetas y avisos.",
+      "sampleTitle": "La rodilla llegó a 108°",
+      "sampleBody": "En la quinta repetición el tronco se inclinó más de lo normal; revisa la gráfica para ver en qué segundo pasó.",
+      "scale": "Escala",
+      "figures": "Cifras tabulares"
+    },
+    "glyphs": {
+      "lead": "El mismo juego de trazo fino y extremos redondos del primer diseño. Acompañan al texto, nunca lo reemplazan."
+    },
+    "components": {
+      "lead": "Controles con relieve: se hunden al presionar, brillan con el color de su acción al enfocarlos y responden con un rebote corto.",
+      "buttons": "Botones",
+      "primary": "Analizar video",
+      "secondary": "Ver historial",
+      "quiet": "Cancelar",
+      "pending": "Analizando…",
+      "fields": "Campos",
+      "email": "Correo electrónico",
+      "emailHint": "Con el que entras a KinesiApp.",
+      "emailInvalid": "nombre@correo",
+      "emailError": "Escribe un correo válido, como nombre@dominio.com.",
+      "checkbox": "Acepto que KinesiApp guarde y analice mis videos.",
+      "switch": "Recordatorio semanal para grabar",
+      "movement": "Selector de movimiento",
+      "movementLegend": "¿Qué movimiento vas a grabar?",
+      "jumpHint": "Salto vertical con contramovimiento",
+      "squatHint": "Sentadilla libre, de perfil",
+      "notices": "Avisos",
+      "info": "La cámara debe quedar fija y de perfil, a unos tres metros.",
+      "success": "Video listo. El análisis empezó.",
+      "warning": "El video dura más de 40 segundos; recórtalo antes de subirlo.",
+      "ai": "Estado de la IA",
+      "aiWaking": "IA despertando",
+      "aiReady": "IA activada",
+      "aiUnavailable": "IA no disponible",
+      "aiWakingHint": "Tarda unos segundos la primera vez.",
+      "aiUnavailableHint": "Tus videos quedan guardados; el análisis empieza cuando vuelva.",
+      "navigation": "Navegación",
+      "navigationLead": "Barra superior en computador y barra inferior en el celular, con la pestaña activa iluminada.",
+      "states": "Vacío, carga y error",
+      "emptyTitle": "Todavía no hay análisis",
+      "emptyBody": "Graba tu primera sentadilla o tu primer salto y aquí verás cómo se mueven tus articulaciones.",
+      "emptyAction": "Grabar el primero",
+      "loading": "Cargando tus análisis",
+      "errorTitle": "No pudimos cargar tus análisis",
+      "errorBody": "Revisa tu conexión e inténtalo de nuevo.",
+      "errorAction": "Reintentar",
+      "dialog": "Diálogo",
+      "dialogOpen": "Eliminar análisis",
+      "dialogTitle": "¿Eliminar este análisis?",
+      "dialogBody": "Se borran el video, las métricas y la conversación con la IA. No se puede deshacer.",
+      "dialogConfirm": "Eliminar",
+      "dialogCancel": "Conservar"
+    },
+    "charts": {
+      "lead": "Las líneas se trazan solas con un degradado que sigue la zona, y las repeticiones se encienden una tras otra.",
+      "timeline": "Línea de tiempo sincronizada",
+      "timelineLead": "El video, el esqueleto y la gráfica comparten el mismo cabezal. Toca una repetición para saltar a ella.",
+      "timelineLabel": "Flexión de rodilla e inclinación del tronco durante los 40 segundos de la serie",
+      "stage": "Cuadro del video en el segundo actual",
+      "play": "Reproducir",
+      "pause": "Pausar",
+      "playhead": "Posición en el video",
+      "repetitions": "Repeticiones",
+      "repetition": "Repetición {index}: {risk}, pico {peak}",
+      "seconds": "s",
+      "trend": "Tendencia del riesgo",
+      "trendLead": "Puntaje de riesgo por sesión sobre las tres bandas de nivel.",
+      "trendLabel": "Puntaje de riesgo de las últimas ocho sesiones, de {first} a {last}",
+      "trendLast": "Última: {score}",
+      "comparison": "Comparación entre deportistas",
+      "comparisonLead": "Rango y mediana de la flexión máxima de cada deportista sobre la misma escala.",
+      "median": "Mediana",
+      "repetitionFocus": "Repetición {index}: {risk}, {joint} a los {time}"
+    },
+    "progress": {
+      "lead": "Mientras la IA trabaja, el esqueleto se arma punto por punto y el anillo avanza por etapas con el color de cada una.",
+      "label": "Progreso del análisis",
+      "stage": "Etapa {index} de {total}: {name}",
+      "replay": "Repetir la animación",
+      "stages": {
+        "queued": "En cola",
+        "downloading": "Descargando el video",
+        "pose": "Detectando el esqueleto",
+        "repetitions": "Contando repeticiones",
+        "risk": "Calculando el riesgo"
+      },
+      "done": "Análisis listo"
+    },
+    "screens": {
+      "lead": "Tres pantallas completas con el sistema aplicado. Cambian entre sí con una transición de vista.",
+      "open": "Abrir la pantalla",
+      "back": "Volver a la guía",
+      "label": "Pantalla de ejemplo",
+      "home": {
+        "name": "Inicio del deportista",
+        "summary": "Saludo, estado de la IA, último análisis y tendencia.",
+        "greeting": "Hola, {name}",
+        "lead": "Tu última sentadilla estuvo dentro del rango objetivo en {count} de {total} repeticiones.",
+        "last": "Último análisis",
+        "recent": "Grabaciones recientes",
+        "newAnalysis": "Nuevo análisis",
+        "openAnalysis": "Ver el análisis",
+        "trend": "Tu riesgo en el tiempo"
+      },
+      "analysis": {
+        "name": "Resultado de un análisis",
+        "summary": "Medidores, línea de tiempo sincronizada y repeticiones.",
+        "title": "Sentadilla del {date}",
+        "peakKnee": "Flexión máxima de rodilla",
+        "peakTrunk": "Inclinación máxima del tronco",
+        "repetitions": "Repeticiones",
+        "inTarget": "{count} de {total} en el objetivo",
+        "risk": "Riesgo de la serie",
+        "riskSteps": "Nivel {step} de 3",
+        "chat": "Preguntarle a la IA",
+        "delete": "Eliminar"
+      },
+      "capture": {
+        "name": "Captura de video",
+        "summary": "Selector de movimiento, guía de encuadre y grabación con tope de 40 s.",
+        "title": "Nuevo análisis",
+        "lead": "Elige el movimiento, encuadra de perfil y graba. La grabación se detiene sola a los {seconds} segundos.",
+        "frame": "Vista previa de la cámara",
+        "frameHint": "Que se vea el cuerpo entero, del pie a la cabeza",
+        "record": "Grabar",
+        "stop": "Detener",
+        "recording": "Grabando",
+        "limit": "Máximo {seconds} s",
+        "autoStopped": "La grabación se detuvo sola a los {seconds} segundos.",
+        "again": "Grabar otra vez",
+        "upload": "Subir y analizar",
+        "simulated": "En la guía la cámara es simulada: no se pide permiso ni se graba nada."
+      }
+    }
+  },
+  "ai": {
+    "label": "Estado de la IA",
+    "waking": "IA encendiendo…",
+    "ready": "IA activada",
+    "unavailable": "IA no disponible",
+    "wakingHint": "La primera vez tarda unos segundos.",
+    "unavailableHint": "Tus videos quedan guardados; el análisis empieza cuando vuelva."
+  },
+  "coachHome": {
+    "lead": {
+      "high": {
+        "one": "{count} de tus {total} deportistas terminó su último análisis con riesgo alto.",
+        "other": "{count} de tus {total} deportistas terminaron su último análisis con riesgo alto."
+      },
+      "none": {
+        "one": "Tu deportista no terminó su último análisis con riesgo alto.",
+        "other": "Ninguno de tus {count} deportistas terminó su último análisis con riesgo alto."
+      },
+      "noAnalyses": "Cuando tus deportistas graben, aquí verás cómo viene su riesgo.",
+      "noAthletes": "Crea tu primer deportista o pide que te asignen uno con cuenta."
+    },
+    "loading": "Cargando a tus deportistas…",
+    "squad": "Riesgo de tu plantel",
+    "squadLead": "Promedio del último análisis de cada deportista.",
+    "squadEmpty": "Sin análisis procesados todavía",
+    "highNow": "Con riesgo alto ahora",
+    "attention": "Mira primero",
+    "attentionLead": "Tus deportistas con el último riesgo más alto.",
+    "seeAllAthletes": "Ver todos los deportistas",
+    "teams": "Tus equipos",
+    "seeAllTeams": "Ver los equipos",
+    "createTeam": "Crear un equipo",
+    "noTeams": "Agrupa a tus deportistas en equipos para comparar su riesgo.",
+    "recent": "Lo último que se grabó",
+    "seeAllAnalyses": "Ver todas las grabaciones"
+  },
+  "adminHome": {
+    "lead": {
+      "pending": {
+        "one": "Hay {users} cuentas y {count} deportista espera entrenador.",
+        "other": "Hay {users} cuentas y {count} deportistas esperan entrenador."
+      },
+      "clear": "Hay {users} cuentas y todos los deportistas tienen entrenador."
+    },
+    "loading": "Cargando las cuentas…",
+    "coverage": "Cobertura de entrenador",
+    "coverageLead": "Deportistas que ya tienen un entrenador asignado.",
+    "coverageLabel": "Cobertura de entrenador: {value}, {covered} de {total} deportistas",
+    "coverageCount": "{covered} de {total}",
+    "roles": "Cuentas por rol",
+    "roleCount": {
+      "athlete": "Deportistas",
+      "coach": "Entrenadores",
+      "admin": "Administradores"
+    },
+    "status": "Estado de las cuentas",
+    "pendingTitle": "Esperan entrenador",
+    "pendingEmpty": "Todos tienen entrenador",
+    "pendingEmptyBody": "Cuando un deportista quede sin entrenador aparecerá aquí.",
+    "unverifiedTitle": "Sin verificar el correo",
+    "unverifiedEmpty": "No hay cuentas sin verificar",
+    "unverifiedEmptyBody": "Las cuentas nuevas aparecen aquí hasta que confirman su correo."
   }
 }

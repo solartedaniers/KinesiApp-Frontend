@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/Button";
+import { CheckboxField } from "@/components/ui/CheckboxField";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { FullNameField } from "@/components/ui/FullNameField";
 import { NewPasswordField } from "@/components/ui/NewPasswordField";
@@ -27,7 +28,7 @@ export function RegisterForm() {
   const [state, formAction, pending] = useActionState(register, INITIAL_STATE);
 
   return (
-    <form action={formAction} className={styles.form} noValidate>
+    <form action={formAction} className={`${styles.form} lg:grid-cols-2 lg:gap-x-6 lg:*:col-span-2`} noValidate>
       {state.error && (
         <FormAlert tone="error">
           <p>{state.error}</p>
@@ -37,39 +38,51 @@ export function RegisterForm() {
         </FormAlert>
       )}
 
-      <SegmentedControl
-        name="role"
-        legend={t.fields.role}
-        options={roleOptions}
-        defaultValue={state.values?.role ?? SIGNUP_ROLES[0]}
-        error={state.fieldErrors?.role}
-      />
-      <FullNameField defaultValue={state.values?.full_name} error={state.fieldErrors?.full_name} />
-      <TextField
-        name="email"
-        type="email"
-        label={t.fields.email}
-        autoComplete="email"
-        inputMode="email"
-        required
-        defaultValue={state.values?.email}
-        error={state.fieldErrors?.email}
-      />
-      <NewPasswordField
-        name="password"
-        label={t.fields.password}
-        autoComplete="new-password"
-        minLength={PASSWORD_MIN_LENGTH}
-        required
-        error={state.fieldErrors?.password}
-      />
-      <PasswordField
-        name="confirm_password"
-        label={t.fields.confirmPassword}
-        autoComplete="new-password"
-        required
-        error={state.fieldErrors?.confirm_password}
-      />
+      {/* En escritorio, quién es a la izquierda y la contraseña a la derecha */}
+      <div className="grid content-start gap-4 lg:col-span-1!">
+        <SegmentedControl
+          name="role"
+          legend={t.fields.role}
+          options={roleOptions}
+          defaultValue={state.values?.role ?? SIGNUP_ROLES[0]}
+          error={state.fieldErrors?.role}
+        />
+        <FullNameField defaultValue={state.values?.full_name} error={state.fieldErrors?.full_name} />
+        <TextField
+          name="email"
+          type="email"
+          label={t.fields.email}
+          autoComplete="email"
+          inputMode="email"
+          required
+          defaultValue={state.values?.email}
+          error={state.fieldErrors?.email}
+        />
+      </div>
+      <div className="grid content-start gap-4 lg:col-span-1!">
+        <NewPasswordField
+          name="password"
+          label={t.fields.password}
+          autoComplete="new-password"
+          minLength={PASSWORD_MIN_LENGTH}
+          required
+          error={state.fieldErrors?.password}
+        />
+        <PasswordField
+          name="confirm_password"
+          label={t.fields.confirmPassword}
+          autoComplete="new-password"
+          required
+          error={state.fieldErrors?.confirm_password}
+        />
+      </div>
+      {/* Obligatorio: Register exige la versión vigente del consentimiento de video */}
+      <CheckboxField name="video_consent" required error={state.fieldErrors?.video_consent}>
+        {t.register.videoConsent}{" "}
+        <Link href={ROUTES.legalVideoConsent} target="_blank">
+          {t.register.videoConsentLink}
+        </Link>
+      </CheckboxField>
       <Button type="submit" block pending={pending} pendingLabel={t.register.pending} className={styles.submit}>
         {t.register.submit}
       </Button>

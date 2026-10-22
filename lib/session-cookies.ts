@@ -13,7 +13,7 @@ type CookieOptions = {
 export type SessionCookie = { name: string; value: string; options: CookieOptions };
 
 // La cookie vive lo mismo que el token que guarda: la duración la decide el backend (claim exp),
-// no un número repetido aquí (§4.2 del diseño)
+// no un número repetido aquí
 function cookieFor(name: string, token: string): SessionCookie {
   return {
     name,

@@ -1,8 +1,9 @@
 // Lectura y validación de la ficha biométrica desde un formulario: lógica pura, compartida por el
 // alta obligatoria del deportista, la edición de su perfil y los deportistas gestionados del coach.
 import { formText } from "./form-state.ts";
-import { GENDERS, type Gender } from "./types.ts";
+import { type ClientPolicy, GENDERS, type Gender } from "./types.ts";
 import {
+  type BiometricsRules,
   collectErrors,
   parseMeasure,
   validateBirthDate,
@@ -24,7 +25,19 @@ export type BiometricsReading = {
   payload: BiometricsPayload | null;
 };
 
-export function readBiometrics(formData: FormData, today: Date): BiometricsReading {
+/** Rangos de la ficha tal como los publica el backend. */
+export function biometricsRules(policy: ClientPolicy): BiometricsRules {
+  return {
+    minAgeYears: policy.athlete_min_age_years,
+    maxAgeYears: policy.athlete_max_age_years,
+    minHeightCm: policy.min_height_cm,
+    maxHeightCm: policy.max_height_cm,
+    minWeightKg: policy.min_weight_kg,
+    maxWeightKg: policy.max_weight_kg,
+  };
+}
+
+export function readBiometrics(formData: FormData, today: Date, rules: BiometricsRules): BiometricsReading {
   const values = {
     gender: formText(formData, "gender"),
     birth_date: formText(formData, "birth_date"),
@@ -33,9 +46,9 @@ export function readBiometrics(formData: FormData, today: Date): BiometricsReadi
   };
   const errors = collectErrors<BiometricsField>({
     gender: validateOption(values.gender, GENDERS),
-    birth_date: validateBirthDate(values.birth_date, today),
-    height_cm: validateHeight(values.height_cm),
-    weight_kg: validateWeight(values.weight_kg),
+    birth_date: validateBirthDate(values.birth_date, today, rules),
+    height_cm: validateHeight(values.height_cm, rules),
+    weight_kg: validateWeight(values.weight_kg, rules),
   });
   const payload = errors
     ? null

@@ -1,6 +1,8 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 
+import { COLORS as INSTRUMENT_COLORS } from "./lib/design/palette.ts";
+
 /*
  * Tokens de diseño: único lugar con colores, tipografía, radios y medidas de layout.
  * Cada color define su par [claro, oscuro]; el plugin de abajo los publica como variables CSS
@@ -38,15 +40,46 @@ const COLORS = {
   backdrop: ["rgb(17 20 24 / 0.5)", "rgb(0 0 0 / 0.65)"],
 } as const;
 
-type ColorName = keyof typeof COLORS;
+type Palette = Record<string, readonly [string, string]>;
 
-function variables(mode: 0 | 1): Record<string, string> {
-  return Object.fromEntries(Object.entries(COLORS).map(([name, pair]) => [`--kin-${name}`, pair[mode]]));
+function variables(mode: 0 | 1, palette: Palette = COLORS): Record<string, string> {
+  return Object.fromEntries(Object.entries(palette).map(([name, pair]) => [`--kin-${name}`, pair[mode]]));
 }
 
+// La paleta del instrumento (lib/design/palette.ts) suma sus señales y zonas a los nombres actuales
 const themeColors = Object.fromEntries(
-  (Object.keys(COLORS) as ColorName[]).map((name) => [name, `var(--kin-${name})`]),
+  Object.keys({ ...COLORS, ...INSTRUMENT_COLORS }).map((name) => [name, `var(--kin-${name})`]),
 );
+
+// Familias por variable: las clases font-* leen estas variables. Las cifras usan la display con números
+// tabulares; no hay monoespaciada
+const INSTRUMENT_FONTS = { "--kin-font-display": "var(--font-instrument-display)", "--kin-font-sans": "var(--font-instrument-sans)", "--kin-font-mono": "var(--font-instrument-display)", "--kin-display-stretch": "92%" };
+
+// Radios por función, no uno igual para todo; como variables para que el CSS del instrumento los use
+const RADIUS = { tag: "0.25rem", control: "0.375rem", panel: "0.625rem", stage: "0.875rem" };
+const RADIUS_VARS = Object.fromEntries(Object.entries(RADIUS).map(([name, value]) => [`--kin-radius-${name}`, value]));
+
+// Tiempos del movimiento: las medidas se toman su tiempo porque son el contenido; la interfaz responde rápido
+const MOTION = {
+  "--kin-motion-press": "90ms",
+  "--kin-motion-hover": "180ms",
+  "--kin-motion-lift": "320ms",
+  "--kin-motion-draw": "1400ms",
+  "--kin-motion-measure": "1500ms",
+  "--kin-motion-stagger": "90ms",
+  "--kin-ease-out": "cubic-bezier(0.22, 1, 0.36, 1)",
+};
+
+// El instrumento rige dentro de data-design="instrument", que los layouts raíz ponen en <body>.
+// Un data-theme anidado fuerza un modo, como la cabina oscura o el escenario del video
+const INSTRUMENT = '[data-design="instrument"]';
+// Cuánto color lleva el brillo de bordes y medidores: discreto sobre blanco, intenso en la cabina oscura
+const GLOW_MIX = ["42%", "62%"];
+const instrument = (mode: 0 | 1) => ({
+  colorScheme: mode ? "dark" : "light",
+  ...variables(mode, INSTRUMENT_COLORS),
+  "--kin-glow-mix": GLOW_MIX[mode],
+});
 
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
@@ -55,9 +88,11 @@ const config: Config = {
       colors: themeColors,
       fontFamily: {
         // Títulos y cifras grandes (puntaje, grados): Archivo en ancho expandido
-        display: ["var(--font-archivo)", "ui-sans-serif", "system-ui", "sans-serif"],
-        // Interfaz, listas y tablas: IBM Plex Sans, cifras tabulares legibles
-        sans: ["var(--font-plex)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--kin-font-display)", "ui-serif", "Georgia", "serif"],
+        // Interfaz, listas y tablas
+        sans: ["var(--kin-font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        // Métricas: grados, tiempos, conteos; cifras tabulares por diseño
+        mono: ["var(--kin-font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
       },
       fontSize: {
         xs: ["0.75rem", { lineHeight: "1rem" }],
@@ -70,21 +105,13 @@ const config: Config = {
         score: ["clamp(3.25rem, 9vw, 4.75rem)", { lineHeight: "1" }],
         hero: ["clamp(2.25rem, 6vw, 3.75rem)", { lineHeight: "1.05" }],
       },
-      // Radios por función, no uno igual para todo
-      borderRadius: {
-        tag: "0.25rem",
-        control: "0.375rem",
-        panel: "0.625rem",
-        stage: "0.875rem",
-      },
+      borderRadius: Object.fromEntries(Object.keys(RADIUS).map((name) => [name, `var(--kin-radius-${name})`])),
       // Sombra sólo para lo que flota sobre la página (diálogos, menús); las tarjetas usan borde
       boxShadow: {
         overlay: "0 12px 32px -12px rgb(17 20 24 / 0.28), 0 2px 6px rgb(17 20 24 / 0.08)",
       },
       spacing: {
         control: "2.75rem",
-        sidebar: "15rem",
-        topbar: "3.5rem",
       },
       maxWidth: {
         content: "76rem",
@@ -99,14 +126,20 @@ const config: Config = {
   plugins: [
     plugin(({ addBase }) => {
       addBase({
-        ":root": { colorScheme: "light", ...variables(0) },
+        ":root": { colorScheme: "light", ...variables(0), ...RADIUS_VARS },
+        ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
+        [INSTRUMENT]: { ...instrument(0), ...INSTRUMENT_FONTS, ...MOTION },
         // Sin data-theme (preferencia "sistema") sigue al sistema operativo
         "@media (prefers-color-scheme: dark)": {
           ":root:not([data-theme])": { colorScheme: "dark", ...variables(1) },
+          [`:root:not([data-theme]) ${INSTRUMENT}`]: instrument(1),
         },
-        ':root[data-theme="dark"]': { colorScheme: "dark", ...variables(1) },
+        [`:root[data-theme="dark"] ${INSTRUMENT}`]: instrument(1),
+        [`${INSTRUMENT} [data-theme="light"]`]: instrument(0),
+        [`${INSTRUMENT} [data-theme="dark"]`]: instrument(1),
         "@media print": {
           ":root, :root[data-theme]": { colorScheme: "light", ...variables(0) },
+          [`${INSTRUMENT}, ${INSTRUMENT} [data-theme]`]: instrument(0),
         },
       });
     }),

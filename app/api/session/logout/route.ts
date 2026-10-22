@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { apiRequest } from "@/lib/api";
-import { API_PATHS } from "@/lib/api-paths";
+import { authGateway } from "@/lib/grpc/auth-gateway";
 import { isSameOrigin } from "@/lib/origin";
 import { ROUTES } from "@/lib/routes";
 import { clearSession, readRefreshToken } from "@/lib/session";
@@ -17,7 +16,7 @@ export async function POST(request: NextRequest) {
   const refreshToken = await readRefreshToken();
   if (refreshToken) {
     // Revoca el refresh token en el backend; si falla, la sesión local se cierra igual
-    await apiRequest(API_PATHS.logout, { method: "POST", body: { refresh_token: refreshToken } }).catch(() => undefined);
+    await authGateway().logout(refreshToken).catch(() => undefined);
   }
   await clearSession();
   return NextResponse.redirect(new URL(ROUTES.login, request.url), 303);

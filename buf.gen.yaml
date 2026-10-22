@@ -1,0 +1,13 @@
+# Genera los clientes TypeScript de los contratos (contracts/, submódulo) en lib/gen/. Corre solo
+# antes de dev y build: el código generado no se versiona ni se edita a mano
+version: v2
+inputs:
+  - directory: contracts/proto
+plugins:
+  - local: protoc-gen-es
+    out: lib/gen
+    # Con la extensión .ts en los imports, las pruebas de Node cargan el código generado sin bundler
+    opt:
+      - target=ts
+      - import_extension=ts
+clean: true

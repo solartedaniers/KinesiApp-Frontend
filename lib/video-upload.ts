@@ -1,11 +1,11 @@
-// Subida de un video del navegador directo a la API (no pasa por Vercel, que corta los cuerpos
-// grandes). Lo autoriza un token de subida de vida corta, acotado a un deportista: el token de
-// sesión nunca llega al navegador.
-import type { MovementType } from "./types.ts";
+// Subida de archivos del navegador directo al bucket privado con la URL firmada que entrega un RPC:
+// no pasa por Vercel (que corta los cuerpos grandes) y el token de sesión nunca llega al navegador.
+import type { UploadTarget } from "./types.ts";
+import { type VideoReading, videoReadingSchema } from "./worker-messages.ts";
 
 export type VideoFileError = "videoRequired" | "videoInvalidType" | "videoTooLarge";
 
-/** Mismas reglas que JumpVideoStorage del backend (tipo y tamaño); el backend vuelve a validar. */
+/** Mismas reglas que aplica CreateVideoUpload (tipo y tamaño); el backend vuelve a validar. */
 export function validateVideoFile(file: { type: string; size: number } | null, maxBytes: number): VideoFileError | null {
   if (!file || file.size === 0) return "videoRequired";
   if (!file.type.startsWith("video/")) return "videoInvalidType";
@@ -17,61 +17,83 @@ export function bytesToMegabytes(bytes: number): number {
   return Math.round(bytes / (1024 * 1024));
 }
 
-export type UploadOutcome = { ok: true; analysisId: number } | { ok: false; code: string };
+export type UploadOutcome = { ok: true } | { ok: false; code: string };
 
-export type VideoUpload = { done: Promise<UploadOutcome>; abort: () => void };
+export type BucketUpload = { done: Promise<UploadOutcome>; abort: () => void };
 
 /** Código del cliente para una subida cancelada por el usuario. */
-export const UPLOAD_ABORTED_CODE = "upload_aborted";
+export const UPLOAD_ABORTED_CODE = "UPLOAD_ABORTED";
 
 /**
- * POST multipart con XMLHttpRequest: es la única API del navegador que informa el progreso de
- * subida (xhr.upload.onprogress). Nunca rechaza: un fallo es `{ ok: false, code }` con el `code`
- * estable del backend, o "network" / UPLOAD_ABORTED_CODE.
+ * PUT al bucket con XMLHttpRequest: es la única API del navegador que informa el progreso de subida
+ * (xhr.upload.onprogress). Los headers firmados van tal cual. Nunca rechaza: un fallo es
+ * `{ ok: false, code }` con "STORAGE_UNAVAILABLE", "NETWORK" o UPLOAD_ABORTED_CODE.
  */
-export function startVideoUpload({
-  url,
-  token,
-  athleteId,
-  movementType,
-  file,
-  onProgress,
-}: {
-  url: string;
-  token: string;
-  athleteId: number;
-  movementType: MovementType;
-  file: File;
-  onProgress: (fraction: number) => void;
-}): VideoUpload {
+export function uploadToBucket(target: UploadTarget, body: Blob, onProgress?: (fraction: number) => void): BucketUpload {
   const xhr = new XMLHttpRequest();
   const done = new Promise<UploadOutcome>((resolve) => {
     xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) onProgress(event.loaded / event.total);
+      if (event.lengthComputable) onProgress?.(event.loaded / event.total);
     };
-    xhr.onload = () => {
-      const body = parseJson(xhr.responseText);
-      if (xhr.status === 202 && typeof body?.id === "number") resolve({ ok: true, analysisId: body.id });
-      else resolve({ ok: false, code: typeof body?.code === "string" ? body.code : xhr.status === 422 ? "validation_error" : "generic" });
-    };
-    xhr.onerror = () => resolve({ ok: false, code: "network" });
+    xhr.onload = () => resolve(xhr.status >= 200 && xhr.status < 300 ? { ok: true } : { ok: false, code: "STORAGE_UNAVAILABLE" });
+    xhr.onerror = () => resolve({ ok: false, code: "NETWORK" });
     xhr.onabort = () => resolve({ ok: false, code: UPLOAD_ABORTED_CODE });
   });
 
-  const form = new FormData();
-  form.set("athlete_id", String(athleteId));
-  form.set("movement_type", movementType);
-  form.set("video", file);
-  xhr.open("POST", url);
-  xhr.setRequestHeader("Authorization", `Bearer ${token}`);
-  xhr.send(form);
+  xhr.open("PUT", target.url);
+  for (const [name, value] of Object.entries(target.headers)) xhr.setRequestHeader(name, value);
+  xhr.send(body);
   return { done, abort: () => xhr.abort() };
 }
 
-function parseJson(text: string): Record<string, unknown> | null {
-  try {
-    return JSON.parse(text) as Record<string, unknown>;
-  } catch {
-    return null;
-  }
+export type VideoMetadata = { durationMs: number; width: number; height: number; container: string | null };
+
+const VIDEO_METADATA_WORKER_URL = "/workers/video-metadata-worker.js";
+
+function readInWorker(file: Blob): Promise<VideoReading> {
+  return new Promise((resolve) => {
+    const worker = new Worker(VIDEO_METADATA_WORKER_URL, { type: "module" });
+    const finish = (reading: VideoReading) => {
+      worker.terminate();
+      resolve(reading);
+    };
+    worker.onmessage = (event: MessageEvent<unknown>) => {
+      const reading = videoReadingSchema.safeParse(event.data);
+      finish(reading.success ? reading.data : null);
+    };
+    worker.onerror = () => finish(null);
+    worker.postMessage(file);
+  });
+}
+
+/** Respaldo con lo que lee el propio navegador (<video preload="metadata">). */
+function readWithVideoElement(file: Blob): Promise<{ durationMs: number | null; width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const video = document.createElement("video");
+    const finish = (settle: () => void) => {
+      URL.revokeObjectURL(url);
+      video.removeAttribute("src");
+      settle();
+    };
+    video.preload = "metadata";
+    video.onloadedmetadata = () =>
+      finish(() => resolve({ durationMs: Number.isFinite(video.duration) ? Math.round(video.duration * 1000) : null, width: video.videoWidth, height: video.videoHeight }));
+    video.onerror = () => finish(() => reject(new Error("unreadable video")));
+    video.src = url;
+  });
+}
+
+/**
+ * Duración, resolución y contenedor. Primero el lector propio en un Web Worker; si no entiende el
+ * archivo o no trae duración, el <video> del navegador. `recordedMs` es lo que midió la grabación:
+ * el WebM de MediaRecorder no trae duración y Chrome la informa como Infinity.
+ */
+export async function readVideoMetadata(file: Blob, recordedMs?: number): Promise<VideoMetadata | null> {
+  const worker = typeof Worker === "undefined" ? null : await readInWorker(file);
+  if (worker?.durationMs != null && worker.width) return { ...worker, durationMs: worker.durationMs };
+  const element = await readWithVideoElement(file).catch(() => null);
+  const durationMs = element?.durationMs ?? worker?.durationMs ?? recordedMs ?? null;
+  if (durationMs === null) return null;
+  return { durationMs, width: element?.width || worker?.width || 0, height: element?.height || worker?.height || 0, container: worker?.container ?? null };
 }

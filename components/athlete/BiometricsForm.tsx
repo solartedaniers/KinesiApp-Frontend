@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { FormAlert } from "@/components/ui/FormAlert";
 import type { BiometricsField } from "@/lib/biometrics";
 import type { FormState } from "@/lib/form-state";
+import type { BiometricsRules } from "@/lib/validation";
 
 import { BiometricsFields } from "./BiometricsFields";
 
@@ -17,12 +18,14 @@ export function BiometricsForm({
   action,
   initial,
   today,
+  rules,
   submitLabel,
   pendingLabel,
 }: {
   action: BiometricsAction;
   initial?: Partial<Record<BiometricsField, string>>;
   today: string;
+  rules: BiometricsRules;
   submitLabel: string;
   pendingLabel: string;
 }) {
@@ -32,7 +35,7 @@ export function BiometricsForm({
     <form action={formAction} className={styles.form} noValidate>
       {state.error && <FormAlert tone="error">{state.error}</FormAlert>}
       {state.notice && <FormAlert tone="success">{state.notice}</FormAlert>}
-      <BiometricsFields values={state.values ?? initial} errors={state.fieldErrors} today={today} />
+      <BiometricsFields values={state.values ?? initial} errors={state.fieldErrors} today={today} rules={rules} />
       <Button type="submit" block pending={pending} pendingLabel={pendingLabel} className={styles.submit}>
         {submitLabel}
       </Button>

@@ -27,3 +27,8 @@ export function resolveLocale(cookieValue: string | undefined, acceptLanguage: s
 export function format(template: string, values: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (match, key: string) => (key in values ? String(values[key]) : match));
 }
+
+/** Singular o plural según `count` (los dos idiomas sólo distinguen uno de varios), con `{count}` disponible. */
+export function plural(templates: { one: string; other: string }, count: number, values: Record<string, string | number> = {}): string {
+  return format(count === 1 ? templates.one : templates.other, { count, ...values });
+}

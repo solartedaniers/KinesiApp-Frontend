@@ -1,9 +1,9 @@
 "use server";
 
-import { apiRequest } from "../api";
-import { API_PATHS } from "../api-paths";
-import { ApiError, errorMessage, validationMessages } from "../errors";
+import { errorMessage, validationMessages } from "../errors";
 import { FORM_INTENT, formText, type FormState } from "../form-state";
+import { authGateway } from "../grpc/auth-gateway";
+import { ErrorReason, hasReason } from "../grpc/errors";
 import type { Dictionary } from "../i18n";
 import { getT } from "../i18n/server";
 import {
@@ -19,7 +19,7 @@ export type RecoveryField = "email" | "code" | "password" | "confirm_password";
 
 /**
  * El paso, el correo y el código viven en el estado del formulario (memoria del cliente),
- * nunca en la URL ni en el historial (§3 del diseño). El backend revalida el código al confirmar.
+ * nunca en la URL ni en el historial. El backend revalida el código al confirmar.
  */
 export type RecoveryState = FormState<RecoveryField> & { step: RecoveryStep; email?: string; code?: string };
 
@@ -36,12 +36,7 @@ export async function recoverPassword(previous: RecoveryState, formData: FormDat
         ? requestCode(t, previous.email ?? "", previous)
         : verifyCode(t, previous.email ?? "", formText(formData, "code").trim());
     case "password":
-      return confirmNewPassword(
-        t,
-        previous,
-        formText(formData, "password"),
-        formText(formData, "confirm_password"),
-      );
+      return confirmNewPassword(t, previous, formText(formData, "password"), formText(formData, "confirm_password"));
     default:
       return previous;
   }
@@ -51,7 +46,7 @@ async function requestCode(t: Dictionary, email: string, previous: RecoveryState
   const errors = collectErrors({ email: validateEmail(email) });
   if (errors) return { step: "email", fieldErrors: validationMessages(t, errors), values: { email } };
   try {
-    await apiRequest(API_PATHS.requestPasswordReset, { method: "POST", body: { email } });
+    await authGateway().requestPasswordReset(email);
   } catch (error) {
     return { ...previous, error: errorMessage(t, error), values: { email } };
   }
@@ -67,7 +62,7 @@ async function verifyCode(t: Dictionary, email: string, code: string): Promise<R
   const errors = collectErrors({ code: validateOtp(code) });
   if (errors) return { step: "code", email, fieldErrors: validationMessages(t, errors) };
   try {
-    await apiRequest(API_PATHS.verifyPasswordResetCode, { method: "POST", body: { email, code } });
+    await authGateway().verifyPasswordResetCode(email, code);
   } catch (error) {
     return { step: "code", email, error: errorMessage(t, error) };
   }
@@ -88,14 +83,10 @@ async function confirmNewPassword(
   if (errors) return { step: "password", email, code, fieldErrors: validationMessages(t, errors) };
 
   try {
-    await apiRequest(API_PATHS.confirmPasswordReset, {
-      method: "POST",
-      body: { email, code, new_password: password },
-    });
+    await authGateway().confirmPasswordReset(email, code, password);
   } catch (error) {
     // El código venció o se agotaron los intentos entre el paso 2 y el 3: hay que pedir otro
-    const codeRejected = error instanceof ApiError && error.code === "invalid_otp";
-    return codeRejected
+    return hasReason(error, ErrorReason.INVALID_OTP)
       ? { step: "code", email, error: errorMessage(t, error) }
       : { step: "password", email, code, error: errorMessage(t, error) };
   }

@@ -17,7 +17,7 @@ export function secondsUntilExpiry(token: string, nowMs: number = Date.now()): n
   return exp === null ? 0 : Math.max(0, Math.floor(exp - nowMs / 1000));
 }
 
-/** Renovar antes de que venza (no al fallar): así casi nunca coinciden dos renovaciones (§4.4). */
+/** Renovar antes de que venza (no al fallar): así casi nunca coinciden dos renovaciones. */
 export function shouldRefresh(accessToken: string | undefined, leewaySeconds: number, nowMs: number = Date.now()): boolean {
   return !accessToken || secondsUntilExpiry(accessToken, nowMs) < leewaySeconds;
 }

@@ -1,19 +1,21 @@
-import { AnalysisVideo } from "@/components/AnalysisVideo";
-import { riskLevel } from "@/lib/analysis-stats";
-import { publicApiBaseUrl } from "@/lib/config";
-import { getVideoAccess } from "@/lib/data/analyses";
+import { getPlaybackUrl } from "@/lib/data/analyses";
+import { getRiskCuts } from "@/lib/data/public";
 import type { JumpAnalysis } from "@/lib/types";
-import { videoSource } from "@/lib/video";
 
-/** Pide la URL firmada en el servidor (Bearer desde la cookie) y entrega el <video> ya listo. */
+import { VideoTimeline } from "./VideoTimeline";
+
+/** Pide la URL firmada en el servidor (GetVideoPlaybackUrl) y entrega la línea de tiempo con el video. */
 export async function AnalysisVideoPanel({ analysis }: { analysis: JumpAnalysis }) {
-  const access = await getVideoAccess(analysis.id);
+  const [initial, cuts] = await Promise.all([getPlaybackUrl(analysis.id), getRiskCuts()]);
   return (
-    <AnalysisVideo
+    <VideoTimeline
       analysisId={analysis.id}
-      initial={videoSource(publicApiBaseUrl(), analysis.id, access)}
+      initial={initial}
       measurements={analysis.angle_measurements}
-      risk={analysis.risk_score === null ? undefined : riskLevel(analysis.risk_score)}
+      assessment={analysis.risk_assessment}
+      cuts={cuts}
+      target={analysis.knee_target}
+      movement={analysis.movement_type}
     />
   );
 }

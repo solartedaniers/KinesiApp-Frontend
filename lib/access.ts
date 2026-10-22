@@ -1,20 +1,19 @@
-// Qué ve cada rol: el equivalente de RouteAccessPolicy + RoleHomeResolver del cliente Flutter (§9.2).
-// Es UX, no seguridad: el backend vuelve a autorizar cada request (require_roles, _authorize_athlete_access).
-import type { IconName } from "@/components/ui/Icon";
+// Qué ve cada rol. Es UX, no seguridad: el backend vuelve a autorizar cada RPC.
+import type { GlyphName } from "@/lib/design/icons";
 
 import { ROUTES } from "./routes";
 import type { UserRole } from "./types";
 
-export type NavKey = "home" | "analyses" | "stats" | "profile" | "athletes" | "teams" | "users" | "assignments";
+export type NavKey = "home" | "analyses" | "capture" | "stats" | "profile" | "athletes" | "teams" | "users" | "assignments";
 export type NavItem = {
   key: NavKey;
   href: string;
-  icon: IconName;
+  glyph: GlyphName;
   /** Otras rutas que marcan esta pestaña como activa (p. ej. /account/password → Perfil). */
   alsoActiveFor?: string[];
 };
 
-export const HOME_BY_ROLE: Record<UserRole, string> = {
+const HOME_BY_ROLE: Record<UserRole, string> = {
   athlete: "/athlete",
   coach: "/coach",
   admin: "/admin",
@@ -22,30 +21,30 @@ export const HOME_BY_ROLE: Record<UserRole, string> = {
 
 export const NAV_BY_ROLE: Record<UserRole, NavItem[]> = {
   athlete: [
-    { key: "home", href: "/athlete", icon: "home" },
-    { key: "analyses", href: "/athlete/analyses", icon: "video" },
-    { key: "stats", href: "/athlete/stats", icon: "chart" },
-    { key: "profile", href: "/athlete/profile", icon: "user", alsoActiveFor: [ROUTES.changePassword] },
+    { key: "home", href: "/athlete", glyph: "overview" },
+    { key: "analyses", href: "/athlete/analyses", glyph: "history" },
+    { key: "capture", href: ROUTES.newAnalysis, glyph: "capture" },
+    { key: "stats", href: "/athlete/stats", glyph: "trend" },
+    { key: "profile", href: "/athlete/profile", glyph: "profile", alsoActiveFor: [ROUTES.changePassword] },
   ],
   coach: [
-    { key: "home", href: "/coach", icon: "home" },
-    { key: "athletes", href: ROUTES.coachAthletes, icon: "users" },
-    { key: "teams", href: "/coach/teams", icon: "folder" },
-    { key: "analyses", href: "/coach/analyses", icon: "video" },
-    { key: "stats", href: "/coach/stats", icon: "chart" },
-    { key: "profile", href: "/coach/profile", icon: "user", alsoActiveFor: [ROUTES.changePassword] },
+    { key: "home", href: "/coach", glyph: "overview" },
+    { key: "athletes", href: ROUTES.coachAthletes, glyph: "athlete" },
+    { key: "teams", href: "/coach/teams", glyph: "team" },
+    { key: "analyses", href: "/coach/analyses", glyph: "history" },
+    { key: "stats", href: "/coach/stats", glyph: "trend" },
+    { key: "profile", href: "/coach/profile", glyph: "profile", alsoActiveFor: [ROUTES.changePassword] },
   ],
   admin: [
-    { key: "home", href: "/admin", icon: "home" },
-    { key: "users", href: "/admin/users", icon: "users" },
-    { key: "assignments", href: "/admin/assignments", icon: "link" },
-    { key: "teams", href: "/admin/teams", icon: "folder" },
-    { key: "profile", href: "/admin/profile", icon: "user", alsoActiveFor: [ROUTES.changePassword] },
+    { key: "home", href: "/admin", glyph: "overview" },
+    { key: "users", href: "/admin/users", glyph: "roles" },
+    { key: "assignments", href: "/admin/assignments", glyph: "link" },
+    { key: "teams", href: "/admin/teams", glyph: "team" },
+    { key: "profile", href: "/admin/profile", glyph: "profile", alsoActiveFor: [ROUTES.changePassword] },
   ],
 };
 
-// Roles que pueden abrir cada sección; cada layout de sección la consulta. El flujo de análisis
-// es de deportista y coach (_analysisRoutes en Flutter)
+// Roles que pueden abrir cada sección; cada layout de sección la consulta
 export const SECTION_ROLES = {
   athlete: ["athlete"],
   coach: ["coach"],

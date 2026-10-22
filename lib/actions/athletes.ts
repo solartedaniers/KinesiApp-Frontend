@@ -3,28 +3,31 @@
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { API_PATHS } from "../api-paths";
-import { type BiometricsField, readBiometrics } from "../biometrics";
-import { errorMessage, validationMessages } from "../errors";
+import { type BiometricsField, biometricsRules, readBiometrics } from "../biometrics";
+import { getClientPolicy } from "../data/public";
+import { validationMessages } from "../errors";
 import type { FormState } from "../form-state";
 import { todayInAppTimeZone } from "../format";
+import { athleteGateway } from "../grpc/athlete-gateway";
 import { getT } from "../i18n/server";
 import { ROUTES } from "../routes";
-import { authedMutation } from "./request";
+import { biometricsParams } from "../validation";
+import { authedMutation, failureMessage } from "./request";
 
 /** Alta obligatoria de la ficha del deportista (primer ingreso): al guardarla entra a la app. */
 export async function createMyProfile(
   _previous: FormState<BiometricsField>,
   formData: FormData,
 ): Promise<FormState<BiometricsField>> {
-  const t = await getT();
-  const { values, errors, payload } = readBiometrics(formData, todayInAppTimeZone());
-  if (!payload) return { fieldErrors: validationMessages(t, errors ?? {}), values };
+  const [t, policy] = await Promise.all([getT(), getClientPolicy()]);
+  const rules = biometricsRules(policy);
+  const { values, errors, payload } = readBiometrics(formData, todayInAppTimeZone(), rules);
+  if (!payload) return { fieldErrors: validationMessages(t, errors ?? {}, biometricsParams(rules)), values };
 
   try {
-    await authedMutation(API_PATHS.myAthleteProfile, { method: "POST", body: payload });
+    await authedMutation(() => athleteGateway().createMine(payload));
   } catch (error) {
-    return { error: errorMessage(t, error), values };
+    return { error: failureMessage(t, error), values };
   }
   redirect(ROUTES.home);
 }
@@ -34,14 +37,15 @@ export async function updateMyProfile(
   _previous: FormState<BiometricsField>,
   formData: FormData,
 ): Promise<FormState<BiometricsField>> {
-  const t = await getT();
-  const { values, errors, payload } = readBiometrics(formData, todayInAppTimeZone());
-  if (!payload) return { fieldErrors: validationMessages(t, errors ?? {}), values };
+  const [t, policy] = await Promise.all([getT(), getClientPolicy()]);
+  const rules = biometricsRules(policy);
+  const { values, errors, payload } = readBiometrics(formData, todayInAppTimeZone(), rules);
+  if (!payload) return { fieldErrors: validationMessages(t, errors ?? {}, biometricsParams(rules)), values };
 
   try {
-    await authedMutation(API_PATHS.myAthleteProfile, { method: "PATCH", body: payload });
+    await authedMutation(() => athleteGateway().updateMine(payload));
   } catch (error) {
-    return { error: errorMessage(t, error), values };
+    return { error: failureMessage(t, error), values };
   }
   refresh();
   return { notice: t.biometrics.saved, values };
