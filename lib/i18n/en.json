@@ -438,7 +438,8 @@
   },
   "chat": {
     "title": "Assistant's explanation",
-    "empty": "No messages yet. Ask, for example, what your result means or how to improve your technique.",
+    "empty": "No messages yet. Ask for the explanation of your result or type a question, for example, how to improve your technique.",
+    "explain": "Explain results",
     "label": "Your question",
     "placeholder": "Type your question about this analysis…",
     "send": "Send",

@@ -438,7 +438,8 @@
   },
   "chat": {
     "title": "Explicación del asistente",
-    "empty": "Todavía no hay mensajes. Pregunta, por ejemplo, qué significa tu resultado o cómo mejorar la técnica.",
+    "empty": "Todavía no hay mensajes. Pide la explicación de tu resultado o escribe una pregunta, por ejemplo, cómo mejorar la técnica.",
+    "explain": "Explicar resultados",
     "label": "Tu pregunta",
     "placeholder": "Escribe tu pregunta sobre este análisis…",
     "send": "Enviar",

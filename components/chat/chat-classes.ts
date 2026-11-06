@@ -10,7 +10,7 @@ export const chatStyles = {
   // Pregunta del usuario: a la derecha, en el tono suave de la acción
   user: `${MESSAGE} justify-self-end rounded-panel rounded-br-md bg-accent-soft px-4 py-2.5 text-ink`,
   typing: `${MESSAGE} kin-well justify-self-start p-4 text-ink-muted`,
-  empty: "text-ink-muted",
+  empty: "grid justify-items-start gap-3 text-ink-muted",
   form: "grid gap-2 border-t border-line pt-4",
   composer: "kin-field flex flex-col gap-2 p-2 sm:flex-row sm:items-end",
   input: "min-h-20 w-full flex-1 resize-y bg-transparent px-2 py-1.5 text-ink outline-none placeholder:text-ink-muted",

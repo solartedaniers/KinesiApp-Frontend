@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/instrument/Button";
 import { Glyph } from "@/components/instrument/Glyph";
@@ -23,7 +23,8 @@ const appendOnce = (message: ChatMessage) => (current: ChatMessage[]) => (curren
 /**
  * Hilo del usuario con el asistente. Las respuestas llegan por fragmentos (StartConversation y
  * SendMessage en streaming) y se van escribiendo mientras el modelo las genera. Si una respuesta
- * falla, la pregunta vuelve al cuadro y el aviso ofrece reintentar.
+ * falla, la pregunta vuelve al cuadro y el aviso ofrece reintentar. La explicación inicial se pide con un
+ * botón y no al abrir el análisis, porque cada una gasta una llamada a Gemini.
  */
 export function ChatPanel({ analysisId, messages: initial }: { analysisId: string; messages: ChatMessage[] }) {
   const t = useT();
@@ -32,7 +33,6 @@ export function ChatPanel({ analysisId, messages: initial }: { analysisId: strin
   const [error, setError] = useState<string | null>(null);
   const [retry, setRetry] = useState<Retry | null>(null);
   const [content, setContent] = useState("");
-  const opened = useRef(false);
 
   /** Devuelve si la respuesta llegó completa. */
   async function consume(events: AsyncIterable<ChatEvent>): Promise<boolean> {
@@ -79,20 +79,19 @@ export function ChatPanel({ analysisId, messages: initial }: { analysisId: strin
     setRetry({ kind: "question", text: question });
   }
 
-  // La primera vez que se abre un análisis procesado, la explicación se pide sola
-  useEffect(() => {
-    if (opened.current || initial.length > 0) return;
-    opened.current = true;
-    void open();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo al montar
-  }, []);
-
   const busy = draft !== null;
 
   return (
     <div className={styles.panel}>
       {messages.length === 0 && !busy ? (
-        <p className={styles.empty}>{t.chat.empty}</p>
+        <div className={styles.empty}>
+          <p>{t.chat.empty}</p>
+          {!retry && (
+            <Button glyph="ai" className="w-fit" onClick={() => void open()}>
+              {t.chat.explain}
+            </Button>
+          )}
+        </div>
       ) : (
         <ol className={styles.thread} aria-live="polite" aria-busy={busy}>
           {messages.map((message) => (
