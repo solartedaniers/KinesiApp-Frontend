@@ -5,6 +5,7 @@ import { createGrpcWebTransport } from "@connectrpc/connect-node";
 import { cookies } from "next/headers";
 
 import { SESSION_COOKIE } from "../config";
+import { withColdStartRetry } from "./cold-start-retry";
 import { grpcEnv } from "./env";
 
 let publicTransport: Transport | undefined;
@@ -18,13 +19,18 @@ const bearerFromSession: Interceptor = (next) => async (request) => {
 };
 
 function createTransport(interceptors: Interceptor[]): Transport {
-  const { GRPC_WEB_BASE_URL, GRPC_TIMEOUT_MS } = grpcEnv();
+  const env = grpcEnv();
   // Uso gRPC-Web sobre HTTP/1.1 porque Render no acepta gRPC nativo desde internet
-  return createGrpcWebTransport({
-    baseUrl: GRPC_WEB_BASE_URL,
+  const transport = createGrpcWebTransport({
+    baseUrl: env.GRPC_WEB_BASE_URL,
     httpVersion: "1.1",
-    defaultTimeoutMs: GRPC_TIMEOUT_MS,
+    defaultTimeoutMs: env.GRPC_TIMEOUT_MS,
     interceptors,
+  });
+  return withColdStartRetry(transport, {
+    firstDelayMs: env.GRPC_COLD_START_FIRST_DELAY_MS,
+    maxDelayMs: env.GRPC_COLD_START_MAX_DELAY_MS,
+    maxWaitMs: env.GRPC_COLD_START_MAX_WAIT_MS,
   });
 }
 
