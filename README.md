@@ -12,17 +12,155 @@ Despliego en Vercel, en la región `fra1`, junto al backend de Render Frankfurt 
 - `https://www.kinesiapp.com` es el dominio canónico. `kinesiapp.com` redirige con **308** a `www`, así que el sitemap, el canonical y los buscadores ven una sola URL.
 - El **HTTPS es automático**: Vercel emite y renueva el certificado de los dos nombres, sin que yo haga nada.
 
-## Arquitectura: gRPC de punta a punta, sin REST
+## Arquitectura de KinesiApp
 
+KinesiApp son cuatro repos que se hablan solo por RPC definidos en [KinesiApp-Contracts](https://github.com/solartedaniers/KinesiApp-Contracts), sin API REST. Este diagrama y el de secuencia son los mismos en los cuatro README; cada flecha dice su protocolo.
+
+```mermaid
+flowchart LR
+  user(["Navegador"])
+
+  subgraph vercel["Vercel · fra1"]
+    next["Next.js<br/>Server Components y Server Actions<br/>runtime Node"]
+  end
+
+  subgraph render["Render · Frankfurt · un solo contenedor"]
+    envoyB["Envoy<br/>gRPC-Web → gRPC"]
+    api["Backend grpcio<br/>Python asyncio"]
+  end
+
+  subgraph azure["Azure Container Apps · canadacentral"]
+    ingress["Ingress HTTP/2 + TLS"]
+    envoyA["Envoy"]
+    ai["IA grpcio<br/>YOLO · MediaPipe · OpenCV"]
+  end
+
+  subgraph neon["Neon · Frankfurt"]
+    pg[("Postgres")]
+    s3[("Neon Storage<br/>buckets privados")]
+  end
+
+  gemini["Gemini API"]
+  resend["Resend"]
+
+  user -- "HTTPS: HTML, RSC y Server Actions" --> next
+  user -- "HTTPS PUT y GET con URL firmada" --> s3
+  next -- "gRPC-Web sobre HTTP/1.1 + TLS" --> envoyB
+  envoyB -- "gRPC nativo, HTTP/2 en localhost" --> api
+  api -- "protocolo Postgres + TLS, por el pooler" --> pg
+  api -- "API S3 por HTTPS: HEAD, GET parcial y DELETE" --> s3
+  api -- "gRPC nativo + TLS" --> ingress
+  ingress -- "HTTP/2" --> envoyA
+  envoyA -- "gRPC nativo en localhost" --> ai
+  ai -- "HTTPS GET con URL firmada" --> s3
+  ai -- "HTTPS, SDK google-genai" --> gemini
+  api -- "HTTPS, API de correo" --> resend
 ```
-Navegador ──HTML/RSC/Server Actions──▶ Next.js (runtime Node, Vercel fra1)
-                                          │  Connect-ES, transporte gRPC-Web (HTTP/1.1)
-                                          ▼
-                              Envoy ──gRPC nativo──▶ backend grpcio (Render Frankfurt)
-                                                         │  gRPC nativo + TLS
-                                                         ▼
-                                                   IA (Azure Container Apps)
+
+### Flujo principal: subir un video, analizarlo, ver el resultado y preguntar al chat
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor U as Deportista en el navegador
+  participant N as Next.js en Vercel
+  participant B as Backend en Render
+  participant S as Neon Storage
+  participant P as Neon Postgres
+  participant A as IA en Azure
+  participant G as Gemini
+
+  U->>N: Elige el movimiento y el video (máximo 40 s, lo valida un Web Worker)
+  N->>B: CreateVideoUpload
+  B-->>N: URL firmada de subida y upload_id
+  U->>S: PUT del video directo al bucket privado
+  N->>B: ConfirmVideoUpload
+  B->>S: HEAD y primeros bytes: tamaño, tipo y magic bytes
+  B->>P: Crea el análisis en PENDING
+  B-->>N: analysis_id
+  N->>B: WatchAnalysis (server streaming)
+  B->>A: WarmUp
+  B->>A: AnalyzeVideo con URL firmada de lectura (server streaming)
+  A->>S: GET del video
+  loop Por cada etapa: descarga, pose, repeticiones y riesgo
+    A-->>B: Progreso
+    B->>P: Guarda el progreso
+    B-->>N: Progreso
+    N-->>U: Anillo de progreso en vivo
+  end
+  A-->>B: Resultado: ángulos por cuadro y evaluación de riesgo
+  B->>P: Guarda las mediciones y el riesgo (PROCESSED)
+  B-->>N: Análisis terminado
+  N->>B: GetAnalysis y GetVideoPlaybackUrl
+  B-->>N: Resultado y URL firmada de corta vida
+  N-->>U: Resultados con Streaming SSR
+  U->>S: GET del video para verlo con el esqueleto
+  U->>N: Abre el chat
+  N->>B: StartConversation (server streaming)
+  B->>P: Lee el análisis
+  B->>A: ExplainAnalysis con los datos estructurados
+  A->>G: Prompt que arma la IA
+  G-->>A: Texto en streaming
+  A-->>B: Fragmentos
+  B-->>N: Fragmentos
+  N-->>U: La explicación se escribe en vivo
+  B->>P: Guarda la explicación
+  U->>N: Hace una pregunta
+  N->>B: SendMessage (server streaming)
+  B->>A: AnswerQuestion con los datos y el historial
+  A->>G: Prompt
+  G-->>A: Texto en streaming
+  A-->>B: Fragmentos
+  B-->>N: Fragmentos
+  N-->>U: Respuesta en vivo
+  B->>P: Guarda la pregunta y la respuesta
 ```
+
+### Qué hace cada parte
+
+- **Navegador.** Ahí la persona graba o elige el video. Valido la duración en un Web Worker y subo el archivo directo al bucket con una URL firmada, así el video nunca pasa por Vercel. El navegador no habla gRPC ni conoce la URL del backend.
+- **Next.js en Vercel.** Sirve las páginas con el patrón que le toca a cada una (SSG, ISR, SSR con streaming y CSR) y, desde los Server Components y las Server Actions, llama al backend con un cliente gRPC-Web generado del contrato. Guarda la sesión en cookies `httpOnly`.
+- **Envoy en Render.** Render solo acepta HTTP/1.1 desde internet, así que Envoy recibe gRPC-Web y lo traduce a gRPC nativo hacia grpcio, en el mismo contenedor. Solo deja pasar las rutas del contrato.
+- **Backend grpcio en Render.** Es el dueño de los datos y de las reglas: cuentas, roles, deportistas, equipos, análisis y chat. Verifica el token en un interceptor, guarda en Postgres, firma las URLs de los archivos y le encarga el trabajo pesado a la IA.
+- **IA en Azure Container Apps.** Es un microservicio gRPC propio. Analiza el video con YOLO, MediaPipe y OpenCV y devuelve en streaming el progreso, los ángulos y el riesgo. También arma el prompt del chat y habla con Gemini. Baja a cero réplicas cuando nadie la usa, por eso el backend la despierta con `WarmUp`.
+- **Neon Postgres.** Guarda las cuentas, los perfiles, los equipos, los análisis con sus mediciones y los mensajes del chat. Está en Frankfurt, junto al backend, para que cada consulta tarde poco.
+- **Neon Storage.** Son buckets privados compatibles con S3 para los videos, las fotos y los logos. Solo se entra con URLs firmadas de corta vida.
+- **Gemini.** Es el modelo de lenguaje que redacta la explicación del análisis y responde las preguntas. Solo lo llama la IA.
+- **Resend.** Envía desde `no-reply@kinesiapp.com` los correos con el código de verificación y el de recuperación de contraseña.
+
+## Arquitectura de este repo
+
+```mermaid
+flowchart TB
+  subgraph browser["Navegador"]
+    islands["HTML del servidor + islas de cliente (CSR)<br/>captura, progreso, chat y línea de tiempo"]
+    ww["Web Workers<br/>metadatos del video, foto de perfil y PDF"]
+    shw["Shared Worker<br/>estado de la IA entre pestañas"]
+    sw["Service Worker<br/>estáticos y página offline"]
+  end
+
+  subgraph vercel["Next.js en Vercel, runtime Node"]
+    proxy["proxy.ts<br/>renueva la sesión antes de renderizar"]
+    site["app/(site): landing SSG, guías ISR y offline"]
+    app["app/(main): SSR con Streaming y Suspense<br/>deportista, coach, admin y resultados"]
+    actions["Server Actions<br/>formularios y streams del análisis y del chat"]
+    gateways["lib/grpc/*-gateway.ts<br/>un Adapter por servicio del contrato"]
+    transport["Transporte Connect-ES gRPC-Web<br/>pone el token de la cookie httpOnly en la metadata"]
+  end
+
+  islands -- "HTTPS" --> proxy
+  proxy --> site
+  proxy --> app
+  islands -- "Server Actions" --> actions
+  islands -- "PUT directo con URL firmada" --> s3[("Neon Storage")]
+  site --> gateways
+  app --> gateways
+  actions --> gateways
+  gateways --> transport
+  transport -- "gRPC-Web sobre HTTP/1.1 + TLS" --> backend["Envoy del backend en Render"]
+```
+
+Los patrones de cada ruta están en [Patrón de rendering por ruta](#patrón-de-rendering-por-ruta) y los workers en [Workers: cuáles uso y por qué](#workers-cuáles-uso-y-por-qué).
 
 - **El navegador nunca habla gRPC ni conoce la URL del backend.** Los Server Components y las Server Actions corren en Node. Ahí llamo al backend con clientes gRPC-Web generados del contrato (`lib/grpc/transport.ts`). Uso gRPC-Web porque Render solo acepta HTTP/1.1 desde internet. Envoy, en el contenedor del backend, lo traduce a gRPC nativo.
 - **Contract-first.** Los `.proto` viven en [KinesiApp-Contracts](https://github.com/solartedaniers/KinesiApp-Contracts). Los traigo como submódulo en `contracts/`, fijado a un tag (hoy `v0.11.0`). `npm run generate` (Buf + `protoc-gen-es`) genera `lib/gen/`, que no se versiona ni se edita a mano.
