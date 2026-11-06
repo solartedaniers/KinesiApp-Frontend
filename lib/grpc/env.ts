@@ -12,7 +12,7 @@ const grpcEnvSchema = z.object({
   GRPC_STREAM_TIMEOUT_MS: z.coerce.number().int().positive().default(240_000),
   // WakeUpAi con la réplica de Azure en cero tarda ~35 s
   AI_WAKE_UP_TIMEOUT_MS: z.coerce.number().int().positive().default(60_000),
-  // A veces Render dormido responde 503 en vez de retener la petición: reintento con espera creciente hasta
+  // Mientras grpcio arranca, Envoy responde 503 sin pasarle la petición: reintento con espera creciente hasta
   // este tope total. Con un último intento de GRPC_TIMEOUT_MS queda bajo el maxDuration de Vercel (300 s)
   GRPC_COLD_START_FIRST_DELAY_MS: z.coerce.number().int().positive().default(1_000),
   GRPC_COLD_START_MAX_DELAY_MS: z.coerce.number().int().positive().default(15_000),

@@ -9,6 +9,11 @@ import { rpcReason } from "./errors.ts";
 // El 503 del borde de Render no trae grpc-status; un UNAVAILABLE del backend sí
 const renderAsleep = () => new ConnectError("HTTP 503", Code.Unavailable, new Headers({ "content-type": "text/html" }));
 const backendUnavailable = () => new ConnectError("ai down", Code.Unavailable, new Headers({ "grpc-status": "14" }));
+// Copiado de la respuesta real de Render frío: Envoy ya escucha y grpcio todavía no
+const ENVOY_COLD_MESSAGE = "upstream connect error or disconnect/reset before headers. reset reason: remote connection failure";
+const envoyBeforeGrpcio = () => new ConnectError(ENVOY_COLD_MESSAGE, Code.Unavailable, new Headers({ "grpc-status": "14", "grpc-message": ENVOY_COLD_MESSAGE }));
+// Si grpcio cae con la petición adentro, Envoy da otro motivo: esa sí pudo procesarse y no se repite
+const envoyResetAfterSend = () => new ConnectError("upstream connect error or disconnect/reset before headers. reset reason: connection termination", Code.Unavailable, new Headers({ "grpc-status": "14" }));
 
 function fakeTransport(outcomes: (Error | "ok")[]) {
   const calls = { unary: 0, stream: 0 };
@@ -50,6 +55,20 @@ test("reintenta el 503 de Render con espera creciente hasta que responde", async
   assert.equal(await unary(retrying), "response");
   assert.equal(calls.unary, 4);
   assert.deepEqual(clock.waits, [1000, 2000, 3000]);
+});
+
+test("reintenta mientras Envoy no puede conectarse a grpcio", async () => {
+  const { transport, calls } = fakeTransport([renderAsleep(), envoyBeforeGrpcio(), envoyBeforeGrpcio(), "ok"]);
+  const retrying = withColdStartRetry(transport, { firstDelayMs: 1000, maxDelayMs: 3000, maxWaitMs: 90_000, ...fakeClock() });
+  assert.equal(await unary(retrying), "response");
+  assert.equal(calls.unary, 4);
+});
+
+test("no reintenta si grpcio se cayó con la petición adentro", async () => {
+  const { transport, calls } = fakeTransport([envoyResetAfterSend(), "ok"]);
+  const retrying = withColdStartRetry(transport, { firstDelayMs: 1000, maxDelayMs: 3000, maxWaitMs: 90_000, ...fakeClock() });
+  await assert.rejects(unary(retrying));
+  assert.equal(calls.unary, 1);
 });
 
 test("no reintenta un UNAVAILABLE que sí viene del backend", async () => {

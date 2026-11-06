@@ -25,19 +25,24 @@ const FALLBACK_REASON_BY_CODE: Partial<Record<Code, string>> = {
   [Code.NotFound]: "NOT_FOUND",
 };
 
-// Motivo propio del cliente: Render siguió respondiendo 503 mientras despertaba y se acabó la espera
+// Motivo propio del cliente: el backend siguió sin responder mientras despertaba y se acabó la espera
 export const SERVER_ASLEEP_REASON = "SERVER_ASLEEP";
 
+// Lo medí con Render frío: el contenedor arranca Envoy antes que grpcio, y Envoy responde esto mientras no
+// puede conectarse a grpcio. Solo acepto fallas al abrir la conexión: la petición no llegó al backend
+const ENVOY_UPSTREAM_DOWN = /^upstream connect error or disconnect\/reset before headers\. (retried and the latest )?reset reason: (remote )?connection failure/;
+
 /**
- * ¿Es el 503 con el que Render responde mientras despierta el contenedor? Ese 503 lo da su borde, antes de
- * Envoy, así que no trae grpc-status: la petición nunca llegó al backend y repetirla no duplica nada. Un
- * UNAVAILABLE del propio backend (por ejemplo, la IA caída) siempre trae grpc-status y no entra aquí.
+ * ¿El backend todavía está despertando? Lo reconozco por dos respuestas en las que la petición nunca llegó a
+ * grpcio, así que repetirla no duplica nada: el 503 del borde de Render, sin grpc-status, y el UNAVAILABLE
+ * que da Envoy cuando grpcio aún no escucha. Un UNAVAILABLE del propio backend (por ejemplo, la IA caída)
+ * trae otro mensaje y no entra aquí.
  */
 export function isServerAsleep(error: unknown): boolean {
   const connectError = ConnectError.from(error);
-  return connectError.code === Code.Unavailable
-    && connectError.rawMessage === "HTTP 503"
-    && !connectError.metadata.has("grpc-status");
+  if (connectError.code !== Code.Unavailable) return false;
+  const renderEdge = connectError.rawMessage === "HTTP 503" && !connectError.metadata.has("grpc-status");
+  return renderEdge || ENVOY_UPSTREAM_DOWN.test(connectError.rawMessage);
 }
 
 /** Único punto donde un status code de gRPC se convierte en el tipo de error que muestra la UI. */

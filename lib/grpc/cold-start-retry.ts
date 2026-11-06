@@ -24,7 +24,7 @@ const abortableSleep = (ms: number, signal: AbortSignal | undefined) =>
   });
 
 /**
- * Decorator del transporte: si Render responde el 503 de cuando está dormido, repito la llamada unaria con
+ * Decorator del transporte: si el backend responde que todavía está despertando, repito la llamada unaria con
  * espera creciente hasta que despierte. Envuelvo el transporte y no uso un interceptor porque el deadline
  * nace dentro del transporte: así cada intento tiene su propio plazo y no se lo come la espera.
  * Los streams no se repiten: el progreso del análisis y el chat ya tienen su propio manejo.
