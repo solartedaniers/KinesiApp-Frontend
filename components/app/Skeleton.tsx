@@ -1,3 +1,5 @@
+import { ServerWakeNotice } from "./ServerWake";
+
 // Esqueletos de carga con el brillo que barre del instrumento: fallback de Suspense y de loading.tsx
 const styles = {
   block: "kin-shimmer rounded-panel",
@@ -32,12 +34,17 @@ function TitleSkeleton() {
   return <div className={`${styles.block} ${styles.title}`} aria-hidden />;
 }
 
+/** Carga de una sección entera: si tarda más de lo normal, aviso que el servidor está despertando. */
 export function PageSkeleton() {
   return (
-    <div className={styles.stack} aria-busy>
-      <TitleSkeleton />
-      <TilesSkeleton />
-      <ListSkeleton />
+    <div className={styles.stack}>
+      {/* Fuera de aria-busy: ahí los lectores de pantalla pueden callar el anuncio */}
+      <ServerWakeNotice pending />
+      <div className={styles.stack} aria-busy>
+        <TitleSkeleton />
+        <TilesSkeleton />
+        <ListSkeleton />
+      </div>
     </div>
   );
 }

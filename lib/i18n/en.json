@@ -202,7 +202,8 @@
     "videoConsentLink": "Read the consent"
   },
   "session": {
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "serverWaking": "Waking up the server, this can take a few seconds."
   },
   "common": {
     "cancel": "Cancel",
@@ -755,6 +756,7 @@
   "errors": {
     "GENERIC": "Something went wrong. Try again.",
     "NETWORK": "We couldn't reach the server. Check your connection and try again.",
+    "SERVER_ASLEEP": "The server did not wake up in time. Wait a minute and try again.",
     "BAD_REQUEST": "Check the information you entered.",
     "INVALID_CREDENTIALS": "Incorrect email or password.",
     "EMAIL_NOT_REGISTERED": "There's no account with that email.",

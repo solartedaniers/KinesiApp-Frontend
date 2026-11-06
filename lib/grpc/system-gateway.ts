@@ -1,11 +1,12 @@
 import "server-only";
 
 import { timestampDate } from "@bufbuild/protobuf/wkt";
-import { type Client, createClient } from "@connectrpc/connect";
+import { type Client, createClient, createContextValues } from "@connectrpc/connect";
 
 import { SystemService } from "@/lib/gen/kinesiapp/system/v1/system_pb";
 
 import type { AiState, ClientPolicy } from "../types";
+import { SKIP_COLD_START_RETRY } from "./cold-start-retry";
 import { toAiState } from "./mappers";
 import { authedTransport, grpcTransport } from "./transport";
 
@@ -26,6 +27,11 @@ class SystemGateway {
       serverTime: response.serverTime ? timestampDate(response.serverTime) : null,
       roundTripMs: Math.round(performance.now() - startedAt),
     };
+  }
+
+  /** Un solo Ping, sin reintento y con plazo corto: solo lo uso para que Render empiece a despertar. */
+  async wakeServer(timeoutMs: number): Promise<void> {
+    await this.anonymous.ping({}, { timeoutMs, contextValues: createContextValues().set(SKIP_COLD_START_RETRY, true) });
   }
 
   async clientPolicy(): Promise<ClientPolicy> {
