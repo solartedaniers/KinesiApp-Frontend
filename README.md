@@ -413,7 +413,7 @@ Hay cinco pruebas que se saltan a propósito, y lo dicen:
 
 ## Flujo de trabajo
 
-- **Trabajo en ramas feature.** Aquí es `feature/grpc-frontend`. Nunca hago commit directo en `main`; fusiono con `--no-ff` cuando el cambio está probado.
+- **Trabajo en una rama feature corta por cambio.** Nunca hago commit directo en `main`: creo la rama, la fusiono a `main` con `--no-ff` cuando el cambio está probado y la borro, local y en GitHub. En el repo solo queda `main`.
 - **Cada push a una rama genera un preview** en Vercel.
 - **El push a `main` despliega a producción:** Vercel publica en `www.kinesiapp.com` y Render reconstruye el backend desde su propio `main`.
 - **La IA necesita un paso a mano.** Su push construye la imagen en GHCR, pero Azure no la toma hasta que corro `az containerapp update -n kinesiapp-ia -g kinesiapp-rg --image ghcr.io/solartedaniers/kinesiapp-ai:<sha>`.
