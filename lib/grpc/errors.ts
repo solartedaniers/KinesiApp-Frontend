@@ -25,6 +25,21 @@ const FALLBACK_REASON_BY_CODE: Partial<Record<Code, string>> = {
   [Code.NotFound]: "NOT_FOUND",
 };
 
+// Motivo propio del cliente: Render siguió respondiendo 503 mientras despertaba y se acabó la espera
+export const SERVER_ASLEEP_REASON = "SERVER_ASLEEP";
+
+/**
+ * ¿Es el 503 con el que Render responde mientras despierta el contenedor? Ese 503 lo da su borde, antes de
+ * Envoy, así que no trae grpc-status: la petición nunca llegó al backend y repetirla no duplica nada. Un
+ * UNAVAILABLE del propio backend (por ejemplo, la IA caída) siempre trae grpc-status y no entra aquí.
+ */
+export function isServerAsleep(error: unknown): boolean {
+  const connectError = ConnectError.from(error);
+  return connectError.code === Code.Unavailable
+    && connectError.rawMessage === "HTTP 503"
+    && !connectError.metadata.has("grpc-status");
+}
+
 /** Único punto donde un status code de gRPC se convierte en el tipo de error que muestra la UI. */
 export function rpcErrorKind(error: unknown): RpcErrorKind {
   return KIND_BY_CODE[ConnectError.from(error).code] ?? "generic";
@@ -46,6 +61,7 @@ export function rpcReason(error: unknown): string {
       if (reason) return reason;
     }
   }
+  if (isServerAsleep(connectError)) return SERVER_ASLEEP_REASON;
   return FALLBACK_REASON_BY_CODE[connectError.code] ?? "GENERIC";
 }
 
