@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/Button";
+import { ServerWakeNotice, useWakeServerOnInput } from "@/components/app/ServerWake";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { PasswordField } from "@/components/ui/PasswordField";
 import { TextField } from "@/components/ui/TextField";
@@ -24,9 +25,10 @@ const INITIAL_STATE: FormState<LoginField> = {};
 export function LoginForm({ demo }: { demo?: DemoLogin | null }) {
   const t = useT();
   const [state, formAction, pending] = useActionState(login, INITIAL_STATE);
+  const wakeServerOnInput = useWakeServerOnInput();
 
   return (
-    <form action={formAction} className={styles.form} noValidate>
+    <form action={formAction} onInput={wakeServerOnInput} className={styles.form} noValidate>
       {demo && <FormAlert tone="info">{t.login.demoNotice}</FormAlert>}
       {state.error && (
         <FormAlert tone="error">
@@ -62,6 +64,7 @@ export function LoginForm({ demo }: { demo?: DemoLogin | null }) {
       <Button type="submit" block pending={pending} pendingLabel={t.login.pending} className={styles.submit}>
         {t.login.submit}
       </Button>
+      <ServerWakeNotice pending={pending} />
     </form>
   );
 }

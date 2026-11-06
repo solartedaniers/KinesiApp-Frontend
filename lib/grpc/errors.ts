@@ -25,6 +25,26 @@ const FALLBACK_REASON_BY_CODE: Partial<Record<Code, string>> = {
   [Code.NotFound]: "NOT_FOUND",
 };
 
+// Motivo propio del cliente: el backend siguió sin responder mientras despertaba y se acabó la espera
+export const SERVER_ASLEEP_REASON = "SERVER_ASLEEP";
+
+// Lo medí con Render frío: el contenedor arranca Envoy antes que grpcio, y Envoy responde esto mientras no
+// puede conectarse a grpcio. Solo acepto fallas al abrir la conexión: la petición no llegó al backend
+const ENVOY_UPSTREAM_DOWN = /^upstream connect error or disconnect\/reset before headers\. (retried and the latest )?reset reason: (remote )?connection failure/;
+
+/**
+ * ¿El backend todavía está despertando? Lo reconozco por dos respuestas en las que la petición nunca llegó a
+ * grpcio, así que repetirla no duplica nada: el 503 del borde de Render, sin grpc-status, y el UNAVAILABLE
+ * que da Envoy cuando grpcio aún no escucha. Un UNAVAILABLE del propio backend (por ejemplo, la IA caída)
+ * trae otro mensaje y no entra aquí.
+ */
+export function isServerAsleep(error: unknown): boolean {
+  const connectError = ConnectError.from(error);
+  if (connectError.code !== Code.Unavailable) return false;
+  const renderEdge = connectError.rawMessage === "HTTP 503" && !connectError.metadata.has("grpc-status");
+  return renderEdge || ENVOY_UPSTREAM_DOWN.test(connectError.rawMessage);
+}
+
 /** Único punto donde un status code de gRPC se convierte en el tipo de error que muestra la UI. */
 export function rpcErrorKind(error: unknown): RpcErrorKind {
   return KIND_BY_CODE[ConnectError.from(error).code] ?? "generic";
@@ -46,6 +66,7 @@ export function rpcReason(error: unknown): string {
       if (reason) return reason;
     }
   }
+  if (isServerAsleep(connectError)) return SERVER_ASLEEP_REASON;
   return FALLBACK_REASON_BY_CODE[connectError.code] ?? "GENERIC";
 }
 

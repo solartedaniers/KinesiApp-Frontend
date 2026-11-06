@@ -12,17 +12,183 @@ Despliego en Vercel, en la región `fra1`, junto al backend de Render Frankfurt 
 - `https://www.kinesiapp.com` es el dominio canónico. `kinesiapp.com` redirige con **308** a `www`, así que el sitemap, el canonical y los buscadores ven una sola URL.
 - El **HTTPS es automático**: Vercel emite y renueva el certificado de los dos nombres, sin que yo haga nada.
 
-## Arquitectura: gRPC de punta a punta, sin REST
+## Arquitectura de KinesiApp
 
+KinesiApp son cuatro repos que se hablan solo por RPC definidos en [KinesiApp-Contracts](https://github.com/solartedaniers/KinesiApp-Contracts), sin API REST. Este diagrama y el de secuencia son los mismos en los cuatro README; cada flecha dice su protocolo.
+
+```mermaid
+flowchart TB
+  user(["Navegador"])
+
+  subgraph vercel["Vercel · fra1"]
+    next["Next.js<br/>Server Components y Server Actions<br/>runtime Node"]
+  end
+
+  subgraph render["Render · Frankfurt · un solo contenedor"]
+    envoyB["Envoy<br/>gRPC-Web → gRPC"]
+    api["Backend grpcio<br/>Python asyncio"]
+  end
+
+  subgraph azure["Azure Container Apps · canadacentral"]
+    ingress["Ingress HTTP/2 + TLS"]
+    envoyA["Envoy"]
+    ai["IA grpcio<br/>YOLO · MediaPipe · OpenCV"]
+  end
+
+  subgraph neon["Neon · Frankfurt"]
+    pg[("Postgres")]
+    s3[("Neon Storage<br/>buckets privados")]
+  end
+
+  subgraph external["Servicios externos"]
+    gemini["Gemini API"]
+    resend["Resend"]
+  end
+
+  user -- "HTTPS: HTML, RSC y Server Actions" --> next
+  user -- "HTTPS PUT y GET con URL firmada" --> s3
+  next -- "gRPC-Web sobre HTTP/1.1 + TLS" --> envoyB
+  envoyB -- "gRPC nativo, HTTP/2 en localhost" --> api
+  api -- "protocolo Postgres + TLS, por el pooler" --> pg
+  api -- "API S3 por HTTPS: HEAD, GET parcial y DELETE" --> s3
+  api -- "gRPC nativo + TLS" --> ingress
+  ingress -- "HTTP/2" --> envoyA
+  envoyA -- "gRPC nativo en localhost" --> ai
+  ai -- "HTTPS GET con URL firmada" --> s3
+  ai -- "HTTPS, SDK google-genai" --> gemini
+  api -- "HTTPS, API de correo" --> resend
+
+  classDef browser fill:#e5e7eb,stroke:#374151,stroke-width:2px,color:#111827
+  classDef vercelNode fill:#d1d5db,stroke:#111827,stroke-width:2px,color:#111827
+  classDef renderNode fill:#ddd6fe,stroke:#5b21b6,stroke-width:2px,color:#1e1b4b
+  classDef azureNode fill:#bfdbfe,stroke:#1d4ed8,stroke-width:2px,color:#172554
+  classDef neonNode fill:#a7f3d0,stroke:#047857,stroke-width:2px,color:#064e3b
+  classDef externalNode fill:#fde68a,stroke:#b45309,stroke-width:2px,color:#451a03
+  classDef vercelZone fill:#f3f4f6,stroke:#111827,stroke-width:2px,color:#111827
+  classDef renderZone fill:#f5f3ff,stroke:#5b21b6,stroke-width:2px,color:#1e1b4b
+  classDef azureZone fill:#eff6ff,stroke:#1d4ed8,stroke-width:2px,color:#172554
+  classDef neonZone fill:#ecfdf5,stroke:#047857,stroke-width:2px,color:#064e3b
+  classDef externalZone fill:#fffbeb,stroke:#b45309,stroke-width:2px,color:#451a03
+
+  class user browser
+  class next vercelNode
+  class envoyB,api renderNode
+  class ingress,envoyA,ai azureNode
+  class pg,s3 neonNode
+  class gemini,resend externalNode
+  class vercel vercelZone
+  class render renderZone
+  class azure azureZone
+  class neon neonZone
+  class external externalZone
+
+  linkStyle default stroke:#6e7781,stroke-width:2px
 ```
-Navegador ──HTML/RSC/Server Actions──▶ Next.js (runtime Node, Vercel fra1)
-                                          │  Connect-ES, transporte gRPC-Web (HTTP/1.1)
-                                          ▼
-                              Envoy ──gRPC nativo──▶ backend grpcio (Render Frankfurt)
-                                                         │  gRPC nativo + TLS
-                                                         ▼
-                                                   IA (Azure Container Apps)
+
+### Flujo principal: subir un video, analizarlo, ver el resultado y preguntar al chat
+
+```mermaid
+sequenceDiagram
+  autonumber
+  actor U as Deportista en el navegador
+  participant N as Next.js en Vercel
+  participant B as Backend en Render
+  participant S as Neon Storage
+  participant P as Neon Postgres
+  participant A as IA en Azure
+  participant G as Gemini
+
+  U->>N: Elige el movimiento y el video (máximo 40 s, lo valida un Web Worker)
+  N->>B: CreateVideoUpload
+  B-->>N: URL firmada de subida y upload_id
+  U->>S: PUT del video directo al bucket privado
+  N->>B: ConfirmVideoUpload
+  B->>S: HEAD y primeros bytes: tamaño, tipo y magic bytes
+  B->>P: Crea el análisis en PENDING
+  B-->>N: analysis_id
+  N->>B: WatchAnalysis (server streaming)
+  B->>A: WarmUp
+  B->>A: AnalyzeVideo con URL firmada de lectura (server streaming)
+  A->>S: GET del video
+  loop Por cada etapa: descarga, pose, repeticiones y riesgo
+    A-->>B: Progreso
+    B->>P: Guarda el progreso
+    B-->>N: Progreso
+    N-->>U: Anillo de progreso en vivo
+  end
+  A-->>B: Resultado: ángulos por cuadro y evaluación de riesgo
+  B->>P: Guarda las mediciones y el riesgo (PROCESSED)
+  B-->>N: Análisis terminado
+  N->>B: GetAnalysis y GetVideoPlaybackUrl
+  B-->>N: Resultado y URL firmada de corta vida
+  N-->>U: Resultados con Streaming SSR
+  U->>S: GET del video para verlo con el esqueleto
+  U->>N: Abre el chat
+  N->>B: StartConversation (server streaming)
+  B->>P: Lee el análisis
+  B->>A: ExplainAnalysis con los datos estructurados
+  A->>G: Prompt que arma la IA
+  G-->>A: Texto en streaming
+  A-->>B: Fragmentos
+  B-->>N: Fragmentos
+  N-->>U: La explicación se escribe en vivo
+  B->>P: Guarda la explicación
+  U->>N: Hace una pregunta
+  N->>B: SendMessage (server streaming)
+  B->>A: AnswerQuestion con los datos y el historial
+  A->>G: Prompt
+  G-->>A: Texto en streaming
+  A-->>B: Fragmentos
+  B-->>N: Fragmentos
+  N-->>U: Respuesta en vivo
+  B->>P: Guarda la pregunta y la respuesta
 ```
+
+### Qué hace cada parte
+
+- **Navegador.** Ahí la persona graba o elige el video. Valido la duración en un Web Worker y subo el archivo directo al bucket con una URL firmada, así el video nunca pasa por Vercel. El navegador no habla gRPC ni conoce la URL del backend.
+- **Next.js en Vercel.** Sirve las páginas con el patrón que le toca a cada una (SSG, ISR, SSR con streaming y CSR) y, desde los Server Components y las Server Actions, llama al backend con un cliente gRPC-Web generado del contrato. Guarda la sesión en cookies `httpOnly`.
+- **Envoy en Render.** Render solo acepta HTTP/1.1 desde internet, así que Envoy recibe gRPC-Web y lo traduce a gRPC nativo hacia grpcio, en el mismo contenedor. Solo deja pasar las rutas del contrato.
+- **Backend grpcio en Render.** Es el dueño de los datos y de las reglas: cuentas, roles, deportistas, equipos, análisis y chat. Verifica el token en un interceptor, guarda en Postgres, firma las URLs de los archivos y le encarga el trabajo pesado a la IA.
+- **IA en Azure Container Apps.** Es un microservicio gRPC propio. Analiza el video con YOLO, MediaPipe y OpenCV y devuelve en streaming el progreso, los ángulos y el riesgo. También arma el prompt del chat y habla con Gemini. Baja a cero réplicas cuando nadie la usa, por eso el backend la despierta con `WarmUp`.
+- **Neon Postgres.** Guarda las cuentas, los perfiles, los equipos, los análisis con sus mediciones y los mensajes del chat. Está en Frankfurt, junto al backend, para que cada consulta tarde poco.
+- **Neon Storage.** Son buckets privados compatibles con S3 para los videos, las fotos y los logos. Solo se entra con URLs firmadas de corta vida.
+- **Gemini.** Es el modelo de lenguaje que redacta la explicación del análisis y responde las preguntas. Solo lo llama la IA.
+- **Resend.** Envía desde `no-reply@kinesiapp.com` los correos con el código de verificación y el de recuperación de contraseña.
+
+## Arquitectura de este repo
+
+```mermaid
+flowchart TB
+  subgraph browser["Navegador"]
+    islands["HTML del servidor + islas de cliente (CSR)<br/>captura, progreso, chat y línea de tiempo"]
+    ww["Web Workers<br/>metadatos del video, foto de perfil y PDF"]
+    shw["Shared Worker<br/>estado de la IA entre pestañas"]
+    sw["Service Worker<br/>estáticos y página offline"]
+  end
+
+  subgraph vercel["Next.js en Vercel, runtime Node"]
+    proxy["proxy.ts<br/>renueva la sesión antes de renderizar"]
+    site["app/(site): landing SSG, guías ISR y offline"]
+    app["app/(main): SSR con Streaming y Suspense<br/>deportista, coach, admin y resultados"]
+    actions["Server Actions<br/>formularios y streams del análisis y del chat"]
+    gateways["lib/grpc/*-gateway.ts<br/>un Adapter por servicio del contrato"]
+    transport["Transporte Connect-ES gRPC-Web<br/>pone el token de la cookie httpOnly en la metadata"]
+  end
+
+  islands -- "HTTPS" --> proxy
+  proxy --> site
+  proxy --> app
+  islands -- "Server Actions" --> actions
+  islands -- "PUT directo con URL firmada" --> s3[("Neon Storage")]
+  site --> gateways
+  app --> gateways
+  actions --> gateways
+  gateways --> transport
+  transport -- "gRPC-Web sobre HTTP/1.1 + TLS" --> backend["Envoy del backend en Render"]
+```
+
+Los patrones de cada ruta están en [Patrón de rendering por ruta](#patrón-de-rendering-por-ruta) y los workers en [Workers: cuáles uso y por qué](#workers-cuáles-uso-y-por-qué).
 
 - **El navegador nunca habla gRPC ni conoce la URL del backend.** Los Server Components y las Server Actions corren en Node. Ahí llamo al backend con clientes gRPC-Web generados del contrato (`lib/grpc/transport.ts`). Uso gRPC-Web porque Render solo acepta HTTP/1.1 desde internet. Envoy, en el contenedor del backend, lo traduce a gRPC nativo.
 - **Contract-first.** Los `.proto` viven en [KinesiApp-Contracts](https://github.com/solartedaniers/KinesiApp-Contracts). Los traigo como submódulo en `contracts/`, fijado a un tag (hoy `v0.11.0`). `npm run generate` (Buf + `protoc-gen-es`) genera `lib/gen/`, que no se versiona ni se edita a mano.
@@ -38,6 +204,10 @@ Navegador ──HTML/RSC/Server Actions──▶ Next.js (runtime Node, Vercel f
   Para reproducir un video, pido una URL firmada de vida corta.
 - **Validación en las fronteras.** Todo dato que entra se parsea en runtime antes de usarse; la sección [Por qué las respuestas gRPC no pasan por Zod](#por-qué-las-respuestas-grpc-no-pasan-por-zod) explica con qué. Los límites no se repiten aquí: llegan del backend por `GetClientPolicy`. Son la duración y el tamaño del video, la contraseña, la edad, la estatura, el peso, el largo del chat y los cortes de nivel de riesgo. Cada análisis ya trae su nivel; los cortes solo sirven para lo que calculo aquí, como promedios, la peor repetición y las bandas de los medidores. El backend vuelve a validar todo.
 - **Estado de la IA.** Al iniciar sesión disparo `WakeUpAi` y muestro "IA despertando" o "IA activada". Si la IA no responde, el backend devuelve `UNAVAILABLE` y la interfaz lo comunica sin romperse.
+- **Backend dormido.** Render apaga el backend tras 15 minutos sin tráfico. Al volver, Render retiene la primera petición mientras arranca el contenedor. Lo medí en frío: a los ~13 s responde 503, porque Envoy ya escucha pero grpcio todavía no (`upstream connect error … remote connection failure`).
+  - Cada RPC simple espera hasta `GRPC_TIMEOUT_MS` (75 s). En ese 503 la petición nunca llegó a grpcio, así que `lib/grpc/cold-start-retry.ts` (un *Decorator* del transporte) la repite con espera creciente hasta un tope. Hago lo mismo con un 503 del borde de Render sin `grpc-status`. No reintento otro `UNAVAILABLE` del backend ni un corte por tiempo, porque esos sí pudieron procesarse.
+  - Mientras tanto, el botón sigue en "Ingresando…" y, si la espera pasa de 4 s, aparece "Despertando el servidor, puede tardar unos segundos". Las secciones con sesión muestran lo mismo en su `loading.tsx`. Si no despierta a tiempo, el error lo dice en vez de "revisa tu conexión".
+  - Para adelantar el arranque, los formularios de acceso mandan un `Ping` la primera vez que la persona escribe, nunca al cargar la página: así un bot que solo visita no despierta a Render.
 
 ## Por qué las respuestas gRPC no pasan por Zod
 
@@ -130,9 +300,11 @@ Copio `.env.example` a `.env.local` y lo lleno así. En Vercel, las mismas varia
 | Variable | Para qué la uso | De dónde saco el valor | Secreta |
 |---|---|---|---|
 | `GRPC_WEB_BASE_URL` | La URL pública del Envoy del backend, sin barra final. Es la única obligatoria. | En local, `http://localhost:10000` (el contenedor del backend). En Vercel, la URL del servicio de Render | No |
-| `GRPC_TIMEOUT_MS` | El plazo de cada RPC simple (30 s). | Default | No |
+| `GRPC_TIMEOUT_MS` | El plazo de cada RPC simple (75 s). Cubre los 30 a 60 s que Render dormido retiene la primera petición. | Default | No |
 | `GRPC_STREAM_TIMEOUT_MS` | El plazo de los streams de análisis y chat (240 s), por debajo del `maxDuration` de 300 s de Vercel. | Default | No |
 | `AI_WAKE_UP_TIMEOUT_MS` | Cuánto espero a `WakeUpAi` con la IA en frío (60 s). | Default | No |
+| `GRPC_COLD_START_FIRST_DELAY_MS`, `GRPC_COLD_START_MAX_DELAY_MS`, `GRPC_COLD_START_MAX_WAIT_MS` | El reintento cuando Render dormido responde 503: primera espera (1 s), espera máxima entre intentos (15 s) y tope total (90 s). | Default | No |
+| `GRPC_WAKE_PING_TIMEOUT_MS` | El plazo del ping que despierta a Render cuando la persona empieza a escribir (3 s). | Default | No |
 | `SITE_ORIGIN` | El origen público para el sitemap, el canonical y la metadata. En producción es `https://www.kinesiapp.com`; si falta, Vercel lo deduce del despliegue. | Lo defino yo, solo en Production | No |
 | `LIST_PAGE_SIZE` | El tamaño de página de los listados. El backend no entrega más de 50. | Default | No |
 | `ACCESS_REFRESH_LEEWAY_SECONDS` | Cuántos segundos antes del vencimiento renuevo el access token (60). | Default | No |
@@ -150,6 +322,7 @@ Copio `.env.example` a `.env.local` y lo lleno así. En Vercel, las mismas varia
 | `NEXT_PUBLIC_PREFERENCE_COOKIE_MAX_AGE_SECONDS` | La vida de las cookies de idioma y tema (un año). |
 | `NEXT_PUBLIC_AI_READY_TTL_MS`, `NEXT_PUBLIC_AI_WAKE_STALE_MS`, `NEXT_PUBLIC_AI_WARMING_RETRY_MS`, `NEXT_PUBLIC_AI_WARMING_ATTEMPTS` | El estado de la IA: cuánto vale un "IA activada", cuándo doy por perdido un "despertando" y cómo reintento. |
 | `NEXT_PUBLIC_RISK_POSE_WINDOW_MS` | Cuánto antes y después del pico de riesgo dibujo el esqueleto sobre el video. |
+| `NEXT_PUBLIC_SERVER_WAKE_NOTICE_DELAY_MS` | Tras cuánto tiempo de espera aviso que el servidor está despertando (4 s). |
 
 Ninguna pública es secreta, y todas tienen su default en `.env.example`.
 

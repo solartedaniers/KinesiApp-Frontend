@@ -18,3 +18,12 @@ export async function wakeUpAi(): Promise<AiWakeOutcome> {
     return "unavailable";
   }
 }
+
+/**
+ * La llama el formulario cuando la persona empieza a escribir, nunca al cargar la página: así solo una
+ * persona despierta a Render, no un bot que pasa. Si falla o Render aún arranca, no importa: el envío del
+ * formulario reintenta hasta que responda.
+ */
+export async function wakeServer(): Promise<void> {
+  await systemGateway().wakeServer(grpcEnv().GRPC_WAKE_PING_TIMEOUT_MS).catch(() => undefined);
+}

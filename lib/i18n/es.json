@@ -202,7 +202,8 @@
     "videoConsentLink": "Leer el consentimiento"
   },
   "session": {
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "serverWaking": "Despertando el servidor, puede tardar unos segundos."
   },
   "common": {
     "cancel": "Cancelar",
@@ -755,6 +756,7 @@
   "errors": {
     "GENERIC": "Ocurrió un error. Intenta de nuevo.",
     "NETWORK": "No pudimos conectar con el servidor. Revisa tu conexión e intenta de nuevo.",
+    "SERVER_ASLEEP": "El servidor no despertó a tiempo. Espera un minuto e intenta de nuevo.",
     "BAD_REQUEST": "Revisa los datos ingresados.",
     "INVALID_CREDENTIALS": "Correo o contraseña incorrectos.",
     "EMAIL_NOT_REGISTERED": "No hay ninguna cuenta con ese correo.",

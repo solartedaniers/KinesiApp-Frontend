@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/Button";
+import { ServerWakeNotice, useWakeServerOnInput } from "@/components/app/ServerWake";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { OtpField } from "@/components/ui/OtpField";
 import { TextField } from "@/components/ui/TextField";
@@ -26,9 +27,10 @@ export function VerifyEmailFromQuery() {
 export function VerifyEmailForm({ defaultEmail }: { defaultEmail: string }) {
   const t = useT();
   const [state, formAction, pending] = useActionState(verifyEmail, INITIAL_STATE);
+  const wakeServerOnInput = useWakeServerOnInput();
 
   return (
-    <form action={formAction} className={styles.form} noValidate>
+    <form action={formAction} onInput={wakeServerOnInput} className={styles.form} noValidate>
       {state.error && <FormAlert tone="error">{state.error}</FormAlert>}
       {state.notice && <FormAlert tone="info">{state.notice}</FormAlert>}
 
@@ -47,6 +49,7 @@ export function VerifyEmailForm({ defaultEmail }: { defaultEmail: string }) {
         {t.verifyEmail.submit}
       </Button>
       <ResendCodeButton key={state.codeSentId ?? 0} coolingDown={Boolean(state.codeSentId)} pending={pending} />
+      <ServerWakeNotice pending={pending} />
     </form>
   );
 }

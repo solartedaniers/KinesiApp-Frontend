@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 
 import { Button, ButtonLink } from "@/components/ui/Button";
+import { ServerWakeNotice, useWakeServerOnInput } from "@/components/app/ServerWake";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { OtpField } from "@/components/ui/OtpField";
 import { NewPasswordField } from "@/components/ui/NewPasswordField";
@@ -26,6 +27,7 @@ const STEP_ORDER: RecoveryStep[] = ["email", "code", "password"];
 export function PasswordRecoveryFlow() {
   const t = useT();
   const [state, formAction, pending] = useActionState(recoverPassword, INITIAL_STATE);
+  const wakeServerOnInput = useWakeServerOnInput();
 
   if (state.step === "done") {
     return (
@@ -42,7 +44,7 @@ export function PasswordRecoveryFlow() {
   }
 
   return (
-    <form action={formAction} className={styles.form} noValidate>
+    <form action={formAction} onInput={wakeServerOnInput} className={styles.form} noValidate>
       <StepIndicator
         current={STEP_ORDER.indexOf(state.step) + 1}
         total={STEP_ORDER.length}
@@ -108,6 +110,7 @@ export function PasswordRecoveryFlow() {
           </Button>
         </>
       )}
+      <ServerWakeNotice pending={pending} />
     </form>
   );
 }

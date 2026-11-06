@@ -5,6 +5,7 @@ import { useActionState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { CheckboxField } from "@/components/ui/CheckboxField";
+import { ServerWakeNotice, useWakeServerOnInput } from "@/components/app/ServerWake";
 import { FormAlert } from "@/components/ui/FormAlert";
 import { FullNameField } from "@/components/ui/FullNameField";
 import { NewPasswordField } from "@/components/ui/NewPasswordField";
@@ -26,9 +27,10 @@ export function RegisterForm() {
   const t = useT();
   const roleOptions = SIGNUP_ROLES.map((role) => ({ value: role, label: t.roles[role] }));
   const [state, formAction, pending] = useActionState(register, INITIAL_STATE);
+  const wakeServerOnInput = useWakeServerOnInput();
 
   return (
-    <form action={formAction} className={`${styles.form} lg:grid-cols-2 lg:gap-x-6 lg:*:col-span-2`} noValidate>
+    <form action={formAction} onInput={wakeServerOnInput} className={`${styles.form} lg:grid-cols-2 lg:gap-x-6 lg:*:col-span-2`} noValidate>
       {state.error && (
         <FormAlert tone="error">
           <p>{state.error}</p>
@@ -86,6 +88,7 @@ export function RegisterForm() {
       <Button type="submit" block pending={pending} pendingLabel={t.register.pending} className={styles.submit}>
         {t.register.submit}
       </Button>
+      <ServerWakeNotice pending={pending} />
     </form>
   );
 }
