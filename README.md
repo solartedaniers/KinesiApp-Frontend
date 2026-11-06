@@ -204,6 +204,10 @@ Los patrones de cada ruta están en [Patrón de rendering por ruta](#patrón-de-
   Para reproducir un video, pido una URL firmada de vida corta.
 - **Validación en las fronteras.** Todo dato que entra se parsea en runtime antes de usarse; la sección [Por qué las respuestas gRPC no pasan por Zod](#por-qué-las-respuestas-grpc-no-pasan-por-zod) explica con qué. Los límites no se repiten aquí: llegan del backend por `GetClientPolicy`. Son la duración y el tamaño del video, la contraseña, la edad, la estatura, el peso, el largo del chat y los cortes de nivel de riesgo. Cada análisis ya trae su nivel; los cortes solo sirven para lo que calculo aquí, como promedios, la peor repetición y las bandas de los medidores. El backend vuelve a validar todo.
 - **Estado de la IA.** Al iniciar sesión disparo `WakeUpAi` y muestro "IA despertando" o "IA activada". Si la IA no responde, el backend devuelve `UNAVAILABLE` y la interfaz lo comunica sin romperse.
+- **Backend dormido.** Render apaga el backend tras 15 minutos sin tráfico. Al volver, retiene la primera petición mientras arranca (30 a 60 s) o a veces responde 503.
+  - Cada RPC simple espera hasta `GRPC_TIMEOUT_MS` (75 s). Ese 503 lo da el borde de Render sin `grpc-status`, así que la petición no llegó al backend: `lib/grpc/cold-start-retry.ts` (un *Decorator* del transporte) la repite con espera creciente hasta un tope. No reintento un `UNAVAILABLE` del backend ni un corte por tiempo, porque esos sí pudieron procesarse.
+  - Mientras tanto, el botón sigue en "Ingresando…" y, si la espera pasa de 4 s, aparece "Despertando el servidor, puede tardar unos segundos". Las secciones con sesión muestran lo mismo en su `loading.tsx`. Si no despierta a tiempo, el error lo dice en vez de "revisa tu conexión".
+  - Para adelantar el arranque, los formularios de acceso mandan un `Ping` la primera vez que la persona escribe, nunca al cargar la página: así un bot que solo visita no despierta a Render.
 
 ## Por qué las respuestas gRPC no pasan por Zod
 
@@ -296,9 +300,11 @@ Copio `.env.example` a `.env.local` y lo lleno así. En Vercel, las mismas varia
 | Variable | Para qué la uso | De dónde saco el valor | Secreta |
 |---|---|---|---|
 | `GRPC_WEB_BASE_URL` | La URL pública del Envoy del backend, sin barra final. Es la única obligatoria. | En local, `http://localhost:10000` (el contenedor del backend). En Vercel, la URL del servicio de Render | No |
-| `GRPC_TIMEOUT_MS` | El plazo de cada RPC simple (30 s). | Default | No |
+| `GRPC_TIMEOUT_MS` | El plazo de cada RPC simple (75 s). Cubre los 30 a 60 s que Render dormido retiene la primera petición. | Default | No |
 | `GRPC_STREAM_TIMEOUT_MS` | El plazo de los streams de análisis y chat (240 s), por debajo del `maxDuration` de 300 s de Vercel. | Default | No |
 | `AI_WAKE_UP_TIMEOUT_MS` | Cuánto espero a `WakeUpAi` con la IA en frío (60 s). | Default | No |
+| `GRPC_COLD_START_FIRST_DELAY_MS`, `GRPC_COLD_START_MAX_DELAY_MS`, `GRPC_COLD_START_MAX_WAIT_MS` | El reintento cuando Render dormido responde 503: primera espera (1 s), espera máxima entre intentos (15 s) y tope total (90 s). | Default | No |
+| `GRPC_WAKE_PING_TIMEOUT_MS` | El plazo del ping que despierta a Render cuando la persona empieza a escribir (3 s). | Default | No |
 | `SITE_ORIGIN` | El origen público para el sitemap, el canonical y la metadata. En producción es `https://www.kinesiapp.com`; si falta, Vercel lo deduce del despliegue. | Lo defino yo, solo en Production | No |
 | `LIST_PAGE_SIZE` | El tamaño de página de los listados. El backend no entrega más de 50. | Default | No |
 | `ACCESS_REFRESH_LEEWAY_SECONDS` | Cuántos segundos antes del vencimiento renuevo el access token (60). | Default | No |
@@ -316,6 +322,7 @@ Copio `.env.example` a `.env.local` y lo lleno así. En Vercel, las mismas varia
 | `NEXT_PUBLIC_PREFERENCE_COOKIE_MAX_AGE_SECONDS` | La vida de las cookies de idioma y tema (un año). |
 | `NEXT_PUBLIC_AI_READY_TTL_MS`, `NEXT_PUBLIC_AI_WAKE_STALE_MS`, `NEXT_PUBLIC_AI_WARMING_RETRY_MS`, `NEXT_PUBLIC_AI_WARMING_ATTEMPTS` | El estado de la IA: cuánto vale un "IA activada", cuándo doy por perdido un "despertando" y cómo reintento. |
 | `NEXT_PUBLIC_RISK_POSE_WINDOW_MS` | Cuánto antes y después del pico de riesgo dibujo el esqueleto sobre el video. |
+| `NEXT_PUBLIC_SERVER_WAKE_NOTICE_DELAY_MS` | Tras cuánto tiempo de espera aviso que el servidor está despertando (4 s). |
 
 Ninguna pública es secreta, y todas tienen su default en `.env.example`.
 
