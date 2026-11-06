@@ -361,6 +361,15 @@ Si están las dos, `/login` sale prellenado con esa cuenta y un aviso pequeño (
 - **La contraseña sí llega al navegador.** Prellenar un formulario implica mandar el valor en el HTML de `/login`, así que cualquiera que abra esa página puede verla. No hay forma de prellenar sin exponerla. Lo acepté a propósito para la evaluación: lo pidió el profesor y es una cuenta solo de la app, sin relación con ningún otro servicio.
 - **Se quitan cuando termine la evaluación.** Al borrarlas (o dejarlas vacías) y redesplegar, el login vuelve a su forma normal y el riesgo desaparece. Después se cambia la contraseña de esa cuenta, porque ya estuvo expuesta.
 
+## Datos de demostración
+
+La base de producción tiene datos de demostración para la evaluación: entrenadores, deportistas, equipos y 20 análisis, **creados con un script** del backend (`scripts/seed_demo.py`, se explica en su README).
+
+- Los análisis son reales: salen de recortes de mis propios videos y los procesó la IA.
+- **En todos los videos aparece la misma persona**, aunque cada análisis esté a nombre de un deportista distinto.
+- **El riesgo casi siempre sale bajo**, porque en esos videos el movimiento es correcto.
+- No tienen chat. Para no gastar Gemini al abrirlos, la explicación del asistente se pide con el botón **Explicar resultados**.
+
 ## Pruebas
 
 ```bash
